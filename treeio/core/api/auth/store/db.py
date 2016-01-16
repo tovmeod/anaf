@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 import oauth2 as oauth
 
 from treeio.core.api.auth.store import InvalidConsumerError, InvalidTokenError, Store

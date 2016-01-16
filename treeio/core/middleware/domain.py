@@ -1,10 +1,5 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
-Domain middleware: enables multi-tenancy in a single Tree.io process
+Domain middleware: enables multi-tenancy in a single process
 """
 from treeio.core.domains import setup_domain, setup_domain_database
 from treeio.core.db import DatabaseNotFound

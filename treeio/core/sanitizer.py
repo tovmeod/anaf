@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 import re
 from xml.sax.saxutils import escape, unescape
 import html5lib
