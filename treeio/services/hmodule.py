@@ -1,5 +1,5 @@
 """
-Service Support: Hardtree module definition
+Service Support: module definition
 """
 
 PROPERTIES = {

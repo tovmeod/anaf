@@ -1,5 +1,5 @@
 """
-Documents: Hardtree module definition
+Documents: module definition
 """
 
 PROPERTIES = {

@@ -175,6 +175,6 @@ def contact_autocreate_handler(sender, instance, created, **kwargs):
             pass
 
 
-# Autocreate a Contact when Hardtree user is created
+# Autocreate a Contact when Anaf user is created
 if getattr(settings, 'HARDTREE_SIGNALS_AUTOCREATE_CONTACT', True):
     post_save.connect(contact_autocreate_handler, sender=User)

@@ -1,5 +1,5 @@
 {% extends "json/page.json" %}
-{% block title %}Knowledge Base / Hardtree{% endblock %}
+{% block title %}Knowledge Base / Anaf{% endblock %}
 {% block module_title %}Knowledge Base{% endblock %}
 {% block module_subtitle %}Knowledge{% endblock %}
 {% block content %}

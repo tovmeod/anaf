@@ -1,5 +1,5 @@
 """
-Hardtree Reporting forms
+Reporting forms
 """
 
 from django import forms

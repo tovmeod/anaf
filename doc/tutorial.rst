@@ -1,7 +1,7 @@
 
 Installation and Set-up Tutorial
-====================================
+================================
 
-Hardtree is a web-based IT management system
+Anaf is a web-based business management system
 
-This Tutorial will guide you through the basics of Hardtree
+This Tutorial will guide you through the basics of Anaf

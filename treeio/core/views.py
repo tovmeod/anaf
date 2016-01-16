@@ -288,7 +288,7 @@ def mobile_view(request, url='/'):
 
 
 def iframe_close(request, response_format='html'):
-    "For third-party resources, when returned back to Hardtree, close iframe"
+    "For third-party resources, when returned back to Anaf, close iframe"
 
     return render_to_response('core/iframe_close', {},
                               context_instance=RequestContext(request),

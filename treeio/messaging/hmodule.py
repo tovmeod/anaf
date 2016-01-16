@@ -1,5 +1,5 @@
 """
-Messaging: Hardtree module definition
+Messaging: module definition
 """
 
 PROPERTIES = {

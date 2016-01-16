@@ -1,5 +1,5 @@
 """
-Infrastructure: Hardtree module definition
+Infrastructure: module definition
 """
 
 

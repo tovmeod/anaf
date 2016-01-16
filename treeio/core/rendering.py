@@ -1,5 +1,5 @@
 """
-Rendering routines for Hardtree
+Rendering routines
 """
 
 from django.http import HttpResponse

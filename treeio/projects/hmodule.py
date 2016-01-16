@@ -1,5 +1,5 @@
 """
-Project Management: Hardtree module definition
+Project Management: module definition
 """
 
 PROPERTIES = {

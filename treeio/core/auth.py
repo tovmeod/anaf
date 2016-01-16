@@ -1,5 +1,5 @@
 """
-Hardtree support authentication backend
+Anaf support authentication backend
 """
 from django.contrib.auth.models import User
 from treeio.identities.models import ContactValue

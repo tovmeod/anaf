@@ -1,5 +1,5 @@
 """
-Finance: Hardtree module definition
+Finance: module definition
 """
 
 PROPERTIES = {

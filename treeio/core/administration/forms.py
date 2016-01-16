@@ -249,7 +249,7 @@ class UserForm(forms.ModelForm):
             raise forms.ValidationError(
                 _("User with username %s already exists.") % data)
         if self.instance and not self.instance.id:
-            # Check Hardtree Subscription user limit
+            # Check Anaf Subscription user limit
             user_limit = getattr(
                 settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
             if user_limit > 0:

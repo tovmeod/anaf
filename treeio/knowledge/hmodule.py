@@ -1,5 +1,5 @@
 """
-Knowledge Base: Hardtree module definition
+Knowledge Base: module definition
 """
 
 

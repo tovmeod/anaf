@@ -1,10 +1,10 @@
-.. Hardtree documentation master file, created by
+.. Anaf documentation master file, created by
    sphinx-quickstart on Mon Oct 25 16:15:27 2010.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Hardtree documentation!
-====================================
+Welcome to Anaf documentation!
+==============================
 
 Contents:
 

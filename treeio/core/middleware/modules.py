@@ -11,7 +11,7 @@ from treeio.core.models import Module
 
 class ModuleDetect(object):
 
-    "Handles Hardtree automatic modules detection"
+    "Handles automatic modules detection"
 
     def process_request(self, request):
         "Process request"

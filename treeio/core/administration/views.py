@@ -404,7 +404,7 @@ def user_add(request, response_format='html'):
 @treeio_login_required
 @module_admin_required()
 def user_invite(request, emails=None, response_format='html'):
-    "Invite people to Hardtree"
+    "Invite people to Anaf"
 
     user_limit = getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
 

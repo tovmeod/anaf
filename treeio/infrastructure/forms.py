@@ -23,7 +23,7 @@ class ItemForm(forms.Form):
     files = {}
 
     def _get_form_field(self, field, value=None):
-        "Generate a Django-friendly field from Hardtree spec in DB"
+        "Generate a Django-friendly field from Anaf spec in DB"
         form_field = None
         if field.field_type == 'text':
             form_field = forms.CharField(label=field.label, max_length=512,
