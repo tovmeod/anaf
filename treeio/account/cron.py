@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Account cron jobs
 """
@@ -24,7 +19,7 @@ from treeio.core.models import UpdateRecord
 from treeio.account.models import NotificationSetting, Notification
 
 
-class CronNotifier:
+class CronNotifier(object):
     def __init__(self):
         self.next_daily = datetime.now()
 
