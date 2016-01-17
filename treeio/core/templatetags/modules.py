@@ -863,7 +863,7 @@ def rss_link(context, url=None):
 
     if not url:
         url = request.path
-    for ext in getattr(settings, 'HARDTREE_RESPONSE_FORMATS', {'html': 'text/html'}):
+    for ext in settings.ANAF_RESPONSE_FORMATS:
         url = url.replace('.' + ext, '')
     url += '.rss'
     try:

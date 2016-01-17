@@ -219,13 +219,13 @@ class PopupMiddleware():
                     content['popup'].update({'object': {'name': unicode(hobject),
                                                         'id': obj}})
                     response = HttpResponse(json.dumps(content),
-                                            content_type=settings.HARDTREE_RESPONSE_FORMATS['json'])
+                                            content_type=settings.ANAF_RESPONSE_FORMATS['json'])
                     break
 
             content = json.loads(response.content)
             content['popup'].update({'redirect': True})
             response = HttpResponse(json.dumps(content),
-                                    content_type=settings.HARDTREE_RESPONSE_FORMATS['json'])
+                                    content_type=settings.ANAF_RESPONSE_FORMATS['json'])
 
         return response
 

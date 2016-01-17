@@ -247,13 +247,13 @@ def ajax_popup(request, popup_id='', url='/'):
 
     context = {'content': module_inner, 'title': title, 'subtitle': subtitle, 'popup_id': popup_id, 'url': request.path}
 
-    if settings.HARDTREE_RESPONSE_FORMATS['json'] in response.get('Content-Type', 'text/html'):
+    if settings.ANAF_RESPONSE_FORMATS['json'] in response.get('Content-Type', 'text/html'):
         new_response = render_to_response('core/ajax_popup', context,
                                           context_instance=RequestContext(request), response_format='json')
     else:
         new_response = HttpResponse(json.dumps({'popup': context}))
 
-    new_response.mimetype = settings.HARDTREE_RESPONSE_FORMATS['json']
+    new_response.mimetype = settings.ANAF_RESPONSE_FORMATS['json']
     try:
         jsonresponse = json.loads(response.content)
         if 'redirect' in jsonresponse:
