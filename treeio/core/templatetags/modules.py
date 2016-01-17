@@ -40,7 +40,7 @@ def _get_modules(request):
         module.type = 'minor'
         try:
             import_name = module.name + "." + \
-                settings.HARDTREE_MODULE_IDENTIFIER
+                settings.ANAF_MODULE_IDENTIFIER
             hmodule = __import__(import_name, fromlist=[str(module.name)])
             urls = hmodule.URL_PATTERNS
             for regexp in urls:

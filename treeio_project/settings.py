@@ -1,9 +1,4 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
-# coding=utf-8
+# -*- coding: utf-8 -*-
 
 """
 Django settings for treeio project.
@@ -209,6 +204,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_websocket',
     'django.contrib.messages',
+    'rest_framework',
     'treeio.account',
     'treeio.core',
     'treeio.core.api',
@@ -256,33 +252,26 @@ AUTHENTICATION_BACKENDS = (
 # AUTH_LDAP_START_TLS = True
 
 #
-# Hardtree configuration
+# ANAF configuration
 #
-HARDTREE_MODULE_IDENTIFIER = 'hmodule'
-
-HARDTREE_DEFAULT_USER_ID = 1
-
-HARDTREE_DEFAULT_PERMISSIONS = 'everyone'
 
 HARDTREE_SEND_EMAIL_TO_CALLER = True
 
 HARDTREE_ALLOW_EMAIL_NOTIFICATIONS = True
 HARDTREE_ALLOW_GRITTER_NOTIFICATIONS = True
 
-HARDTREE_PASSWORD_LENGTH_MIN = 4
-
-HARDTREE_RESPONSE_FORMATS = {
-    'html': 'text/html',
-    'mobile': 'text/html',
-    'json': 'text/plain',
-    # 'json': 'application/json',
-    'ajax': 'text/plain',
-    # 'ajax': 'application/json',
-    'csv': 'text/csv',
-    'xls': 'text/xls',
-    'pdf': 'application/pdf',
-    'rss': 'application/rss+xml',
-}
+# HARDTREE_RESPONSE_FORMATS = {
+#     'html': 'text/html',
+#     'mobile': 'text/html',
+#     'json': 'text/plain',
+#     # 'json': 'application/json',
+#     'ajax': 'text/plain',
+#     # 'ajax': 'application/json',
+#     'csv': 'text/csv',
+#     'xls': 'text/xls',
+#     'pdf': 'application/pdf',
+#     'rss': 'application/rss+xml',
+# }
 
 HARDTREE_IMAGE_MAX_SIZE = (300, 400)
 HARDTREE_IMAGE_RESIZE_FILTER = 'ANTIALIAS'
@@ -462,7 +451,7 @@ HARDTREE_UNSAFE_TAGS = ('script', 'object', 'embed',
 
 
 #
-# Hardtree Subcription settings
+# Anaf Subcription settings
 #
 
 EVERGREEN_FREE_USERS = 3
@@ -492,22 +481,6 @@ NUVIUS_CHECK_USER_KEYS = True
 
 NUVIUS_DATA_CACHE_LIFE = 600
 CACHE_KEY_PREFIX = 'treeio_'
-
-#
-# Email settings
-#
-
-EMAIL_SERVER = 'localhost'
-IMAP_SERVER = ''
-EMAIL_USERNAME = None
-EMAIL_PASSWORD = None
-EMAIL_FROM = 'noreply@tree.io'
-DEFAULT_SIGNATURE = """
-Thanks!
-The Tree.io Team
-http://www.tree.io
-            """
-
 
 #
 # Search index (Whoosh)

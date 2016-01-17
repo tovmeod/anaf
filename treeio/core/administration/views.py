@@ -756,7 +756,7 @@ def settings_view(request, response_format='html'):
             'treeio.core', 'default_permissions')[0]
         default_permissions = conf.value
     except:
-        default_permissions = settings.HARDTREE_DEFAULT_PERMISSIONS
+        default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
 
     default_permissions_display = default_permissions
     for key, value in PERMISSION_CHOICES:

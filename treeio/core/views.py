@@ -195,7 +195,7 @@ def ajax_popup(request, popup_id='', url='/'):
     for module in modules:
         try:
             import_name = module.name + "." + \
-                          settings.HARDTREE_MODULE_IDENTIFIER
+                          settings.ANAF_MODULE_IDENTIFIER
             hmodule = __import__(import_name, fromlist=[str(module.name)])
             urls = hmodule.URL_PATTERNS
             for regexp in urls:

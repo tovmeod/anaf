@@ -22,7 +22,7 @@ class CronRunner(Thread):
 
         for module in settings.INSTALLED_APPS:
             import_name = str(
-                module) + "." + settings.HARDTREE_MODULE_IDENTIFIER
+                module) + "." + settings.ANAF_MODULE_IDENTIFIER
             try:
                 hmodule = __import__(import_name, fromlist=[str(module)])
                 self.jobs.extend(hmodule.CRON)

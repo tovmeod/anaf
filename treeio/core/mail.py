@@ -21,12 +21,12 @@ from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import removetags
 
-EMAIL_SERVER = getattr(settings, 'EMAIL_SERVER', '127.0.0.1')
-IMAP_SERVER = getattr(settings, 'IMAP_SERVER', '')
-EMAIL_USERNAME = getattr(settings, 'EMAIL_USERNAME', None)
-EMAIL_PASSWORD = getattr(settings, 'EMAIL_PASSWORD', None)
-EMAIL_FROM = getattr(settings, 'EMAIL_FROM', 'noreply@tree.io')
-DEFAULT_SIGNATURE = getattr(settings, 'DEFAULT_SIGNATURE', '')
+EMAIL_SERVER = settings.ANAF_EMAIL_SERVER
+IMAP_SERVER = settings.ANAF_IMAP_SERVER
+EMAIL_USERNAME = settings.ANAF_EMAIL_USERNAME
+EMAIL_PASSWORD = settings.ANAF_EMAIL_PASSWORD
+EMAIL_FROM = settings.ANAF_EMAIL_FROM
+DEFAULT_SIGNATURE = settings.ANAF_DEFAULT_SIGNATURE
 
 
 class BaseEmail(Thread):

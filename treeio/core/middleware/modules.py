@@ -18,7 +18,7 @@ class ModuleDetect(object):
         hmodules = dict()
         for module in settings.INSTALLED_APPS:
             import_name = str(
-                module) + "." + settings.HARDTREE_MODULE_IDENTIFIER
+                module) + "." + settings.ANAF_MODULE_IDENTIFIER
             try:
                 hmodule = __import__(import_name, fromlist=[str(module)])
                 hmodules[str(module)] = hmodule.PROPERTIES

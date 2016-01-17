@@ -26,7 +26,7 @@ def treeio_login_required(f):
             for module in all_modules:
                 try:
                     import_name = module.name + "." + \
-                                  settings.HARDTREE_MODULE_IDENTIFIER
+                                  settings.ANAF_MODULE_IDENTIFIER
                     hmodule = __import__(
                         import_name, fromlist=[str(module.name)])
                     urls = hmodule.URL_PATTERNS

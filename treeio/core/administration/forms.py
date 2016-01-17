@@ -73,8 +73,7 @@ class SettingsForm(forms.Form):
                 'treeio.core', 'default_permissions')[0]
             self.fields['default_permissions'].initial = conf.value
         except:
-            self.fields['default_permissions'].initial = getattr(
-                settings, 'HARDTREE_DEFAULT_PERMISSIONS', 'everyone')
+            self.fields['default_permissions'].initial = settings.ANAF_DEFAULT_PERMISSIONS
 
         self.fields['default_timezone'].choices = getattr(
             settings, 'HARDTREE_SERVER_TIMEZONE')

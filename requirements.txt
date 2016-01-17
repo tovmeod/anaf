@@ -20,3 +20,4 @@ django-pandora
 dj_database_url
 django-markup-deprecated
 freezegun==0.3.5
+djangorestframework==3.3.2

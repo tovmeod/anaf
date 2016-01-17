@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Treeio Core system objects
 """
@@ -11,7 +6,7 @@ from django.contrib import messages
 from django.http import HttpRequest
 from django.contrib.messages.storage import default_storage
 from django.contrib.messages.storage.base import Message
-
+from django.utils import timezone
 from django.db import models
 from django.core.exceptions import MultipleObjectsReturned
 from django.contrib.sites.models import RequestSite
@@ -197,7 +192,7 @@ class User(AccessEntity):
         Group, related_name='default_user_set', blank=True, null=True)
     other_groups = models.ManyToManyField(Group, blank=True, null=True)
     disabled = models.BooleanField(default=False)
-    last_access = models.DateTimeField(default=datetime.now)
+    last_access = models.DateTimeField(default=timezone.now)
 
     class Meta:
         """User"""
@@ -221,7 +216,7 @@ class User(AccessEntity):
                 pass
 
         super(User, self).save(*args, **kwargs)
-        # Check Hardtree Subscription user limit
+        # Check Anaf Subscription user limit
         if not self.id:
             user_limit = getattr(
                 settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
@@ -392,12 +387,12 @@ if getattr(settings, 'HARDTREE_SIGNALS_AUTOCREATE_USER', False):
 
 
 class Invitation(models.Model):
-    """Invitation to register on Hardtree"""
+    """Invitation to register on Anaf"""
     email = models.EmailField()
     key = models.CharField(max_length=256)
     sender = models.ForeignKey(User, blank=True, null=True)
     default_group = models.ForeignKey(Group, blank=True, null=True)
-    date_created = models.DateTimeField(default=datetime.now)
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __init__(self, *args, **kwargs):
         """Create a hash automatically"""
@@ -411,7 +406,7 @@ class Invitation(models.Model):
 class Tag(models.Model):
     """Model for Global Tagging"""
     name = models.CharField(max_length=512)
-    date_created = models.DateTimeField(default=datetime.now)
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __unicode__(self):
         return self.name
@@ -428,7 +423,7 @@ class Comment(models.Model):
         User, blank=True, null=True, related_name='comments_liked')
     dislikes = models.ManyToManyField(
         User, blank=True, null=True, related_name='comments_disliked')
-    date_created = models.DateTimeField(default=datetime.now)
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __unicode__(self):
         return self.body
@@ -460,8 +455,8 @@ class Object(models.Model):
     dislikes = models.ManyToManyField(
         User, blank=True, null=True, related_name='objects_disliked')
 
-    last_updated = models.DateTimeField(auto_now=True)
-    date_created = models.DateTimeField(default=datetime.now)
+    last_updated = models.DateTimeField(auto_now=True)  # todo: don't use auto_now see http://stackoverflow.com/questions/1737017/django-auto-now-and-auto-now-add/1737078#1737078  # noqa
+    date_created = models.DateTimeField(default=timezone.now)
 
     nuvius_resource = models.TextField(blank=True, null=True)
 
@@ -860,7 +855,7 @@ class Object(models.Model):
                 'treeio.core', 'default_permissions')[0]
             default_permissions = conf.value
         except:
-            default_permissions = settings.HARDTREE_DEFAULT_PERMISSIONS
+            default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
 
         if not self.creator:
             self.creator = user
@@ -945,9 +940,9 @@ class Object(models.Model):
         return self
 
     def set_default_user(self):
-        """Sets the user defined in settings.HARDTREE_DEFAULT_USER_ID and default mode"""
+        """Sets the user defined in settings.ANAF_DEFAULT_USER_ID and default mode"""
         try:
-            user = User.objects.get(pk=settings.HARDTREE_DEFAULT_USER_ID)
+            user = User.objects.get(pk=settings.ANAF_DEFAULT_USER_ID)
         except:
             try:
                 user = User.objects.all()[0]
@@ -1007,7 +1002,7 @@ class Object(models.Model):
         """Sets the value of a given field"""
         return setattr(self, field_name)
 
-    def set_last_updated(self, last_updated=datetime.now()):
+    def set_last_updated(self, last_updated=timezone.now()):
         self.last_updated = last_updated
         self.save()
 
@@ -1017,7 +1012,7 @@ class Revision(models.Model):
         'self', blank=True, null=True, related_name='next')
     object = models.ForeignKey(Object)
     change_type = models.CharField(max_length=512, null=True, blank=True)
-    date_created = models.DateTimeField(default=datetime.now)
+    date_created = models.DateTimeField(default=timezone.now)
 
 
 class RevisionField(models.Model):
@@ -1063,7 +1058,7 @@ class UpdateRecord(models.Model):
         User, blank=True, null=True, related_name='updates_liked')
     dislikes = models.ManyToManyField(
         User, blank=True, null=True, related_name='updates_disliked')
-    date_created = models.DateTimeField(default=datetime.now)
+    date_created = models.DateTimeField(default=timezone.now)
 
     class Meta:
         """UpdateRecord"""
