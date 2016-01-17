@@ -58,7 +58,7 @@ The Anaf Team
     'CRON_HARD_KILL': -1,
     # Seconds to wait between SIGKILL signals to a dead job
     'CRON_GRACE_WAIT': 5,
-    'CRON_DISABLED': False,
+    'CRON_DISABLED': True,
     'MULTIPLE_LOGINS_DISABLED': False,
     'MESSAGING_POP3_LIMIT': 100,
     'MESSAGING_IMAP_LIMIT': 100,
