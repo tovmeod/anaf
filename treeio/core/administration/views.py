@@ -792,16 +792,14 @@ def settings_view(request, response_format='html'):
         pass
 
     # time zone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get_for_module(
             'treeio.core', 'default_timezone')[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                            (1, '(GMT-11:00) International Date Line West')])
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
 
     return render_to_response('core/administration/settings_view',
                               {

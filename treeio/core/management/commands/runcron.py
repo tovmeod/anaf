@@ -102,17 +102,15 @@ class CronRunner():
 
         self.databases = databases or []
         self.jobs = []
-        self.sleeptime = getattr(settings, 'HARDTREE_CRON_PERIOD', 60)
-        self.priority_high = getattr(
-            settings, 'HARDTREE_CRON_HIGH_PRIORITY', 10)
-        self.priority_low = getattr(settings, 'HARDTREE_CRON_LOW_PRIORITY', 3)
-        self.qualify_high = getattr(settings, 'HARDTREE_CRON_QUALIFY_HIGH', 10)
-        self.qualify_run = getattr(
-            settings, 'HARDTREE_CRON_QUALIFY_RUN', 86400)
-        self.poolsize = getattr(settings, 'HARDTREE_CRON_POOL_SIZE', 10)
-        self.softkill = getattr(settings, 'HARDTREE_CRON_SOFT_KILL', 0)
-        self.hardkill = getattr(settings, 'HARDTREE_CRON_HARD_KILL', -1)
-        self.gracewait = getattr(settings, 'HARDTREE_CRON_GRACE_WAIT', 5)
+        self.sleeptime = settings.ANAF_CRON_PERIOD
+        self.priority_high = settings.ANAF_CRON_HIGH_PRIORITY
+        self.priority_low = settings.ANAF_CRON_LOW_PRIORITY
+        self.qualify_high = settings.ANAF_CRON_QUALIFY_HIGH
+        self.qualify_run = settings.ANAF_CRON_QUALIFY_RUN
+        self.poolsize = settings.ANAF_CRON_POOL_SIZE
+        self.softkill = settings.ANAF_CRON_SOFT_KILL
+        self.hardkill = settings.ANAF_CRON_HARD_KILL
+        self.gracewait = settings.ANAF_CRON_GRACE_WAIT
         self.noloop = noloop
 
         for module in settings.INSTALLED_APPS:

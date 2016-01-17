@@ -115,7 +115,7 @@ def paginate(context, items, plength=None):
             pass
 
     if not plength:
-        plength = getattr(settings, 'HARDTREE_PAGINATOR_LENGTH', 10)
+        plength = settings.ANAF_PAGINATOR_LENGTH
     length = skip + plength
 
     return items[skip:length]
@@ -140,7 +140,7 @@ def pager(context, items, plength=None):
             pass
 
     if not plength:
-        plength = getattr(settings, 'HARDTREE_PAGINATOR_LENGTH', 10)
+        plength = settings.ANAF_PAGINATOR_LENGTH
     if hasattr(items, 'count'):
         try:
             items_length = items.count()
@@ -153,7 +153,7 @@ def pager(context, items, plength=None):
     if items_length % plength:
         pagenum += 1
 
-    maxpages = getattr(settings, 'HARDTREE_PAGINATOR_PAGES', 20)
+    maxpages = settings.ANAF_PAGINATOR_PAGES
 
     current = skip // plength
     start = current - (maxpages // 2)
@@ -315,7 +315,7 @@ def htform(context, form):
             pass
 
     # timezone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -326,11 +326,9 @@ def htform(context, form):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                            (1, '(GMT-11:00) International Date Line West')])
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
     title = all_timezones[int(default_timezone)][1]
     GMT = title[4:10]  # with sign e.g. +06:00
     sign = GMT[0:1]  # + or -
@@ -390,7 +388,7 @@ def htdate(context, date, dateformat='DATE_FORMAT'):
             pass
 
     # timezone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -401,11 +399,9 @@ def htdate(context, date, dateformat='DATE_FORMAT'):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                            (1, '(GMT-11:00) International Date Line West')])
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
     title = all_timezones[int(default_timezone)][1]
     GMT = title[4:10]  # with sign e.g. +06:00
     sign = GMT[0:1]  # + or -
@@ -451,7 +447,7 @@ def htdatetime(context, date, dateformat='DATETIME_FORMAT'):
             pass
 
     # timezone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -462,11 +458,9 @@ def htdatetime(context, date, dateformat='DATETIME_FORMAT'):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                            (1, '(GMT-11:00) International Date Line West')])
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
     title = all_timezones[int(default_timezone)][1]
     GMT = title[4:10]  # with sign e.g. +06:00
     sign = GMT[0:1]  # + or -
@@ -513,7 +507,7 @@ def httime(context, time, timeformat='TIME_FORMAT'):
             pass
 
     # timezone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -524,11 +518,9 @@ def httime(context, time, timeformat='TIME_FORMAT'):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                            (1, '(GMT-11:00) International Date Line West')])
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
     title = all_timezones[int(default_timezone)][1]
     GMT = title[4:10]  # with sign e.g. +06:00
     sign = GMT[0:1]  # + or -
@@ -610,7 +602,7 @@ def humanize_datetime(context, value):
             pass
 
     # timezone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -621,11 +613,9 @@ def humanize_datetime(context, value):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                            (1, '(GMT-11:00) International Date Line West')])
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
     title = all_timezones[int(default_timezone)][1]
     GMT = title[4:10]  # with sign e.g. +06:00
     sign = GMT[0:1]  # + or -

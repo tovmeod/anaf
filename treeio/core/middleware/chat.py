@@ -75,7 +75,7 @@ def get_notifications(user):
     except:
         return []
     try:
-        if not getattr(settings, 'HARDTREE_ALLOW_GRITTER_NOTIFICATIONS', False):
+        if not settings.ANAF_ALLOW_GRITTER_NOTIFICATIONS:
             return notifications
         request = HttpRequest()
         request.user = user

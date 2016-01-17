@@ -205,11 +205,9 @@ class ContactForm(forms.Form):
         filepath = settings.MEDIA_ROOT + filepath
         try:
             img = Image.open(filepath)
-            expected_size = getattr(
-                settings, 'HARDTREE_IMAGE_MAX_SIZE', [400, 300])
+            expected_size = settings.ANAF_IMAGE_MAX_SIZE
             if img.size[0] > expected_size[0] or img.size[1] > expected_size[1]:
-                filter_name = getattr(
-                    settings, 'HARDTREE_IMAGE_RESIZE_FILTER', 'ANTIALIAS')
+                filter_name = settings.ANAF_IMAGE_RESIZE_FILTER
                 filter = getattr(Image, filter_name, Image.ANTIALIAS)
                 aspect = img.size[0] / float(img.size[1])
                 newsize = list(expected_size)

@@ -18,7 +18,7 @@ class CronRunner(Thread):
         super(CronRunner, self).__init__(*args, **kwargs)
 
         self.jobs = []
-        self.sleeptime = settings.HARDTREE_CRON_PERIOD
+        self.sleeptime = settings.ANAF_CRON_PERIOD
 
         for module in settings.INSTALLED_APPS:
             import_name = str(
@@ -66,6 +66,6 @@ class CronMiddleware(object):
     runner = None
 
     def __init__(self):
-        if not getattr(settings, "HARDTREE_CRON_DISABLED", False):
+        if not settings.ANAF_CRON_DISABLED:
             self.runner = CronRunner()
             self.runner.start()

@@ -82,7 +82,7 @@ def user_login(request, response_format='html'):
                     login(request, user)
 
                     # Prevent same user from logging in at 2 different machines
-                    if getattr(settings, "HARDTREE_MULTIPLE_LOGINS_DISABLED", False):
+                    if settings.ANAF_MULTIPLE_LOGINS_DISABLED:
                         for ses in Session.objects.all():
                             if ses != request.session:
                                 try:

@@ -1165,10 +1165,8 @@ class UpdateRecord(models.Model):
             for recipient in self.recipients.all():
                 if author and author.id == recipient.id:
                     continue
-                email_notifications = getattr(
-                    settings, 'HARDTREE_ALLOW_EMAIL_NOTIFICATIONS', False)
-                gritter_notifications = getattr(
-                    settings, 'HARDTREE_ALLOW_GRITTER_NOTIFICATIONS', False)
+                email_notifications = settings.ANAF_ALLOW_EMAIL_NOTIFICATIONS
+                gritter_notifications = settings.ANAF_ALLOW_GRITTER_NOTIFICATIONS
                 try:
                     conf = ModuleSetting.get(
                         'email_notifications', user=recipient)[0]

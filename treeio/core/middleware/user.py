@@ -265,7 +265,7 @@ def process_timezone_field(user, instance):
     "Processes date and datetime fields according to the selected time zone"
     from datetime import date, datetime, timedelta
 
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -276,11 +276,9 @@ def process_timezone_field(user, instance):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-        (1, '(GMT-11:00) International Date Line West')])
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
     title = all_timezones[int(default_timezone)][1]
     GMT = title[4:10]  # with sign e.g. +06:00
     sign = GMT[0:1]  # + or -

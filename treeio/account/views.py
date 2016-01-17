@@ -121,7 +121,7 @@ def settings_view(request, response_format='html'):
         settings, 'HARDTREE_LANGUAGES', [('en', 'English')])
 
     # time zone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -132,14 +132,12 @@ def settings_view(request, response_format='html'):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE')
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
 
     # email notifications e.g. new task assigned to you
-    email_notifications = getattr(
-        settings, 'HARDTREE_ALLOW_EMAIL_NOTIFICATIONS', False)
+    email_notifications = settings.ANAF_ALLOW_EMAIL_NOTIFICATIONS
     try:
         conf = ModuleSetting.get('email_notifications', user=user)[0]
         email_notifications = conf.value

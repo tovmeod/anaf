@@ -151,9 +151,8 @@ class SettingsForm(forms.Form):
         except:
             pass
 
-        self.fields['default_timezone'].choices = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')
-        timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+        self.fields['default_timezone'].choices = settings.ANAF_SERVER_TIMEZONE
+        timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
         try:
             conf = ModuleSetting.get('default_timezone', user=user)[0]
             timezone = conf.value
@@ -176,7 +175,7 @@ class SettingsForm(forms.Form):
             self.fields['email_notifications'].initial = conf.value
         except:
             self.fields[
-                'email_notifications'].initial = settings.HARDTREE_ALLOW_EMAIL_NOTIFICATIONS
+                'email_notifications'].initial = settings.ANAF_ALLOW_EMAIL_NOTIFICATIONS
 
         perspective = user.get_perspective()
 

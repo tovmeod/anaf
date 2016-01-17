@@ -75,9 +75,8 @@ class SettingsForm(forms.Form):
         except:
             self.fields['default_permissions'].initial = settings.ANAF_DEFAULT_PERMISSIONS
 
-        self.fields['default_timezone'].choices = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')
-        timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+        self.fields['default_timezone'].choices = settings.ANAF_SERVER_TIMEZONE
+        timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
         try:
             conf = ModuleSetting.get_for_module(
                 'treeio.core', 'default_timezone')[0]

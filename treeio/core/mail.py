@@ -244,9 +244,8 @@ class EmailReceiver(Thread):
         self.folder_name = folder_name or getattr(
             settings, 'HARDTREE_MESSAGING_IMAP_DEFAULT_FOLDER_NAME', 'UNSEEN')
 
-        default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
-        all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                                (1, '(GMT-11:00) International Date Line West')])
+        default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
+        all_timezones = settings.ANAF_SERVER_TIMEZONE
         title = all_timezones[int(default_timezone)][1]
         GMT = title[4:10]  # with sign e.g. +06:00
         sign = GMT[0:1]  # + or -

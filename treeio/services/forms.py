@@ -72,7 +72,7 @@ class SettingsForm(forms.Form):
             self.fields['send_email_to_caller'].initial = conf.value
         except:
             self.fields[
-                'send_email_to_caller'].initial = settings.HARDTREE_SEND_EMAIL_TO_CALLER
+                'send_email_to_caller'].initial = settings.ANAF_SEND_EMAIL_TO_CALLER
 
         # notification template
         try:

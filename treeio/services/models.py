@@ -254,8 +254,7 @@ def email_caller_on_new_ticket(sender, instance, created, **kwargs):
                 'treeio.services', 'send_email_to_caller')[0]
             send_email_to_caller = conf.value
         except:
-            send_email_to_caller = getattr(
-                settings, 'HARDTREE_SEND_EMAIL_TO_CALLER', True)
+            send_email_to_caller = settings.ANAF_SEND_EMAIL_TO_CALLER
 
         if send_email_to_caller:
             # don't send email to yourself
