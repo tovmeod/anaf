@@ -381,7 +381,7 @@ def user_autocreate_handler(sender, instance, created, **kwargs):
             profile.save()
 
 # Autocreate a treeio user when Django user is created
-if getattr(settings, 'HARDTREE_SIGNALS_AUTOCREATE_USER', False):
+if settings.ANAF_SIGNALS_AUTOCREATE_USER:
     models.signals.post_save.connect(
         user_autocreate_handler, sender=django_auth.User)
 

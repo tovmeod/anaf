@@ -160,9 +160,8 @@ class SettingsForm(forms.Form):
             pass
         self.fields['default_timezone'].initial = timezone
 
-        self.fields['language'].choices = getattr(
-            settings, 'HARDTREE_LANGUAGES', [('en', 'English')])
-        language = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', '')
+        self.fields['language'].choices = settings.ANAF_LANGUAGES
+        language = settings.ANAF_LANGUAGES_DEFAULT
         try:
             conf = ModuleSetting.get('language', user=user)[0]
             language = conf.value

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Multitenancy settings
 """
@@ -59,6 +60,35 @@ The Anaf Team
     'CRON_GRACE_WAIT': 5,
     'CRON_DISABLED': False,
     'MULTIPLE_LOGINS_DISABLED': False,
+    'MESSAGING_POP3_LIMIT': 100,
+    'MESSAGING_IMAP_LIMIT': 100,
+    'MESSAGING_UNSAFE_BLOCKS': (
+        'head', 'object', 'embed', 'applet', 'noframes', 'noscript', 'noembed', 'iframe', 'frame', 'frameset'
+    ),
+    'MESSAGING_IMAP_DEFAULT_FOLDER_NAME': 'UNSEEN',
+    'SIGNALS_AUTOCREATE_USER': True,
+    'HELP_LINK_PREFIX': '/help/',
+    'HELP_SOURCE': 'http://www.anaf.website/help',
+    'LANGUAGES': (
+        ('en', u'English'),
+        ('ru', u'Русский'),
+        ('es', u'Español'),
+        ('de', u'Deutsche'),
+        ('zh_CN', u'简体中文'),
+        ('fr', u'Français'),
+        ('el', u'ελληνικά'),
+        ('pt_BR', u'português')
+    ),
+    'LANGUAGES_DEFAULT': 'en',
+    'AJAX_RELOAD_ON_REDIRECT': (
+        'home',
+        'user_login',
+        'account_settings_view',
+        'core_admin_index_perspectives',
+        'core_admin_perspective_view',
+        'core_settings_view'
+    ),
+    'FORCE_AJAX_RENDERING': True,
     # 49 is (GMT+00:00) UTC
     'SERVER_DEFAULT_TIMEZONE': 49,
     'SERVER_TIMEZONE': (

@@ -255,44 +255,8 @@ AUTHENTICATION_BACKENDS = (
 #
 # Messaging
 #
-HARDTREE_MESSAGING_POP3_LIMIT = 100  # number of emails
-HARDTREE_MESSAGING_IMAP_LIMIT = 200  # number of emails
-
-HARDTREE_MESSAGING_UNSAFE_BLOCKS = (
-    'head', 'object', 'embed', 'applet', 'noframes', 'noscript', 'noembed',
-    'iframe', 'frame', 'frameset'
-)
-
-HARDTREE_MESSAGING_IMAP_DEFAULT_FOLDER_NAME = 'UNSEEN'
-
-HARDTREE_SIGNALS_AUTOCREATE_USER = True
-
-HARDTREE_HELP_LINK_PREFIX = '/help/'
-HARDTREE_HELP_SOURCE = 'http://www.tree.io/help'
-
-HARDTREE_LANGUAGES = (
-    ('en', u'English'),
-    ('ru', u'Русский'),
-    ('es', u'Español'),
-    ('de', u'Deutsche'),
-    ('zh_CN', u'简体中文'),
-    ('fr', u'Français'),
-    ('el', u'ελληνικά'),
-    ('pt_BR', u'português')
-)
-
-HARDTREE_LANGUAGES_DEFAULT = 'en'
 
 LOCALE_PATHS = (BASE_DIR + "/locale",)
-
-HARDTREE_AJAX_RELOAD_ON_REDIRECT = ('home',
-                                    'user_login',
-                                    'account_settings_view',
-                                    'core_admin_index_perspectives',
-                                    'core_admin_perspective_view',
-                                    'core_settings_view')
-
-HARDTREE_FORCE_AJAX_RENDERING = True
 
 #
 # htsafe settings

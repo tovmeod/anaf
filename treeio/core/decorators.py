@@ -93,8 +93,7 @@ def module_admin_required(module_name=None):
 
 def _is_full_redirect(redirect_url):
     "Returns True if this page requires full reload with AJAX enabled"
-    redirect_views = getattr(
-        settings, 'HARDTREE_AJAX_RELOAD_ON_REDIRECT', ['user_login'])
+    redirect_views = settings.ANAF_AJAX_RELOAD_ON_REDIRECT
     for view in redirect_views:
         url = ''
         try:

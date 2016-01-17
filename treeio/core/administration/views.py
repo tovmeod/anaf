@@ -772,14 +772,13 @@ def settings_view(request, response_format='html'):
         default_perspective = None
 
     # language
-    language = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', '')
+    language = settings.ANAF_LANGUAGES_DEFAULT
     try:
         conf = ModuleSetting.get_for_module('treeio.core', 'language')[0]
         language = conf.value
     except IndexError:
         pass
-    all_languages = getattr(
-        settings, 'HARDTREE_LANGUAGES', [('en', 'English')])
+    all_languages = settings.ANAF_LANGUAGES
 
     logopath = ''
     try:

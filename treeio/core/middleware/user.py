@@ -239,7 +239,7 @@ class LanguageMiddleware(object):
     def process_request(self, request):
         "Set language for the current user"
 
-        lang = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', 'en')
+        lang = settings.ANAF_LANGUAGES_DEFAULT
 
         if request.user.username:
             try:

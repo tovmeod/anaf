@@ -201,7 +201,7 @@ def render_to_response(template_name, context=None, context_instance=None, respo
         if response_format == 'html' and context_instance and context_instance['request'].path[:3] == '/m/':
             context['response_format'] = response_format = 'mobile'
 
-        if getattr(settings, 'HARDTREE_FORCE_AJAX_RENDERING', False):
+        if settings.ANAF_FORCE_AJAX_RENDERING:
             context = preprocess_context_ajax(context)
 
         rendered_string = render_to_string(

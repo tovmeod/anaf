@@ -315,8 +315,7 @@ def database_setup(request, response_format='html'):
 def help_page(request, url='/', response_format='html'):
     "Returns a Help page from Evergreen"
 
-    source = getattr(
-        settings, 'HARDTREE_HELP_SOURCE', 'http://127.0.0.1:7000/help')
+    source = settings.ANAF_HELP_SOURCE
 
     if not url:
         url = '/'

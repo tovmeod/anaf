@@ -490,7 +490,7 @@ class Search_Inactive_Users(threading.Thread):
 class ChatAjaxMiddleware(object):
 
     def __init__(self, *args, **kwargs):
-        if not settings.HARDTREE_CRON_DISABLED:
+        if not settings.ANAF_CRON_DISABLED:
             Search_Inactive_Users().start()
             pass
         # noinspection PyArgumentList

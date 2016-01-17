@@ -48,7 +48,7 @@ class SettingsForm(forms.Form):
             self.fields['default_imap_folder'].initial = conf.value
         except:
             self.fields[
-                'default_imap_folder'].initial = settings.HARDTREE_MESSAGING_IMAP_DEFAULT_FOLDER_NAME
+                'default_imap_folder'].initial = settings.ANAF_MESSAGING_IMAP_DEFAULT_FOLDER_NAME
 
         self.fields['signature'].label = _('Signature')
         try:

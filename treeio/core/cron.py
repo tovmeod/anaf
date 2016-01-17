@@ -89,5 +89,5 @@ def email_reply():
     "Fetches emails"
     from treeio.core.mail import IMAP_SERVER, EMAIL_USERNAME, EMAIL_PASSWORD
     emailreplier = EmailReplier('IMAP-SSL', IMAP_SERVER, EMAIL_USERNAME, EMAIL_PASSWORD,
-                                getattr(settings, 'HARDTREE_MESSAGING_IMAP_DEFAULT_FOLDER_NAME', 'UNSEEN'))
+                                settings.ANAF_MESSAGING_IMAP_DEFAULT_FOLDER_NAME)
     emailreplier.get_emails()

@@ -692,8 +692,7 @@ def settings_view(request, response_format='html'):
             'treeio.messaging', 'default_imap_folder')[0]
         default_imap_folder = conf.value
     except:
-        default_imap_folder = getattr(
-            settings, 'HARDTREE_MESSAGING_IMAP_DEFAULT_FOLDER_NAME', 'UNSEEN')
+        default_imap_folder = settings.ANAF_MESSAGING_IMAP_DEFAULT_FOLDER_NAME
 
     # signature
     try:

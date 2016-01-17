@@ -111,14 +111,13 @@ def settings_view(request, response_format='html'):
         default_perspective = None
 
     # language
-    language = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', '')
+    language = settings.ANAF_LANGUAGES_DEFAULT
     try:
         conf = ModuleSetting.get('language', user=user)[0]
         language = conf.value
     except IndexError:
         pass
-    all_languages = getattr(
-        settings, 'HARDTREE_LANGUAGES', [('en', 'English')])
+    all_languages = settings.ANAF_LANGUAGES
 
     # time zone
     default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
