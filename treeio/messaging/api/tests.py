@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Messaging: test api
 """
@@ -18,7 +13,6 @@ from treeio.messaging.models import Message, MessageStream, MailingList
 from treeio.identities.models import Contact, ContactType
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class MessagingApiTest(TestCase):
     "Messaging functional tests for api"
 

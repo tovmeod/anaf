@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Infrastructure module forms
 """
@@ -28,7 +23,7 @@ class ItemForm(forms.Form):
     files = {}
 
     def _get_form_field(self, field, value=None):
-        "Generate a Django-friendly field from Hardtree spec in DB"
+        "Generate a Django-friendly field from Anaf spec in DB"
         form_field = None
         if field.field_type == 'text':
             form_field = forms.CharField(label=field.label, max_length=512,
@@ -105,11 +100,9 @@ class ItemForm(forms.Form):
         filepath = settings.MEDIA_ROOT + filepath
         try:
             img = Image.open(filepath)
-            expected_size = getattr(
-                settings, 'HARDTREE_IMAGE_MAX_SIZE', [400, 300])
+            expected_size = settings.ANAF_IMAGE_MAX_SIZE
             if img.size[0] > expected_size[0] or img.size[1] > expected_size[1]:
-                filter_name = getattr(
-                    settings, 'HARDTREE_IMAGE_RESIZE_FILTER', 'ANTIALIAS')
+                filter_name = settings.ANAF_IMAGE_RESIZE_FILTER
                 filter = getattr(Image, filter_name, Image.ANTIALIAS)
                 aspect = img.size[0] / float(img.size[1])
                 newsize = list(expected_size)

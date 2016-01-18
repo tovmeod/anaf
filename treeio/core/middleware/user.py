@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 User middleware: performs user-specific request pre-processing
 """
@@ -47,7 +42,7 @@ class CommonMiddleware(object):
 
             domain = getattr(settings, 'CURRENT_DOMAIN', 'default')
             cache.set('treeio_%s_last' % (domain), time.time())
-            if getattr(settings, 'HARDTREE_SUBSCRIPTION_BLOCKED', False) and '/accounts' not in request.path:
+            if settings.ANAF_SUBSCRIPTION_BLOCKED and '/accounts' not in request.path:
                 return HttpResponseRedirect('/accounts/logout')
 
             user = None
@@ -116,7 +111,7 @@ class CommonMiddleware(object):
 
         if isinstance(instance, Object):
             attr = sender._meta.object_name.split('_', 1)[1]
-            if attr in settings.HARDTREE_OBJECT_BLACKLIST:
+            if attr in settings.ANAF_OBJECT_BLACKLIST:
                 return
 
             if action == "pre_clear" or action == "pre_remove":
@@ -224,13 +219,13 @@ class PopupMiddleware():
                     content['popup'].update({'object': {'name': unicode(hobject),
                                                         'id': obj}})
                     response = HttpResponse(json.dumps(content),
-                                            content_type=settings.HARDTREE_RESPONSE_FORMATS['json'])
+                                            content_type=settings.ANAF_RESPONSE_FORMATS['json'])
                     break
 
             content = json.loads(response.content)
             content['popup'].update({'redirect': True})
             response = HttpResponse(json.dumps(content),
-                                    content_type=settings.HARDTREE_RESPONSE_FORMATS['json'])
+                                    content_type=settings.ANAF_RESPONSE_FORMATS['json'])
 
         return response
 
@@ -244,7 +239,7 @@ class LanguageMiddleware(object):
     def process_request(self, request):
         "Set language for the current user"
 
-        lang = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', 'en')
+        lang = settings.ANAF_LANGUAGES_DEFAULT
 
         if request.user.username:
             try:
@@ -270,7 +265,7 @@ def process_timezone_field(user, instance):
     "Processes date and datetime fields according to the selected time zone"
     from datetime import date, datetime, timedelta
 
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -281,11 +276,9 @@ def process_timezone_field(user, instance):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-        (1, '(GMT-11:00) International Date Line West')])
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
     title = all_timezones[int(default_timezone)][1]
     GMT = title[4:10]  # with sign e.g. +06:00
     sign = GMT[0:1]  # + or -
@@ -293,7 +286,7 @@ def process_timezone_field(user, instance):
     mins = int(GMT[4:6])
 
     for field in instance.get_fields():
-        if field.name not in getattr(settings, 'HARDTREE_TIMEZONE_BLACKLIST', []):
+        if field.name not in settings.ANAF_TIMEZONE_BLACKLIST:
             if isinstance(field, models.DateTimeField) or \
                     isinstance(field, models.DateField):
                 if getattr(instance, field.name):
@@ -316,8 +309,8 @@ class SSLMiddleware(object):
 
     def process_request(self, request):
         """ Revert to SSL/no SSL depending on settings """
-        if getattr(settings, 'HARDTREE_SUBSCRIPTION_SSL_ENABLED', True):
-            if getattr(settings, 'HARDTREE_SUBSCRIPTION_SSL_ENFORCE', False) and not request.is_secure():
+        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED:
+            if settings.ANAF_SUBSCRIPTION_SSL_ENFORCE and not request.is_secure():
                 redirect_url = request.build_absolute_uri()
                 return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
         else:
@@ -327,10 +320,10 @@ class SSLMiddleware(object):
 
     def process_response(self, request, response):
         """ Keep protocol """
-        if getattr(settings, 'HARDTREE_SUBSCRIPTION_SSL_ENABLED', True):
+        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED:
             if response.status_code == 302:
                 redirect_url = request.build_absolute_uri(response['Location'])
-                if request.is_secure() or getattr(settings, 'HARDTREE_SUBSCRIPTION_SSL_ENFORCE', False):
+                if request.is_secure() or settings.ANAF_SUBSCRIPTION_SSL_ENFORCE:
                     response['Location'] = redirect_url.replace(
                         'http://', 'https://')
         return response

@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Events: test api
 """
@@ -17,7 +12,6 @@ from treeio.events.models import Event
 from datetime import datetime
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class EventsViewsTest(TestCase):
     "Events functional tests for api"
     username = "api_test"

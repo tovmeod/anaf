@@ -1099,7 +1099,7 @@ treeio.utils = {
 }
 
 /*
- * Hardtree modules JS library
+ * Anaf modules JS library
  * 
  * Needs to be loaded after treeio.js
  */
@@ -1244,7 +1244,7 @@ treeio.modules = {
   }
 }
 
-/* Hardtree Nuvius library */
+/* Anaf Nuvius library */
 treeio.nuvius = {
   
   'profile': null,

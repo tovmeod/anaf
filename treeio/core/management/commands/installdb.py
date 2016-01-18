@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 from distutils.util import strtobool
 from django.core.management.base import BaseCommand, CommandError
 from treeio.core.conf import settings

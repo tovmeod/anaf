@@ -1,14 +1,14 @@
 
 Core
-====================================
+====
 
-Hardtree Core is at the heart of the project. It provides a set of generic models, such as Object,
-which is extended by many other entities in Hardtree.
+Anaf Core is at the heart of the project. It provides a set of generic models, such as Object,
+which is extended by many other entities in Anaf.
 
 The Core also handles automatic module insertion and provides many routines for module manipulation.
 
 Models
-------------------------------------
+------
 
 .. automodule:: treeio.core.models
    :members:
@@ -17,7 +17,7 @@ Models
 
 
 Account
-------------------------------------
+-------
 
 .. automodule:: treeio.account.views
    :members:
@@ -25,7 +25,7 @@ Account
    :show-inheritance:
 
 Administration
-------------------------------------
+--------------
 
 .. automodule:: treeio.core.administration.views
    :members:
@@ -33,7 +33,7 @@ Administration
    :show-inheritance:
 
 Dashboard
-------------------------------------
+---------
 
 .. automodule:: treeio.core.dashboard.views
    :members:
@@ -41,7 +41,7 @@ Dashboard
    :show-inheritance:
 
 Trash
-------------------------------------
+-----
 
 .. automodule:: treeio.core.trash.views
    :members:

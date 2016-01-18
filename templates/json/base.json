@@ -1,5 +1,5 @@
 {"response": {
-  "title": "{% block title %}Hardtree{% endblock %}",
+  "title": "{% block title %}Anaf{% endblock %}",
   {% block page %}{% endblock %}
   }
 }

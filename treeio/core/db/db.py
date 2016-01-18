@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Database manipulations
 
@@ -16,7 +11,7 @@ from os import path
 
 FILE_ROOT = path.abspath(path.dirname(__file__))
 
-HARDTREE_DB_SETTINGS_FILE = path.join(FILE_ROOT, 'dbsettings.json')
+DB_SETTINGS_FILE = path.join(FILE_ROOT, 'dbsettings.json')
 NO_DEFAULT = False
 
 
@@ -46,13 +41,13 @@ class DatabaseDict(UserDict.DictMixin, dict):
         self._load_databases(*args, **kwargs)
 
     def _load_databases(self, *args, **kwargs):
-        dbfile = open(HARDTREE_DB_SETTINGS_FILE, 'r')
+        dbfile = open(DB_SETTINGS_FILE, 'r')
         self.store = json.load(dbfile)
         self.update(dict(*args, **kwargs))  # use the free update to set keys
         self._ensure_defaults()
 
     def _save_databases(self):
-        f = open(HARDTREE_DB_SETTINGS_FILE, 'w')
+        f = open(DB_SETTINGS_FILE, 'w')
         json.dump(self.store, f)
         f.close()
 

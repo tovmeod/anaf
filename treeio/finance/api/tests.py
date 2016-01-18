@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 # -*- coding: utf-8 -*-
 
 import json
@@ -16,7 +11,6 @@ from treeio.finance.models import Transaction, Liability, Category, Account, Equ
 from treeio.identities.models import Contact, ContactType
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class FinanceAPITest(TestCase):
     "Finance api tests"
     username = "api_test"

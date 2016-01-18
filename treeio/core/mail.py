@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Core Mail Framework
 """
@@ -26,12 +21,12 @@ from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import removetags
 
-EMAIL_SERVER = getattr(settings, 'EMAIL_SERVER', '127.0.0.1')
-IMAP_SERVER = getattr(settings, 'IMAP_SERVER', '')
-EMAIL_USERNAME = getattr(settings, 'EMAIL_USERNAME', None)
-EMAIL_PASSWORD = getattr(settings, 'EMAIL_PASSWORD', None)
-EMAIL_FROM = getattr(settings, 'EMAIL_FROM', 'noreply@tree.io')
-DEFAULT_SIGNATURE = getattr(settings, 'DEFAULT_SIGNATURE', '')
+EMAIL_SERVER = settings.ANAF_EMAIL_SERVER
+IMAP_SERVER = settings.ANAF_IMAP_SERVER
+EMAIL_USERNAME = settings.ANAF_EMAIL_USERNAME
+EMAIL_PASSWORD = settings.ANAF_EMAIL_PASSWORD
+EMAIL_FROM = settings.ANAF_EMAIL_FROM
+DEFAULT_SIGNATURE = settings.ANAF_DEFAULT_SIGNATURE
 
 
 class BaseEmail(Thread):
@@ -246,12 +241,10 @@ class EmailReceiver(Thread):
         self.incoming_server_name = server_name
         self.incoming_server_username = username
         self.incoming_password = password
-        self.folder_name = folder_name or getattr(
-            settings, 'HARDTREE_MESSAGING_IMAP_DEFAULT_FOLDER_NAME', 'UNSEEN')
+        self.folder_name = folder_name or settings.ANAF_MESSAGING_IMAP_DEFAULT_FOLDER_NAME
 
-        default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
-        all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                                (1, '(GMT-11:00) International Date Line West')])
+        default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
+        all_timezones = settings.ANAF_SERVER_TIMEZONE
         title = all_timezones[int(default_timezone)][1]
         GMT = title[4:10]  # with sign e.g. +06:00
         sign = GMT[0:1]  # + or -
@@ -294,8 +287,7 @@ class EmailReceiver(Thread):
 
         if self.incoming_server_type == 'IMAP' or self.incoming_server_type == 'IMAP-SSL':
 
-            HARDTREE_MESSAGING_IMAP_LIMIT = getattr(
-                settings, 'HARDTREE_MESSAGING_IMAP_LIMIT', 100)
+            ANAF_MESSAGING_IMAP_LIMIT = settings.ANAF_MESSAGING_IMAP_LIMIT
             # connect to the server
             port, ssl = self.get_imap_port()
 
@@ -317,7 +309,7 @@ class EmailReceiver(Thread):
                 msgnums = data[0].split() if data[0] else []
                 msgnums = sorted(msgnums, cmp=intcmp, reverse=True)
 
-            for num in msgnums[:HARDTREE_MESSAGING_IMAP_LIMIT]:
+            for num in msgnums[:ANAF_MESSAGING_IMAP_LIMIT]:
                 resp, msg = M.fetch(num, '(RFC822)')
                 mail = email.message_from_string(msg[0][1])
                 self.process_mail(mail)
@@ -329,8 +321,7 @@ class EmailReceiver(Thread):
 
         if self.incoming_server_type == 'POP3' or self.incoming_server_type == 'POP3-SSL':
 
-            HARDTREE_MESSAGING_POP3_LIMIT = getattr(
-                settings, 'HARDTREE_MESSAGING_POP3_LIMIT', 100)
+            ANAF_MESSAGING_POP3_LIMIT = settings.ANAF_MESSAGING_POP3_LIMIT
             # connect to the server
             port, ssl = self.get_pop_port()
 
@@ -344,8 +335,8 @@ class EmailReceiver(Thread):
             numMessages = len(M.list()[1])
 
             # Select correct limit for range(limit, numMessages)
-            if numMessages >= HARDTREE_MESSAGING_POP3_LIMIT:
-                limit = numMessages - HARDTREE_MESSAGING_POP3_LIMIT
+            if numMessages >= ANAF_MESSAGING_POP3_LIMIT:
+                limit = numMessages - ANAF_MESSAGING_POP3_LIMIT
             else:
                 limit = 0
 
@@ -471,12 +462,10 @@ class EmailReceiver(Thread):
         body = body.replace('\r', '').replace('=\n', '').replace('=\n\r', '')
         body = body.replace('=20\n', '\n\n')
 
-        HARDTREE_MESSAGING_UNSAFE_BLOCKS = getattr(settings, 'HARDTREE_MESSAGING_UNSAFE_BLOCKS',
-                                                   ('head', 'object', 'embed', 'applet', 'noframes',
-                                                    'noscript', 'noembed', 'iframe', 'frame', 'frameset'))
+        ANAF_MESSAGING_UNSAFE_BLOCKS = settings.ANAF_MESSAGING_UNSAFE_BLOCKS
 
         # Strip unsafe tags
-        tags_str = ' '.join(HARDTREE_MESSAGING_UNSAFE_BLOCKS)
+        tags_str = ' '.join(ANAF_MESSAGING_UNSAFE_BLOCKS)
         body = removetags(body, tags_str)
 
         # Remove multiple <br /> tags

@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Compression middleware
 """
@@ -24,6 +19,6 @@ class SpacelessMiddleware(object):
         "Process response"
         if 'text/html' in response['Content-Type']:
             response.content = short(response.content)
-        if settings.HARDTREE_MINIFY_JSON and settings.HARDTREE_RESPONSE_FORMATS['json'] in response['Content-Type']:
+        if settings.ANAF_MINIFY_JSON and settings.ANAF_RESPONSE_FORMATS['json'] in response['Content-Type']:
             response.content = _minify_json(response.content)
         return response

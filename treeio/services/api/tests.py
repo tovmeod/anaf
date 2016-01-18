@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 # -*- coding: utf-8 -*-
 
 import urllib
@@ -19,7 +14,6 @@ from treeio.identities.models import Contact, ContactType
 import datetime
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class ServicesViewsTest(TestCase):
     "Services functional tests for api"
     username = "api_test"

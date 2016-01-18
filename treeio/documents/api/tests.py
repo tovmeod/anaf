@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Documents: test api
 """
@@ -19,7 +14,6 @@ from treeio.core.models import User, Group, Perspective, ModuleSetting, Object
 from treeio.documents.models import Folder, Document, File, WebLink
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class DocumentsViewsTest(TestCase):
     "Documents functional tests for api"
 

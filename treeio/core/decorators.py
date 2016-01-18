@@ -1,10 +1,5 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
-Hardtree Core decorators for views
+Core decorators for views
 """
 
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -31,7 +26,7 @@ def treeio_login_required(f):
             for module in all_modules:
                 try:
                     import_name = module.name + "." + \
-                                  settings.HARDTREE_MODULE_IDENTIFIER
+                                  settings.ANAF_MODULE_IDENTIFIER
                     hmodule = __import__(
                         import_name, fromlist=[str(module.name)])
                     urls = hmodule.URL_PATTERNS
@@ -98,8 +93,7 @@ def module_admin_required(module_name=None):
 
 def _is_full_redirect(redirect_url):
     "Returns True if this page requires full reload with AJAX enabled"
-    redirect_views = getattr(
-        settings, 'HARDTREE_AJAX_RELOAD_ON_REDIRECT', ['user_login'])
+    redirect_views = settings.ANAF_AJAX_RELOAD_ON_REDIRECT
     for view in redirect_views:
         url = ''
         try:
@@ -129,23 +123,23 @@ def handle_response_format(f):
                         location = response['Location']
                         if not _is_full_redirect(location):
                             response = HttpResponse(json.dumps({'redirect': location}),
-                                                    content_type=settings.HARDTREE_RESPONSE_FORMATS['ajax'])
+                                                    content_type=settings.ANAF_RESPONSE_FORMATS['ajax'])
                         else:
                             if '.ajax' in location:
                                 location = str(location).replace('.ajax', '')
                             response = HttpResponse(json.dumps({'redirect_out': location}),
-                                                    content_type=settings.HARDTREE_RESPONSE_FORMATS['ajax'])
+                                                    content_type=settings.ANAF_RESPONSE_FORMATS['ajax'])
                     elif hasattr(request, 'redirect'):
                         location = request.redirect
                         response = HttpResponse(json.dumps({'redirect': location}),
-                                                content_type=settings.HARDTREE_RESPONSE_FORMATS['ajax'])
+                                                content_type=settings.ANAF_RESPONSE_FORMATS['ajax'])
                     elif 'Content-Disposition' in response and \
-                            response['Content-Type'] not in settings.HARDTREE_RESPONSE_FORMATS.values():
+                            response['Content-Type'] not in settings.ANAF_RESPONSE_FORMATS.values():
                         location = request.get_full_path()
                         if '.ajax' in location:
                             location = str(location).replace('.ajax', '')
                         response = HttpResponse(json.dumps({'redirect_out': location}),
-                                                content_type=settings.HARDTREE_RESPONSE_FORMATS['ajax'])
+                                                content_type=settings.ANAF_RESPONSE_FORMATS['ajax'])
 
                 return response
             else:

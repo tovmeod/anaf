@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Object-related Core templatetags
 """
@@ -384,7 +379,7 @@ def help_link(context, link=''):
         if match:
             link = match.group('url') + "/"
 
-    link = getattr(settings, 'HARDTREE_HELP_LINK_PREFIX', '/help/') + link
+    link = settings.ANAF_HELP_LINK_PREFIX + link
 
     return Markup(render_to_string('core/tags/help_link_block',
                                    {'link': link},

@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Modules middleware: handles modular behavior of the system
 """
@@ -16,14 +11,14 @@ from treeio.core.models import Module
 
 class ModuleDetect(object):
 
-    "Handles Hardtree automatic modules detection"
+    "Handles automatic modules detection"
 
     def process_request(self, request):
         "Process request"
         hmodules = dict()
         for module in settings.INSTALLED_APPS:
             import_name = str(
-                module) + "." + settings.HARDTREE_MODULE_IDENTIFIER
+                module) + "." + settings.ANAF_MODULE_IDENTIFIER
             try:
                 hmodule = __import__(import_name, fromlist=[str(module)])
                 hmodules[str(module)] = hmodule.PROPERTIES

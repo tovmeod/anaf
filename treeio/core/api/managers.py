@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 from django.db import models
 from django.contrib.auth.models import User
 from treeio.core.conf import settings
@@ -10,7 +5,7 @@ from treeio.core.conf import settings
 KEY_SIZE = 18
 SECRET_SIZE = 32
 
-CONSUMER_DB = getattr(settings, 'HARDTREE_API_CONSUMER_DB', 'default')
+CONSUMER_DB = settings.ANAF_API_CONSUMER_DB
 
 
 class KeyManager(models.Manager):

@@ -1,5 +1,5 @@
 {% extends "json/page.json" %}
-{% block title %}Project Management / Hardtree{% endblock %}
+{% block title %}Project Management / Anaf{% endblock %}
 {% block module_title %}Project Management{% endblock %}
 {% block module_subtitle %}Projects{% endblock %}
 {% block content %}

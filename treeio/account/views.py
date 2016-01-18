@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Core module views
 """
@@ -105,7 +100,7 @@ def settings_view(request, response_format='html'):
             'treeio.core', 'default_permissions', user=user)[0]
         default_permissions = conf.value
     except:
-        default_permissions = settings.HARDTREE_DEFAULT_PERMISSIONS
+        default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
 
     # default perspective
     try:
@@ -116,17 +111,16 @@ def settings_view(request, response_format='html'):
         default_perspective = None
 
     # language
-    language = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', '')
+    language = settings.ANAF_LANGUAGES_DEFAULT
     try:
         conf = ModuleSetting.get('language', user=user)[0]
         language = conf.value
     except IndexError:
         pass
-    all_languages = getattr(
-        settings, 'HARDTREE_LANGUAGES', [('en', 'English')])
+    all_languages = settings.ANAF_LANGUAGES
 
     # time zone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get('default_timezone')[0]
         default_timezone = conf.value
@@ -137,14 +131,12 @@ def settings_view(request, response_format='html'):
         conf = ModuleSetting.get('default_timezone', user=user)[0]
         default_timezone = conf.value
     except:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
 
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE')
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
 
     # email notifications e.g. new task assigned to you
-    email_notifications = getattr(
-        settings, 'HARDTREE_ALLOW_EMAIL_NOTIFICATIONS', False)
+    email_notifications = settings.ANAF_ALLOW_EMAIL_NOTIFICATIONS
     try:
         conf = ModuleSetting.get('email_notifications', user=user)[0]
         email_notifications = conf.value

@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Core forms
 """
@@ -156,9 +151,8 @@ class SettingsForm(forms.Form):
         except:
             pass
 
-        self.fields['default_timezone'].choices = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')
-        timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+        self.fields['default_timezone'].choices = settings.ANAF_SERVER_TIMEZONE
+        timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
         try:
             conf = ModuleSetting.get('default_timezone', user=user)[0]
             timezone = conf.value
@@ -166,9 +160,8 @@ class SettingsForm(forms.Form):
             pass
         self.fields['default_timezone'].initial = timezone
 
-        self.fields['language'].choices = getattr(
-            settings, 'HARDTREE_LANGUAGES', [('en', 'English')])
-        language = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', '')
+        self.fields['language'].choices = settings.ANAF_LANGUAGES
+        language = settings.ANAF_LANGUAGES_DEFAULT
         try:
             conf = ModuleSetting.get('language', user=user)[0]
             language = conf.value
@@ -181,7 +174,7 @@ class SettingsForm(forms.Form):
             self.fields['email_notifications'].initial = conf.value
         except:
             self.fields[
-                'email_notifications'].initial = settings.HARDTREE_ALLOW_EMAIL_NOTIFICATIONS
+                'email_notifications'].initial = settings.ANAF_ALLOW_EMAIL_NOTIFICATIONS
 
         perspective = user.get_perspective()
 

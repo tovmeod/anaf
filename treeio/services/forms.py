@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Services module forms
 """
@@ -77,7 +72,7 @@ class SettingsForm(forms.Form):
             self.fields['send_email_to_caller'].initial = conf.value
         except:
             self.fields[
-                'send_email_to_caller'].initial = settings.HARDTREE_SEND_EMAIL_TO_CALLER
+                'send_email_to_caller'].initial = settings.ANAF_SEND_EMAIL_TO_CALLER
 
         # notification template
         try:

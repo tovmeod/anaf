@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Knowledge api: test suites
 """
@@ -16,7 +11,6 @@ from treeio.core.models import User, Group, Perspective, ModuleSetting, Object
 from treeio.knowledge.models import KnowledgeFolder, KnowledgeItem, KnowledgeCategory
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class KnowledgeViewsTest(TestCase):
     "Knowledge functional tests for views"
 

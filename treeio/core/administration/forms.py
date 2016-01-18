@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Administration module forms
 """
@@ -78,12 +73,10 @@ class SettingsForm(forms.Form):
                 'treeio.core', 'default_permissions')[0]
             self.fields['default_permissions'].initial = conf.value
         except:
-            self.fields['default_permissions'].initial = getattr(
-                settings, 'HARDTREE_DEFAULT_PERMISSIONS', 'everyone')
+            self.fields['default_permissions'].initial = settings.ANAF_DEFAULT_PERMISSIONS
 
-        self.fields['default_timezone'].choices = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')
-        timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+        self.fields['default_timezone'].choices = settings.ANAF_SERVER_TIMEZONE
+        timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
         try:
             conf = ModuleSetting.get_for_module(
                 'treeio.core', 'default_timezone')[0]
@@ -92,9 +85,8 @@ class SettingsForm(forms.Form):
             pass
         self.fields['default_timezone'].initial = timezone
 
-        self.fields['language'].choices = getattr(
-            settings, 'HARDTREE_LANGUAGES', [('en', 'English')])
-        language = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', '')
+        self.fields['language'].choices = settings.ANAF_LANGUAGES
+        language = settings.ANAF_LANGUAGES_DEFAULT
         try:
             conf = ModuleSetting.get_for_module('treeio.core', 'language')[0]
             language = conf.value
@@ -102,7 +94,7 @@ class SettingsForm(forms.Form):
             pass
         self.fields['language'].initial = language
 
-        if getattr(settings, 'HARDTREE_SUBSCRIPTION_CUSTOMIZATION', True):
+        if settings.ANAF_SUBSCRIPTION_CUSTOMIZATION:
             logopath = ''
             try:
                 conf = ModuleSetting.get_for_module(
@@ -171,7 +163,7 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('language',
                                          self.cleaned_data['language'],
                                          'treeio.core')
-            if getattr(settings, 'HARDTREE_SUBSCRIPTION_CUSTOMIZATION', True):
+            if settings.ANAF_SUBSCRIPTION_CUSTOMIZATION:
                 if isinstance(self.fields['logo'], forms.FileField):
                     logopath = self._handle_uploaded_file('logo')
                     ModuleSetting.set_for_module(
@@ -254,9 +246,8 @@ class UserForm(forms.ModelForm):
             raise forms.ValidationError(
                 _("User with username %s already exists.") % data)
         if self.instance and not self.instance.id:
-            # Check Hardtree Subscription user limit
-            user_limit = getattr(
-                settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+            # Check Anaf Subscription user limit
+            user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
             if user_limit > 0:
                 user_number = User.objects.filter(disabled=False).count()
                 if user_number >= user_limit:
@@ -276,8 +267,7 @@ class UserForm(forms.ModelForm):
         "Ensure the admin does not go over subscription limit by re-enabling users"
         enable = not self.cleaned_data['disabled']
         if self.instance and self.instance.id and enable and self.instance.disabled:
-            user_limit = getattr(
-                settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+            user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
             if user_limit > 0:
                 user_number = User.objects.filter(disabled=False).count()
                 if user_number >= user_limit:
@@ -298,7 +288,7 @@ class UserForm(forms.ModelForm):
             new_user.set_password(self.cleaned_data['password'])
             models.signals.post_save.disconnect(user_autocreate_handler, sender=django_auth.User)
             new_user.save()
-            if getattr(settings, 'HARDTREE_SIGNALS_AUTOCREATE_USER', False):
+            if settings.ANAF_SIGNALS_AUTOCREATE_USER:
                 models.signals.post_save.connect(user_autocreate_handler, sender=django_auth.User)
             self.instance.user = new_user
             super(UserForm, self).save(*args, **kwargs)

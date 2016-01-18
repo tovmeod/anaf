@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Service Support module: views
 """
@@ -915,7 +910,7 @@ def settings_view(request, response_format='html'):
             'treeio.services', 'send_email_to_caller')[0]
         send_email_to_caller = conf.value
     except Exception:
-        send_email_to_caller = settings.HARDTREE_SEND_EMAIL_TO_CALLER
+        send_email_to_caller = settings.ANAF_SEND_EMAIL_TO_CALLER
 
     # notification template
     send_email_example = ''

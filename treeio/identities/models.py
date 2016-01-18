@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Identities module objects
 """
@@ -180,6 +175,6 @@ def contact_autocreate_handler(sender, instance, created, **kwargs):
             pass
 
 
-# Autocreate a Contact when Hardtree user is created
+# Autocreate a Contact when Anaf user is created
 if getattr(settings, 'HARDTREE_SIGNALS_AUTOCREATE_CONTACT', True):
     post_save.connect(contact_autocreate_handler, sender=User)

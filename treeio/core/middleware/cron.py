@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Cron middleware
 """
@@ -23,11 +18,11 @@ class CronRunner(Thread):
         super(CronRunner, self).__init__(*args, **kwargs)
 
         self.jobs = []
-        self.sleeptime = settings.HARDTREE_CRON_PERIOD
+        self.sleeptime = settings.ANAF_CRON_PERIOD
 
         for module in settings.INSTALLED_APPS:
             import_name = str(
-                module) + "." + settings.HARDTREE_MODULE_IDENTIFIER
+                module) + "." + settings.ANAF_MODULE_IDENTIFIER
             try:
                 hmodule = __import__(import_name, fromlist=[str(module)])
                 self.jobs.extend(hmodule.CRON)
@@ -71,6 +66,6 @@ class CronMiddleware(object):
     runner = None
 
     def __init__(self):
-        if not getattr(settings, "HARDTREE_CRON_DISABLED", False):
+        if not settings.ANAF_CRON_DISABLED:
             self.runner = CronRunner()
             self.runner.start()

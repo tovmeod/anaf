@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 # -*- coding: utf-8 -*-
 
 import json
@@ -15,7 +10,6 @@ from django.contrib.auth.models import User as DjangoUser
 from treeio.core.models import User, Group, Perspective, ModuleSetting, Object
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class IdentitiesHandlersTest(TestCase):
     "Identities Handler tests"
     username = "api_test"

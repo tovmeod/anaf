@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Infrastructure: test api
 """
@@ -17,7 +12,6 @@ from treeio.core.models import User, Group, Perspective, ModuleSetting, Object
 from treeio.infrastructure.models import Item, ItemValue, ItemField, ItemType, ItemStatus, ItemServicing
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class InfrastructureApiTest(TestCase):
     "Infrastructure functional tests for api"
     username = "api_test"

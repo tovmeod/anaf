@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 News module forms
 """
@@ -37,7 +32,7 @@ class UpdateRecordForm(forms.ModelForm):
                 'treeio.core', 'default_permissions')[0]
             default_permissions = conf.value
         except:
-            default_permissions = settings.HARDTREE_DEFAULT_PERMISSIONS
+            default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
 
         if self.user and 'userallgroups' in default_permissions:
             self.fields['recipients'].initial = [

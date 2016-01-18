@@ -1,5 +1,5 @@
 """
-Rendering routines for Hardtree
+Rendering routines
 """
 
 from django.http import HttpResponse
@@ -45,7 +45,7 @@ def render_to_string(template_name, context=None, context_instance=None, respons
     "Picks up the appropriate template to render to string"
     if context is None:
         context = {}
-    if not response_format or 'pdf' in response_format or response_format not in settings.HARDTREE_RESPONSE_FORMATS:
+    if not response_format or 'pdf' in response_format or response_format not in settings.ANAF_RESPONSE_FORMATS:
         response_format = 'html'
 
     if not ("." + response_format) in template_name:
@@ -126,10 +126,10 @@ def render_to_response(template_name, context=None, context_instance=None, respo
     if not response_format:
         response_format = 'html'
 
-    if response_format not in settings.HARDTREE_RESPONSE_FORMATS:
+    if response_format not in settings.ANAF_RESPONSE_FORMATS:
         response_format = 'html'
 
-    content_type = settings.HARDTREE_RESPONSE_FORMATS[response_format]
+    content_type = settings.ANAF_RESPONSE_FORMATS[response_format]
 
     if 'pdf' in response_format:
         while True:
@@ -201,7 +201,7 @@ def render_to_response(template_name, context=None, context_instance=None, respo
         if response_format == 'html' and context_instance and context_instance['request'].path[:3] == '/m/':
             context['response_format'] = response_format = 'mobile'
 
-        if getattr(settings, 'HARDTREE_FORCE_AJAX_RENDERING', False):
+        if settings.ANAF_FORCE_AJAX_RENDERING:
             context = preprocess_context_ajax(context)
 
         rendered_string = render_to_string(
@@ -232,7 +232,7 @@ def render_string_template(template_string, context=None, context_instance=None)
 def get_template_source(template_name, response_format='html'):
     "Returns source of the template file"
 
-    if not response_format or 'pdf' in response_format or response_format not in settings.HARDTREE_RESPONSE_FORMATS:
+    if not response_format or 'pdf' in response_format or response_format not in settings.ANAF_RESPONSE_FORMATS:
         response_format = 'html'
 
     if not ("." + response_format) in template_name:

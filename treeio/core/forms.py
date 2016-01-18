@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Core module forms
 """
@@ -216,8 +211,8 @@ class InvitationForm(forms.Form):
         if existing:
             raise forms.ValidationError(
                 _("User with username %s already exists.") % data)
-        # Check Hardtree Subscription user limit
-        user_limit = getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+        # Check Anaf Subscription user limit
+        user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
         if user_limit > 0:
             user_number = User.objects.filter(disabled=False).count()
             if user_number >= user_limit:

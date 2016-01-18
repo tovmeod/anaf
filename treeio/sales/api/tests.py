@@ -1,9 +1,4 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
-# -*- codeing: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import json
 from django.test import TestCase
@@ -18,7 +13,6 @@ from treeio.sales.models import SaleOrder, Product, OrderedProduct, Subscription
 from treeio.finance.models import Currency
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class SalesAPITest(TestCase):
     "Sales functional tests for views"
 

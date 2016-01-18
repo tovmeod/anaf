@@ -1,11 +1,6 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 # -*- coding: utf-8 -*-
 #
-# Hardtree documentation build configuration file, created by
+# Anaf documentation build configuration file, created by
 # sphinx-quickstart on Mon Oct 25 16:15:27 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -51,8 +46,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Hardtree'
-copyright = u'2010, Tree.io Limited'
+project = u'Anaf'
+copyright = u'2016, Avraham'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -175,7 +170,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Hardtreedoc'
+htmlhelp_basename = 'Anafdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------
@@ -189,7 +184,7 @@ htmlhelp_basename = 'Hardtreedoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'Hardtree.tex', u'Hardtree Documentation',
+    ('index', 'Anaf.tex', u'Anaf Documentation',
      u'Tree.io Limited', 'manual'),
 ]
 
@@ -222,6 +217,6 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'treeio', u'Hardtree Documentation',
-     [u'Tree.io Limited'], 1)
+    ('index', 'anaf', u'Anaf Documentation',
+     [u'Avraham'], 1)
 ]

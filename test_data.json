@@ -1,0 +1,5157 @@
+[
+{
+    "fields": {
+        "codename": "add_permission",
+        "name": "Can add permission",
+        "content_type": 1
+    },
+    "model": "auth.permission",
+    "pk": 1
+},
+{
+    "fields": {
+        "codename": "change_permission",
+        "name": "Can change permission",
+        "content_type": 1
+    },
+    "model": "auth.permission",
+    "pk": 2
+},
+{
+    "fields": {
+        "codename": "delete_permission",
+        "name": "Can delete permission",
+        "content_type": 1
+    },
+    "model": "auth.permission",
+    "pk": 3
+},
+{
+    "fields": {
+        "codename": "add_group",
+        "name": "Can add group",
+        "content_type": 2
+    },
+    "model": "auth.permission",
+    "pk": 4
+},
+{
+    "fields": {
+        "codename": "change_group",
+        "name": "Can change group",
+        "content_type": 2
+    },
+    "model": "auth.permission",
+    "pk": 5
+},
+{
+    "fields": {
+        "codename": "delete_group",
+        "name": "Can delete group",
+        "content_type": 2
+    },
+    "model": "auth.permission",
+    "pk": 6
+},
+{
+    "fields": {
+        "codename": "add_user",
+        "name": "Can add user",
+        "content_type": 3
+    },
+    "model": "auth.permission",
+    "pk": 7
+},
+{
+    "fields": {
+        "codename": "change_user",
+        "name": "Can change user",
+        "content_type": 3
+    },
+    "model": "auth.permission",
+    "pk": 8
+},
+{
+    "fields": {
+        "codename": "delete_user",
+        "name": "Can delete user",
+        "content_type": 3
+    },
+    "model": "auth.permission",
+    "pk": 9
+},
+{
+    "fields": {
+        "codename": "add_contenttype",
+        "name": "Can add content type",
+        "content_type": 4
+    },
+    "model": "auth.permission",
+    "pk": 10
+},
+{
+    "fields": {
+        "codename": "change_contenttype",
+        "name": "Can change content type",
+        "content_type": 4
+    },
+    "model": "auth.permission",
+    "pk": 11
+},
+{
+    "fields": {
+        "codename": "delete_contenttype",
+        "name": "Can delete content type",
+        "content_type": 4
+    },
+    "model": "auth.permission",
+    "pk": 12
+},
+{
+    "fields": {
+        "codename": "add_session",
+        "name": "Can add session",
+        "content_type": 5
+    },
+    "model": "auth.permission",
+    "pk": 13
+},
+{
+    "fields": {
+        "codename": "change_session",
+        "name": "Can change session",
+        "content_type": 5
+    },
+    "model": "auth.permission",
+    "pk": 14
+},
+{
+    "fields": {
+        "codename": "delete_session",
+        "name": "Can delete session",
+        "content_type": 5
+    },
+    "model": "auth.permission",
+    "pk": 15
+},
+{
+    "fields": {
+        "codename": "add_site",
+        "name": "Can add site",
+        "content_type": 6
+    },
+    "model": "auth.permission",
+    "pk": 16
+},
+{
+    "fields": {
+        "codename": "change_site",
+        "name": "Can change site",
+        "content_type": 6
+    },
+    "model": "auth.permission",
+    "pk": 17
+},
+{
+    "fields": {
+        "codename": "delete_site",
+        "name": "Can delete site",
+        "content_type": 6
+    },
+    "model": "auth.permission",
+    "pk": 18
+},
+{
+    "fields": {
+        "codename": "add_logentry",
+        "name": "Can add log entry",
+        "content_type": 7
+    },
+    "model": "auth.permission",
+    "pk": 19
+},
+{
+    "fields": {
+        "codename": "change_logentry",
+        "name": "Can change log entry",
+        "content_type": 7
+    },
+    "model": "auth.permission",
+    "pk": 20
+},
+{
+    "fields": {
+        "codename": "delete_logentry",
+        "name": "Can delete log entry",
+        "content_type": 7
+    },
+    "model": "auth.permission",
+    "pk": 21
+},
+{
+    "fields": {
+        "codename": "add_notification",
+        "name": "Can add notification",
+        "content_type": 8
+    },
+    "model": "auth.permission",
+    "pk": 22
+},
+{
+    "fields": {
+        "codename": "change_notification",
+        "name": "Can change notification",
+        "content_type": 8
+    },
+    "model": "auth.permission",
+    "pk": 23
+},
+{
+    "fields": {
+        "codename": "delete_notification",
+        "name": "Can delete notification",
+        "content_type": 8
+    },
+    "model": "auth.permission",
+    "pk": 24
+},
+{
+    "fields": {
+        "codename": "add_notificationsetting",
+        "name": "Can add notification setting",
+        "content_type": 9
+    },
+    "model": "auth.permission",
+    "pk": 25
+},
+{
+    "fields": {
+        "codename": "change_notificationsetting",
+        "name": "Can change notification setting",
+        "content_type": 9
+    },
+    "model": "auth.permission",
+    "pk": 26
+},
+{
+    "fields": {
+        "codename": "delete_notificationsetting",
+        "name": "Can delete notification setting",
+        "content_type": 9
+    },
+    "model": "auth.permission",
+    "pk": 27
+},
+{
+    "fields": {
+        "codename": "add_accessentity",
+        "name": "Can add access entity",
+        "content_type": 10
+    },
+    "model": "auth.permission",
+    "pk": 28
+},
+{
+    "fields": {
+        "codename": "change_accessentity",
+        "name": "Can change access entity",
+        "content_type": 10
+    },
+    "model": "auth.permission",
+    "pk": 29
+},
+{
+    "fields": {
+        "codename": "delete_accessentity",
+        "name": "Can delete access entity",
+        "content_type": 10
+    },
+    "model": "auth.permission",
+    "pk": 30
+},
+{
+    "fields": {
+        "codename": "add_group",
+        "name": "Can add group",
+        "content_type": 11
+    },
+    "model": "auth.permission",
+    "pk": 31
+},
+{
+    "fields": {
+        "codename": "change_group",
+        "name": "Can change group",
+        "content_type": 11
+    },
+    "model": "auth.permission",
+    "pk": 32
+},
+{
+    "fields": {
+        "codename": "delete_group",
+        "name": "Can delete group",
+        "content_type": 11
+    },
+    "model": "auth.permission",
+    "pk": 33
+},
+{
+    "fields": {
+        "codename": "add_user",
+        "name": "Can add user",
+        "content_type": 12
+    },
+    "model": "auth.permission",
+    "pk": 34
+},
+{
+    "fields": {
+        "codename": "change_user",
+        "name": "Can change user",
+        "content_type": 12
+    },
+    "model": "auth.permission",
+    "pk": 35
+},
+{
+    "fields": {
+        "codename": "delete_user",
+        "name": "Can delete user",
+        "content_type": 12
+    },
+    "model": "auth.permission",
+    "pk": 36
+},
+{
+    "fields": {
+        "codename": "add_invitation",
+        "name": "Can add invitation",
+        "content_type": 13
+    },
+    "model": "auth.permission",
+    "pk": 37
+},
+{
+    "fields": {
+        "codename": "change_invitation",
+        "name": "Can change invitation",
+        "content_type": 13
+    },
+    "model": "auth.permission",
+    "pk": 38
+},
+{
+    "fields": {
+        "codename": "delete_invitation",
+        "name": "Can delete invitation",
+        "content_type": 13
+    },
+    "model": "auth.permission",
+    "pk": 39
+},
+{
+    "fields": {
+        "codename": "add_tag",
+        "name": "Can add tag",
+        "content_type": 14
+    },
+    "model": "auth.permission",
+    "pk": 40
+},
+{
+    "fields": {
+        "codename": "change_tag",
+        "name": "Can change tag",
+        "content_type": 14
+    },
+    "model": "auth.permission",
+    "pk": 41
+},
+{
+    "fields": {
+        "codename": "delete_tag",
+        "name": "Can delete tag",
+        "content_type": 14
+    },
+    "model": "auth.permission",
+    "pk": 42
+},
+{
+    "fields": {
+        "codename": "add_comment",
+        "name": "Can add comment",
+        "content_type": 15
+    },
+    "model": "auth.permission",
+    "pk": 43
+},
+{
+    "fields": {
+        "codename": "change_comment",
+        "name": "Can change comment",
+        "content_type": 15
+    },
+    "model": "auth.permission",
+    "pk": 44
+},
+{
+    "fields": {
+        "codename": "delete_comment",
+        "name": "Can delete comment",
+        "content_type": 15
+    },
+    "model": "auth.permission",
+    "pk": 45
+},
+{
+    "fields": {
+        "codename": "add_object",
+        "name": "Can add object",
+        "content_type": 16
+    },
+    "model": "auth.permission",
+    "pk": 46
+},
+{
+    "fields": {
+        "codename": "change_object",
+        "name": "Can change object",
+        "content_type": 16
+    },
+    "model": "auth.permission",
+    "pk": 47
+},
+{
+    "fields": {
+        "codename": "delete_object",
+        "name": "Can delete object",
+        "content_type": 16
+    },
+    "model": "auth.permission",
+    "pk": 48
+},
+{
+    "fields": {
+        "codename": "add_revision",
+        "name": "Can add revision",
+        "content_type": 17
+    },
+    "model": "auth.permission",
+    "pk": 49
+},
+{
+    "fields": {
+        "codename": "change_revision",
+        "name": "Can change revision",
+        "content_type": 17
+    },
+    "model": "auth.permission",
+    "pk": 50
+},
+{
+    "fields": {
+        "codename": "delete_revision",
+        "name": "Can delete revision",
+        "content_type": 17
+    },
+    "model": "auth.permission",
+    "pk": 51
+},
+{
+    "fields": {
+        "codename": "add_revisionfield",
+        "name": "Can add revision field",
+        "content_type": 18
+    },
+    "model": "auth.permission",
+    "pk": 52
+},
+{
+    "fields": {
+        "codename": "change_revisionfield",
+        "name": "Can change revision field",
+        "content_type": 18
+    },
+    "model": "auth.permission",
+    "pk": 53
+},
+{
+    "fields": {
+        "codename": "delete_revisionfield",
+        "name": "Can delete revision field",
+        "content_type": 18
+    },
+    "model": "auth.permission",
+    "pk": 54
+},
+{
+    "fields": {
+        "codename": "add_updaterecord",
+        "name": "Can add update record",
+        "content_type": 19
+    },
+    "model": "auth.permission",
+    "pk": 55
+},
+{
+    "fields": {
+        "codename": "change_updaterecord",
+        "name": "Can change update record",
+        "content_type": 19
+    },
+    "model": "auth.permission",
+    "pk": 56
+},
+{
+    "fields": {
+        "codename": "delete_updaterecord",
+        "name": "Can delete update record",
+        "content_type": 19
+    },
+    "model": "auth.permission",
+    "pk": 57
+},
+{
+    "fields": {
+        "codename": "add_module",
+        "name": "Can add module",
+        "content_type": 20
+    },
+    "model": "auth.permission",
+    "pk": 58
+},
+{
+    "fields": {
+        "codename": "change_module",
+        "name": "Can change module",
+        "content_type": 20
+    },
+    "model": "auth.permission",
+    "pk": 59
+},
+{
+    "fields": {
+        "codename": "delete_module",
+        "name": "Can delete module",
+        "content_type": 20
+    },
+    "model": "auth.permission",
+    "pk": 60
+},
+{
+    "fields": {
+        "codename": "add_perspective",
+        "name": "Can add perspective",
+        "content_type": 21
+    },
+    "model": "auth.permission",
+    "pk": 61
+},
+{
+    "fields": {
+        "codename": "change_perspective",
+        "name": "Can change perspective",
+        "content_type": 21
+    },
+    "model": "auth.permission",
+    "pk": 62
+},
+{
+    "fields": {
+        "codename": "delete_perspective",
+        "name": "Can delete perspective",
+        "content_type": 21
+    },
+    "model": "auth.permission",
+    "pk": 63
+},
+{
+    "fields": {
+        "codename": "add_modulesetting",
+        "name": "Can add module setting",
+        "content_type": 22
+    },
+    "model": "auth.permission",
+    "pk": 64
+},
+{
+    "fields": {
+        "codename": "change_modulesetting",
+        "name": "Can change module setting",
+        "content_type": 22
+    },
+    "model": "auth.permission",
+    "pk": 65
+},
+{
+    "fields": {
+        "codename": "delete_modulesetting",
+        "name": "Can delete module setting",
+        "content_type": 22
+    },
+    "model": "auth.permission",
+    "pk": 66
+},
+{
+    "fields": {
+        "codename": "add_configsetting",
+        "name": "Can add config setting",
+        "content_type": 23
+    },
+    "model": "auth.permission",
+    "pk": 67
+},
+{
+    "fields": {
+        "codename": "change_configsetting",
+        "name": "Can change config setting",
+        "content_type": 23
+    },
+    "model": "auth.permission",
+    "pk": 68
+},
+{
+    "fields": {
+        "codename": "delete_configsetting",
+        "name": "Can delete config setting",
+        "content_type": 23
+    },
+    "model": "auth.permission",
+    "pk": 69
+},
+{
+    "fields": {
+        "codename": "add_location",
+        "name": "Can add location",
+        "content_type": 24
+    },
+    "model": "auth.permission",
+    "pk": 70
+},
+{
+    "fields": {
+        "codename": "change_location",
+        "name": "Can change location",
+        "content_type": 24
+    },
+    "model": "auth.permission",
+    "pk": 71
+},
+{
+    "fields": {
+        "codename": "delete_location",
+        "name": "Can delete location",
+        "content_type": 24
+    },
+    "model": "auth.permission",
+    "pk": 72
+},
+{
+    "fields": {
+        "codename": "add_pagefolder",
+        "name": "Can add page folder",
+        "content_type": 25
+    },
+    "model": "auth.permission",
+    "pk": 73
+},
+{
+    "fields": {
+        "codename": "change_pagefolder",
+        "name": "Can change page folder",
+        "content_type": 25
+    },
+    "model": "auth.permission",
+    "pk": 74
+},
+{
+    "fields": {
+        "codename": "delete_pagefolder",
+        "name": "Can delete page folder",
+        "content_type": 25
+    },
+    "model": "auth.permission",
+    "pk": 75
+},
+{
+    "fields": {
+        "codename": "add_page",
+        "name": "Can add page",
+        "content_type": 26
+    },
+    "model": "auth.permission",
+    "pk": 76
+},
+{
+    "fields": {
+        "codename": "change_page",
+        "name": "Can change page",
+        "content_type": 26
+    },
+    "model": "auth.permission",
+    "pk": 77
+},
+{
+    "fields": {
+        "codename": "delete_page",
+        "name": "Can delete page",
+        "content_type": 26
+    },
+    "model": "auth.permission",
+    "pk": 78
+},
+{
+    "fields": {
+        "codename": "add_widget",
+        "name": "Can add widget",
+        "content_type": 27
+    },
+    "model": "auth.permission",
+    "pk": 79
+},
+{
+    "fields": {
+        "codename": "change_widget",
+        "name": "Can change widget",
+        "content_type": 27
+    },
+    "model": "auth.permission",
+    "pk": 80
+},
+{
+    "fields": {
+        "codename": "delete_widget",
+        "name": "Can delete widget",
+        "content_type": 27
+    },
+    "model": "auth.permission",
+    "pk": 81
+},
+{
+    "fields": {
+        "codename": "add_attachment",
+        "name": "Can add attachment",
+        "content_type": 28
+    },
+    "model": "auth.permission",
+    "pk": 82
+},
+{
+    "fields": {
+        "codename": "change_attachment",
+        "name": "Can change attachment",
+        "content_type": 28
+    },
+    "model": "auth.permission",
+    "pk": 83
+},
+{
+    "fields": {
+        "codename": "delete_attachment",
+        "name": "Can delete attachment",
+        "content_type": 28
+    },
+    "model": "auth.permission",
+    "pk": 84
+},
+{
+    "fields": {
+        "codename": "add_nonce",
+        "name": "Can add nonce",
+        "content_type": 29
+    },
+    "model": "auth.permission",
+    "pk": 85
+},
+{
+    "fields": {
+        "codename": "change_nonce",
+        "name": "Can change nonce",
+        "content_type": 29
+    },
+    "model": "auth.permission",
+    "pk": 86
+},
+{
+    "fields": {
+        "codename": "delete_nonce",
+        "name": "Can delete nonce",
+        "content_type": 29
+    },
+    "model": "auth.permission",
+    "pk": 87
+},
+{
+    "fields": {
+        "codename": "add_consumer",
+        "name": "Can add consumer",
+        "content_type": 30
+    },
+    "model": "auth.permission",
+    "pk": 88
+},
+{
+    "fields": {
+        "codename": "change_consumer",
+        "name": "Can change consumer",
+        "content_type": 30
+    },
+    "model": "auth.permission",
+    "pk": 89
+},
+{
+    "fields": {
+        "codename": "delete_consumer",
+        "name": "Can delete consumer",
+        "content_type": 30
+    },
+    "model": "auth.permission",
+    "pk": 90
+},
+{
+    "fields": {
+        "codename": "add_token",
+        "name": "Can add token",
+        "content_type": 31
+    },
+    "model": "auth.permission",
+    "pk": 91
+},
+{
+    "fields": {
+        "codename": "change_token",
+        "name": "Can change token",
+        "content_type": 31
+    },
+    "model": "auth.permission",
+    "pk": 92
+},
+{
+    "fields": {
+        "codename": "delete_token",
+        "name": "Can delete token",
+        "content_type": 31
+    },
+    "model": "auth.permission",
+    "pk": 93
+},
+{
+    "fields": {
+        "codename": "add_folder",
+        "name": "Can add folder",
+        "content_type": 32
+    },
+    "model": "auth.permission",
+    "pk": 94
+},
+{
+    "fields": {
+        "codename": "change_folder",
+        "name": "Can change folder",
+        "content_type": 32
+    },
+    "model": "auth.permission",
+    "pk": 95
+},
+{
+    "fields": {
+        "codename": "delete_folder",
+        "name": "Can delete folder",
+        "content_type": 32
+    },
+    "model": "auth.permission",
+    "pk": 96
+},
+{
+    "fields": {
+        "codename": "add_file",
+        "name": "Can add file",
+        "content_type": 33
+    },
+    "model": "auth.permission",
+    "pk": 97
+},
+{
+    "fields": {
+        "codename": "change_file",
+        "name": "Can change file",
+        "content_type": 33
+    },
+    "model": "auth.permission",
+    "pk": 98
+},
+{
+    "fields": {
+        "codename": "delete_file",
+        "name": "Can delete file",
+        "content_type": 33
+    },
+    "model": "auth.permission",
+    "pk": 99
+},
+{
+    "fields": {
+        "codename": "add_document",
+        "name": "Can add document",
+        "content_type": 34
+    },
+    "model": "auth.permission",
+    "pk": 100
+},
+{
+    "fields": {
+        "codename": "change_document",
+        "name": "Can change document",
+        "content_type": 34
+    },
+    "model": "auth.permission",
+    "pk": 101
+},
+{
+    "fields": {
+        "codename": "delete_document",
+        "name": "Can delete document",
+        "content_type": 34
+    },
+    "model": "auth.permission",
+    "pk": 102
+},
+{
+    "fields": {
+        "codename": "add_weblink",
+        "name": "Can add web link",
+        "content_type": 35
+    },
+    "model": "auth.permission",
+    "pk": 103
+},
+{
+    "fields": {
+        "codename": "change_weblink",
+        "name": "Can change web link",
+        "content_type": 35
+    },
+    "model": "auth.permission",
+    "pk": 104
+},
+{
+    "fields": {
+        "codename": "delete_weblink",
+        "name": "Can delete web link",
+        "content_type": 35
+    },
+    "model": "auth.permission",
+    "pk": 105
+},
+{
+    "fields": {
+        "codename": "add_event",
+        "name": "Can add event",
+        "content_type": 36
+    },
+    "model": "auth.permission",
+    "pk": 106
+},
+{
+    "fields": {
+        "codename": "change_event",
+        "name": "Can change event",
+        "content_type": 36
+    },
+    "model": "auth.permission",
+    "pk": 107
+},
+{
+    "fields": {
+        "codename": "delete_event",
+        "name": "Can delete event",
+        "content_type": 36
+    },
+    "model": "auth.permission",
+    "pk": 108
+},
+{
+    "fields": {
+        "codename": "add_invitation",
+        "name": "Can add invitation",
+        "content_type": 37
+    },
+    "model": "auth.permission",
+    "pk": 109
+},
+{
+    "fields": {
+        "codename": "change_invitation",
+        "name": "Can change invitation",
+        "content_type": 37
+    },
+    "model": "auth.permission",
+    "pk": 110
+},
+{
+    "fields": {
+        "codename": "delete_invitation",
+        "name": "Can delete invitation",
+        "content_type": 37
+    },
+    "model": "auth.permission",
+    "pk": 111
+},
+{
+    "fields": {
+        "codename": "add_currency",
+        "name": "Can add currency",
+        "content_type": 38
+    },
+    "model": "auth.permission",
+    "pk": 112
+},
+{
+    "fields": {
+        "codename": "change_currency",
+        "name": "Can change currency",
+        "content_type": 38
+    },
+    "model": "auth.permission",
+    "pk": 113
+},
+{
+    "fields": {
+        "codename": "delete_currency",
+        "name": "Can delete currency",
+        "content_type": 38
+    },
+    "model": "auth.permission",
+    "pk": 114
+},
+{
+    "fields": {
+        "codename": "add_tax",
+        "name": "Can add tax",
+        "content_type": 39
+    },
+    "model": "auth.permission",
+    "pk": 115
+},
+{
+    "fields": {
+        "codename": "change_tax",
+        "name": "Can change tax",
+        "content_type": 39
+    },
+    "model": "auth.permission",
+    "pk": 116
+},
+{
+    "fields": {
+        "codename": "delete_tax",
+        "name": "Can delete tax",
+        "content_type": 39
+    },
+    "model": "auth.permission",
+    "pk": 117
+},
+{
+    "fields": {
+        "codename": "add_category",
+        "name": "Can add category",
+        "content_type": 40
+    },
+    "model": "auth.permission",
+    "pk": 118
+},
+{
+    "fields": {
+        "codename": "change_category",
+        "name": "Can change category",
+        "content_type": 40
+    },
+    "model": "auth.permission",
+    "pk": 119
+},
+{
+    "fields": {
+        "codename": "delete_category",
+        "name": "Can delete category",
+        "content_type": 40
+    },
+    "model": "auth.permission",
+    "pk": 120
+},
+{
+    "fields": {
+        "codename": "add_asset",
+        "name": "Can add asset",
+        "content_type": 41
+    },
+    "model": "auth.permission",
+    "pk": 121
+},
+{
+    "fields": {
+        "codename": "change_asset",
+        "name": "Can change asset",
+        "content_type": 41
+    },
+    "model": "auth.permission",
+    "pk": 122
+},
+{
+    "fields": {
+        "codename": "delete_asset",
+        "name": "Can delete asset",
+        "content_type": 41
+    },
+    "model": "auth.permission",
+    "pk": 123
+},
+{
+    "fields": {
+        "codename": "add_account",
+        "name": "Can add account",
+        "content_type": 42
+    },
+    "model": "auth.permission",
+    "pk": 124
+},
+{
+    "fields": {
+        "codename": "change_account",
+        "name": "Can change account",
+        "content_type": 42
+    },
+    "model": "auth.permission",
+    "pk": 125
+},
+{
+    "fields": {
+        "codename": "delete_account",
+        "name": "Can delete account",
+        "content_type": 42
+    },
+    "model": "auth.permission",
+    "pk": 126
+},
+{
+    "fields": {
+        "codename": "add_equity",
+        "name": "Can add equity",
+        "content_type": 43
+    },
+    "model": "auth.permission",
+    "pk": 127
+},
+{
+    "fields": {
+        "codename": "change_equity",
+        "name": "Can change equity",
+        "content_type": 43
+    },
+    "model": "auth.permission",
+    "pk": 128
+},
+{
+    "fields": {
+        "codename": "delete_equity",
+        "name": "Can delete equity",
+        "content_type": 43
+    },
+    "model": "auth.permission",
+    "pk": 129
+},
+{
+    "fields": {
+        "codename": "add_liability",
+        "name": "Can add liability",
+        "content_type": 44
+    },
+    "model": "auth.permission",
+    "pk": 130
+},
+{
+    "fields": {
+        "codename": "change_liability",
+        "name": "Can change liability",
+        "content_type": 44
+    },
+    "model": "auth.permission",
+    "pk": 131
+},
+{
+    "fields": {
+        "codename": "delete_liability",
+        "name": "Can delete liability",
+        "content_type": 44
+    },
+    "model": "auth.permission",
+    "pk": 132
+},
+{
+    "fields": {
+        "codename": "add_transaction",
+        "name": "Can add transaction",
+        "content_type": 45
+    },
+    "model": "auth.permission",
+    "pk": 133
+},
+{
+    "fields": {
+        "codename": "change_transaction",
+        "name": "Can change transaction",
+        "content_type": 45
+    },
+    "model": "auth.permission",
+    "pk": 134
+},
+{
+    "fields": {
+        "codename": "delete_transaction",
+        "name": "Can delete transaction",
+        "content_type": 45
+    },
+    "model": "auth.permission",
+    "pk": 135
+},
+{
+    "fields": {
+        "codename": "add_contactfield",
+        "name": "Can add contact field",
+        "content_type": 46
+    },
+    "model": "auth.permission",
+    "pk": 136
+},
+{
+    "fields": {
+        "codename": "change_contactfield",
+        "name": "Can change contact field",
+        "content_type": 46
+    },
+    "model": "auth.permission",
+    "pk": 137
+},
+{
+    "fields": {
+        "codename": "delete_contactfield",
+        "name": "Can delete contact field",
+        "content_type": 46
+    },
+    "model": "auth.permission",
+    "pk": 138
+},
+{
+    "fields": {
+        "codename": "add_contacttype",
+        "name": "Can add contact type",
+        "content_type": 47
+    },
+    "model": "auth.permission",
+    "pk": 139
+},
+{
+    "fields": {
+        "codename": "change_contacttype",
+        "name": "Can change contact type",
+        "content_type": 47
+    },
+    "model": "auth.permission",
+    "pk": 140
+},
+{
+    "fields": {
+        "codename": "delete_contacttype",
+        "name": "Can delete contact type",
+        "content_type": 47
+    },
+    "model": "auth.permission",
+    "pk": 141
+},
+{
+    "fields": {
+        "codename": "add_contact",
+        "name": "Can add contact",
+        "content_type": 48
+    },
+    "model": "auth.permission",
+    "pk": 142
+},
+{
+    "fields": {
+        "codename": "change_contact",
+        "name": "Can change contact",
+        "content_type": 48
+    },
+    "model": "auth.permission",
+    "pk": 143
+},
+{
+    "fields": {
+        "codename": "delete_contact",
+        "name": "Can delete contact",
+        "content_type": 48
+    },
+    "model": "auth.permission",
+    "pk": 144
+},
+{
+    "fields": {
+        "codename": "add_contactvalue",
+        "name": "Can add contact value",
+        "content_type": 49
+    },
+    "model": "auth.permission",
+    "pk": 145
+},
+{
+    "fields": {
+        "codename": "change_contactvalue",
+        "name": "Can change contact value",
+        "content_type": 49
+    },
+    "model": "auth.permission",
+    "pk": 146
+},
+{
+    "fields": {
+        "codename": "delete_contactvalue",
+        "name": "Can delete contact value",
+        "content_type": 49
+    },
+    "model": "auth.permission",
+    "pk": 147
+},
+{
+    "fields": {
+        "codename": "add_itemfield",
+        "name": "Can add item field",
+        "content_type": 50
+    },
+    "model": "auth.permission",
+    "pk": 148
+},
+{
+    "fields": {
+        "codename": "change_itemfield",
+        "name": "Can change item field",
+        "content_type": 50
+    },
+    "model": "auth.permission",
+    "pk": 149
+},
+{
+    "fields": {
+        "codename": "delete_itemfield",
+        "name": "Can delete item field",
+        "content_type": 50
+    },
+    "model": "auth.permission",
+    "pk": 150
+},
+{
+    "fields": {
+        "codename": "add_itemtype",
+        "name": "Can add item type",
+        "content_type": 51
+    },
+    "model": "auth.permission",
+    "pk": 151
+},
+{
+    "fields": {
+        "codename": "change_itemtype",
+        "name": "Can change item type",
+        "content_type": 51
+    },
+    "model": "auth.permission",
+    "pk": 152
+},
+{
+    "fields": {
+        "codename": "delete_itemtype",
+        "name": "Can delete item type",
+        "content_type": 51
+    },
+    "model": "auth.permission",
+    "pk": 153
+},
+{
+    "fields": {
+        "codename": "add_itemstatus",
+        "name": "Can add item status",
+        "content_type": 52
+    },
+    "model": "auth.permission",
+    "pk": 154
+},
+{
+    "fields": {
+        "codename": "change_itemstatus",
+        "name": "Can change item status",
+        "content_type": 52
+    },
+    "model": "auth.permission",
+    "pk": 155
+},
+{
+    "fields": {
+        "codename": "delete_itemstatus",
+        "name": "Can delete item status",
+        "content_type": 52
+    },
+    "model": "auth.permission",
+    "pk": 156
+},
+{
+    "fields": {
+        "codename": "add_item",
+        "name": "Can add item",
+        "content_type": 53
+    },
+    "model": "auth.permission",
+    "pk": 157
+},
+{
+    "fields": {
+        "codename": "change_item",
+        "name": "Can change item",
+        "content_type": 53
+    },
+    "model": "auth.permission",
+    "pk": 158
+},
+{
+    "fields": {
+        "codename": "delete_item",
+        "name": "Can delete item",
+        "content_type": 53
+    },
+    "model": "auth.permission",
+    "pk": 159
+},
+{
+    "fields": {
+        "codename": "add_itemvalue",
+        "name": "Can add item value",
+        "content_type": 54
+    },
+    "model": "auth.permission",
+    "pk": 160
+},
+{
+    "fields": {
+        "codename": "change_itemvalue",
+        "name": "Can change item value",
+        "content_type": 54
+    },
+    "model": "auth.permission",
+    "pk": 161
+},
+{
+    "fields": {
+        "codename": "delete_itemvalue",
+        "name": "Can delete item value",
+        "content_type": 54
+    },
+    "model": "auth.permission",
+    "pk": 162
+},
+{
+    "fields": {
+        "codename": "add_itemservicing",
+        "name": "Can add item servicing",
+        "content_type": 55
+    },
+    "model": "auth.permission",
+    "pk": 163
+},
+{
+    "fields": {
+        "codename": "change_itemservicing",
+        "name": "Can change item servicing",
+        "content_type": 55
+    },
+    "model": "auth.permission",
+    "pk": 164
+},
+{
+    "fields": {
+        "codename": "delete_itemservicing",
+        "name": "Can delete item servicing",
+        "content_type": 55
+    },
+    "model": "auth.permission",
+    "pk": 165
+},
+{
+    "fields": {
+        "codename": "add_knowledgefolder",
+        "name": "Can add knowledge folder",
+        "content_type": 56
+    },
+    "model": "auth.permission",
+    "pk": 166
+},
+{
+    "fields": {
+        "codename": "change_knowledgefolder",
+        "name": "Can change knowledge folder",
+        "content_type": 56
+    },
+    "model": "auth.permission",
+    "pk": 167
+},
+{
+    "fields": {
+        "codename": "delete_knowledgefolder",
+        "name": "Can delete knowledge folder",
+        "content_type": 56
+    },
+    "model": "auth.permission",
+    "pk": 168
+},
+{
+    "fields": {
+        "codename": "add_knowledgecategory",
+        "name": "Can add knowledge category",
+        "content_type": 57
+    },
+    "model": "auth.permission",
+    "pk": 169
+},
+{
+    "fields": {
+        "codename": "change_knowledgecategory",
+        "name": "Can change knowledge category",
+        "content_type": 57
+    },
+    "model": "auth.permission",
+    "pk": 170
+},
+{
+    "fields": {
+        "codename": "delete_knowledgecategory",
+        "name": "Can delete knowledge category",
+        "content_type": 57
+    },
+    "model": "auth.permission",
+    "pk": 171
+},
+{
+    "fields": {
+        "codename": "add_knowledgeitem",
+        "name": "Can add knowledge item",
+        "content_type": 58
+    },
+    "model": "auth.permission",
+    "pk": 172
+},
+{
+    "fields": {
+        "codename": "change_knowledgeitem",
+        "name": "Can change knowledge item",
+        "content_type": 58
+    },
+    "model": "auth.permission",
+    "pk": 173
+},
+{
+    "fields": {
+        "codename": "delete_knowledgeitem",
+        "name": "Can delete knowledge item",
+        "content_type": 58
+    },
+    "model": "auth.permission",
+    "pk": 174
+},
+{
+    "fields": {
+        "codename": "add_template",
+        "name": "Can add template",
+        "content_type": 59
+    },
+    "model": "auth.permission",
+    "pk": 175
+},
+{
+    "fields": {
+        "codename": "change_template",
+        "name": "Can change template",
+        "content_type": 59
+    },
+    "model": "auth.permission",
+    "pk": 176
+},
+{
+    "fields": {
+        "codename": "delete_template",
+        "name": "Can delete template",
+        "content_type": 59
+    },
+    "model": "auth.permission",
+    "pk": 177
+},
+{
+    "fields": {
+        "codename": "add_mailinglist",
+        "name": "Can add mailing list",
+        "content_type": 60
+    },
+    "model": "auth.permission",
+    "pk": 178
+},
+{
+    "fields": {
+        "codename": "change_mailinglist",
+        "name": "Can change mailing list",
+        "content_type": 60
+    },
+    "model": "auth.permission",
+    "pk": 179
+},
+{
+    "fields": {
+        "codename": "delete_mailinglist",
+        "name": "Can delete mailing list",
+        "content_type": 60
+    },
+    "model": "auth.permission",
+    "pk": 180
+},
+{
+    "fields": {
+        "codename": "add_messagestream",
+        "name": "Can add Stream",
+        "content_type": 61
+    },
+    "model": "auth.permission",
+    "pk": 181
+},
+{
+    "fields": {
+        "codename": "change_messagestream",
+        "name": "Can change Stream",
+        "content_type": 61
+    },
+    "model": "auth.permission",
+    "pk": 182
+},
+{
+    "fields": {
+        "codename": "delete_messagestream",
+        "name": "Can delete Stream",
+        "content_type": 61
+    },
+    "model": "auth.permission",
+    "pk": 183
+},
+{
+    "fields": {
+        "codename": "add_message",
+        "name": "Can add message",
+        "content_type": 62
+    },
+    "model": "auth.permission",
+    "pk": 184
+},
+{
+    "fields": {
+        "codename": "change_message",
+        "name": "Can change message",
+        "content_type": 62
+    },
+    "model": "auth.permission",
+    "pk": 185
+},
+{
+    "fields": {
+        "codename": "delete_message",
+        "name": "Can delete message",
+        "content_type": 62
+    },
+    "model": "auth.permission",
+    "pk": 186
+},
+{
+    "fields": {
+        "codename": "add_project",
+        "name": "Can add project",
+        "content_type": 63
+    },
+    "model": "auth.permission",
+    "pk": 187
+},
+{
+    "fields": {
+        "codename": "change_project",
+        "name": "Can change project",
+        "content_type": 63
+    },
+    "model": "auth.permission",
+    "pk": 188
+},
+{
+    "fields": {
+        "codename": "delete_project",
+        "name": "Can delete project",
+        "content_type": 63
+    },
+    "model": "auth.permission",
+    "pk": 189
+},
+{
+    "fields": {
+        "codename": "add_taskstatus",
+        "name": "Can add task status",
+        "content_type": 64
+    },
+    "model": "auth.permission",
+    "pk": 190
+},
+{
+    "fields": {
+        "codename": "change_taskstatus",
+        "name": "Can change task status",
+        "content_type": 64
+    },
+    "model": "auth.permission",
+    "pk": 191
+},
+{
+    "fields": {
+        "codename": "delete_taskstatus",
+        "name": "Can delete task status",
+        "content_type": 64
+    },
+    "model": "auth.permission",
+    "pk": 192
+},
+{
+    "fields": {
+        "codename": "add_milestone",
+        "name": "Can add milestone",
+        "content_type": 65
+    },
+    "model": "auth.permission",
+    "pk": 193
+},
+{
+    "fields": {
+        "codename": "change_milestone",
+        "name": "Can change milestone",
+        "content_type": 65
+    },
+    "model": "auth.permission",
+    "pk": 194
+},
+{
+    "fields": {
+        "codename": "delete_milestone",
+        "name": "Can delete milestone",
+        "content_type": 65
+    },
+    "model": "auth.permission",
+    "pk": 195
+},
+{
+    "fields": {
+        "codename": "add_task",
+        "name": "Can add task",
+        "content_type": 66
+    },
+    "model": "auth.permission",
+    "pk": 196
+},
+{
+    "fields": {
+        "codename": "change_task",
+        "name": "Can change task",
+        "content_type": 66
+    },
+    "model": "auth.permission",
+    "pk": 197
+},
+{
+    "fields": {
+        "codename": "delete_task",
+        "name": "Can delete task",
+        "content_type": 66
+    },
+    "model": "auth.permission",
+    "pk": 198
+},
+{
+    "fields": {
+        "codename": "add_tasktimeslot",
+        "name": "Can add task time slot",
+        "content_type": 67
+    },
+    "model": "auth.permission",
+    "pk": 199
+},
+{
+    "fields": {
+        "codename": "change_tasktimeslot",
+        "name": "Can change task time slot",
+        "content_type": 67
+    },
+    "model": "auth.permission",
+    "pk": 200
+},
+{
+    "fields": {
+        "codename": "delete_tasktimeslot",
+        "name": "Can delete task time slot",
+        "content_type": 67
+    },
+    "model": "auth.permission",
+    "pk": 201
+},
+{
+    "fields": {
+        "codename": "add_report",
+        "name": "Can add report",
+        "content_type": 68
+    },
+    "model": "auth.permission",
+    "pk": 202
+},
+{
+    "fields": {
+        "codename": "change_report",
+        "name": "Can change report",
+        "content_type": 68
+    },
+    "model": "auth.permission",
+    "pk": 203
+},
+{
+    "fields": {
+        "codename": "delete_report",
+        "name": "Can delete report",
+        "content_type": 68
+    },
+    "model": "auth.permission",
+    "pk": 204
+},
+{
+    "fields": {
+        "codename": "add_chart",
+        "name": "Can add chart",
+        "content_type": 69
+    },
+    "model": "auth.permission",
+    "pk": 205
+},
+{
+    "fields": {
+        "codename": "change_chart",
+        "name": "Can change chart",
+        "content_type": 69
+    },
+    "model": "auth.permission",
+    "pk": 206
+},
+{
+    "fields": {
+        "codename": "delete_chart",
+        "name": "Can delete chart",
+        "content_type": 69
+    },
+    "model": "auth.permission",
+    "pk": 207
+},
+{
+    "fields": {
+        "codename": "add_salestatus",
+        "name": "Can add sale status",
+        "content_type": 70
+    },
+    "model": "auth.permission",
+    "pk": 208
+},
+{
+    "fields": {
+        "codename": "change_salestatus",
+        "name": "Can change sale status",
+        "content_type": 70
+    },
+    "model": "auth.permission",
+    "pk": 209
+},
+{
+    "fields": {
+        "codename": "delete_salestatus",
+        "name": "Can delete sale status",
+        "content_type": 70
+    },
+    "model": "auth.permission",
+    "pk": 210
+},
+{
+    "fields": {
+        "codename": "add_product",
+        "name": "Can add product",
+        "content_type": 71
+    },
+    "model": "auth.permission",
+    "pk": 211
+},
+{
+    "fields": {
+        "codename": "change_product",
+        "name": "Can change product",
+        "content_type": 71
+    },
+    "model": "auth.permission",
+    "pk": 212
+},
+{
+    "fields": {
+        "codename": "delete_product",
+        "name": "Can delete product",
+        "content_type": 71
+    },
+    "model": "auth.permission",
+    "pk": 213
+},
+{
+    "fields": {
+        "codename": "add_salesource",
+        "name": "Can add sale source",
+        "content_type": 72
+    },
+    "model": "auth.permission",
+    "pk": 214
+},
+{
+    "fields": {
+        "codename": "change_salesource",
+        "name": "Can change sale source",
+        "content_type": 72
+    },
+    "model": "auth.permission",
+    "pk": 215
+},
+{
+    "fields": {
+        "codename": "delete_salesource",
+        "name": "Can delete sale source",
+        "content_type": 72
+    },
+    "model": "auth.permission",
+    "pk": 216
+},
+{
+    "fields": {
+        "codename": "add_lead",
+        "name": "Can add lead",
+        "content_type": 73
+    },
+    "model": "auth.permission",
+    "pk": 217
+},
+{
+    "fields": {
+        "codename": "change_lead",
+        "name": "Can change lead",
+        "content_type": 73
+    },
+    "model": "auth.permission",
+    "pk": 218
+},
+{
+    "fields": {
+        "codename": "delete_lead",
+        "name": "Can delete lead",
+        "content_type": 73
+    },
+    "model": "auth.permission",
+    "pk": 219
+},
+{
+    "fields": {
+        "codename": "add_opportunity",
+        "name": "Can add opportunity",
+        "content_type": 74
+    },
+    "model": "auth.permission",
+    "pk": 220
+},
+{
+    "fields": {
+        "codename": "change_opportunity",
+        "name": "Can change opportunity",
+        "content_type": 74
+    },
+    "model": "auth.permission",
+    "pk": 221
+},
+{
+    "fields": {
+        "codename": "delete_opportunity",
+        "name": "Can delete opportunity",
+        "content_type": 74
+    },
+    "model": "auth.permission",
+    "pk": 222
+},
+{
+    "fields": {
+        "codename": "add_saleorder",
+        "name": "Can add sale order",
+        "content_type": 75
+    },
+    "model": "auth.permission",
+    "pk": 223
+},
+{
+    "fields": {
+        "codename": "change_saleorder",
+        "name": "Can change sale order",
+        "content_type": 75
+    },
+    "model": "auth.permission",
+    "pk": 224
+},
+{
+    "fields": {
+        "codename": "delete_saleorder",
+        "name": "Can delete sale order",
+        "content_type": 75
+    },
+    "model": "auth.permission",
+    "pk": 225
+},
+{
+    "fields": {
+        "codename": "add_subscription",
+        "name": "Can add subscription",
+        "content_type": 76
+    },
+    "model": "auth.permission",
+    "pk": 226
+},
+{
+    "fields": {
+        "codename": "change_subscription",
+        "name": "Can change subscription",
+        "content_type": 76
+    },
+    "model": "auth.permission",
+    "pk": 227
+},
+{
+    "fields": {
+        "codename": "delete_subscription",
+        "name": "Can delete subscription",
+        "content_type": 76
+    },
+    "model": "auth.permission",
+    "pk": 228
+},
+{
+    "fields": {
+        "codename": "add_orderedproduct",
+        "name": "Can add ordered product",
+        "content_type": 77
+    },
+    "model": "auth.permission",
+    "pk": 229
+},
+{
+    "fields": {
+        "codename": "change_orderedproduct",
+        "name": "Can change ordered product",
+        "content_type": 77
+    },
+    "model": "auth.permission",
+    "pk": 230
+},
+{
+    "fields": {
+        "codename": "delete_orderedproduct",
+        "name": "Can delete ordered product",
+        "content_type": 77
+    },
+    "model": "auth.permission",
+    "pk": 231
+},
+{
+    "fields": {
+        "codename": "add_ticketstatus",
+        "name": "Can add ticket status",
+        "content_type": 78
+    },
+    "model": "auth.permission",
+    "pk": 232
+},
+{
+    "fields": {
+        "codename": "change_ticketstatus",
+        "name": "Can change ticket status",
+        "content_type": 78
+    },
+    "model": "auth.permission",
+    "pk": 233
+},
+{
+    "fields": {
+        "codename": "delete_ticketstatus",
+        "name": "Can delete ticket status",
+        "content_type": 78
+    },
+    "model": "auth.permission",
+    "pk": 234
+},
+{
+    "fields": {
+        "codename": "add_service",
+        "name": "Can add service",
+        "content_type": 79
+    },
+    "model": "auth.permission",
+    "pk": 235
+},
+{
+    "fields": {
+        "codename": "change_service",
+        "name": "Can change service",
+        "content_type": 79
+    },
+    "model": "auth.permission",
+    "pk": 236
+},
+{
+    "fields": {
+        "codename": "delete_service",
+        "name": "Can delete service",
+        "content_type": 79
+    },
+    "model": "auth.permission",
+    "pk": 237
+},
+{
+    "fields": {
+        "codename": "add_servicelevelagreement",
+        "name": "Can add service level agreement",
+        "content_type": 80
+    },
+    "model": "auth.permission",
+    "pk": 238
+},
+{
+    "fields": {
+        "codename": "change_servicelevelagreement",
+        "name": "Can change service level agreement",
+        "content_type": 80
+    },
+    "model": "auth.permission",
+    "pk": 239
+},
+{
+    "fields": {
+        "codename": "delete_servicelevelagreement",
+        "name": "Can delete service level agreement",
+        "content_type": 80
+    },
+    "model": "auth.permission",
+    "pk": 240
+},
+{
+    "fields": {
+        "codename": "add_serviceagent",
+        "name": "Can add service agent",
+        "content_type": 81
+    },
+    "model": "auth.permission",
+    "pk": 241
+},
+{
+    "fields": {
+        "codename": "change_serviceagent",
+        "name": "Can change service agent",
+        "content_type": 81
+    },
+    "model": "auth.permission",
+    "pk": 242
+},
+{
+    "fields": {
+        "codename": "delete_serviceagent",
+        "name": "Can delete service agent",
+        "content_type": 81
+    },
+    "model": "auth.permission",
+    "pk": 243
+},
+{
+    "fields": {
+        "codename": "add_ticketqueue",
+        "name": "Can add ticket queue",
+        "content_type": 82
+    },
+    "model": "auth.permission",
+    "pk": 244
+},
+{
+    "fields": {
+        "codename": "change_ticketqueue",
+        "name": "Can change ticket queue",
+        "content_type": 82
+    },
+    "model": "auth.permission",
+    "pk": 245
+},
+{
+    "fields": {
+        "codename": "delete_ticketqueue",
+        "name": "Can delete ticket queue",
+        "content_type": 82
+    },
+    "model": "auth.permission",
+    "pk": 246
+},
+{
+    "fields": {
+        "codename": "add_ticket",
+        "name": "Can add ticket",
+        "content_type": 83
+    },
+    "model": "auth.permission",
+    "pk": 247
+},
+{
+    "fields": {
+        "codename": "change_ticket",
+        "name": "Can change ticket",
+        "content_type": 83
+    },
+    "model": "auth.permission",
+    "pk": 248
+},
+{
+    "fields": {
+        "codename": "delete_ticket",
+        "name": "Can delete ticket",
+        "content_type": 83
+    },
+    "model": "auth.permission",
+    "pk": 249
+},
+{
+    "fields": {
+        "codename": "add_ticketrecord",
+        "name": "Can add ticket record",
+        "content_type": 84
+    },
+    "model": "auth.permission",
+    "pk": 250
+},
+{
+    "fields": {
+        "codename": "change_ticketrecord",
+        "name": "Can change ticket record",
+        "content_type": 84
+    },
+    "model": "auth.permission",
+    "pk": 251
+},
+{
+    "fields": {
+        "codename": "delete_ticketrecord",
+        "name": "Can delete ticket record",
+        "content_type": 84
+    },
+    "model": "auth.permission",
+    "pk": 252
+},
+{
+    "fields": {
+        "codename": "add_captchastore",
+        "name": "Can add captcha store",
+        "content_type": 85
+    },
+    "model": "auth.permission",
+    "pk": 253
+},
+{
+    "fields": {
+        "codename": "change_captchastore",
+        "name": "Can change captcha store",
+        "content_type": 85
+    },
+    "model": "auth.permission",
+    "pk": 254
+},
+{
+    "fields": {
+        "codename": "delete_captchastore",
+        "name": "Can delete captcha store",
+        "content_type": 85
+    },
+    "model": "auth.permission",
+    "pk": 255
+},
+{
+    "fields": {
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "is_active": true,
+        "is_superuser": true,
+        "is_staff": true,
+        "last_login": "2013-07-13T19:07:38",
+        "groups": [],
+        "user_permissions": [],
+        "password": "sha1$d8f5f$cec9e212286bf5b056e72539c55227d94a21b4b7",
+        "email": "admin@example.com",
+        "date_joined": "2011-11-08T19:42:16"
+    },
+    "model": "auth.user",
+    "pk": 1
+},
+{
+    "fields": {
+        "domain": "example.com",
+        "name": "example.com"
+    },
+    "model": "sites.site",
+    "pk": 1
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:01:48"
+    },
+    "model": "core.accessentity",
+    "pk": 1
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:27:48"
+    },
+    "model": "core.accessentity",
+    "pk": 2
+},
+{
+    "fields": {
+        "name": "General",
+        "parent": null,
+        "details": null
+    },
+    "model": "core.group",
+    "pk": 2
+},
+{
+    "fields": {
+        "name": "admin",
+        "default_group": 2,
+        "disabled": false,
+        "other_groups": [],
+        "user": 1,
+        "last_access": "2011-02-22T23:19:11"
+    },
+    "model": "core.user",
+    "pk": 1
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:19:44",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.core.models.Perspective",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Default",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:19:44",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 15
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:22:25",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.ContactField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Address",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:22:25",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 16
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:22:48",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.ContactField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "E-mail",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:22:48",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 17
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:23:06",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.ContactField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Phone",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:23:06",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 18
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:23:30",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.ContactField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Website",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:23:30",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 19
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:23:54",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.ContactField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Picture",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:23:54",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 20
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:24:32",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.ContactType",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Company",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:24:32",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 21
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:24:53",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.ContactType",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Department",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:24:53",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 22
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:25:03",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.ContactType",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Person",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:25:03",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 23
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:25:53",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.Contact",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Company",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:25:53",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 24
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:25:31",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "hardtree.identities.models.Contact",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Admin",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:26:31",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 25
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:29:56",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.projects.models.TaskStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Open",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:29:56",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 26
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:30:10",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.projects.models.TaskStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Awaits Spec",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:30:10",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 27
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:30:23",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.projects.models.TaskStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Failed",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:30:23",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 28
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:30:34",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.projects.models.TaskStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Complete",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:30:34",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 29
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:31:19",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.services.models.TicketStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Open",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:31:19",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 30
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:31:33",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.services.models.TicketStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Pending Caller",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:31:33",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 31
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:31:49",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.services.models.TicketStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Pending Supplier",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:31:49",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 32
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:32:02",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.services.models.TicketStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Won't Fix",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:32:02",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 33
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:32:19",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.services.models.TicketStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Closed",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-22T23:32:19",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 34
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:32:40",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.services.models.ServiceAgent",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "admin",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:32:40",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 35
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:33:18",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.documents.models.Folder",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Default",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:33:18",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 36
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:40:34",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.finance.models.Currency",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "$    United States of America, Dollars",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:33:59",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 37
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:39:50",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.finance.models.Account",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Default",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:34:23",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 38
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:40:46",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.messaging.models.MessageStream",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "General",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:40:46",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 39
+},
+{
+    "fields": {
+        "last_updated": "2011-02-22T23:54:36",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.services.models.TicketQueue",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "ServiceDesk",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-02-22T23:54:36",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 40
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:45:39",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleSource",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Advertisement",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:40:10",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 41
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:41:14",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleSource",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Colleague",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:41:14",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 43
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:41:35",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleSource",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Friend",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:41:35",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 44
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:41:46",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleSource",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Search Engine",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:41:46",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 45
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:45:54",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleSource",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Other",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:41:57",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 46
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:46:54",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Open",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:42:44",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 47
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:47:07",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Paused",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:43:20",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 48
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:49:06",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Closed",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:43:38",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 49
+},
+{
+    "fields": {
+        "last_updated": "2011-02-23T00:47:24",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.sales.models.SaleStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Failed",
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-02-23T00:43:59",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 50
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:28:29",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Active",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-08-19T23:28:29",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 51
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:28:53",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Unused",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-08-19T23:28:53",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 52
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:29:19",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemStatus",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Removed",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-08-19T23:29:19",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 53
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:29:50",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "IP Address",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-08-19T23:29:50",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 54
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:30:09",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Hostname",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-08-19T23:30:09",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 55
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:33:47",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemType",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Workstation",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-08-19T23:30:55",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 56
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:32:12",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Operating System",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-08-19T23:32:12",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 57
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:33:06",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemField",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Date Installed",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2011-08-19T23:33:06",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 58
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:34:32",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.infrastructure.models.ItemType",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Server",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-08-19T23:34:32",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 59
+},
+{
+    "fields": {
+        "last_updated": "2011-08-19T23:36:38",
+        "links": [],
+        "creator": null,
+        "dislikes": [],
+        "object_type": "hardtree.knowledge.models.KnowledgeFolder",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Default",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "date_created": "2011-08-19T23:36:38",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 60
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Documents",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 75
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "News",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 76
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Messaging",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 77
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Calendar",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 78
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Account",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 79
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Reports",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 80
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Contacts",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 81
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Knowledge",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 82
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Administration",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 83
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Sales & Stock",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 84
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Projects",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 85
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Infrastructure",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 86
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:16",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Service Support",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:16",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 87
+},
+{
+    "fields": {
+        "last_updated": "2013-07-13T17:36:17",
+        "links": [],
+        "creator": 1,
+        "dislikes": [],
+        "object_type": "treeio.core.models.Module",
+        "nuvius_resource": null,
+        "read_access": [],
+        "object_name": "Finance",
+        "full_access": [],
+        "comments": [],
+        "subscribers": [],
+        "date_created": "2013-07-13T17:36:17",
+        "trash": false,
+        "tags": [],
+        "likes": []
+    },
+    "model": "core.object",
+    "pk": 88
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.documents",
+        "links": [],
+        "title": "Documents",
+        "url": "/documents/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Manage documents",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 75
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.news",
+        "links": [],
+        "title": "News",
+        "url": "/news/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Internal and external news",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 76
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.messaging",
+        "links": [],
+        "title": "Messaging",
+        "url": "/messaging/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Sending messages",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 77
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.events",
+        "links": [],
+        "title": "Calendar",
+        "url": "/calendar/",
+        "tags": [],
+        "dislikes": [],
+        "system": true,
+        "read_access": [],
+        "full_access": [],
+        "details": "Manage events and calendars",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 78
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.account",
+        "links": [],
+        "title": "Account",
+        "url": "/account/",
+        "tags": [],
+        "dislikes": [],
+        "system": true,
+        "read_access": [],
+        "full_access": [],
+        "details": "User Account",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 79
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.reports",
+        "links": [],
+        "title": "Reports",
+        "url": "/reports/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Create Reports",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 80
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.identities",
+        "links": [],
+        "title": "Contacts",
+        "url": "/contacts/",
+        "tags": [],
+        "dislikes": [],
+        "system": true,
+        "read_access": [],
+        "full_access": [],
+        "details": "Manage users, groups, companies and corresponding contacts",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 81
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.knowledge",
+        "links": [],
+        "title": "Knowledge",
+        "url": "/knowledge/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Manage your knowledge",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 82
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.core",
+        "links": [],
+        "title": "Administration",
+        "url": "/admin/",
+        "tags": [],
+        "dislikes": [],
+        "system": true,
+        "read_access": [],
+        "full_access": [],
+        "details": "Core Administration",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 83
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.sales",
+        "links": [],
+        "title": "Sales & Stock",
+        "url": "/sales/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Sales and Client Relationship Management",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 84
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.projects",
+        "links": [],
+        "title": "Projects",
+        "url": "/projects/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Manage your projects",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 85
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.infrastructure",
+        "links": [],
+        "title": "Infrastructure",
+        "url": "/infrastructure/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Manage infrastructure (fixed assets)",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 86
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.services",
+        "links": [],
+        "title": "Service Support",
+        "url": "/services/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Service delivery and support management",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 87
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "treeio.finance",
+        "links": [],
+        "title": "Finance",
+        "url": "/finance/",
+        "tags": [],
+        "dislikes": [],
+        "system": false,
+        "read_access": [],
+        "full_access": [],
+        "details": "Manage finance",
+        "subscribers": [],
+        "display": true,
+        "comments": []
+    },
+    "model": "core.module",
+    "pk": 88
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Default",
+        "links": [],
+        "tags": [],
+        "modules": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "comments": []
+    },
+    "model": "core.perspective",
+    "pk": 15
+},
+{
+    "fields": {
+        "value": "15",
+        "group": 2,
+        "name": "default_perspective",
+        "module": 83,
+        "label": "default_perspective",
+        "perspective": null,
+        "user": null
+    },
+    "model": "core.modulesetting",
+    "pk": 1
+},
+{
+    "fields": {
+        "parent": null,
+        "name": "Default",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "likes": []
+    },
+    "model": "documents.folder",
+    "pk": 36
+},
+{
+    "fields": {
+        "code": "USD",
+        "name": "United States of America, Dollars",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "symbol": "$",
+        "is_active": true,
+        "read_access": [],
+        "is_default": true,
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "factor": "1",
+        "likes": []
+    },
+    "model": "finance.currency",
+    "pk": 37
+},
+{
+    "fields": {
+        "read_access": [],
+        "likes": [],
+        "name": "Default",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "balance_display": "0",
+        "balance_currency": 37,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "owner": 24,
+        "balance": "0",
+        "comments": []
+    },
+    "model": "finance.account",
+    "pk": 38
+},
+{
+    "fields": {
+        "field_type": "details",
+        "likes": [],
+        "name": "address",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "label": "Address",
+        "comments": []
+    },
+    "model": "identities.contactfield",
+    "pk": 16
+},
+{
+    "fields": {
+        "field_type": "email",
+        "likes": [],
+        "name": "email",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "label": "E-mail",
+        "comments": []
+    },
+    "model": "identities.contactfield",
+    "pk": 17
+},
+{
+    "fields": {
+        "field_type": "phone",
+        "likes": [],
+        "name": "phone",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "label": "Phone",
+        "comments": []
+    },
+    "model": "identities.contactfield",
+    "pk": 18
+},
+{
+    "fields": {
+        "field_type": "url",
+        "likes": [],
+        "name": "url",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "label": "Website",
+        "comments": []
+    },
+    "model": "identities.contactfield",
+    "pk": 19
+},
+{
+    "fields": {
+        "field_type": "picture",
+        "likes": [],
+        "name": "picture",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "label": "Picture",
+        "comments": []
+    },
+    "model": "identities.contactfield",
+    "pk": 20
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Company",
+        "links": [],
+        "tags": [],
+        "fields": [
+            16,
+            17,
+            18,
+            20,
+            19
+        ],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "slug": "company",
+        "comments": []
+    },
+    "model": "identities.contacttype",
+    "pk": 21
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Department",
+        "links": [],
+        "tags": [],
+        "fields": [
+            16,
+            17,
+            18,
+            19
+        ],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "slug": "department",
+        "comments": []
+    },
+    "model": "identities.contacttype",
+    "pk": 22
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Person",
+        "links": [],
+        "tags": [],
+        "fields": [
+            16,
+            17,
+            18,
+            20,
+            19
+        ],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "slug": "person",
+        "comments": []
+    },
+    "model": "identities.contacttype",
+    "pk": 23
+},
+{
+    "fields": {
+        "name": "Company",
+        "parent": null,
+        "contact_type": 21,
+        "tags": [],
+        "dislikes": [],
+        "links": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "related_user": null,
+        "likes": []
+    },
+    "model": "identities.contact",
+    "pk": 24
+},
+{
+    "fields": {
+        "name": "Admin",
+        "parent": null,
+        "contact_type": 23,
+        "tags": [],
+        "dislikes": [],
+        "links": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "related_user": 1,
+        "likes": []
+    },
+    "model": "identities.contact",
+    "pk": 25
+},
+{
+    "fields": {
+        "field": 16,
+        "contact": 24,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 1
+},
+{
+    "fields": {
+        "field": 17,
+        "contact": 24,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 2
+},
+{
+    "fields": {
+        "field": 18,
+        "contact": 24,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 3
+},
+{
+    "fields": {
+        "field": 20,
+        "contact": 24,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 4
+},
+{
+    "fields": {
+        "field": 19,
+        "contact": 24,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 5
+},
+{
+    "fields": {
+        "field": 16,
+        "contact": 25,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 11
+},
+{
+    "fields": {
+        "field": 17,
+        "contact": 25,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 12
+},
+{
+    "fields": {
+        "field": 18,
+        "contact": 25,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 13
+},
+{
+    "fields": {
+        "field": 20,
+        "contact": 25,
+        "value": ""
+    },
+    "model": "identities.contactvalue",
+    "pk": 14
+},
+{
+    "fields": {
+        "field": 17,
+        "contact": 25,
+        "value": "admin@example.com"
+    },
+    "model": "identities.contactvalue",
+    "pk": 15
+},
+{
+    "fields": {
+        "field_type": "text",
+        "likes": [],
+        "name": "ip-address",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [],
+        "details": "",
+        "subscribers": [],
+        "label": "IP Address",
+        "comments": []
+    },
+    "model": "infrastructure.itemfield",
+    "pk": 54
+},
+{
+    "fields": {
+        "field_type": "text",
+        "likes": [],
+        "name": "hostname",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [],
+        "details": "",
+        "subscribers": [],
+        "label": "Hostname",
+        "comments": []
+    },
+    "model": "infrastructure.itemfield",
+    "pk": 55
+},
+{
+    "fields": {
+        "field_type": "text",
+        "likes": [],
+        "name": "os",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [],
+        "details": "",
+        "subscribers": [],
+        "label": "Operating System",
+        "comments": []
+    },
+    "model": "infrastructure.itemfield",
+    "pk": 57
+},
+{
+    "fields": {
+        "field_type": "date",
+        "likes": [],
+        "name": "setup_date",
+        "links": [],
+        "tags": [],
+        "required": false,
+        "dislikes": [],
+        "read_access": [],
+        "allowed_values": null,
+        "full_access": [],
+        "details": "",
+        "subscribers": [],
+        "label": "Date Installed",
+        "comments": []
+    },
+    "model": "infrastructure.itemfield",
+    "pk": 58
+},
+{
+    "fields": {
+        "parent": null,
+        "likes": [],
+        "name": "Workstation",
+        "links": [],
+        "tags": [],
+        "fields": [
+            55,
+            54,
+            57,
+            58
+        ],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "comments": []
+    },
+    "model": "infrastructure.itemtype",
+    "pk": 56
+},
+{
+    "fields": {
+        "parent": null,
+        "likes": [],
+        "name": "Server",
+        "links": [],
+        "tags": [],
+        "fields": [
+            55,
+            54,
+            57,
+            58
+        ],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "comments": []
+    },
+    "model": "infrastructure.itemtype",
+    "pk": 59
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Active",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "active": true,
+        "hidden": false,
+        "comments": []
+    },
+    "model": "infrastructure.itemstatus",
+    "pk": 51
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Unused",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "active": false,
+        "hidden": false,
+        "comments": []
+    },
+    "model": "infrastructure.itemstatus",
+    "pk": 52
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Removed",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "active": false,
+        "hidden": true,
+        "comments": []
+    },
+    "model": "infrastructure.itemstatus",
+    "pk": 53
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Default",
+        "parent": null,
+        "tags": [],
+        "dislikes": [],
+        "links": [],
+        "read_access": [],
+        "full_access": [],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "treepath": "default/",
+        "comments": []
+    },
+    "model": "knowledge.knowledgefolder",
+    "pk": 60
+},
+{
+    "fields": {
+        "read_access": [],
+        "likes": [],
+        "outgoing_server_type": null,
+        "incoming_server_name": "",
+        "name": "General",
+        "links": [],
+        "incoming_server_type": null,
+        "dislikes": [],
+        "outgoing_password": "",
+        "subscribers": [
+            1
+        ],
+        "outgoing_server_name": "",
+        "incoming_server_username": "",
+        "outgoing_server_username": "",
+        "outgoing_email": "",
+        "last_checked": null,
+        "comments": [],
+        "faulty": false,
+        "full_access": [
+            1,
+            2
+        ],
+        "tags": [],
+        "incoming_password": ""
+    },
+    "model": "messaging.messagestream",
+    "pk": 39
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Open",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "active": true,
+        "hidden": false,
+        "comments": []
+    },
+    "model": "projects.taskstatus",
+    "pk": 26
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "In progress",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "active": false,
+        "hidden": false,
+        "comments": []
+    },
+    "model": "projects.taskstatus",
+    "pk": 27
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Failed",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "active": true,
+        "hidden": true,
+        "comments": []
+    },
+    "model": "projects.taskstatus",
+    "pk": 28
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Complete",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [
+            1
+        ],
+        "active": false,
+        "hidden": true,
+        "comments": []
+    },
+    "model": "projects.taskstatus",
+    "pk": 29
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Open",
+        "links": [],
+        "tags": [],
+        "comments": [],
+        "dislikes": [],
+        "read_access": [],
+        "active": true,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "use_leads": true,
+        "hidden": false,
+        "use_opportunities": true,
+        "use_sales": true
+    },
+    "model": "sales.salestatus",
+    "pk": 47
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Paused",
+        "links": [],
+        "tags": [],
+        "comments": [],
+        "dislikes": [],
+        "read_access": [],
+        "active": true,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "use_leads": true,
+        "hidden": false,
+        "use_opportunities": true,
+        "use_sales": true
+    },
+    "model": "sales.salestatus",
+    "pk": 48
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Closed",
+        "links": [],
+        "tags": [],
+        "comments": [],
+        "dislikes": [],
+        "read_access": [],
+        "active": true,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "use_leads": true,
+        "hidden": false,
+        "use_opportunities": true,
+        "use_sales": true
+    },
+    "model": "sales.salestatus",
+    "pk": 49
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Failed",
+        "links": [],
+        "tags": [],
+        "comments": [],
+        "dislikes": [],
+        "read_access": [],
+        "active": false,
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "use_leads": true,
+        "hidden": false,
+        "use_opportunities": true,
+        "use_sales": true
+    },
+    "model": "sales.salestatus",
+    "pk": 50
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Advertisement",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": true,
+        "comments": []
+    },
+    "model": "sales.salesource",
+    "pk": 41
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Colleague",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": true,
+        "comments": []
+    },
+    "model": "sales.salesource",
+    "pk": 43
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Friend",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": true,
+        "comments": []
+    },
+    "model": "sales.salesource",
+    "pk": 44
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Search Engine",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": true,
+        "comments": []
+    },
+    "model": "sales.salesource",
+    "pk": 45
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Other",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": true,
+        "comments": []
+    },
+    "model": "sales.salesource",
+    "pk": 46
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Open",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": true,
+        "hidden": false,
+        "comments": []
+    },
+    "model": "services.ticketstatus",
+    "pk": 30
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Pending Caller",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": false,
+        "hidden": false,
+        "comments": []
+    },
+    "model": "services.ticketstatus",
+    "pk": 31
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Pending Supplier",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": false,
+        "hidden": false,
+        "comments": []
+    },
+    "model": "services.ticketstatus",
+    "pk": 32
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Won't Fix",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": true,
+        "hidden": true,
+        "comments": []
+    },
+    "model": "services.ticketstatus",
+    "pk": 33
+},
+{
+    "fields": {
+        "likes": [],
+        "name": "Closed",
+        "links": [],
+        "tags": [],
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "details": "",
+        "subscribers": [],
+        "active": false,
+        "hidden": true,
+        "comments": []
+    },
+    "model": "services.ticketstatus",
+    "pk": 34
+},
+{
+    "fields": {
+        "available_from": null,
+        "links": [],
+        "tags": [],
+        "available_to": null,
+        "dislikes": [],
+        "read_access": [],
+        "full_access": [
+            1,
+            2
+        ],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "active": true,
+        "related_user": 1,
+        "occupied": false,
+        "likes": []
+    },
+    "model": "services.serviceagent",
+    "pk": 35
+},
+{
+    "fields": {
+        "default_ticket_priority": 3,
+        "likes": [],
+        "name": "ServiceDesk",
+        "parent": null,
+        "tags": [],
+        "dislikes": [],
+        "comments": [],
+        "subscribers": [
+            1
+        ],
+        "links": [],
+        "read_access": [],
+        "default_service": null,
+        "ticket_code": "",
+        "next_queue": null,
+        "message_stream": null,
+        "active": true,
+        "details": "",
+        "full_access": [
+            1,
+            2
+        ],
+        "default_ticket_status": 30,
+        "waiting_time": null
+    },
+    "model": "services.ticketqueue",
+    "pk": 40
+}
+]

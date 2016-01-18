@@ -1,5 +1,5 @@
 {% extends "json/page.json" %}
-{% block title %}Messaging / Hardtree{% endblock %}
+{% block title %}Messaging / Anaf{% endblock %}
 {% block module_title %}Messaging{% endblock %}
 {% block module_subtitle %}Messaging{% endblock %}
 {% block content %}

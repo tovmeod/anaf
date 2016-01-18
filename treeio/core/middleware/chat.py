@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 # -*- coding:utf-8 -*-
 
 import json
@@ -80,7 +75,7 @@ def get_notifications(user):
     except:
         return []
     try:
-        if not getattr(settings, 'HARDTREE_ALLOW_GRITTER_NOTIFICATIONS', False):
+        if not settings.ANAF_ALLOW_GRITTER_NOTIFICATIONS:
             return notifications
         request = HttpRequest()
         request.user = user
@@ -495,7 +490,7 @@ class Search_Inactive_Users(threading.Thread):
 class ChatAjaxMiddleware(object):
 
     def __init__(self, *args, **kwargs):
-        if not settings.HARDTREE_CRON_DISABLED:
+        if not settings.ANAF_CRON_DISABLED:
             Search_Inactive_Users().start()
             pass
         # noinspection PyArgumentList

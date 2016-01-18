@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Core Ajax views
 """
@@ -28,51 +23,50 @@ def comments_likes(request, target, form, expand=True):
 
     object_id = form.get('object_id', 0)
     update = form.get('update', 0)
-    object = None
     if update:
-        object = UpdateRecord.objects.get(pk=object_id)
+        obj = UpdateRecord.objects.get(pk=object_id)
     else:
-        object = Object.objects.get(pk=object_id)
+        obj = Object.objects.get(pk=object_id)
 
     profile = request.user.profile
 
-    if object:
-        if form.get('like', 0) == unicode(object.id):
-            object.likes.add(profile)
-            if hasattr(object, 'score'):
-                object.score += 1
-                object.save()
+    if obj:
+        if form.get('like', 0) == unicode(obj.id):
+            obj.likes.add(profile)
+            if hasattr(obj, 'score'):
+                obj.score += 1
+                obj.save()
 
-        elif form.get('unlike', 0) == unicode(object.id):
-            object.likes.remove(profile)
-            if hasattr(object, 'score'):
-                object.score -= 1
-                object.save()
+        elif form.get('unlike', 0) == unicode(obj.id):
+            obj.likes.remove(profile)
+            if hasattr(obj, 'score'):
+                obj.score -= 1
+                obj.save()
 
-        elif form.get('dislike', 0) == unicode(object.id):
-            object.dislikes.add(profile)
-            if hasattr(object, 'score'):
-                object.score += 1
-                object.save()
+        elif form.get('dislike', 0) == unicode(obj.id):
+            obj.dislikes.add(profile)
+            if hasattr(obj, 'score'):
+                obj.score += 1
+                obj.save()
 
-        elif form.get('undislike', 0) == unicode(object.id):
-            object.dislikes.remove(profile)
-            if hasattr(object, 'score'):
-                object.score -= 1
-                object.save()
+        elif form.get('undislike', 0) == unicode(obj.id):
+            obj.dislikes.remove(profile)
+            if hasattr(obj, 'score'):
+                obj.score -= 1
+                obj.save()
 
-        elif form.get('commentobject', 0) == unicode(object.id) and 'comment' in form:
+        elif form.get('commentobject', 0) == unicode(obj.id) and 'comment' in form:
             comment = Comment(author=profile,
                               body=form.get('comment'))
             comment.save()
-            if hasattr(object, 'score'):
-                object.score += 1
-                object.save()
-            object.comments.add(comment)
+            if hasattr(obj, 'score'):
+                obj.score += 1
+                obj.save()
+            obj.comments.add(comment)
 
-    likes = object.likes.all()
-    dislikes = object.dislikes.all()
-    comments = object.comments.all()
+    likes = obj.likes.all()
+    dislikes = obj.dislikes.all()
+    comments = obj.comments.all()
 
     ilike = profile in likes
     idislike = profile in dislikes
@@ -81,7 +75,7 @@ def comments_likes(request, target, form, expand=True):
                         profile.default_group_id] + [i.id for i in profile.other_groups.all().only('id')]).exists()
 
     output = render_to_string('core/tags/comments_likes',
-                              {'object': object,
+                              {'object': obj,
                                'is_update': update,
                                'profile': profile,
                                'likes': likes,
@@ -106,15 +100,15 @@ def tags(request, target, object_id, edit=False, formdata=None):
     dajax = Dajax()
 
     response_format = 'html'
-    object = Object.objects.get(pk=object_id)
+    obj = Object.objects.get(pk=object_id)
 
-    tags = object.tags.all()
+    tags = obj.tags.all()
     form = None
     if 'tags' in formdata and not type(formdata['tags']) == list:
         formdata['tags'] = [formdata['tags']]
 
     if edit or formdata:
-        if formdata.get('tags_object', 0) == unicode(object.id):
+        if formdata.get('tags_object', 0) == unicode(obj.id):
             form = TagsForm(tags, formdata)
             if form.is_valid():
                 if 'multicomplete_tags' in formdata:
@@ -132,15 +126,15 @@ def tags(request, target, object_id, edit=False, formdata=None):
                 else:
                     new_tags = form.is_valid()
 
-                object.tags.clear()
+                obj.tags.clear()
                 for tag in new_tags:
-                    object.tags.add(tag)
-                tags = object.tags.all()
+                    obj.tags.add(tag)
+                tags = obj.tags.all()
                 form = None
         else:
             form = TagsForm(tags)
 
-    context = {'object': object,
+    context = {'object': obj,
                'tags': tags,
                'form': form}
 
@@ -189,7 +183,7 @@ def attachment(request, object_id, update_id=None):
             dajax.add_data(
                 {'target': 'div.attachment-record-block[object="%s"]' % update_id, 'content': update_markup}, 'treeio.add_data')
 
-    except Exception, e:
+    except Exception:
         pass
 
     return dajax.json()
@@ -208,7 +202,7 @@ def attachment_delete(request, attachment_id):
 
     if a.attached_object:
         object_id = a.attached_object.id
-        object = Object.objects.get(pk=object_id)
+        obj = Object.objects.get(pk=object_id)
     else:
         object_id = None
 
@@ -219,7 +213,7 @@ def attachment_delete(request, attachment_id):
         if not update.author == profile:
             return user_denied(request, message="Only the author of this Update can delete attachments.")
 
-    elif not profile.has_permission(object, mode='w'):
+    elif not profile.has_permission(obj, mode='w'):
         return user_denied(request, message="You don't have full access to this Object")
 
     a.delete()

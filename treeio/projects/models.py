@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Project management models
 """
@@ -20,10 +15,8 @@ class Project(Object):
     """ Project model """
     name = models.CharField(max_length=255)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child_set')
-    manager = models.ForeignKey(
-        Contact, related_name='manager', null=True, blank=True, on_delete=models.SET_NULL)
-    client = models.ForeignKey(
-        Contact, related_name='client', null=True, blank=True, on_delete=models.SET_NULL)
+    manager = models.ForeignKey(Contact, related_name='manager', null=True, blank=True, on_delete=models.SET_NULL)
+    client = models.ForeignKey(Contact, related_name='client', null=True, blank=True, on_delete=models.SET_NULL)
     details = models.TextField(max_length=255, null=True, blank=True)
 
     class Meta:

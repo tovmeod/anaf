@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Reports module views
 """
@@ -130,7 +125,7 @@ def _get_chart_ajax(request, chart_id=None, div_id=None):
                    {'name': 'hi', 'data': 50}]
     })
 
-    return HttpResponse(options, content_type=settings.HARDTREE_RESPONSE_FORMATS['json'])
+    return HttpResponse(options, content_type=settings.ANAF_RESPONSE_FORMATS['json'])
 
 
 def _get_report_content(report, request=None):

@@ -1,8 +1,3 @@
-# encoding: utf-8
-# Copyright 2011 Tree.io Limited
-# This file is part of Treeio.
-# License www.tree.io/license
-
 """
 Core module views
 """
@@ -378,7 +373,7 @@ def user_delete(request, user_id, response_format='html'):
 def user_add(request, response_format='html'):
     "User add"
 
-    user_limit = getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+    user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
 
     if user_limit > 0:
         user_number = User.objects.filter(disabled=False).count()
@@ -409,9 +404,9 @@ def user_add(request, response_format='html'):
 @treeio_login_required
 @module_admin_required()
 def user_invite(request, emails=None, response_format='html'):
-    "Invite people to Hardtree"
+    "Invite people to Anaf"
 
-    user_limit = getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+    user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
 
     # Check whether any invites can be made at all
     if user_limit > 0:
@@ -761,7 +756,7 @@ def settings_view(request, response_format='html'):
             'treeio.core', 'default_permissions')[0]
         default_permissions = conf.value
     except:
-        default_permissions = settings.HARDTREE_DEFAULT_PERMISSIONS
+        default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
 
     default_permissions_display = default_permissions
     for key, value in PERMISSION_CHOICES:
@@ -777,14 +772,13 @@ def settings_view(request, response_format='html'):
         default_perspective = None
 
     # language
-    language = getattr(settings, 'HARDTREE_LANGUAGES_DEFAULT', '')
+    language = settings.ANAF_LANGUAGES_DEFAULT
     try:
         conf = ModuleSetting.get_for_module('treeio.core', 'language')[0]
         language = conf.value
     except IndexError:
         pass
-    all_languages = getattr(
-        settings, 'HARDTREE_LANGUAGES', [('en', 'English')])
+    all_languages = settings.ANAF_LANGUAGES
 
     logopath = ''
     try:
@@ -797,16 +791,14 @@ def settings_view(request, response_format='html'):
         pass
 
     # time zone
-    default_timezone = settings.HARDTREE_SERVER_DEFAULT_TIMEZONE
+    default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get_for_module(
             'treeio.core', 'default_timezone')[0]
         default_timezone = conf.value
     except Exception:
-        default_timezone = getattr(
-            settings, 'HARDTREE_SERVER_TIMEZONE')[default_timezone][0]
-    all_timezones = getattr(settings, 'HARDTREE_SERVER_TIMEZONE', [
-                            (1, '(GMT-11:00) International Date Line West')])
+        default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]
+    all_timezones = settings.ANAF_SERVER_TIMEZONE
 
     return render_to_response('core/administration/settings_view',
                               {
