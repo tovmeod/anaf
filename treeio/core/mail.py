@@ -30,8 +30,7 @@ DEFAULT_SIGNATURE = settings.ANAF_DEFAULT_SIGNATURE
 
 
 class BaseEmail(Thread):
-
-    "Generic e-mail class to send any emails"
+    """Generic e-mail class to send any emails"""
 
     def __init__(self, server, username, password, fromaddr,
                  toaddr, subject, body, signature=None, html=None,
@@ -51,15 +50,13 @@ class BaseEmail(Thread):
         self.multipart = self.body and self.html
 
     def run(self):
-        "Run"
         self.process_email()
 
     def send_email(self):
-        "Send email"
         self.start()
 
     def get_smtp_port(self, server):
-        "Returns appropriate SMTP port number depending on incoming server name and boolean ssl"
+        """Returns appropriate SMTP port number depending on incoming server name and boolean ssl"""
         # http://www.emailaddressmanager.com/tips/mail-settings.html
 
         port = 25  # default
@@ -78,7 +75,7 @@ class BaseEmail(Thread):
         return port, ssl
 
     def process_email(self):
-        "Create a message and send it"
+        """Create a message and send it"""
         try:
             msg = MIMEMultipart('alternative')
 
@@ -145,8 +142,7 @@ class BaseEmail(Thread):
 
 
 class SystemEmail(BaseEmail):
-
-    "E-mail class to send messages on behalf of Tree.io team"
+    """E-mail class to send messages on behalf of system"""
 
     def __init__(self, toaddr, subject, body, signature=None, html=None):
 
@@ -162,8 +158,7 @@ class SystemEmail(BaseEmail):
 
 
 class EmailInvitation(SystemEmail):
-
-    "Email Invitation"
+    """Email Invitation"""
 
     invitation = None
     sender = None
@@ -199,8 +194,7 @@ http://%s/accounts/invitation/?email=%s&key=%s
 
 
 class EmailPassword(SystemEmail):
-
-    "Email Message"
+    """Email Message"""
 
     def __init__(self, toaddr, username, password):
 
@@ -229,7 +223,6 @@ def intcmp(a, b):
 
 
 class EmailReceiver(Thread):
-
     """EmailReceiver fetches email from imap and pop email servers.
        This class can be used only as parent. You should redefine
        the process_msg method.
@@ -255,11 +248,10 @@ class EmailReceiver(Thread):
             self.tzoffset *= -1
 
     def run(self):
-        "Run"
         self.get_emails()
 
     def get_pop_port(self):
-        "Returns appropriate POP port number depending on incoming server name"
+        """Returns appropriate POP port number depending on incoming server name"""
 
         port = 110  # default
         ssl = False
@@ -271,7 +263,7 @@ class EmailReceiver(Thread):
         return port, ssl
 
     def get_imap_port(self):
-        "Returns appropriate IMAP port number depending on incoming server name"
+        """Returns appropriate IMAP port number depending on incoming server name"""
 
         port = 143  # default
         ssl = False
@@ -283,7 +275,7 @@ class EmailReceiver(Thread):
         return port, ssl
 
     def get_emails(self):
-        "Fetches emails"
+        """Fetches emails"""
 
         if self.incoming_server_type == 'IMAP' or self.incoming_server_type == 'IMAP-SSL':
 
@@ -446,7 +438,7 @@ class EmailReceiver(Thread):
         return subject, encoding
 
     def decode_body(self, body):
-        "Decodes Base64-encoded string"
+        """Decodes Base64-encoded string"""
         if body is None:
             body = 'No message'
         else:
@@ -488,7 +480,7 @@ class EmailReceiver(Thread):
         return body
 
     def get_email_author(self, msg):
-        "Returns author's name and email if any"
+        """Returns author's name and email if any"""
         try:
             header_from = msg['From']
             splits = header_from.split('<', 1)
