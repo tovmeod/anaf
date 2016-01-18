@@ -399,7 +399,7 @@ class EmailReceiver(Thread):
             return self.make_unicode(string)
 
     def make_unicode(self, string):
-        "Detects string encoding and make it unicode"
+        """Detects string encoding and make it unicode"""
 
         utf8_detector = re.compile(r"""^(?:
             [\x09\x0A\x0D\x20-\x7E]            # ASCII
@@ -428,7 +428,7 @@ class EmailReceiver(Thread):
             return smart_unicode(string, 'utf-8', errors='ignore')
 
     def decode_subject(self, subject):
-        "Decodes email subjects"
+        """Decodes email subjects"""
         if not subject:
             subject = 'No subject'
             encoding = None
@@ -484,20 +484,20 @@ class EmailReceiver(Thread):
         try:
             header_from = msg['From']
             splits = header_from.split('<', 1)
-            name, email = splits if len(splits) == 2 else ('', header_from)
-            email = email.split('>', 1)[0]
+            name, emailmsg = splits if len(splits) == 2 else ('', header_from)
+            emailmsg = emailmsg.split('>', 1)[0]
             if name:
                 name, encoding = decode_header(name.strip(' "\''))[0]
                 name = self.decode(name, encoding)
                 name = name.strip(' \'"')
         except:
-            email = name = None
+            emailmsg = name = None
 
-        if not email:
+        if not emailmsg:
             try:
-                email = msg['Return-path']
-                email.strip(' \'"<>')
+                emailmsg = msg['Return-path']
+                emailmsg.strip(' \'"<>')
             except Exception:
-                email = None
+                emailmsg = None
 
-        return name, email
+        return name, emailmsg
