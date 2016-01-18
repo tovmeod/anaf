@@ -34,23 +34,31 @@ if TESTING:
     if test_db == 'mysql':
         DATABASES = {'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'treeio',
+            'NAME': 'anaf',
             'USER': 'root',
             }}
     elif test_db == 'postgres':
         DATABASES = {'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'treeio',
+            'NAME': 'anaf',
             'USER': 'postgres',
         }}
     elif test_db == 'sqlite':
         DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3'}}
+    elif test_db == 'mssql':
+        DATABASES = {'default': {
+            'ENGINE': 'sqlserver',
+            'NAME': 'anaf_%s' % os.environ.get('MC'),
+            'USER': 'anaf',
+            'PASSWORD': 'anaf',
+            'HOST': '10.0.0.9',
+    }}
     elif test_db == 'oracle':
         DATABASES = {'default': {
             'ENGINE': 'django.db.backends.oracle',
-            'NAME': 'treeio',
-            'USER': 'treeio',
-            'PASSWORD': 'treeio',
+            'NAME': 'anaf',
+            'USER': 'anaf',
+            'PASSWORD': 'anaf',
         }}
 
     if os.environ.get('MC') == '1':
@@ -92,7 +100,7 @@ FORMAT_MODULE_PATH = 'treeio.formats'
 # OAUTH_DATA_STORE is needed for correct database setting up
 OAUTH_DATA_STORE = 'treeio.core.api.auth.store.store'
 
-# Static files location for Tree.io
+# Static files location
 if not DEBUG:
     STATIC_URL = path.join(BASE_DIR, 'static/')
 else:
