@@ -30,7 +30,7 @@ def user_block(context):
         response_format = context['response_format']
 
     trial = False
-    if getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT') == 3:
+    if settings.ANAF_SUBSCRIPTION_USER_LIMIT == 3:
         trial = True
 
     active = context.get('active', None)
@@ -52,7 +52,7 @@ def demo_user(context):
 
     response_format = 'html'
 
-    demo = getattr(settings, 'HARDTREE_DEMO_MODE', False)
+    demo = settings.ANAF_DEMO_MODE
 
     return Markup(render_to_string('core/tags/demo_user',
                   {'demo': demo},

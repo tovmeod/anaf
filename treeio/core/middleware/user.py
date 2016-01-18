@@ -42,7 +42,7 @@ class CommonMiddleware(object):
 
             domain = getattr(settings, 'CURRENT_DOMAIN', 'default')
             cache.set('treeio_%s_last' % (domain), time.time())
-            if getattr(settings, 'HARDTREE_SUBSCRIPTION_BLOCKED', False) and '/accounts' not in request.path:
+            if settings.ANAF_SUBSCRIPTION_BLOCKED and '/accounts' not in request.path:
                 return HttpResponseRedirect('/accounts/logout')
 
             user = None
@@ -111,7 +111,7 @@ class CommonMiddleware(object):
 
         if isinstance(instance, Object):
             attr = sender._meta.object_name.split('_', 1)[1]
-            if attr in settings.HARDTREE_OBJECT_BLACKLIST:
+            if attr in settings.ANAF_OBJECT_BLACKLIST:
                 return
 
             if action == "pre_clear" or action == "pre_remove":
@@ -286,7 +286,7 @@ def process_timezone_field(user, instance):
     mins = int(GMT[4:6])
 
     for field in instance.get_fields():
-        if field.name not in getattr(settings, 'HARDTREE_TIMEZONE_BLACKLIST', []):
+        if field.name not in settings.ANAF_TIMEZONE_BLACKLIST:
             if isinstance(field, models.DateTimeField) or \
                     isinstance(field, models.DateField):
                 if getattr(instance, field.name):
@@ -309,8 +309,8 @@ class SSLMiddleware(object):
 
     def process_request(self, request):
         """ Revert to SSL/no SSL depending on settings """
-        if getattr(settings, 'HARDTREE_SUBSCRIPTION_SSL_ENABLED', True):
-            if getattr(settings, 'HARDTREE_SUBSCRIPTION_SSL_ENFORCE', False) and not request.is_secure():
+        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED:
+            if settings.ANAF_SUBSCRIPTION_SSL_ENFORCE and not request.is_secure():
                 redirect_url = request.build_absolute_uri()
                 return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
         else:
@@ -320,10 +320,10 @@ class SSLMiddleware(object):
 
     def process_response(self, request, response):
         """ Keep protocol """
-        if getattr(settings, 'HARDTREE_SUBSCRIPTION_SSL_ENABLED', True):
+        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED:
             if response.status_code == 302:
                 redirect_url = request.build_absolute_uri(response['Location'])
-                if request.is_secure() or getattr(settings, 'HARDTREE_SUBSCRIPTION_SSL_ENFORCE', False):
+                if request.is_secure() or settings.ANAF_SUBSCRIPTION_SSL_ENFORCE:
                     response['Location'] = redirect_url.replace(
                         'http://', 'https://')
         return response

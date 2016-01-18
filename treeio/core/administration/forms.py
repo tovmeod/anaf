@@ -94,7 +94,7 @@ class SettingsForm(forms.Form):
             pass
         self.fields['language'].initial = language
 
-        if getattr(settings, 'HARDTREE_SUBSCRIPTION_CUSTOMIZATION', True):
+        if settings.ANAF_SUBSCRIPTION_CUSTOMIZATION:
             logopath = ''
             try:
                 conf = ModuleSetting.get_for_module(
@@ -163,7 +163,7 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('language',
                                          self.cleaned_data['language'],
                                          'treeio.core')
-            if getattr(settings, 'HARDTREE_SUBSCRIPTION_CUSTOMIZATION', True):
+            if settings.ANAF_SUBSCRIPTION_CUSTOMIZATION:
                 if isinstance(self.fields['logo'], forms.FileField):
                     logopath = self._handle_uploaded_file('logo')
                     ModuleSetting.set_for_module(
@@ -247,8 +247,7 @@ class UserForm(forms.ModelForm):
                 _("User with username %s already exists.") % data)
         if self.instance and not self.instance.id:
             # Check Anaf Subscription user limit
-            user_limit = getattr(
-                settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+            user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
             if user_limit > 0:
                 user_number = User.objects.filter(disabled=False).count()
                 if user_number >= user_limit:
@@ -268,8 +267,7 @@ class UserForm(forms.ModelForm):
         "Ensure the admin does not go over subscription limit by re-enabling users"
         enable = not self.cleaned_data['disabled']
         if self.instance and self.instance.id and enable and self.instance.disabled:
-            user_limit = getattr(
-                settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+            user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
             if user_limit > 0:
                 user_number = User.objects.filter(disabled=False).count()
                 if user_number >= user_limit:

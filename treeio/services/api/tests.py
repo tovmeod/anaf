@@ -14,7 +14,6 @@ from treeio.identities.models import Contact, ContactType
 import datetime
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class ServicesViewsTest(TestCase):
     "Services functional tests for api"
     username = "api_test"

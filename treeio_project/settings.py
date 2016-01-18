@@ -62,7 +62,7 @@ if TESTING:
         }
 
     PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
-    HARDTREE_API_AUTH_ENGINE = 'basic'
+    ANAF_API_AUTH_ENGINE = 'basic'
 else:
     CONF = ConfigParser.ConfigParser()
     CONF.optionxform = str  # to preserve case for the options names
@@ -89,7 +89,6 @@ SITE_ID = 1
 USE_I18N = True
 FORMAT_MODULE_PATH = 'treeio.formats'
 
-HARDTREE_API_CONSUMER_DB = 'default'
 # OAUTH_DATA_STORE is needed for correct database setting up
 OAUTH_DATA_STORE = 'treeio.core.api.auth.store.store'
 
@@ -278,18 +277,6 @@ EVERGREEN_FREE_USERS = 3
 
 USER_PRICE = 15
 
-HARDTREE_SUBSCRIPTION_CUSTOMIZATION = True
-
-HARDTREE_SUBSCRIPTION_USER_LIMIT = 0
-
-HARDTREE_SUBSCRIPTION_BLOCKED = False
-
-HARDTREE_SUBSCRIPTION_SSL_ENABLED = False
-HARDTREE_SUBSCRIPTION_SSL_ENFORCE = False
-
-HARDTREE_DEMO_MODE = False
-
-
 #
 # Nuvius settings (for integration)
 #
@@ -342,18 +329,6 @@ if not TESTING:
 JOHNNY_MIDDLEWARE_KEY_PREFIX = 'jc_treeio'
 
 DISABLE_QUERYSET_CACHE = False
-
-HARDTREE_OBJECT_BLACKLIST = [
-    'id', 'creator', 'object_name', 'object_type', 'trash', 'full_access',
-    'read_access', 'nuvius_resource', 'object_ptr', 'comments', 'likes',
-    'dislikes', 'tags', 'links', 'subscribers', 'read_by']
-
-HARDTREE_UPDATE_BLACKLIST = [
-    'likes', 'dislikes', 'tags', 'reference', 'total', 'links', 'subscribers',
-    'read_by', 'date_created', 'last_updated']
-
-HARDTREE_TIMEZONE_BLACKLIST = [
-    'date_created', 'last_updated', 'time_from', 'time_to']
 
 WKPATH = os.path.join(BASE_DIR, 'bin/wkhtmltopdf')
 WKCWD = BASE_DIR

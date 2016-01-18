@@ -373,7 +373,7 @@ def user_delete(request, user_id, response_format='html'):
 def user_add(request, response_format='html'):
     "User add"
 
-    user_limit = getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+    user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
 
     if user_limit > 0:
         user_number = User.objects.filter(disabled=False).count()
@@ -406,7 +406,7 @@ def user_add(request, response_format='html'):
 def user_invite(request, emails=None, response_format='html'):
     "Invite people to Anaf"
 
-    user_limit = getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+    user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
 
     # Check whether any invites can be made at all
     if user_limit > 0:

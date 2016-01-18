@@ -72,7 +72,7 @@ def user_login(request, response_format='html'):
                 if user.is_active and profile:
 
                     # Disable account with overdue payment
-                    if getattr(settings, "HARDTREE_SUBSCRIPTION_BLOCKED", False):
+                    if settings.ANAF_SUBSCRIPTION_BLOCKED:
                         return render_to_response('core/user_login', {
                             'error_message': 'We are sorry to inform you but your account has been deactivated. Please login to your <a href="https://www.tree.io/login/">control panel</a> to see details.',
                             'form': Markup(form)},
@@ -381,11 +381,10 @@ def widget_welcome(request, response_format='html'):
     "Quick start widget, which users see when they first log in"
 
     trial = False
-    if getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT') == 3:
+    if settings.ANAF_SUBSCRIPTION_USER_LIMIT == 3:
         trial = True
 
-    customization = getattr(
-        settings, 'HARDTREE_SUBSCRIPTION_CUSTOMIZATION', True)
+    customization = settings.ANAF_SUBSCRIPTION_CUSTOMIZATION
 
     return render_to_response('core/widgets/welcome', {'trial': trial, 'customization': customization},
                               context_instance=RequestContext(request), response_format=response_format)

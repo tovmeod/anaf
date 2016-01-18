@@ -212,7 +212,7 @@ class InvitationForm(forms.Form):
             raise forms.ValidationError(
                 _("User with username %s already exists.") % data)
         # Check Anaf Subscription user limit
-        user_limit = getattr(settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+        user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
         if user_limit > 0:
             user_number = User.objects.filter(disabled=False).count()
             if user_number >= user_limit:

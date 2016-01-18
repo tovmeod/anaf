@@ -12,7 +12,6 @@ from treeio.events.models import Event
 from datetime import datetime
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class EventsViewsTest(TestCase):
     "Events functional tests for api"
     username = "api_test"

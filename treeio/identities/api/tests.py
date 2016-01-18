@@ -10,7 +10,6 @@ from django.contrib.auth.models import User as DjangoUser
 from treeio.core.models import User, Group, Perspective, ModuleSetting, Object
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class IdentitiesHandlersTest(TestCase):
     "Identities Handler tests"
     username = "api_test"

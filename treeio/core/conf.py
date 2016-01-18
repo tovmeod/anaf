@@ -165,7 +165,24 @@ The Anaf Team
         ('139', u'(GMT+12:00) Auckland'), ('140', u'(GMT+12:00) Fiji'),
         ('141', u'(GMT+12:00) Kamchatka'), ('142', u'(GMT+12:00) Marshall Is.'),
         ('143', u'(GMT+12:00) Wellington'), ('144', u'(GMT+13:00) Nukualofa'),
-    )
+    ),
+    'OBJECT_BLACKLIST': [
+        'id', 'creator', 'object_name', 'object_type', 'trash', 'full_access', 'read_access', 'nuvius_resource',
+        'object_ptr', 'comments', 'likes', 'dislikes', 'tags', 'links', 'subscribers', 'read_by'
+    ],
+    'UPDATE_BLACKLIST': [
+        'likes', 'dislikes', 'tags', 'reference', 'total', 'links', 'subscribers', 'read_by', 'date_created',
+        'last_updated'
+    ],
+    'TIMEZONE_BLACKLIST': ['date_created', 'last_updated', 'time_from', 'time_to'],
+    'SUBSCRIPTION_CUSTOMIZATION': True,
+    'SUBSCRIPTION_USER_LIMIT': 0,
+    'SUBSCRIPTION_BLOCKED': False,
+    'SUBSCRIPTION_SSL_ENABLED': True,
+    'SUBSCRIPTION_SSL_ENFORCE': False,
+    'DEMO_MODE': False,
+    'API_CONSUMER_DB': 'default',
+    'API_AUTH_ENGINE': 'basic',
 }
 
 

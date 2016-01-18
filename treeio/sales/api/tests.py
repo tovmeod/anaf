@@ -13,7 +13,6 @@ from treeio.sales.models import SaleOrder, Product, OrderedProduct, Subscription
 from treeio.finance.models import Currency
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class SalesAPITest(TestCase):
     "Sales functional tests for views"
 

@@ -11,7 +11,6 @@ from treeio.core.models import User, Group, Perspective, ModuleSetting, Object
 from treeio.knowledge.models import KnowledgeFolder, KnowledgeItem, KnowledgeCategory
 
 
-@override_settings(HARDTREE_API_AUTH_ENGINE='basic')
 class KnowledgeViewsTest(TestCase):
     "Knowledge functional tests for views"
 

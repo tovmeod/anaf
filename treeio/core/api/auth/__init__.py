@@ -92,7 +92,7 @@ class OAuthAuthentication(object):
         return response
 
 
-auth_engine_name = getattr(settings, 'HARDTREE_API_AUTH_ENGINE', 'oauth')
+auth_engine_name = settings.ANAF_API_AUTH_ENGINE
 if auth_engine_name == 'oauth':
     auth_engine = OAuthAuthentication()
 else:

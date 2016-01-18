@@ -218,8 +218,7 @@ class User(AccessEntity):
         super(User, self).save(*args, **kwargs)
         # Check Anaf Subscription user limit
         if not self.id:
-            user_limit = getattr(
-                settings, 'HARDTREE_SUBSCRIPTION_USER_LIMIT', 0)
+            user_limit = settings.ANAF_SUBSCRIPTION_USER_LIMIT
             if user_limit > 0:
                 user_number = User.objects.all().count()
                 if user_number >= user_limit:
@@ -770,7 +769,7 @@ class Object(models.Model):
                     # Skip ManyToMany fields - they handled differently
                     continue
 
-                if field in getattr(settings, 'HARDTREE_UPDATE_BLACKLIST', []):
+                if field in settings.ANAF_UPDATE_BLACKLIST:
                     # Skip blacklisted items
                     continue
 
@@ -971,16 +970,16 @@ class Object(models.Model):
 
     def get_fields(self):
         """Returns list of fields for given object"""
-        return filter(lambda f: f.name not in settings.HARDTREE_OBJECT_BLACKLIST, self._meta.fields)
+        return filter(lambda f: f.name not in settings.ANAF_OBJECT_BLACKLIST, self._meta.fields)
 
     def get_field_names(self):
         """Returns list of field names for given object"""
         x = []
         for f in self._meta.fields:
-            if f.name not in settings.HARDTREE_OBJECT_BLACKLIST:
+            if f.name not in settings.ANAF_OBJECT_BLACKLIST:
                 x.append(f.name)
         for f in self._meta.many_to_many:
-            if f.name not in settings.HARDTREE_OBJECT_BLACKLIST:
+            if f.name not in settings.ANAF_OBJECT_BLACKLIST:
                 x.append(f.name)
         return x
 

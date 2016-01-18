@@ -5,7 +5,7 @@ from treeio.core.conf import settings
 KEY_SIZE = 18
 SECRET_SIZE = 32
 
-CONSUMER_DB = getattr(settings, 'HARDTREE_API_CONSUMER_DB', 'default')
+CONSUMER_DB = settings.ANAF_API_CONSUMER_DB
 
 
 class KeyManager(models.Manager):
