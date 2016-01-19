@@ -9,7 +9,7 @@ from django.db.models import Q
 from anaf.core.models import Object, ModuleSetting
 from anaf.core.rendering import render_to_response
 from anaf.core.views import user_denied
-from anaf.core.decorators import handle_response_format, treeio_login_required, module_admin_required
+from anaf.core.decorators import handle_response_format, mylogin_required, module_admin_required
 from forms import ChangeSetForm, ChangeSetStatusForm, FilterForm, SettingsForm, MassActionForm
 from models import ChangeSet, ChangeSetStatus
 
@@ -68,7 +68,7 @@ def _process_mass_form(f):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
     "Change Control index page"
@@ -91,7 +91,7 @@ def index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_owned(request, response_format='html'):
     "Change Control owned by me page"
@@ -116,7 +116,7 @@ def index_owned(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_resolved(request, response_format='html'):
     "Change Control resolved by me page"
@@ -146,7 +146,7 @@ def index_resolved(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def status_view(request, status_id, response_format='html'):
     "Status view"
@@ -178,7 +178,7 @@ def status_view(request, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required('treeio.changes')
 def status_edit(request, status_id, response_format='html'):
     "Status edit"
@@ -202,7 +202,7 @@ def status_edit(request, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required('treeio.changes')
 def status_delete(request, status_id, response_format='html'):
     "Status delete"
@@ -228,7 +228,7 @@ def status_delete(request, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required('treeio.changes')
 def status_add(request, response_format='html'):
     "Status add"
@@ -252,7 +252,7 @@ def status_add(request, response_format='html'):
 # ChangeSet
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def set_view(request, set_id, response_format='html'):
     "ChangeSet view"
 
@@ -271,7 +271,7 @@ def set_view(request, set_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def set_edit(request, set_id, response_format='html'):
     "ChangeSet edit"
 
@@ -300,7 +300,7 @@ def set_edit(request, set_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def set_delete(request, set_id, response_format='html'):
     "ChangeSet delete"
 
@@ -330,7 +330,7 @@ def set_delete(request, set_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def set_add(request, response_format='html'):
     "ChangeSet add"
 
@@ -355,7 +355,7 @@ def set_add(request, response_format='html'):
 # Settings
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required('treeio.changes')
 def settings_view(request, response_format='html'):
     "Settings"
@@ -386,7 +386,7 @@ def settings_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required('treeio.changes')
 def settings_edit(request, response_format='html'):
     "Settings"

@@ -11,7 +11,7 @@ from django.db.models import Q
 from anaf.core.views import user_denied
 from anaf.core.models import Object, Module
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from forms import ObjChoiceForm, MassActionForm, ChartForm, FilterForm
 from models import Report, Field, Model, Chart
 from helpers import dumps, loads, aggregate_functions, number_field_regex
@@ -260,7 +260,7 @@ def _get_report_content(report, request=None):
             'aggregations': aggregations}
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def charts_index(request, response_format='html'):
@@ -276,7 +276,7 @@ def charts_index(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def chart_add(request, report_id=None, response_format='html'):
 
@@ -298,7 +298,7 @@ def chart_add(request, report_id=None, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def chart_edit(request, chart_id=None, response_format='html'):
 
@@ -325,7 +325,7 @@ def chart_edit(request, chart_id=None, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def chart_view(request, chart_id=None, response_format='html'):
 
@@ -338,7 +338,7 @@ def chart_view(request, chart_id=None, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def chart_delete(request, chart_id, response_format='html'):
     "Chart delete"
@@ -369,7 +369,7 @@ def chart_delete(request, chart_id, response_format='html'):
 #
 # Index pages
 #
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def index(request, response_format='html'):
@@ -384,7 +384,7 @@ def index(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def index_owned(request, response_format='html'):
@@ -401,7 +401,7 @@ def index_owned(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def report_add(request, response_format='html'):
     "Create new report based on user choice"
@@ -467,7 +467,7 @@ def report_add(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def report_edit(request, report_id=None, response_format='html'):
     "Create new report based on user choice"
@@ -513,7 +513,7 @@ def report_edit(request, report_id=None, response_format='html'):
 #
 # Aggregations, Filters, Joins and Grouping
 #
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def report_filter(request, report_id, field_name, response_format='html'):
     "View to Filter over a given field for a Report"
@@ -538,7 +538,7 @@ def report_filter(request, report_id, field_name, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def report_filter_remove(request, report_id, field_name, filter_index, response_format='html'):
     "Remove a Filter on a given field for a Report"
@@ -556,7 +556,7 @@ def report_filter_remove(request, report_id, field_name, filter_index, response_
     return HttpResponseRedirect(reverse('reports_report_edit', args=[int(report_id)]))
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def report_group(request, report_id, field_name, response_format='html'):
     "View to Group by a given field in a report"
@@ -589,7 +589,7 @@ def report_group(request, report_id, field_name, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def report_view(request, response_format='html', report_id=None):
     "Display the report"
@@ -622,7 +622,7 @@ def report_view(request, response_format='html', report_id=None):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def report_delete(request, report_id, response_format='html'):
     "Report delete"

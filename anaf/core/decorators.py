@@ -13,11 +13,10 @@ import json
 import re
 
 
-def treeio_login_required(f):
+def mylogin_required(f):
     """ Check that the user has write access to the anaf.core module """
 
     def wrap(request, *args, **kwargs):
-        "Wrap"
         if request.user.is_authenticated():
             user = request.user.profile
             user_modules = user.get_perspective().get_modules()
@@ -33,7 +32,7 @@ def treeio_login_required(f):
                     for regexp in urls:
                         if re.match(regexp, request.path):
                             active = module
-                            # todo: this is inneficient, after finding the active module it continues the loop
+                            # todo: this is inefficient, after finding the active module it continues the loop
                 except ImportError:
                     pass
                 except AttributeError:

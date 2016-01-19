@@ -10,7 +10,7 @@ from forms import ItemForm, ItemTypeForm, ItemStatusForm, FilterForm, MassAction
 from anaf.core.forms import LocationForm
 from anaf.core.models import Object, ModuleSetting, Location
 from anaf.core.views import user_denied
-from anaf.core.decorators import treeio_login_required, handle_response_format, module_admin_required
+from anaf.core.decorators import mylogin_required, handle_response_format, module_admin_required
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -72,7 +72,7 @@ def _process_mass_form(f):
     return wrap
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def index(request, response_format='html'):
@@ -100,7 +100,7 @@ def index(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def index_owned(request, response_format='html'):
@@ -126,7 +126,7 @@ def index_owned(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def type_view(request, type_id, response_format='html'):
@@ -155,7 +155,7 @@ def type_view(request, type_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def type_edit(request, type_id, response_format='html'):
     "ItemType edit"
@@ -188,7 +188,7 @@ def type_edit(request, type_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def type_add(request, response_format='html'):
     "ItemType add"
@@ -219,7 +219,7 @@ def type_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def type_delete(request, type_id, response_format='html'):
     "ItemType delete page"
     type = get_object_or_404(ItemType, pk=type_id)
@@ -248,7 +248,7 @@ def type_delete(request, type_id, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def field_view(request, field_id, response_format='html'):
@@ -266,7 +266,7 @@ def field_view(request, field_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def field_edit(request, field_id, response_format='html'):
     "ItemField edit"
@@ -295,7 +295,7 @@ def field_edit(request, field_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def field_add(request, response_format='html'):
     "ItemField add"
@@ -326,7 +326,7 @@ def field_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def field_delete(request, field_id, response_format='html'):
     "ItemField delete page"
     field = get_object_or_404(ItemField, pk=field_id)
@@ -354,7 +354,7 @@ def field_delete(request, field_id, response_format='html'):
 #
 # Statuses
 #
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def status_view(request, status_id, response_format='html'):
@@ -383,7 +383,7 @@ def status_view(request, status_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def status_edit(request, status_id, response_format='html'):
     "ItemStatus edit"
@@ -412,7 +412,7 @@ def status_edit(request, status_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def status_delete(request, status_id, response_format='html'):
     "ItemStatus delete"
@@ -440,7 +440,7 @@ def status_delete(request, status_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def status_add(request, response_format='html'):
     "ItemStatus edit"
@@ -472,7 +472,7 @@ def status_add(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def item_add(request, response_format='html'):
     "New item form"
@@ -483,7 +483,7 @@ def item_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def item_add_typed(request, type_id, response_format='html'):
     "Item add with preselected type"
@@ -513,7 +513,7 @@ def item_add_typed(request, type_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def item_view(request, item_id, response_format='html'):
     "Item view"
@@ -529,7 +529,7 @@ def item_view(request, item_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def item_edit(request, item_id, response_format='html'):
     "Item edit page"
@@ -560,7 +560,7 @@ def item_edit(request, item_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def item_delete(request, item_id, response_format='html'):
     "Item delete page"
     item = get_object_or_404(Item, pk=item_id)
@@ -588,7 +588,7 @@ def item_delete(request, item_id, response_format='html'):
 #
 # Locations
 #
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def location_add(request, response_format='html'):
     "New location form"
@@ -614,7 +614,7 @@ def location_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def location_view(request, location_id, response_format='html'):
@@ -640,7 +640,7 @@ def location_view(request, location_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def location_edit(request, location_id, response_format='html'):
     "Location edit page"
@@ -671,7 +671,7 @@ def location_edit(request, location_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def location_delete(request, location_id, response_format='html'):
     "Location delete page"
     location = get_object_or_404(Location, pk=location_id)
@@ -700,7 +700,7 @@ def location_delete(request, location_id, response_format='html'):
 # Settings
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required('treeio.infrastructure')
 def settings_view(request, response_format='html'):
     "Settings"
@@ -733,7 +733,7 @@ def settings_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required('treeio.infrastructure')
 def settings_edit(request, response_format='html'):
     "Settings"
@@ -760,7 +760,7 @@ def settings_edit(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def service_record_index(request, response_format='html'):
@@ -781,7 +781,7 @@ def service_record_index(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def service_record_add(request, response_format='html'):
     "New service_record form"
@@ -812,7 +812,7 @@ def service_record_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def service_record_view(request, service_record_id, response_format='html'):
     "ServiceRecord view"
@@ -828,7 +828,7 @@ def service_record_view(request, service_record_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def service_record_edit(request, service_record_id, response_format='html'):
     "ServiceRecord edit page"
@@ -862,7 +862,7 @@ def service_record_edit(request, service_record_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def service_record_delete(request, service_record_id, response_format='html'):
     "ServiceRecord delete page"
     service_record = get_object_or_404(ItemServicing, pk=service_record_id)

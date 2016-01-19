@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from django.db.models import Q
 from anaf.core.models import UpdateRecord, Module, Object, Widget
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from forms import UpdateRecordForm, UpdateRecordFilterForm
 from anaf.core.rss import ObjectFeed
 
@@ -69,7 +69,7 @@ def _get_filter_query(user, do_permissions=True, do_recipients=True, filters=Non
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index(request, response_format='html'):
     "Default index page"
 
@@ -106,7 +106,7 @@ def index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_social(request, response_format='html'):
     "Social Activity"
 
@@ -138,7 +138,7 @@ def index_social(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def top_news(request, response_format='html'):
     "Default index page - top news"
 
@@ -175,7 +175,7 @@ def top_news(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def my_watchlist(request, response_format='html'):
     "Displays news about all objects a User is subscribed to"
 
@@ -214,7 +214,7 @@ def my_watchlist(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def my_activity(request, response_format='html'):
     "Default index page"
 
@@ -250,7 +250,7 @@ def my_activity(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_by_module(request, module_name, response_format='html'):
     "Default index page"
 
@@ -300,7 +300,7 @@ def index_by_module(request, module_name, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def widget_news_index(request, response_format='html'):
     "Widget: All Activity"
 
@@ -338,7 +338,7 @@ def widget_news_index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def widget_news_social(request, response_format='html'):
     "Widget: Social Activity"
 
@@ -369,7 +369,7 @@ def widget_news_social(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def widget_my_watchlist(request, response_format='html'):
     "Displays news about all objects a User is subscribed to"
 

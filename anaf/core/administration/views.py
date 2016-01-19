@@ -15,7 +15,7 @@ from anaf.core.models import User, Group, Invitation, Perspective, Module, Modul
 from forms import PerspectiveForm, UserForm, PasswordForm, \
     GroupForm, PageForm, PageFolderForm, FilterForm, SettingsForm, PERMISSION_CHOICES, ContactSetupForm
 from anaf.core.mail import EmailInvitation
-from anaf.core.decorators import module_admin_required, treeio_login_required, handle_response_format
+from anaf.core.decorators import module_admin_required, mylogin_required, handle_response_format
 
 from anaf.identities.models import ContactType
 import re
@@ -34,7 +34,7 @@ def _get_filter_query(args):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def index_perspectives(request, response_format='html'):
     """Perspective list"""
@@ -55,7 +55,7 @@ def index_perspectives(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def index_modules(request, response_format='html'):
     """Module list"""
@@ -71,7 +71,7 @@ def index_modules(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def perspective_view(request, perspective_id, response_format='html'):
     """Perspective view"""
@@ -89,7 +89,7 @@ def perspective_view(request, perspective_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def perspective_edit(request, perspective_id, response_format='html'):
     """Perspective edit"""
@@ -127,7 +127,7 @@ def perspective_edit(request, perspective_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def perspective_delete(request, perspective_id, response_format='html'):
     "Perspective delete"
@@ -165,7 +165,7 @@ def perspective_delete(request, perspective_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def perspective_add(request, response_format='html'):
     "Perspective add"
@@ -194,7 +194,7 @@ def perspective_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def module_view(request, module_id, response_format='html'):
     "Module view"
@@ -210,7 +210,7 @@ def module_view(request, module_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def index_users(request, response_format='html'):
     "User List"
@@ -223,7 +223,7 @@ def index_users(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def user_view(request, user_id, response_format='html'):
     "User view"
@@ -243,7 +243,7 @@ def user_view(request, user_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def user_edit(request, user_id, response_format='html'):
     "User edit"
@@ -267,7 +267,7 @@ def user_edit(request, user_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def contact_setup(request, response_format='html'):
 
@@ -320,7 +320,7 @@ def contact_setup(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def user_password(request, user_id, response_format='html'):
     "User change password form"
 
@@ -342,7 +342,7 @@ def user_password(request, user_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def user_delete(request, user_id, response_format='html'):
     "User delete"
@@ -367,7 +367,7 @@ def user_delete(request, user_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def user_add(request, response_format='html'):
     "User add"
@@ -400,7 +400,7 @@ def user_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def user_invite(request, emails=None, response_format='html'):
     "Invite people to Anaf"
@@ -455,7 +455,7 @@ def user_invite(request, emails=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def index_groups(request, response_format='html'):
     "Group List"
@@ -468,7 +468,7 @@ def index_groups(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def group_view(request, group_id, response_format='html'):
     "Group view"
@@ -486,7 +486,7 @@ def group_view(request, group_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def group_edit(request, group_id, response_format='html'):
     "Group edit"
@@ -511,7 +511,7 @@ def group_edit(request, group_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def group_delete(request, group_id, response_format='html'):
     "Group delete"
@@ -536,7 +536,7 @@ def group_delete(request, group_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def group_add(request, response_format='html'):
     "Group add"
@@ -563,7 +563,7 @@ def group_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def index_pages(request, response_format='html'):
     "Static Pages list"
@@ -576,7 +576,7 @@ def index_pages(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def pagefolder_view(request, folder_id, response_format='html'):
     "Folder for Static Pages view"
@@ -590,7 +590,7 @@ def pagefolder_view(request, folder_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def pagefolder_edit(request, folder_id, response_format='html'):
     "Folder for Static Pages edit"
@@ -610,7 +610,7 @@ def pagefolder_edit(request, folder_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def pagefolder_delete(request, folder_id, response_format='html'):
     "Folder for Static Pages delete"
@@ -630,7 +630,7 @@ def pagefolder_delete(request, folder_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def pagefolder_add(request, response_format='html'):
     "Folder for Static Pages add"
@@ -648,7 +648,7 @@ def pagefolder_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def page_view(request, page_id, response_format='html'):
     "Static Page view"
@@ -660,7 +660,7 @@ def page_view(request, page_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def page_edit(request, page_id, response_format='html'):
     "Static Page edit"
@@ -680,7 +680,7 @@ def page_edit(request, page_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def page_delete(request, page_id, response_format='html'):
     "Static Page delete"
@@ -699,7 +699,7 @@ def page_delete(request, page_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def page_add(request, response_format='html'):
     "Static Page add"
@@ -721,7 +721,7 @@ def page_add(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def setup(request, response_format='html'):
     "Quick set-up page"
@@ -744,7 +744,7 @@ def setup(request, response_format='html'):
 # Settings
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def settings_view(request, response_format='html'):
     "Settings view"
@@ -814,7 +814,7 @@ def settings_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @module_admin_required()
 def settings_edit(request, response_format='html'):
     "Settings edit"

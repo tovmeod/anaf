@@ -7,14 +7,14 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from forms import AccountForm, AccountPasswordForm, SettingsForm, MassActionForm
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.core.models import ModuleSetting, Perspective
 from anaf.account.models import NotificationSetting
 from anaf.core.conf import settings
 from jinja2 import Markup
 
 
-@treeio_login_required
+@mylogin_required
 def account_view(request, response_format='html'):
     """Account view"""
 
@@ -30,7 +30,7 @@ def account_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def watchlist(request, response_format='html'):
     """Displays all objects a User is subscribed to"""
 
@@ -44,7 +44,7 @@ def watchlist(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def account_edit(request, response_format='html'):
     "Account edit"
 
@@ -64,7 +64,7 @@ def account_edit(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def account_password(request, response_format='html'):
     "Change password form"
 
@@ -89,7 +89,7 @@ def account_password(request, response_format='html'):
 #
 # Settings
 #
-@treeio_login_required
+@mylogin_required
 def settings_view(request, response_format='html'):
     "Settings view"
     user = request.user.profile
@@ -164,7 +164,7 @@ def settings_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def settings_edit(request, response_format='html'):
     "Settings edit"
 

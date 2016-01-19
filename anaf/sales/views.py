@@ -16,7 +16,7 @@ from forms import SettingsForm, OrderForm, ProductForm, SaleStatusForm, UpdateRe
 from anaf.core.rendering import render_to_response
 from anaf.core.models import Object, ModuleSetting, UpdateRecord
 from anaf.core.views import user_denied
-from anaf.core.decorators import treeio_login_required, handle_response_format, module_admin_required
+from anaf.core.decorators import mylogin_required, handle_response_format, module_admin_required
 from anaf.identities.models import Contact
 from anaf.finance.models import Currency
 from anaf.finance.helpers import convert
@@ -133,7 +133,7 @@ def _do_update_record(profile, request, object):
     return form
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def index(request, response_format='html'):
@@ -161,7 +161,7 @@ def index(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def index_assigned(request, response_format='html'):
@@ -190,7 +190,7 @@ def index_assigned(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def index_status(request, response_format='html'):
     "Index Status"
@@ -226,7 +226,7 @@ def index_status(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_open(request, response_format='html'):
     "SaleOrders owned by current user"
@@ -258,7 +258,7 @@ def index_open(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def ordered_product_add(request, order_id=None, response_format='html'):
     "Add new Ordered Product"
@@ -293,7 +293,7 @@ def ordered_product_add(request, order_id=None, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def ordered_product_view(request, ordered_product_id, response_format='html'):
     "Ordered product view"
@@ -307,7 +307,7 @@ def ordered_product_view(request, ordered_product_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def ordered_product_edit(request, ordered_product_id, response_format='html'):
     "OrderedProduct edit"
@@ -342,7 +342,7 @@ def ordered_product_edit(request, ordered_product_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def ordered_product_delete(request, ordered_product_id, response_format='html'):
     "OrderedProduct delete"
@@ -373,7 +373,7 @@ def ordered_product_delete(request, ordered_product_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def subscription_index(request, response_format='html'):
     "Subscription index page"
@@ -402,7 +402,7 @@ def subscription_index(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def subscription_add(request, order_id=None, product_id=None, productset_id=None, response_format='html'):
     "Product add"
@@ -448,7 +448,7 @@ def subscription_add(request, order_id=None, product_id=None, productset_id=None
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def subscription_view(request, subscription_id, response_format='html'):
     "Subscription view"
@@ -478,7 +478,7 @@ def subscription_view(request, subscription_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def subscription_edit(request, subscription_id, response_format='html'):
     "Subscription edit"
@@ -505,7 +505,7 @@ def subscription_edit(request, subscription_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def subscription_delete(request, subscription_id, response_format='html'):
     "Subscription delete"
@@ -532,7 +532,7 @@ def subscription_delete(request, subscription_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def product_index(request, response_format='html'):
     "Product index page"
@@ -576,7 +576,7 @@ def product_index(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @module_admin_required('treeio.sales')
 def product_add(request, parent_id=None, response_format='html'):
@@ -605,7 +605,7 @@ def product_add(request, parent_id=None, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def product_edit(request, product_id, response_format='html'):
     "Product edit"
@@ -637,7 +637,7 @@ def product_edit(request, product_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def product_view(request, product_id, response_format='html'):
     "Product view"
@@ -669,7 +669,7 @@ def product_view(request, product_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def product_delete(request, product_id, response_format='html'):
     "Product delete"
@@ -704,7 +704,7 @@ def product_delete(request, product_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_lead_form
 def lead_index(request, response_format='html'):
@@ -735,7 +735,7 @@ def lead_index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_lead_form
 def lead_index_assigned(request, response_format='html'):
     "Leads owned by current user"
@@ -763,7 +763,7 @@ def lead_index_assigned(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def lead_add(request, lead_id=None, response_format='html'):
     "Lead add"
@@ -790,7 +790,7 @@ def lead_add(request, lead_id=None, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def lead_edit(request, lead_id, response_format='html'):
     "Lead edit"
@@ -816,7 +816,7 @@ def lead_edit(request, lead_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def lead_view(request, lead_id, response_format='html'):
     "Queue view"
@@ -839,7 +839,7 @@ def lead_view(request, lead_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def lead_delete(request, lead_id, response_format='html'):
     "Lead delete"
@@ -871,7 +871,7 @@ def lead_delete(request, lead_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_opportunity_form
 def opportunity_index(request, response_format='html'):
@@ -903,7 +903,7 @@ def opportunity_index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_opportunity_form
 def opportunity_index_assigned(request, response_format='html'):
     "Opportunities owned by current user"
@@ -932,7 +932,7 @@ def opportunity_index_assigned(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def opportunity_add(request, lead_id=None, response_format='html'):
     "Opportunity add"
@@ -959,7 +959,7 @@ def opportunity_add(request, lead_id=None, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def opportunity_edit(request, opportunity_id, response_format='html'):
     "Opportunity edit"
@@ -993,7 +993,7 @@ def opportunity_edit(request, opportunity_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def opportunity_view(request, opportunity_id, response_format='html'):
     "Opportunity view"
@@ -1012,7 +1012,7 @@ def opportunity_view(request, opportunity_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def opportunity_delete(request, opportunity_id, response_format='html'):
     "Opportunity delete"
@@ -1042,7 +1042,7 @@ def opportunity_delete(request, opportunity_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def order_add(request, lead_id=None, opportunity_id=None, response_format='html'):
     "Order add"
@@ -1077,7 +1077,7 @@ def order_add(request, lead_id=None, opportunity_id=None, response_format='html'
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def order_edit(request, order_id, response_format='html'):
     "SaleOrder edit"
@@ -1110,7 +1110,7 @@ def order_edit(request, order_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def order_view(request, order_id, response_format='html'):
     "SaleOrder view"
@@ -1136,7 +1136,7 @@ def order_view(request, order_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def order_invoice_view(request, order_id, response_format='html'):
     "Order view as Invoice"
@@ -1162,7 +1162,7 @@ def order_invoice_view(request, order_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def order_delete(request, order_id, response_format='html'):
     "SaleOrder delete"
@@ -1196,7 +1196,7 @@ def order_delete(request, order_id, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def settings_view(request, response_format='html'):
     "Settings"
@@ -1306,7 +1306,7 @@ def settings_view(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def settings_edit(request, response_format='html'):
     "Settings"
@@ -1337,7 +1337,7 @@ def settings_edit(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def status_add(request, response_format='html'):
     "TicketStatus add"
@@ -1371,7 +1371,7 @@ def status_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def status_view(request, status_id, response_format='html'):
     "Tickets filtered by status"
@@ -1392,7 +1392,7 @@ def status_view(request, status_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def status_edit(request, status_id, response_format='html'):
     "SaleStatus edit"
@@ -1420,7 +1420,7 @@ def status_edit(request, status_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def status_delete(request, status_id, response_format='html'):
     "SaleStatus delete"
@@ -1450,7 +1450,7 @@ def status_delete(request, status_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def source_add(request, response_format='html'):
     "TicketStatus add"
@@ -1484,7 +1484,7 @@ def source_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def source_view(request, source_id, response_format='html'):
     "Orders filtered by source"
@@ -1511,7 +1511,7 @@ def source_view(request, source_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def source_edit(request, source_id, response_format='html'):
     "SaleSource edit"
@@ -1545,7 +1545,7 @@ def source_edit(request, source_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def source_delete(request, source_id, response_format='html'):
     "SaleSource delete"
@@ -1581,7 +1581,7 @@ def source_delete(request, source_id, response_format='html'):
 # AJAX handlers
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_subscription_lookup(request, response_format='html'):
     "Returns a list of matching tasks"
 

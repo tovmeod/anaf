@@ -4,14 +4,14 @@ Core Search module views
 
 from anaf.core.rendering import render_to_response
 from django.template import RequestContext
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.core.conf import settings
 from anaf.core.models import Object, Tag
 from anaf.core.search import dbsearch
 from whoosh import index, qparser
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def search_query(request, response_format='html'):
     """Account view"""

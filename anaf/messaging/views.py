@@ -12,7 +12,7 @@ from anaf.core.models import Object, ModuleSetting
 from anaf.core.views import user_denied
 from anaf.core.conf import settings
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.identities.models import ContactType, Contact
 from models import Message, MessageStream, MailingList
 from forms import MessageForm, MessageStreamForm, FilterForm, MassActionForm, SettingsForm, \
@@ -78,7 +78,7 @@ def _process_mass_form(f):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
     "Messaging index page"
@@ -104,7 +104,7 @@ def index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_sent(request, response_format='html'):
     "Sent messages index page"
@@ -131,7 +131,7 @@ def index_sent(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_inbox(request, response_format='html'):
     "Received messages index page"
@@ -157,7 +157,7 @@ def index_inbox(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_unread(request, response_format='html'):
     "Messaging unread page"
@@ -185,7 +185,7 @@ def index_unread(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def stream_add(request, response_format='html'):
     "New message stream"
     user = request.user.profile
@@ -212,7 +212,7 @@ def stream_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def stream_view(request, stream_id, response_format='html'):
     "Stream view page"
@@ -285,7 +285,7 @@ def stream_view(request, stream_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def stream_edit(request, stream_id, response_format='html'):
     "Stream edit page"
     user = request.user.profile
@@ -316,7 +316,7 @@ def stream_edit(request, stream_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def stream_checkmail(request, stream_id, response_format='html'):
     "Stream check mail"
     user = request.user.profile
@@ -341,7 +341,7 @@ def stream_checkmail(request, stream_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def stream_delete(request, stream_id, response_format='html'):
     "Delete stream page"
 
@@ -370,7 +370,7 @@ def stream_delete(request, stream_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def messaging_compose(request, response_format='html'):
     "New message page"
 
@@ -432,7 +432,7 @@ def messaging_compose(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def messaging_view(request, message_id, response_format='html'):
     "Single message page"
 
@@ -514,7 +514,7 @@ def messaging_view(request, message_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def messaging_delete(request, message_id, response_format='html'):
     "Delete message page"
 
@@ -548,7 +548,7 @@ Mailing Lists
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def mlist_add(request, response_format='html'):
     "New message mlist"
     user = request.user.profile
@@ -574,7 +574,7 @@ def mlist_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def mlist_view(request, mlist_id, response_format='html'):
     "Mailing List view page"
@@ -621,7 +621,7 @@ def mlist_view(request, mlist_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def mlist_edit(request, mlist_id, response_format='html'):
     "MailingList edit page"
     user = request.user.profile
@@ -640,7 +640,7 @@ def mlist_edit(request, mlist_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def mlist_delete(request, mlist_id, response_format='html'):
     "Delete mlist page"
 
@@ -674,7 +674,7 @@ Settings
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def settings_view(request, response_format='html'):
     "Settings admin view"
 
@@ -717,7 +717,7 @@ def settings_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def settings_edit(request, response_format='html'):
     "Settings admin view"
 
@@ -744,7 +744,7 @@ def settings_edit(request, response_format='html'):
 # Widgets
 #
 
-@treeio_login_required
+@mylogin_required
 def widget_new_messages(request, response_format='html'):
     "A list of new messages. Limit by 5."
 

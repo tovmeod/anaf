@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q, Sum
 from anaf.core.rendering import render_to_response
 from anaf.core.models import Object, ModuleSetting
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.core.views import user_denied
 from anaf.identities.models import Contact
 from forms import TransactionForm, LiabilityForm, AccountForm, EquityForm, AssetForm, \
@@ -85,7 +85,7 @@ def _get_filter_query(model, args):
 #
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_categories(request, response_format='html'):
     "Finance categories page"
 
@@ -103,7 +103,7 @@ def index_categories(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def category_edit(request, category_id, response_format='html'):
     "category edit page"
     category = get_object_or_404(Category, pk=category_id)
@@ -124,7 +124,7 @@ def category_edit(request, category_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def category_add(request, response_format='html'):
     "new category form"
     categories = Object.filter_by_request(request, Category.objects, mode="r")
@@ -146,7 +146,7 @@ def category_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def category_view(request, category_id, response_format='html'):
     "Single category view page"
     category = get_object_or_404(Category, pk=category_id)
@@ -194,7 +194,7 @@ def category_view(request, category_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def category_delete(request, category_id, response_format='html'):
     "Category delete"
@@ -225,7 +225,7 @@ def category_delete(request, category_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def account_edit(request, account_id, response_format='html'):
     "account edit page"
     account = get_object_or_404(Account, pk=account_id)
@@ -248,7 +248,7 @@ def account_edit(request, account_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def account_add(request, response_format='html'):
     "new account form"
     if request.POST:
@@ -270,7 +270,7 @@ def account_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def account_view(request, account_id, response_format='html'):
     "Single transaction view page"
     account = get_object_or_404(Account, pk=account_id)
@@ -279,7 +279,7 @@ def account_view(request, account_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def account_delete(request, account_id, response_format='html'):
     "Account delete"
@@ -310,7 +310,7 @@ def account_delete(request, account_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_assets(request, response_format='html'):
     "Index_assets page: displays all Assets"
 
@@ -332,7 +332,7 @@ def index_assets(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def asset_edit(request, asset_id, response_format='html'):
     "asset edit page"
     asset = get_object_or_404(Asset, pk=asset_id)
@@ -353,7 +353,7 @@ def asset_edit(request, asset_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def asset_add(request, response_format='html'):
     "new asset form"
     assets = Object.filter_by_request(request, Asset.objects, mode="r")
@@ -375,7 +375,7 @@ def asset_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def asset_view(request, asset_id, response_format='html'):
     "Single transaction view page"
     asset = get_object_or_404(Asset, pk=asset_id)
@@ -384,7 +384,7 @@ def asset_view(request, asset_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def asset_delete(request, asset_id, response_format='html'):
     "Asset delete"
@@ -415,7 +415,7 @@ def asset_delete(request, asset_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_equities(request, response_format='html'):
     "Index_equities page: displays all Equities"
     if request.GET:
@@ -437,7 +437,7 @@ def index_equities(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def equity_edit(request, equity_id, response_format='html'):
     "equity edit page"
     equity = get_object_or_404(Equity, pk=equity_id)
@@ -458,7 +458,7 @@ def equity_edit(request, equity_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def equity_add(request, response_format='html'):
     "new equity form"
     equities = Object.filter_by_request(request, Equity.objects, mode="r")
@@ -480,7 +480,7 @@ def equity_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def equity_view(request, equity_id, response_format='html'):
     "Single transaction view page"
     equity = get_object_or_404(Equity, pk=equity_id)
@@ -489,7 +489,7 @@ def equity_view(request, equity_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def equity_delete(request, equity_id, response_format='html'):
     "Equity delete"
@@ -520,7 +520,7 @@ def equity_delete(request, equity_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_transactions(request, response_format='html'):
     "Index_transactions page: displays all Transactions"
     if request.GET:
@@ -557,7 +557,7 @@ def index_transactions(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def transaction_add(request, liability_id=None, order_id=None, response_format='html'):
     "new transaction form"
     transactions = Object.filter_by_request(
@@ -589,7 +589,7 @@ def transaction_add(request, liability_id=None, order_id=None, response_format='
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def transaction_edit(request, transaction_id, response_format='html'):
     "Transaction edit page"
     transaction = get_object_or_404(Transaction, pk=transaction_id)
@@ -612,7 +612,7 @@ def transaction_edit(request, transaction_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def transaction_view(request, transaction_id, response_format='html'):
     "Single transaction view page"
     transaction = get_object_or_404(Transaction, pk=transaction_id)
@@ -621,7 +621,7 @@ def transaction_view(request, transaction_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def transaction_delete(request, transaction_id, response_format='html'):
     "Transaction delete"
@@ -652,7 +652,7 @@ def transaction_delete(request, transaction_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_liabilities(request, response_format='html'):
     "Index_liabilities page: displays all Liabilities"
     if request.GET:
@@ -694,7 +694,7 @@ def index_liabilities(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def liability_edit(request, liability_id, response_format='html'):
     "liability edit page"
     liability = get_object_or_404(Liability, pk=liability_id)
@@ -716,7 +716,7 @@ def liability_edit(request, liability_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def liability_add(request, response_format='html'):
     "new liability form"
     liabilities = Object.filter_by_request(
@@ -741,7 +741,7 @@ def liability_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def liability_view(request, liability_id, response_format='html'):
     "Single transaction view page"
     liability = get_object_or_404(Liability, pk=liability_id)
@@ -754,7 +754,7 @@ def liability_view(request, liability_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def liability_delete(request, liability_id, response_format='html'):
     "Liability delete"
@@ -784,7 +784,7 @@ def liability_delete(request, liability_id, response_format='html'):
 #
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_receivables(request, response_format='html'):
     "Index_receivables page: displays all Liabilities"
     if request.GET:
@@ -825,7 +825,7 @@ def index_receivables(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def receivable_add(request, response_format='html'):
     "new receivable form"
     if request.POST:
@@ -848,7 +848,7 @@ def receivable_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def receivable_edit(request, receivable_id, response_format='html'):
     "Liability edit page"
     receivable = get_object_or_404(Liability, pk=receivable_id)
@@ -870,7 +870,7 @@ def receivable_edit(request, receivable_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def receivable_view(request, receivable_id, response_format='html'):
     "Single receivable view page"
     receivable = get_object_or_404(Liability, pk=receivable_id)
@@ -882,7 +882,7 @@ def receivable_view(request, receivable_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def receivable_delete(request, receivable_id, response_format='html'):
     "Receivable delete"
@@ -913,7 +913,7 @@ def receivable_delete(request, receivable_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def income_view(request, response_format='html'):
     "Income Statement view page"
 
@@ -981,7 +981,7 @@ def income_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def balance_sheet(request, response_format='html'):
     "Balance Sheet view page"
 
@@ -1100,7 +1100,7 @@ def balance_sheet(request, response_format='html'):
 # Settings
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_accounts(request, response_format='html'):
     "Settings"
 
@@ -1131,7 +1131,7 @@ def index_accounts(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def settings_view(request, response_format='html'):
     "Settings"
@@ -1202,7 +1202,7 @@ def settings_view(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def settings_edit(request, response_format='html'):
     "Settings"
@@ -1232,7 +1232,7 @@ def settings_edit(request, response_format='html'):
 # Currency
 #
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def currency_add(request, response_format='html'):
     "Currency add"
@@ -1264,7 +1264,7 @@ def currency_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def currency_edit(request, currency_id, response_format='html'):
     "Currency edit"
@@ -1292,7 +1292,7 @@ def currency_edit(request, currency_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def currency_view(request, currency_id, response_format='html'):
     "View a currency"
@@ -1307,7 +1307,7 @@ def currency_view(request, currency_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def currency_delete(request, currency_id, response_format='html'):
     "Currency delete"
@@ -1340,7 +1340,7 @@ def currency_delete(request, currency_id, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def tax_add(request, response_format='html'):
     "Tax add"
@@ -1368,7 +1368,7 @@ def tax_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def tax_edit(request, tax_id, response_format='html'):
     "Tax edit"
@@ -1396,7 +1396,7 @@ def tax_edit(request, tax_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def tax_view(request, tax_id, response_format='html'):
     "View a tax"
@@ -1411,7 +1411,7 @@ def tax_view(request, tax_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def tax_delete(request, tax_id, response_format='html'):
     "Tax delete"
