@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpRespons
 from django.core.urlresolvers import resolve, reverse
 from django.shortcuts import get_object_or_404
 from conf import settings
-from decorators import treeio_login_required, handle_response_format
+from decorators import mylogin_required, handle_response_format
 from forms import LoginForm, PasswordResetForm, InvitationForm, SqlSettingsForm
 from models import Object, Module, ModuleSetting, Perspective, User, Attachment, Invitation, Tag, \
     UpdateRecord
@@ -28,7 +28,7 @@ import random
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def user_logout(request, response_format='html'):
     """User logout"""
     logout(request)
@@ -130,7 +130,7 @@ def user_denied(request, message='', response_format='html'):
     return response
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def user_perspective(request, response_format='html'):
     "Change user perspective"
@@ -311,7 +311,7 @@ def database_setup(request, response_format='html'):
     return HttpResponseRedirect('/')
 
 
-@treeio_login_required
+@mylogin_required
 def help_page(request, url='/', response_format='html'):
     "Returns a Help page from Evergreen"
 
@@ -340,7 +340,7 @@ def help_page(request, url='/', response_format='html'):
 #
 # AJAX lookups
 #
-@treeio_login_required
+@mylogin_required
 def ajax_object_lookup(request, response_format='html'):
     "Returns a list of matching objects"
 
@@ -357,7 +357,7 @@ def ajax_object_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_tag_lookup(request, response_format='html'):
     "Returns a list of matching tags"
 
@@ -376,7 +376,7 @@ def ajax_tag_lookup(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 def widget_welcome(request, response_format='html'):
     "Quick start widget, which users see when they first log in"
 
@@ -490,7 +490,7 @@ def save_upload(uploaded, filename, raw_data):
     return False
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_upload(request, object_id=None, record=None):
     try:
         object = None
@@ -571,13 +571,13 @@ def ajax_upload(request, object_id=None, record=None):
         pass
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_upload_record(request, record_id=None):
     record = UpdateRecord.objects.get(id=record_id)
     return ajax_upload(request, None, record)
 
 
-@treeio_login_required
+@mylogin_required
 def attachment_download(request, attachment_id):
     try:
         attachment = Attachment.objects.get(pk=attachment_id)

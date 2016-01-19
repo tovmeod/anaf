@@ -10,7 +10,7 @@ from django.db.models import Q
 from anaf.core.rendering import render_to_response
 from anaf.core.models import Object
 from anaf.core.views import user_denied
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from models import Event
 from forms import EventForm, GoToDateForm, FilterForm, MassActionForm
 from rendering import EventCollection
@@ -74,7 +74,7 @@ def _process_mass_form(f):
     return wrap
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def index(request, response_format='html'):
@@ -100,7 +100,7 @@ def index(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def upcoming(request, response_format='html'):
@@ -121,7 +121,7 @@ def upcoming(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def month_view(request, response_format='html'):
     "Month view - each cell represents a day"
@@ -168,7 +168,7 @@ def month_view(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def week_view(request, response_format='html'):
     "Week view - each slot represents an hour"
@@ -227,7 +227,7 @@ def week_view(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def day_view(request, response_format='html'):
     "Day view - each slot represents an hour"
@@ -281,7 +281,7 @@ def day_view(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def event_view(request, event_id, response_format='html'):
     "Event view"
@@ -295,7 +295,7 @@ def event_view(request, event_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def event_edit(request, event_id, response_format='html'):
     "Event edit"
@@ -322,7 +322,7 @@ def event_edit(request, event_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def event_delete(request, event_id, response_format='html'):
     "Event delete"
@@ -347,7 +347,7 @@ def event_delete(request, event_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def event_add(request, date=None, hour=12, response_format='html'):
     "Event add form"
@@ -371,7 +371,7 @@ def event_add(request, date=None, hour=12, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def ical_all_event(request, response_format='ical'):
     "Export upcoming events "
     query = Q()
@@ -415,7 +415,7 @@ END:VCALENDAR
 #
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def widget_week_view(request, response_format='html'):
     "Week view - each slot represents an hour"
 

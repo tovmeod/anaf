@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from anaf.core.models import Object
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.core.rendering import render_to_response
 from anaf.core.views import user_denied
 from forms import MassActionForm
@@ -46,7 +46,7 @@ def _process_mass_form(f):
     return wrap
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 @_process_mass_form
 def index(request, response_format='html'):
@@ -62,7 +62,7 @@ def index(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def object_delete(request, object_id, response_format='html'):
     "Completely delete item"
@@ -83,7 +83,7 @@ def object_delete(request, object_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def object_untrash(request, object_id, response_format='html'):
     "Untrash item"

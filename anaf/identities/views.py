@@ -12,7 +12,7 @@ from anaf.core.rendering import render_to_response
 from anaf.core.forms import LocationForm
 from anaf.core.models import User, Group, Object, Location, AccessEntity
 from anaf.core.views import user_denied
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from csvapi import ProcessContacts
 from models import Contact, ContactType, ContactField
 from forms import ContactForm, FilterForm, ContactTypeForm, ContactFieldForm, \
@@ -72,7 +72,7 @@ def _process_mass_form(f):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
     "Default page"
@@ -99,7 +99,7 @@ def index(request, response_format='html'):
 # ContactTypes
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def type_view(request, type_id, response_format='html'):
     "Contacts by type"
@@ -118,7 +118,7 @@ def type_view(request, type_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def type_edit(request, type_id, response_format='html'):
     "ContactType edit"
@@ -152,7 +152,7 @@ def type_edit(request, type_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def type_add(request, response_format='html'):
     "ContactType add"
@@ -184,7 +184,7 @@ def type_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def type_delete(request, type_id, response_format='html'):
     "ContactType delete page"
     type = get_object_or_404(ContactType, pk=type_id)
@@ -214,7 +214,7 @@ def type_delete(request, type_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def field_view(request, field_id, response_format='html'):
     "ContactField view"
 
@@ -231,7 +231,7 @@ def field_view(request, field_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def field_edit(request, field_id, response_format='html'):
     "ContactField edit"
 
@@ -260,7 +260,7 @@ def field_edit(request, field_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def field_add(request, response_format='html'):
     "ContactField add"
 
@@ -290,7 +290,7 @@ def field_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def field_delete(request, field_id, response_format='html'):
     "ContactField delete page"
     field = get_object_or_404(ContactField, pk=field_id)
@@ -316,7 +316,7 @@ def field_delete(request, field_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def contact_add(request, response_format='html'):
     "Contact add"
 
@@ -329,7 +329,7 @@ def contact_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def contact_add_typed(request, type_id, response_format='html'):
     "Contact add with preselected type"
 
@@ -360,7 +360,7 @@ def contact_add_typed(request, type_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def contact_view(request, contact_id, attribute='', response_format='html'):
     "Contact view"
 
@@ -399,7 +399,7 @@ def contact_view(request, contact_id, attribute='', response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def contact_me(request, attribute='', response_format='html'):
     "My Contact card"
 
@@ -441,7 +441,7 @@ def contact_me(request, attribute='', response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @cache_control(private=True, max_age=31536000)
 def contact_view_picture(request, contact_id, response_format='html'):
     "Contact view Picture"
@@ -451,7 +451,7 @@ def contact_view_picture(request, contact_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def contact_edit(request, contact_id, response_format='html'):
     "Contact edit"
 
@@ -483,7 +483,7 @@ def contact_edit(request, contact_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def contact_delete(request, contact_id, response_format='html'):
     "Contact delete"
 
@@ -511,7 +511,7 @@ def contact_delete(request, contact_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_users(request, response_format='html'):
     "User List"
 
@@ -525,7 +525,7 @@ def index_users(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_groups(request, response_format='html'):
     "Group List"
 
@@ -538,7 +538,7 @@ def index_groups(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def user_view(request, user_id, response_format='html'):
     "User view"
     user = get_object_or_404(User, pk=user_id)
@@ -547,7 +547,7 @@ def user_view(request, user_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def group_view(request, group_id, response_format='html'):
     "Group view"
 
@@ -572,7 +572,7 @@ def group_view(request, group_id, response_format='html'):
 #
 # Locations
 #
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def location_index(request, location_id, response_format='html'):
     "Location index"
@@ -589,7 +589,7 @@ def location_index(request, location_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def location_add(request, response_format='html'):
     "New location form"
@@ -615,7 +615,7 @@ def location_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def location_view(request, location_id, response_format='html'):
     "Location view"
@@ -633,7 +633,7 @@ def location_view(request, location_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 @handle_response_format
 def location_edit(request, location_id, response_format='html'):
     "Location edit page"
@@ -664,7 +664,7 @@ def location_edit(request, location_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def location_delete(request, location_id, response_format='html'):
     "Location delete page"
     location = get_object_or_404(Location, pk=location_id)
@@ -693,7 +693,7 @@ def location_delete(request, location_id, response_format='html'):
 # Settings
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def settings_view(request, response_format='html'):
     "Settings"
 
@@ -731,7 +731,7 @@ def settings_view(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_access_lookup(request, response_format='html'):
     "Returns a list of matching users"
 
@@ -747,7 +747,7 @@ def ajax_access_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_user_lookup(request, response_format='html'):
     "Returns a list of matching users"
 
@@ -762,7 +762,7 @@ def ajax_user_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_contact_lookup(request, response_format='html'):
     "Returns a list of matching contacts"
 
@@ -778,7 +778,7 @@ def ajax_contact_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_location_lookup(request, response_format='html'):
     "Returns a list of matching locations"
 
@@ -801,7 +801,7 @@ def ajax_location_lookup(request, response_format='html'):
 #
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def widget_contact_me(request, response_format='html'):
     "My Contact card"
 

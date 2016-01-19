@@ -10,7 +10,7 @@ from models import KnowledgeFolder, KnowledgeItem, KnowledgeCategory
 from anaf.core.models import Object
 from anaf.core.views import user_denied
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from forms import KnowledgeFolderForm, KnowledgeItemForm, KnowledgeCategoryForm, \
     FilterForm, MassActionForm
 from django.http import Http404
@@ -67,7 +67,7 @@ def _process_mass_form(f):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
     "Knowledge base index page"
@@ -91,7 +91,7 @@ def index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index_categories(request, response_format='html'):
     "Knowledge base categories page"
 
@@ -116,7 +116,7 @@ def index_categories(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def folder_add(request, response_format='html'):
     "New folder form"
 
@@ -143,7 +143,7 @@ def folder_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def folder_add_folder(request, folderPath, response_format='html'):
     "Add new knowledge folder to preselected folder"
 
@@ -184,7 +184,7 @@ def folder_add_folder(request, folderPath, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def folder_view(request, folderPath, response_format='html'):
     "Single knowledge folder view page"
@@ -211,7 +211,7 @@ def folder_view(request, folderPath, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def folder_edit(request, knowledgeType_id, response_format='html'):
     "Knowledge folder edit page"
 
@@ -246,7 +246,7 @@ def folder_edit(request, knowledgeType_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def folder_delete(request, knowledgeType_id, response_format='html'):
     "Type delete"
 
@@ -278,7 +278,7 @@ def folder_delete(request, knowledgeType_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def item_add(request, response_format='html'):
     "Add new knowledge item"
     items = Object.filter_permitted(
@@ -309,7 +309,7 @@ def item_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def item_add_folder(request, folderPath, response_format='html'):
     "Add new knowledge item to preselected folder"
     items = Object.filter_permitted(
@@ -347,7 +347,7 @@ def item_add_folder(request, folderPath, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def item_view(request, folderPath, itemPath, response_format='html'):
     "Single knowledge item view page"
 
@@ -374,7 +374,7 @@ def item_view(request, folderPath, itemPath, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def item_edit(request, knowledgeItem_id, response_format='html'):
     "Knowledge item edit page"
     item = get_object_or_404(KnowledgeItem, pk=knowledgeItem_id)
@@ -410,7 +410,7 @@ def item_edit(request, knowledgeItem_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def item_delete(request, knowledgeItem_id, response_format='html'):
     "Item delete"
 
@@ -443,7 +443,7 @@ def item_delete(request, knowledgeItem_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def category_add(request, response_format='html'):
     "Add new knowledge category"
 
@@ -469,7 +469,7 @@ def category_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def category_view(request, categoryPath, response_format='html'):
     "Single knowledge category view page"
@@ -495,7 +495,7 @@ def category_view(request, categoryPath, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def category_edit(request, knowledgeCategory_id, response_format='html'):
     "Knowledge category edit page"
     category = get_object_or_404(KnowledgeCategory, pk=knowledgeCategory_id)
@@ -527,7 +527,7 @@ def category_edit(request, knowledgeCategory_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def category_delete(request, knowledgeCategory_id, response_format='html'):
     "Knowledge Category delete"
 

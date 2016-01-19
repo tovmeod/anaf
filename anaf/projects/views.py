@@ -6,7 +6,7 @@ from django.db.models import Q
 from anaf.core.models import Object, ModuleSetting, UpdateRecord
 from anaf.core.views import user_denied
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 from forms import ProjectForm, MilestoneForm, TaskForm, FilterForm, TaskRecordForm, \
     MassActionForm, TaskTimeSlotForm, TaskStatusForm, SettingsForm
@@ -77,7 +77,7 @@ def _process_mass_form(f):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
     """Project Management index page"""
@@ -106,7 +106,7 @@ def index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_owned(request, response_format='html'):
     """Tasks owned by current user"""
@@ -137,7 +137,7 @@ def index_owned(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_assigned(request, response_format='html'):
     """Tasks assigned to current user"""
@@ -168,7 +168,7 @@ def index_assigned(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_by_status(request, status_id, response_format='html'):
     """Sort tasks by status"""
@@ -198,7 +198,7 @@ def index_by_status(request, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_in_progress(request, response_format='html'):
     """A page with a list of tasks in progress"""
@@ -232,7 +232,7 @@ def index_in_progress(request, response_format='html'):
 # Projects
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def project_add(request, response_format='html'):
     """New project form"""
 
@@ -258,7 +258,7 @@ def project_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def project_add_typed(request, project_id, response_format='html'):
     """Project add to preselected parent project"""
 
@@ -290,7 +290,7 @@ def project_add_typed(request, project_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def project_view(request, project_id, response_format='html'):
     """Single project view page"""
@@ -359,7 +359,7 @@ def project_view(request, project_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def project_edit(request, project_id, response_format='html'):
     """Project edit page"""
 
@@ -387,7 +387,7 @@ def project_edit(request, project_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def project_delete(request, project_id, response_format='html'):
     """Project delete"""
 
@@ -418,7 +418,7 @@ def project_delete(request, project_id, response_format='html'):
 #
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def milestone_add(request, response_format='html'):
     """New milestone form"""
 
@@ -444,7 +444,7 @@ def milestone_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def milestone_add_typed(request, project_id=None, response_format='html'):
     """Milestone add to preselected project"""
 
@@ -476,7 +476,7 @@ def milestone_add_typed(request, project_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def milestone_view(request, milestone_id, response_format='html'):
     """Single milestone view page"""
@@ -522,7 +522,7 @@ def milestone_view(request, milestone_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def milestone_edit(request, milestone_id, response_format='html'):
     """Milestone edit page"""
 
@@ -554,7 +554,7 @@ def milestone_edit(request, milestone_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def milestone_delete(request, milestone_id, response_format='html'):
     """Milestone delete"""
 
@@ -589,7 +589,7 @@ def milestone_delete(request, milestone_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def milestone_set_status(request, milestone_id, status_id, response_format='html'):
     """Milestone quick set: Status"""
 
@@ -613,7 +613,7 @@ def milestone_set_status(request, milestone_id, status_id, response_format='html
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_add(request, response_format='html'):
     """New task form"""
 
@@ -639,7 +639,7 @@ def task_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_add_typed(request, project_id=None, response_format='html'):
     """Task add to preselected project"""
 
@@ -672,7 +672,7 @@ def task_add_typed(request, project_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_add_to_milestone(request, milestone_id=None, response_format='html'):
     """Task add to preselected project"""
 
@@ -710,7 +710,7 @@ def task_add_to_milestone(request, milestone_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_add_subtask(request, task_id=None, response_format='html'):
     """New subtask form"""
 
@@ -743,7 +743,7 @@ def task_add_subtask(request, task_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def task_view(request, task_id, response_format='html'):
     """Single task view page"""
@@ -793,7 +793,7 @@ def task_view(request, task_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_edit(request, task_id, response_format='html'):
     """Task edit page"""
 
@@ -823,7 +823,7 @@ def task_edit(request, task_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_delete(request, task_id, response_format='html'):
     """Task delete"""
 
@@ -857,7 +857,7 @@ def task_delete(request, task_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_set_status(request, task_id, status_id, response_format='html'):
     """Task quick set: Status"""
 
@@ -881,7 +881,7 @@ def task_set_status(request, task_id, status_id, response_format='html'):
 #
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_time_slot_start(request, task_id, response_format='html'):
     """Start TaskTimeSlot for preselected Task"""
 
@@ -899,7 +899,7 @@ def task_time_slot_start(request, task_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_time_slot_stop(request, slot_id, response_format='html'):
     """Stop TaskTimeSlot for preselected Task"""
 
@@ -916,7 +916,7 @@ def task_time_slot_stop(request, slot_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_time_slot_add(request, task_id, response_format='html'):
     """Time slot add to preselected task"""
 
@@ -954,7 +954,7 @@ def task_time_slot_add(request, task_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_time_slot_view(request, time_slot_id, response_format='html'):
     """Task time slot view page"""
 
@@ -973,7 +973,7 @@ def task_time_slot_view(request, time_slot_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_time_slot_edit(request, time_slot_id, response_format='html'):
     """Task time slot edit page"""
 
@@ -1007,7 +1007,7 @@ def task_time_slot_edit(request, time_slot_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_time_slot_delete(request, time_slot_id, response_format='html'):
     """Task time slot delete"""
 
@@ -1042,7 +1042,7 @@ def task_time_slot_delete(request, time_slot_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_status_add(request, response_format='html'):
     """TaskStatus add"""
 
@@ -1071,7 +1071,7 @@ def task_status_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_status_edit(request, status_id, response_format='html'):
     """TaskStatus edit"""
 
@@ -1100,7 +1100,7 @@ def task_status_edit(request, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def task_status_delete(request, status_id, response_format='html'):
     """TaskStatus delete"""
 
@@ -1134,7 +1134,7 @@ def task_status_delete(request, status_id, response_format='html'):
 #
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def settings_view(request, response_format='html'):
     """Settings"""
 
@@ -1160,7 +1160,7 @@ def settings_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def settings_edit(request, response_format='html'):
     """Settings"""
 
@@ -1190,7 +1190,7 @@ def settings_edit(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_task_lookup(request, response_format='html'):
     """Returns a list of matching tasks"""
 
@@ -1209,7 +1209,7 @@ def ajax_task_lookup(request, response_format='html'):
 # Widgets
 #
 
-@treeio_login_required
+@mylogin_required
 def widget_tasks_assigned_to_me(request, response_format='html'):
     "A list of tasks assigned to current user"
 
@@ -1226,7 +1226,7 @@ def widget_tasks_assigned_to_me(request, response_format='html'):
 #
 
 
-@treeio_login_required
+@mylogin_required
 def gantt_view(request, project_id, response_format='html'):
     projects = Project.objects.filter(trash=False)
     project = projects.filter(pk=project_id)[0]

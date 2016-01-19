@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.core.models import Object, Widget
 from forms import WidgetForm
 from anaf.core.conf import settings
@@ -142,7 +142,7 @@ def _get_widget_content(content, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def index(request, response_format='html'):
     "Homepage"
     trash = Object.filter_by_request(request, manager=Object.objects.filter(trash=True),
@@ -182,7 +182,7 @@ def index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def dashboard_widget_add(request, module_name=None, widget_name=None, response_format='html'):
     "Add a Widget to the Dashboard"
     trash = Object.filter_by_request(request, manager=Object.objects.filter(trash=True),
@@ -202,7 +202,7 @@ def dashboard_widget_add(request, module_name=None, widget_name=None, response_f
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def dashboard_widget_edit(request, widget_id, response_format='html'):
     "Edit an existing Widget on the Dashboard"
 
@@ -240,7 +240,7 @@ def dashboard_widget_edit(request, widget_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def dashboard_widget_delete(request, widget_id, response_format='html'):
     "Delete an existing Widget from the Dashboard"
 
@@ -253,7 +253,7 @@ def dashboard_widget_delete(request, widget_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def dashboard_widget_arrange(request, panel='left', response_format='html'):
     "Arrange widgets with AJAX request"
     user = request.user.profile

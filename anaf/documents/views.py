@@ -11,7 +11,7 @@ from anaf.core.views import user_denied
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from django.http import HttpResponse
 from anaf.core.conf import settings
 from django.utils.encoding import smart_str
@@ -116,7 +116,7 @@ def _process_mass_form(f):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
     "Index page: displays all Documents"
@@ -144,7 +144,7 @@ def index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_files(request, response_format='html'):
     "Index_files page: displays all Files"
@@ -169,7 +169,7 @@ def index_files(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_weblinks(request, response_format='html'):
     "Index_weblinks page: displays all WebLinks"
@@ -194,7 +194,7 @@ def index_weblinks(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_documents(request, response_format='html'):
     "Index_documents page: displays all Documents"
@@ -219,7 +219,7 @@ def index_documents(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def folder_add(request, response_format='html'):
     "New folder form"
 
@@ -246,7 +246,7 @@ def folder_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def folder_add_typed(request, folder_id=None, response_format='html'):
     "Folder add to preselected folder"
 
@@ -280,7 +280,7 @@ def folder_add_typed(request, folder_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def folder_view(request, folder_id, response_format='html'):
     "Single folder view page"
@@ -322,7 +322,7 @@ def folder_view(request, folder_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def folder_edit(request, folder_id, response_format='html'):
     "Folder edit page"
 
@@ -355,7 +355,7 @@ def folder_edit(request, folder_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def folder_delete(request, folder_id, response_format='html'):
     "Folder delete"
 
@@ -401,7 +401,7 @@ def folder_delete(request, folder_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def document_add(request, response_format='html'):
     "new document form"
 
@@ -429,7 +429,7 @@ def document_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def document_add_typed(request, folder_id=None, response_format='html'):
     "Document add to preselected folder"
 
@@ -463,7 +463,7 @@ def document_add_typed(request, folder_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def document_view(request, document_id, response_format='html'):
     "Single document view page"
 
@@ -481,7 +481,7 @@ def document_view(request, document_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def document_edit(request, document_id, response_format='html'):
     "Document edit page"
 
@@ -513,7 +513,7 @@ def document_edit(request, document_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def document_delete(request, document_id, response_format='html'):
     "Document delete"
 
@@ -542,7 +542,7 @@ def document_delete(request, document_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def file_upload(request, response_format='html'):
     "New file form"
 
@@ -569,7 +569,7 @@ def file_upload(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def file_upload_typed(request, folder_id=None, response_format='html'):
     "File upload to preselected folder"
 
@@ -602,7 +602,7 @@ def file_upload_typed(request, folder_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def file_view(request, file_id, response_format='html'):
     "Single file view page"
 
@@ -636,7 +636,7 @@ def file_view(request, file_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def file_delete(request, file_id, response_format='html'):
     "File delete"
 
@@ -664,7 +664,7 @@ def file_delete(request, file_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def file_edit(request, file_id, response_format='html'):
     "File edit page"
 
@@ -696,7 +696,7 @@ def file_edit(request, file_id, response_format='html'):
 
 # Web Links
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def weblink_add(request, response_format='html'):
     "New web link form"
 
@@ -725,7 +725,7 @@ def weblink_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def weblink_add_typed(request, folder_id=None, response_format='html'):
     "Web link add to preselected folder"
 
@@ -759,7 +759,7 @@ def weblink_add_typed(request, folder_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def weblink_view(request, weblink_id, response_format='html'):
     "Weblink page"
 
@@ -777,7 +777,7 @@ def weblink_view(request, weblink_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def weblink_edit(request, weblink_id, response_format='html'):
     "WebLink edit page"
 
@@ -809,7 +809,7 @@ def weblink_edit(request, weblink_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def weblink_delete(request, weblink_id, response_format='html'):
     "WebLink delete"
 

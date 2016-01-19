@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from anaf.core.conf import settings
 from anaf.core.rendering import render_to_response, render_string_template, render_to_string
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.core.views import user_denied
 from anaf.core.models import Object, ModuleSetting
 from models import Ticket, TicketRecord, TicketStatus, TicketQueue, Service, \
@@ -80,7 +80,7 @@ def _process_mass_form(f):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
     "All available tickets"
@@ -108,7 +108,7 @@ def index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_assigned(request, response_format='html'):
     "Tickets assigned to current user"
@@ -141,7 +141,7 @@ def index_assigned(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def index_owned(request, response_format='html'):
     "Tickets owned by current user"
@@ -174,7 +174,7 @@ def index_owned(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def status_view(request, status_id, response_format='html'):
     "Tickets filtered by status"
@@ -200,7 +200,7 @@ def status_view(request, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def status_edit(request, status_id, response_format='html'):
     "TicketStatus edit"
 
@@ -230,7 +230,7 @@ def status_edit(request, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def status_delete(request, status_id, response_format='html'):
     "TicketStatus delete"
 
@@ -257,7 +257,7 @@ def status_delete(request, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def status_add(request, response_format='html'):
     "TicketStatus add"
 
@@ -291,7 +291,7 @@ def status_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 @_process_mass_form
 def queue_view(request, queue_id, response_format='html'):
     "Queue view"
@@ -326,7 +326,7 @@ def queue_view(request, queue_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def queue_edit(request, queue_id, response_format='html'):
     "Queue edit"
 
@@ -354,7 +354,7 @@ def queue_edit(request, queue_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def queue_delete(request, queue_id, response_format='html'):
     "Queue delete"
 
@@ -388,7 +388,7 @@ def queue_delete(request, queue_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def queue_add(request, response_format='html'):
     "Queue add"
 
@@ -422,7 +422,7 @@ def queue_add(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def ticket_view(request, ticket_id, response_format='html'):
     "Ticket view"
 
@@ -465,7 +465,7 @@ def ticket_view(request, ticket_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def ticket_edit(request, ticket_id, response_format='html'):
     "Ticket edit"
 
@@ -497,7 +497,7 @@ def ticket_edit(request, ticket_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def ticket_set_status(request, ticket_id, status_id, response_format='html'):
     "Ticket quick set: Status"
     ticket = get_object_or_404(Ticket, pk=ticket_id)
@@ -516,7 +516,7 @@ def ticket_set_status(request, ticket_id, status_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def ticket_delete(request, ticket_id, response_format='html'):
     "Ticket delete"
 
@@ -543,7 +543,7 @@ def ticket_delete(request, ticket_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def ticket_add(request, queue_id=None, response_format='html'):
     "Ticket add"
 
@@ -628,7 +628,7 @@ def ticket_add(request, queue_id=None, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def service_catalogue(request, response_format='html'):
     "All available Services"
 
@@ -645,7 +645,7 @@ def service_catalogue(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def service_view(request, service_id, response_format='html'):
     "Service view"
 
@@ -662,7 +662,7 @@ def service_view(request, service_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def service_edit(request, service_id, response_format='html'):
     "Service edit"
 
@@ -691,7 +691,7 @@ def service_edit(request, service_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def service_delete(request, service_id, response_format='html'):
     "Service delete"
 
@@ -719,7 +719,7 @@ def service_delete(request, service_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def service_add(request, response_format='html'):
     "Service add"
 
@@ -753,7 +753,7 @@ def service_add(request, response_format='html'):
 #
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def sla_index(request, response_format='html'):
     "All available Service Level Agreements"
 
@@ -775,7 +775,7 @@ def sla_index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def sla_view(request, sla_id, response_format='html'):
     "ServiceLevelAgreement view"
 
@@ -791,7 +791,7 @@ def sla_view(request, sla_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def sla_edit(request, sla_id, response_format='html'):
     "ServiceLevelAgreement edit"
 
@@ -820,7 +820,7 @@ def sla_edit(request, sla_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def sla_delete(request, sla_id, response_format='html'):
     "ServiceLevelAgreement delete"
 
@@ -847,7 +847,7 @@ def sla_delete(request, sla_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def sla_add(request, response_format='html'):
     "ServiceLevelAgreement add"
 
@@ -880,7 +880,7 @@ def sla_add(request, response_format='html'):
 # Settings
 #
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def settings_view(request, response_format='html'):
     "Settings"
 
@@ -968,7 +968,7 @@ def settings_view(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def settings_edit(request, response_format='html'):
     "Settings"
 
@@ -999,7 +999,7 @@ def settings_edit(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def agent_index(request, response_format='html'):
     "All available Agents"
 
@@ -1025,7 +1025,7 @@ def agent_index(request, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def agent_view(request, agent_id, response_format='html'):
     "Agent view"
 
@@ -1041,7 +1041,7 @@ def agent_view(request, agent_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def agent_edit(request, agent_id, response_format='html'):
     "Agent edit"
 
@@ -1069,7 +1069,7 @@ def agent_edit(request, agent_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def agent_delete(request, agent_id, response_format='html'):
     "Agent delete"
 
@@ -1096,7 +1096,7 @@ def agent_delete(request, agent_id, response_format='html'):
 
 
 @handle_response_format
-@treeio_login_required
+@mylogin_required
 def agent_add(request, response_format='html'):
     "Agent add"
 
@@ -1125,7 +1125,7 @@ def agent_add(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def widget_index(request, response_format='html'):
     "All Active Tickets"
 
@@ -1140,7 +1140,7 @@ def widget_index(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def widget_index_assigned(request, response_format='html'):
     "Tickets assigned to current user"
 
@@ -1162,7 +1162,7 @@ def widget_index_assigned(request, response_format='html'):
 #
 # AJAX lookups
 #
-@treeio_login_required
+@mylogin_required
 def ajax_ticket_lookup(request, response_format='html'):
     "Returns a list of matching tickets"
 
@@ -1177,7 +1177,7 @@ def ajax_ticket_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
-@treeio_login_required
+@mylogin_required
 def ajax_agent_lookup(request, response_format='html'):
     "Returns a list of matching agents"
 
