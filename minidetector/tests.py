@@ -38,10 +38,10 @@ def MobileDetectionFactory(uas, expected):
             minidetector.Middleware.process_request(request)
             if self.expected:
                 self.assert_(request.mobile,
-                             "Mobile Not Detected: %s" % ua)
+                             "Mobile Not Detected: {0!s}".format(ua))
             else:
                 self.assert_(not request.mobile,
-                             "Mobile Falsely Detected: %s" % ua)
+                             "Mobile Falsely Detected: {0!s}".format(ua))
 
     def testnum(num):
         def test(self):
@@ -52,8 +52,8 @@ def MobileDetectionFactory(uas, expected):
     suite = TestSuite()
     for x in range(len(uas)):
         if not uas[x].startswith('#'):
-            setattr(MobileDetection, 'test%s' % x, testnum(x))
-            suite.addTest(MobileDetection('test%s' % x))
+            setattr(MobileDetection, 'test{0!s}'.format(x), testnum(x))
+            suite.addTest(MobileDetection('test{0!s}'.format(x)))
     return suite
 
 

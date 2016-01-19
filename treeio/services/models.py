@@ -270,7 +270,7 @@ def email_caller_on_new_ticket(sender, instance, created, **kwargs):
                     else:
                         instance.reference = str(instance.id)
                     instance.save()
-                subject = "[#%s] %s" % (instance.reference, instance.name)
+                subject = "[#{0!s}] {1!s}".format(instance.reference, instance.name)
 
                 # Construct context and render to html, body
                 context = {'ticket': instance}

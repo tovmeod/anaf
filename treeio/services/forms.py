@@ -332,7 +332,7 @@ class TicketRecordForm(forms.ModelForm):
                     reply.reply_to = ticket.message
                 else:
                     reply.stream = ticket.queue.message_stream if ticket.queue else None
-                    reply.title = "[#%s] %s" % (ticket.reference, ticket.name)
+                    reply.title = "[#{0!s}] {1!s}".format(ticket.reference, ticket.name)
                 reply.save()
                 if not ticket.message:
                     ticket.message = reply

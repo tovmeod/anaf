@@ -67,7 +67,7 @@ class ProcessContacts(object):
         if url:
             if '://' not in url:
                 # If no URL scheme given, assume http://
-                url = u'http://%s' % url
+                url = u'http://{0!s}'.format(url)
             url_fields = list(urlparse.urlsplit(url))
             if not url_fields[2]:
                 # the path portion may need to be added before query params

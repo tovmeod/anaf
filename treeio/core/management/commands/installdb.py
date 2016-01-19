@@ -29,7 +29,7 @@ class Command(BaseCommand):
         if dbengine in ('mysql', 'postgresql', 'postgresql_psycopg2', 'oracle', 'sqlite3'):
             dbengine = 'django.db.backends.' + dbengine
         else:
-            raise CommandError('Unknown database engine: %s' % dbengine)
+            raise CommandError('Unknown database engine: {0!s}'.format(dbengine))
 
         if dbengine.endswith('sqlite3'):
             dbname = raw_input(

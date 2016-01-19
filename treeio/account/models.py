@@ -31,7 +31,7 @@ class NotificationSetting(models.Model):
 
     def __unicode__(self):
         if self.module:
-            return '%s of %s' % (self.get_ntype_display(), self.module.title)
+            return '{0!s} of {1!s}'.format(self.get_ntype_display(), self.module.title)
         return self.get_ntype_display()
 
     def save(self, *args, **kwargs):
@@ -60,6 +60,6 @@ class NotificationSetting(models.Model):
         if self.ntype == 'd':
             return '<h1>Today</h1>'
         elif self.ntype == 'w':
-            return '<h1>%s week</h1>' % self.next_date.isocalendar()[1]
+            return '<h1>{0!s} week</h1>'.format(self.next_date.isocalendar()[1])
         elif self.ntype == 'm':
-            return '<h1>%s</h1>' % calendar.month_name[self.next_date.month]
+            return '<h1>{0!s}</h1>'.format(calendar.month_name[self.next_date.month])

@@ -130,15 +130,15 @@ class BaseEmail(Thread):
                 from django.core.mail import mail_admins
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 domain = getattr(settings, 'CURRENT_DOMAIN', 'default')
-                subject = "Exception for %s: %s %s" % (
+                subject = "Exception for {0!s}: {1!s} {2!s}".format(
                     domain, unicode(exc_type), unicode(exc_value))
                 body = subject + "\n\n"
                 body += unicode(core.__file__) + "\n\n"
-                body += u"Server: %s\n\n" % self.server
-                body += u"Port: %s\n\n" % unicode(self.port)
-                body += u"Username: %s\n\n" % self.username
-                body += u"From: %s\n\n" % self.fromaddr
-                body += u"To: %s\n\n" % self.toaddr
+                body += u"Server: {0!s}\n\n".format(self.server)
+                body += u"Port: {0!s}\n\n".format(unicode(self.port))
+                body += u"Username: {0!s}\n\n".format(self.username)
+                body += u"From: {0!s}\n\n".format(self.fromaddr)
+                body += u"To: {0!s}\n\n".format(self.toaddr)
                 for s in traceback.format_tb(exc_traceback):
                     body += s + '\n'
                 mail_admins(subject, body)
@@ -173,13 +173,13 @@ class EmailInvitation(SystemEmail):
         self.sender = sender
         self.domain = domain
 
-        subject = '%s has invited you to Tree.io' % (self.sender)
+        subject = '{0!s} has invited you to Tree.io'.format((self.sender))
 
         toaddr = self.invitation.email
 
         signature = """
 \r\n
-- %s""" % unicode(self.sender)
+- {0!s}""".format(unicode(self.sender))
 
         body = """
 Hi!
@@ -190,8 +190,8 @@ Tree.io is a new online service that helps you manage your business online.
 \r\n
 Use this link to join me:
 \r\n
-http://%s/accounts/invitation/?email=%s&key=%s
-        """ % (unicode(self.domain),
+http://{0!s}/accounts/invitation/?email={1!s}&key={2!s}
+        """.format(unicode(self.domain),
                unicode(self.invitation.email),
                unicode(self.invitation.key))
 
@@ -211,8 +211,8 @@ Hello!
 \r\n
 You have requested a password reset for your Tree.io account.
 \r\n
-New password for: %s\r\n\r\n Password: %s\r\n\r\n
-""" % (username, password)
+New password for: {0!s}\r\n\r\n Password: {1!s}\r\n\r\n
+""".format(username, password)
 
         super(EmailPassword, self).__init__(toaddr, subject, body)
 

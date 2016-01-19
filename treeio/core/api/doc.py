@@ -34,7 +34,7 @@ def generate_doc(handler_cls):
     """
     if not (type(handler_cls) is ObjectHandlerMetaClass
             or type(handler_cls) is handler.HandlerMetaClass):
-        raise ValueError("Give me handler, not %s" % type(handler_cls))
+        raise ValueError("Give me handler, not {0!s}".format(type(handler_cls)))
 
     return HandlerDocumentation(handler_cls)
 
@@ -73,7 +73,7 @@ class HandlerMethod(object):
             spec += argn
 
             if argdef:
-                spec += '=%s' % argdef
+                spec += '={0!s}'.format(argdef)
 
             spec += ', '
 
@@ -136,15 +136,15 @@ class HandlerMethod(object):
     name = property(get_name)
 
     def __repr__(self):
-        return "<Method: %s>" % self.name
+        return "<Method: {0!s}>".format(self.name)
 
 
 def _convert(template, params=None):
     """URI template converter"""
     if params is None:
         params = []
-    paths = template % dict([p, "{%s}" % p] for p in params)
-    return u'/api%s%s' % (get_script_prefix(), paths)
+    paths = template % dict([p, "{{{0!s}}}".format(p)] for p in params)
+    return u'/api{0!s}{1!s}'.format(get_script_prefix(), paths)
 
 
 class HandlerDocumentation(object):
@@ -262,7 +262,7 @@ class HandlerDocumentation(object):
     resource_uri_template = property(get_resource_uri_template)
 
     def __repr__(self):
-        return u'<Documentation for "%s">' % self.name
+        return u'<Documentation for "{0!s}">'.format(self.name)
 
 
 def documentation_view(request, module):

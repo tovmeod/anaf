@@ -113,7 +113,7 @@ class EmailMessage(Thread):
         "Process email"
         message = self.message
         if message.reply_to:
-            subject = "Re: %s" % message.reply_to.title
+            subject = "Re: {0!s}".format(message.reply_to.title)
         else:
             subject = message.title
         body = strip_tags(message.body)

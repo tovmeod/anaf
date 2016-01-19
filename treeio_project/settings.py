@@ -48,7 +48,7 @@ if TESTING:
     elif test_db == 'mssql':
         DATABASES = {'default': {
             'ENGINE': 'sqlserver',
-            'NAME': 'anaf_%s' % os.environ.get('MC'),
+            'NAME': 'anaf_{0!s}'.format(os.environ.get('MC')),
             'USER': 'anaf',
             'PASSWORD': 'anaf',
             'HOST': '10.0.0.9',

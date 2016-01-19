@@ -209,7 +209,7 @@ def ajax_popup(request, popup_id='', url='/'):
     response = None
     if active:
         if not request.user.profile.has_permission(active):
-            response = user_denied(request, "You do not have access to the %s module" % unicode(active),
+            response = user_denied(request, "You do not have access to the {0!s} module".format(unicode(active)),
                                    response_format='ajax')
 
     if not response:
@@ -593,5 +593,5 @@ def attachment_download(request, attachment_id):
 
     response = HttpResponse(data, content_type=attachment.mimetype)
     response[
-        'Content-Disposition'] = 'filename="%s"' % smart_unicode(attachment.filename)
+        'Content-Disposition'] = 'filename="{0!s}"'.format(smart_unicode(attachment.filename))
     return response

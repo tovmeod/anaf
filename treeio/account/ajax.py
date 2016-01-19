@@ -168,7 +168,7 @@ def attachment(request, object_id, update_id=None):
                                              response_format='html')
 
             dajax.add_data(
-                {'target': 'div.attachment-block[object="%s"]' % object_id, 'content': object_markup}, 'treeio.add_data')
+                {'target': 'div.attachment-block[object="{0!s}"]'.format(object_id), 'content': object_markup}, 'treeio.add_data')
 
         if update_id:
             attachments = Attachment.objects.filter(
@@ -181,7 +181,7 @@ def attachment(request, object_id, update_id=None):
                                                  request),
                                              response_format='html')
             dajax.add_data(
-                {'target': 'div.attachment-record-block[object="%s"]' % update_id, 'content': update_markup}, 'treeio.add_data')
+                {'target': 'div.attachment-record-block[object="{0!s}"]'.format(update_id), 'content': update_markup}, 'treeio.add_data')
 
     except Exception:
         pass
@@ -259,8 +259,8 @@ def easy_invite(request, emails=None):
                                      context_instance=RequestContext(request),
                                      response_format='html')
 
-    dajax.add_data({'target': "div.easy-invite[emails='%s']" %
-                   (emails_original), 'content': invite_markup}, 'treeio.add_data')
+    dajax.add_data({'target': "div.easy-invite[emails='{0!s}']".format(
+                   (emails_original)), 'content': invite_markup}, 'treeio.add_data')
     return dajax.json()
 
 dajaxice_functions.register(easy_invite)
