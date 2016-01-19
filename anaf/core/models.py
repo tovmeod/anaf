@@ -274,7 +274,7 @@ class User(AccessEntity):
         if obj.full_access.filter(query).exists():
             return True
 
-        if mode == 'r' or mode == 'x':
+        if mode in ('r', 'x'):
             if obj.read_access.filter(query).exists():
                 return True
 
@@ -473,7 +473,7 @@ class Object(models.Model):
             query = query | models.Q(full_access=user.default_group) | models.Q(
                 full_access__in=user.other_groups.all())
 
-            if mode == 'r' or mode == 'x':
+            if mode in ('r', 'x'):
                 query = query | models.Q(read_access=user)
                 query = query | models.Q(read_access=user.default_group) | models.Q(
                     read_access__in=user.other_groups.all())

@@ -114,11 +114,11 @@ class CommonMiddleware(object):
             if attr in settings.ANAF_OBJECT_BLACKLIST:
                 return
 
-            if action == "pre_clear" or action == "pre_remove":
+            if action in ("pre_clear", "pre_remove"):
                 original = list(getattr(instance, attr).all())
                 self.objects[unicode(user.id)].update(
                     {unicode(instance.id): original})
-            elif action == "post_add" or action == "post_remove":
+            elif action in ("post_add", "post_remove"):
                 updated = list(getattr(instance, attr).all())
                 if unicode(user.id) in self.objects and unicode(instance.id) in self.objects[unicode(user.id)]:
                     original = self.objects[

@@ -1,6 +1,3 @@
-"""
-Core Mail Framework
-"""
 from anaf.core.conf import settings
 
 import re
@@ -30,8 +27,7 @@ DEFAULT_SIGNATURE = settings.ANAF_DEFAULT_SIGNATURE
 
 
 class BaseEmail(Thread):
-
-    "Generic e-mail class to send any emails"
+    """Generic e-mail class to send any emails"""
 
     def __init__(self, server, username, password, fromaddr,
                  toaddr, subject, body, signature=None, html=None,
@@ -51,15 +47,13 @@ class BaseEmail(Thread):
         self.multipart = self.body and self.html
 
     def run(self):
-        "Run"
         self.process_email()
 
     def send_email(self):
-        "Send email"
         self.start()
 
     def get_smtp_port(self, server):
-        "Returns appropriate SMTP port number depending on incoming server name and boolean ssl"
+        """Returns appropriate SMTP port number depending on incoming server name and boolean ssl"""
         # http://www.emailaddressmanager.com/tips/mail-settings.html
 
         port = 25  # default
@@ -72,13 +66,13 @@ class BaseEmail(Thread):
             if hasattr(smtplib, 'SMTP_SSL'):
                 port = 465
             ssl = True
-        if server == "smtp.live.com" or server == "smtp.isp.netscape.com":
+        if server in ("smtp.live.com", "smtp.isp.netscape.com"):
             ssl = True
 
         return port, ssl
 
     def process_email(self):
-        "Create a message and send it"
+        """Create a message and send it"""
         try:
             msg = MIMEMultipart('alternative')
 
