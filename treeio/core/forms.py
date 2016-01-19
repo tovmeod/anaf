@@ -322,7 +322,7 @@ class SqlSettingsForm(forms.Form):
 
     def clean_sql_engine(self):
         engine = self.cleaned_data['sql_engine']
-        return "django.db.backends.%s" % engine
+        return "django.db.backends.{0!s}".format(engine)
 
     def create_database(self):
         if not self._errors:
@@ -346,7 +346,7 @@ class SqlSettingsForm(forms.Form):
             except Exception as exc:
                 del connections._connections['treeio_new_db']
                 raise ValidationError(
-                    _("Can't create database. SQL error is") + ' %s' % exc)
+                    _("Can't create database. SQL error is") + ' {0!s}'.format(exc))
             finally:
                 del settings.DATABASES['treeio_new_db']
 

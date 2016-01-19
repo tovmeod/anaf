@@ -41,7 +41,7 @@ class MultiHiddenWidget(MultiWidget):
         # in self.widgets.
         if not isinstance(value, list):
             value = self.decompress(value)
-        output = [u'<span id="%s_%s">' % (u'multi', name)]
+        output = [u'<span id="{0!s}_{1!s}">'.format(u'multi', name)]
         final_attrs = self.build_attrs(attrs)
         id_ = final_attrs.get('id', None)
         for i, widget in enumerate(self.widgets):

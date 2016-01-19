@@ -625,7 +625,7 @@ def file_view(request, file_id, response_format='html'):
 
         response = HttpResponse(data, content_type='application/x-download')
         response[
-            'Content-Disposition'] = 'attachment; filename="%s"' % smart_str(file.content)
+            'Content-Disposition'] = 'attachment; filename="{0!s}"'.format(smart_str(file.content))
         return response
 
     context = _get_default_context(request)

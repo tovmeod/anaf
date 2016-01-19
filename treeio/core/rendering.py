@@ -33,8 +33,7 @@ def _preprocess_context_html(context):
                 try:
                     # find popuplink fields
                     if field.widget.attrs and 'popuplink' in field.widget.attrs:
-                        field.help_text += '<a href="%s" field="id_%s" id="link-%s" class="inline-link add-link popup-link">%s</a>' % \
-                                           (field.widget.attrs['popuplink'], fname, fname, _("New"))
+                        field.help_text += '<a href="{0!s}" field="id_{1!s}" id="link-{2!s}" class="inline-link add-link popup-link">{3!s}</a>'.format(field.widget.attrs['popuplink'], fname, fname, _("New"))
                 except Exception:
                     pass
 
@@ -101,7 +100,7 @@ def render_to_ajax(template_name, context=None, context_instance=None):
                                     pass
                             message['title'] = unicode(update.author)
                         for obj in update.about.all():
-                            message['message'] = "(%s) %s:<br />%s" % (
+                            message['message'] = "({0!s}) {1!s}:<br />{2!s}".format(
                                 obj.get_human_type(), unicode(obj), message['message'])
                         notifications.append(message)
                     except:
@@ -171,8 +170,7 @@ def render_to_response(template_name, context=None, context_instance=None, respo
         f.close()
 
         wkpath = getattr(settings, 'WKPATH', './bin/wkhtmltopdf-i386')
-        x = subprocess.Popen("%s --print-media-type --orientation %s --page-size %s %s %s" %
-                             (wkpath,
+        x = subprocess.Popen("{0!s} --print-media-type --orientation {1!s} --page-size {2!s} {3!s} {4!s}".format(wkpath,
                               orientation,
                               page_size,
                               source,

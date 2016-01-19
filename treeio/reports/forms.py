@@ -268,7 +268,7 @@ class FilterForm(forms.Form):
                 display_operand = dc
                 break
 
-        display = "%s %s %s" % (
+        display = "{0!s} {1!s} {2!s}".format(
             field.get_human_name(), display_operand, unicode(display_choice))
         field.filters.append({'choice': c,
                               'operand': self.data['operand'],

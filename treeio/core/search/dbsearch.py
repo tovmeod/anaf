@@ -9,7 +9,7 @@ for model in get_models():
             if isinstance(field, CharField) or isinstance(field, TextField):
                 if 'password' not in field.name and 'object_name' not in field.name and 'object_type' not in field.name \
                         and 'nuvius' not in field.name:
-                    params.append('%s__%s' % (model._meta.module_name, field.name))
+                    params.append('{0!s}__{1!s}'.format(model._meta.module_name, field.name))
 
 
 def search(term):
@@ -21,7 +21,7 @@ def search(term):
         attr = 'icontains'
         term = term[1:]
     for param in params:
-        kwargs = {'%s__%s' % (param, attr): term}
+        kwargs = {'{0!s}__{1!s}'.format(param, attr): term}
         # query_dict[param] = term
         query = query | Q(**kwargs)
 

@@ -21,7 +21,7 @@ def get_key(postfix=""):
     :type postfix: basestring
     """
     domain = getattr(settings, 'CURRENT_DOMAIN', 'default')
-    key = "treeio_%s_chat_%s" % (domain, postfix)
+    key = "treeio_{0!s}_chat_{1!s}".format(domain, postfix)
     return key
 
 

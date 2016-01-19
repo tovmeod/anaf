@@ -33,7 +33,7 @@ class Nonce(models.Model):
     key = models.CharField(max_length=255)
 
     def __unicode__(self):
-        return u"Nonce %s for %s" % (self.key, self.consumer_key)
+        return u"Nonce {0!s} for {1!s}".format(self.key, self.consumer_key)
 
 
 class Consumer(models.Model):
@@ -50,7 +50,7 @@ class Consumer(models.Model):
     objects = ConsumerManager()
 
     def __unicode__(self):
-        return u"Consumer %s with key %s" % (self.name, self.key)
+        return u"Consumer {0!s} with key {1!s}".format(self.name, self.key)
 
     def generate_random_codes(self):
         """
@@ -96,7 +96,7 @@ class Token(models.Model):
     objects = TokenManager()
 
     def __unicode__(self):
-        return u"%s Token %s for %s" % (self.get_token_type_display(), self.key, self.consumer_id)
+        return u"{0!s} Token {1!s} for {2!s}".format(self.get_token_type_display(), self.key, self.consumer_id)
 
     def to_string(self, only_key=False):
         token_dict = {
@@ -132,9 +132,9 @@ class Token(models.Model):
             parts = urlparse.urlparse(self.callback)
             scheme, netloc, path, params, query, fragment = parts[:6]
             if query:
-                query = '%s&oauth_verifier=%s' % (query, self.verifier)
+                query = '{0!s}&oauth_verifier={1!s}'.format(query, self.verifier)
             else:
-                query = 'oauth_verifier=%s' % self.verifier
+                query = 'oauth_verifier={0!s}'.format(self.verifier)
             return urlparse.urlunparse((scheme, netloc, path, params,
                                         query, fragment))
         return self.callback

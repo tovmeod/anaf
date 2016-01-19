@@ -64,7 +64,7 @@ def authorize_request_token(request, form_class=AuthorizeRequestTokenForm, templ
                 request, oauth_request, request_token)
             if request_token.callback is not None and request_token.callback != 'oob':
                 domain = RequestSite(request).domain
-                return HttpResponseRedirect('%s&%s' % (
+                return HttpResponseRedirect('{0!s}&{1!s}'.format(
                     request_token.get_callback_url(), urlencode({'oauth_token': request_token.key, 'domain': domain})))
             else:
                 return render_to_response(verification_template_name,

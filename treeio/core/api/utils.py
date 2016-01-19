@@ -17,8 +17,7 @@ def get_version():
 
 
 def format_error(error):
-    return u"Piston/%s (Django %s) crash report:\n\n%s" % \
-        (get_version(), django_version(), error)
+    return u"Piston/{0!s} (Django {1!s}) crash report:\n\n{2!s}".format(get_version(), django_version(), error)
 
 
 class rc_factory(object):
@@ -106,7 +105,7 @@ def throttle(max_requests, timeout=60 * 60, extra=''):
             that `throttle_extra` might be set on the request
             object. If so, append the identifier name with it.
             """
-            ident += ':%s' % str(request.throttle_extra)
+            ident += ':{0!s}'.format(str(request.throttle_extra))
 
         if ident:
             """
@@ -115,7 +114,7 @@ def throttle(max_requests, timeout=60 * 60, extra=''):
             can't use it yet. If someone sees this after it's in
             stable, you can change it here.
             """
-            ident += ':%s' % extra
+            ident += ':{0!s}'.format(extra)
 
             now = time.time()
             count, expiration = cache.get(ident, (1, None))
@@ -126,7 +125,7 @@ def throttle(max_requests, timeout=60 * 60, extra=''):
             if count >= max_requests and expiration > now:
                 t = rc.THROTTLED
                 wait = int(expiration - now)
-                t.content = 'Throttled, wait %d seconds.' % wait
+                t.content = 'Throttled, wait {0:d} seconds.'.format(wait)
                 t['Retry-After'] = wait
                 return t
 
@@ -301,7 +300,7 @@ def send_consumer_mail(consumer):
     try:
         subject = settings.PISTON_OAUTH_EMAIL_SUBJECTS[consumer.status]
     except AttributeError:
-        subject = "Your API Consumer for %s " % Site.objects.get_current().name
+        subject = "Your API Consumer for {0!s} ".format(Site.objects.get_current().name)
         if consumer.status == "accepted":
             subject += "was accepted!"
         elif consumer.status == "canceled":
@@ -311,7 +310,7 @@ def send_consumer_mail(consumer):
         else:
             subject += "is awaiting approval."
 
-    template = "piston/mails/consumer_%s.txt" % consumer.status
+    template = "piston/mails/consumer_{0!s}.txt".format(consumer.status)
 
     try:
         body = loader.render_to_string(template,
@@ -336,6 +335,6 @@ def send_consumer_mail(consumer):
         mail_admins(_(subject), body, fail_silently=True)
 
     if settings.DEBUG and consumer.user:
-        print "Mail being sent, to=%s" % consumer.user.email
-        print "Subject: %s" % _(subject)
+        print "Mail being sent, to={0!s}".format(consumer.user.email)
+        print "Subject: {0!s}".format(_(subject))
         print body
