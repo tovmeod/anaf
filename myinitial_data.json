@@ -1319,7 +1319,7 @@
 	"pk": 79,
 	"model": "core.module",
 	"fields": {
-		"name": "treeio.account",
+		"name": "anaf.account",
 		"links": [],
 		"title": "Account",
 		"url": "/account/",
@@ -1339,7 +1339,7 @@
 	"pk": 83,
 	"model": "core.module",
 	"fields": {
-		"name": "treeio.core",
+		"name": "anaf.core",
 		"links": [],
 		"title": "Administration",
 		"url": "/admin/",

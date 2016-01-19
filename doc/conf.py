@@ -20,8 +20,8 @@ import os
 sys.path.insert(0, os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('../'))
 
-import treeio_project.settings, django
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "treeio_project.settings")
+import project.settings, django
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 django.setup()
 
 # -- General configuration -----------------------------------------------
