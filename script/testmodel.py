@@ -9,9 +9,9 @@ sys.path.append('../')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 from django.core.management import setup_environ
-from treeio import settings
-from treeio.core.models import Object, User
-from treeio.projects.models import Project
+from anaf import settings
+from anaf.core.models import Object, User
+from anaf.projects.models import Project
 
 setup_environ(settings)
 
