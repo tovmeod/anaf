@@ -1,12 +1,7 @@
-"""
-Finance: test suites
-"""
-
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from models import Transaction, Liability, Category, Account, Equity, Asset, Currency, Tax
 from anaf.identities.models import Contact, ContactType
 
@@ -15,7 +10,7 @@ class FinanceModelsTest(TestCase):
     """Finance models tests"""
 
     def test_model_category(self):
-        "Test category model"
+        """Test category model"""
         obj = Category(name='test')
         obj.save()
         self.assertEquals('test', obj.name)
@@ -23,7 +18,7 @@ class FinanceModelsTest(TestCase):
         obj.delete()
 
     def test_model_tax(self):
-        "Test tax model"
+        """Test tax model"""
         obj = Tax(name='test', rate=10)
         obj.save()
         self.assertEquals('test', obj.name)
@@ -31,7 +26,7 @@ class FinanceModelsTest(TestCase):
         obj.delete()
 
     def test_model_equity(self):
-        "Test equity model"
+        """Test equity model"""
         contact_type = ContactType(name='test')
         contact_type.save()
 
@@ -139,94 +134,75 @@ class FinanceModelsTest(TestCase):
 
 
 class FinanceViewsTest(TestCase):
-
-    "Finance functional tests for views"
-
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
-            User.objects.all().delete()
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+        perspective, created = Perspective.objects.get_or_create(name='default')
+        perspective.set_default_user()
+        perspective.save()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-            # Create objects
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
-            self.user, created = User.objects.get_or_create(user=duser)
-            self.user.save()
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.contact_type = ContactType(name='test')
+        self.contact_type.set_default_user()
+        self.contact_type.save()
 
-            self.contact_type = ContactType(name='test')
-            self.contact_type.set_default_user()
-            self.contact_type.save()
+        self.contact = Contact(name='test', contact_type=self.contact_type)
+        self.contact.set_default_user()
+        self.contact.save()
 
-            self.contact = Contact(name='test', contact_type=self.contact_type)
-            self.contact.set_default_user()
-            self.contact.save()
+        self.category = Category(name='test')
+        self.category.set_default_user()
+        self.category.save()
 
-            self.category = Category(name='test')
-            self.category.set_default_user()
-            self.category.save()
+        self.equity = Equity(
+            issue_price=10, sell_price=10, issuer=self.contact, owner=self.contact)
+        self.equity.set_default_user()
+        self.equity.save()
 
-            self.equity = Equity(
-                issue_price=10, sell_price=10, issuer=self.contact, owner=self.contact)
-            self.equity.set_default_user()
-            self.equity.save()
+        self.asset = Asset(name='test', owner=self.contact)
+        self.asset.set_default_user()
+        self.asset.save()
 
-            self.asset = Asset(name='test', owner=self.contact)
-            self.asset.set_default_user()
-            self.asset.save()
+        self.tax = Tax(name='test', rate=10)
+        self.tax.set_default_user()
+        self.tax.save()
 
-            self.tax = Tax(name='test', rate=10)
-            self.tax.set_default_user()
-            self.tax.save()
+        self.currency = Currency(code="GBP",
+                                 name="Pounds",
+                                 symbol="L",
+                                 is_default=True)
+        self.currency.set_default_user()
+        self.currency.save()
 
-            self.currency = Currency(code="GBP",
-                                     name="Pounds",
-                                     symbol="L",
-                                     is_default=True)
-            self.currency.set_default_user()
-            self.currency.save()
+        self.account = Account(
+            name='test', owner=self.contact, balance_currency=self.currency)
+        self.account.set_default_user()
+        self.account.save()
 
-            self.account = Account(
-                name='test', owner=self.contact, balance_currency=self.currency)
-            self.account.set_default_user()
-            self.account.save()
+        self.liability = Liability(name='test',
+                                   source=self.contact,
+                                   target=self.contact,
+                                   account=self.account,
+                                   value=10,
+                                   value_currency=self.currency)
+        self.liability.set_default_user()
+        self.liability.save()
 
-            self.liability = Liability(name='test',
-                                       source=self.contact,
-                                       target=self.contact,
-                                       account=self.account,
-                                       value=10,
-                                       value_currency=self.currency)
-            self.liability.set_default_user()
-            self.liability.save()
-
-            self.transaction = Transaction(name='test', account=self.account, source=self.contact,
-                                           target=self.contact, value=10, value_currency=self.currency)
-            self.transaction.set_default_user()
-            self.transaction.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.transaction = Transaction(name='test', account=self.account, source=self.contact,
+                                       target=self.contact, value=10, value_currency=self.currency)
+        self.transaction.set_default_user()
+        self.transaction.save()
 
     ######################################
     # Testing views when user is logged in
     ######################################
     def test_finance_login(self):
-        "Test index page with login at /finance/"
+        """Test index page with login at /finance/"""
         response = self.client.post('/accounts/login',
                                     {'username': self.username, 'password': self.password})
         self.assertRedirects(response, '/')

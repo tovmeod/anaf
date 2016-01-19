@@ -1,13 +1,8 @@
-"""
-Events: test api
-"""
 import json
 from django.test import TestCase
-from django.test.client import Client
-from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from anaf.events.models import Event
 from datetime import datetime
 
@@ -16,62 +11,28 @@ class EventsViewsTest(TestCase):
     """Events functional tests for api"""
     username = "api_test"
     password = "api_password"
-    prepared = False
     authentication_headers = {"CONTENT_TYPE": "application/json",
                               "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
     content_type = 'application/json'
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
 
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
+        perspective, created = Perspective.objects.get_or_create(name='default')
+        perspective.set_default_user()
+        perspective.save()
 
-            # Create objects
-            try:
-                self.group = Group.objects.get(name='test')
-            except Group.DoesNotExist:
-                Group.objects.all().delete()
-                self.group = Group(name='test')
-                self.group.save()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-            try:
-                self.user = DjangoUser.objects.get(username=self.username)
-                self.user.set_password(self.password)
-                try:
-                    self.profile = self.user.profile
-                except Exception:
-                    User.objects.all().delete()
-                    self.user = DjangoUser(username=self.username, password='')
-                    self.user.set_password(self.password)
-                    self.user.save()
-            except DjangoUser.DoesNotExist:
-                User.objects.all().delete()
-                self.user = DjangoUser(username=self.username, password='')
-                self.user.set_password(self.password)
-                self.user.save()
-
-            try:
-                perspective = Perspective.objects.get(name='default')
-            except Perspective.DoesNotExist:
-                Perspective.objects.all().delete()
-                perspective = Perspective(name='default')
-                perspective.set_default_user()
-                perspective.save()
-
-            ModuleSetting.set('default_perspective', perspective.id)
-
-            self.event = Event(name='TestStatus', end=datetime.now())
-            self.event.set_default_user()
-            self.event.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.event = Event(name='TestStatus', end=datetime.now())
+        self.event.set_default_user()
+        self.event.save()
 
     def test_unauthenticated_access(self):
-        "Test index page at /api/calendar/events"
+        """Test index page at /api/calendar/events"""
         response = self.client.get('/api/calendar/events')
         # Redirects as unauthenticated
         self.assertEquals(response.status_code, 401)

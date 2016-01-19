@@ -2,11 +2,9 @@
 
 import json
 from django.test import TestCase
-from django.test.client import Client
-from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from anaf.finance.models import Transaction, Liability, Category, Account, Equity, Asset, Currency, Tax
 from anaf.identities.models import Contact, ContactType
 
@@ -15,108 +13,74 @@ class FinanceAPITest(TestCase):
     """Finance api tests"""
     username = "api_test"
     password = "api_password"
-    prepared = False
     authentication_headers = {"CONTENT_TYPE": "application/json",
                               "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
     content_type = 'application/json'
 
     def setUp(self):
-        "Initial Setup"
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
-            User.objects.all().delete()
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
 
-            # Create objects
-            try:
-                self.group = Group.objects.get(name='test')
-            except Group.DoesNotExist:
-                Group.objects.all().delete()
-                self.group = Group(name='test')
-                self.group.save()
+        self.perspective = Perspective(name='test')
+        self.perspective.set_default_user()
+        self.perspective.save()
+        ModuleSetting.set('default_perspective', self.perspective.id)
 
-            try:
-                self.user = DjangoUser.objects.get(username=self.username)
-                self.user.set_password(self.password)
-                try:
-                    self.profile = self.user.profile
-                except Exception:
-                    User.objects.all().delete()
-                    self.user = DjangoUser(username=self.username, password='')
-                    self.user.set_password(self.password)
-                    self.user.save()
-            except DjangoUser.DoesNotExist:
-                User.objects.all().delete()
-                self.user = DjangoUser(username=self.username, password='')
-                self.user.set_password(self.password)
-                self.user.save()
+        self.contact_type = ContactType(name='test')
+        self.contact_type.set_default_user()
+        self.contact_type.save()
 
-            try:
-                perspective = Perspective.objects.get(name='default')
-            except Perspective.DoesNotExist:
-                Perspective.objects.all().delete()
-                perspective = Perspective(name='default')
-                perspective.set_default_user()
-                perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.contact = Contact(name='test', contact_type=self.contact_type)
+        self.contact.set_default_user()
+        self.contact.save()
 
-            self.contact_type = ContactType(name='test')
-            self.contact_type.set_default_user()
-            self.contact_type.save()
+        self.category = Category(name='test')
+        self.category.set_default_user()
+        self.category.save()
 
-            self.contact = Contact(name='test', contact_type=self.contact_type)
-            self.contact.set_default_user()
-            self.contact.save()
+        self.equity = Equity(
+            issue_price=10, sell_price=10, issuer=self.contact, owner=self.contact)
+        self.equity.set_default_user()
+        self.equity.save()
 
-            self.category = Category(name='test')
-            self.category.set_default_user()
-            self.category.save()
+        self.asset = Asset(name='test', owner=self.contact)
+        self.asset.set_default_user()
+        self.asset.save()
 
-            self.equity = Equity(
-                issue_price=10, sell_price=10, issuer=self.contact, owner=self.contact)
-            self.equity.set_default_user()
-            self.equity.save()
+        self.tax = Tax(name='test', rate=10)
+        self.tax.set_default_user()
+        self.tax.save()
 
-            self.asset = Asset(name='test', owner=self.contact)
-            self.asset.set_default_user()
-            self.asset.save()
+        self.currency = Currency(code="GBP",
+                                 name="Pounds",
+                                 symbol="L",
+                                 is_default=True)
+        self.currency.set_default_user()
+        self.currency.save()
 
-            self.tax = Tax(name='test', rate=10)
-            self.tax.set_default_user()
-            self.tax.save()
+        self.account = Account(
+            name='test', owner=self.contact, balance_currency=self.currency)
+        self.account.set_default_user()
+        self.account.save()
 
-            self.currency = Currency(code="GBP",
-                                     name="Pounds",
-                                     symbol="L",
-                                     is_default=True)
-            self.currency.set_default_user()
-            self.currency.save()
+        self.liability = Liability(name='test',
+                                   source=self.contact,
+                                   target=self.contact,
+                                   account=self.account,
+                                   value=10,
+                                   value_currency=self.currency)
+        self.liability.set_default_user()
+        self.liability.save()
 
-            self.account = Account(
-                name='test', owner=self.contact, balance_currency=self.currency)
-            self.account.set_default_user()
-            self.account.save()
-
-            self.liability = Liability(name='test',
-                                       source=self.contact,
-                                       target=self.contact,
-                                       account=self.account,
-                                       value=10,
-                                       value_currency=self.currency)
-            self.liability.set_default_user()
-            self.liability.save()
-
-            self.transaction = Transaction(name='test', account=self.account, source=self.contact,
-                                           target=self.contact, value=10, value_currency=self.currency)
-            self.transaction.set_default_user()
-            self.transaction.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.transaction = Transaction(name='test', account=self.account, source=self.contact,
+                                       target=self.contact, value=10, value_currency=self.currency)
+        self.transaction.set_default_user()
+        self.transaction.save()
 
     def test_unauthenticated_access(self):
-        "Test index page at /api/finance/currencies"
+        """Test index page at /api/finance/currencies"""
         response = self.client.get('/api/finance/currencies')
         # Redirects as unauthenticated
         self.assertEquals(response.status_code, 401)

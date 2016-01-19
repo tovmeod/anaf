@@ -1,10 +1,6 @@
-"""
-Knowledge api: test suites
-"""
 import json
 from django.test import TestCase
 from django.test.client import Client
-from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
@@ -12,79 +8,43 @@ from anaf.knowledge.models import KnowledgeFolder, KnowledgeItem, KnowledgeCateg
 
 
 class KnowledgeViewsTest(TestCase):
-    "Knowledge functional tests for views"
-
     username = "api_test"
     password = "api_password"
-    prepared = False
     authentication_headers = {"CONTENT_TYPE": "application/json",
                               "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
     content_type = 'application/json'
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
 
-            # Create objects
-            try:
-                self.group = Group.objects.get(name='test')
-            except Group.DoesNotExist:
-                Group.objects.all().delete()
-                self.group = Group(name='test')
-                self.group.save()
+        self.perspective = Perspective(name='test')
+        self.perspective.set_default_user()
+        self.perspective.save()
+        ModuleSetting.set('default_perspective', self.perspective.id)
 
-            try:
-                self.user = DjangoUser.objects.get(username=self.username)
-                self.user.set_password(self.password)
-                try:
-                    self.profile = self.user.profile
-                except Exception:
-                    User.objects.all().delete()
-                    self.user = DjangoUser(username=self.username, password='')
-                    self.user.set_password(self.password)
-                    self.user.save()
-            except DjangoUser.DoesNotExist:
-                User.objects.all().delete()
-                self.user = DjangoUser(username=self.username, password='')
-                self.user.set_password(self.password)
-                self.user.save()
+        self.folder = KnowledgeFolder(name='test', treepath='test')
+        self.folder.set_default_user()
+        self.folder.save()
 
-            try:
-                perspective = Perspective.objects.get(name='default')
-            except Perspective.DoesNotExist:
-                Perspective.objects.all().delete()
-                perspective = Perspective(name='default')
-                perspective.set_default_user()
-                perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.category = KnowledgeCategory(name='test', treepath='test')
+        self.category.set_default_user()
+        self.category.save()
 
-            self.folder = KnowledgeFolder(name='test', treepath='test')
-            self.folder.set_default_user()
-            self.folder.save()
+        self.item = KnowledgeItem(name='test', folder=self.folder,
+                                  category=self.category, treepath='test')
+        self.item.set_default_user()
+        self.item.save()
 
-            self.category = KnowledgeCategory(name='test', treepath='test')
-            self.category.set_default_user()
-            self.category.save()
-
-            self.item = KnowledgeItem(name='test', folder=self.folder,
-                                      category=self.category, treepath='test')
-            self.item.set_default_user()
-            self.item.save()
-
-            # parent folder
-            self.parent = KnowledgeFolder(name='test', treepath='test')
-            self.parent.set_default_user()
-            self.parent.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        # parent folder
+        self.parent = KnowledgeFolder(name='test', treepath='test')
+        self.parent.set_default_user()
+        self.parent.save()
 
     def test_unauthenticated_access(self):
-        "Test index page at /api/knowledge/folders"
+        """Test index page at /api/knowledge/folders"""
         response = self.client.get('/api/knowledge/folders')
         # Redirects as unauthenticated
         self.assertEquals(response.status_code, 401)

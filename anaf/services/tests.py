@@ -1,24 +1,15 @@
-"""
-Services: test suites
-"""
-
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
-from models import Ticket, TicketQueue, TicketStatus, ServiceAgent, \
-    Service, ServiceLevelAgreement
+from anaf.core.models import Group, Perspective, ModuleSetting
+from models import Ticket, TicketQueue, TicketStatus, ServiceAgent, Service, ServiceLevelAgreement
 from anaf.identities.models import Contact, ContactType
 import datetime
 
 
 class ServicesModelsTest(TestCase):
-
-    "Services DB models tests"
-
     def test_model(self):
-        "Test Services models"
+        """Test Services models"""
         status = TicketStatus(name='TestStatus')
         status.save()
         self.assertNotEquals(status.id, None)
@@ -37,75 +28,55 @@ class ServicesModelsTest(TestCase):
 
 
 class ServicesViewsTest(TestCase):
-
-    "Services functional tests for views"
-
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+        perspective, created = Perspective.objects.get_or_create(name='default')
+        perspective.set_default_user()
+        perspective.save()
 
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
-            User.objects.all().delete()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-            # Create objects
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
-            self.user, created = User.objects.get_or_create(user=duser)
-            self.user.save()
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
+        self.contact_type = ContactType(name='test')
+        self.contact_type.set_default_user()
+        self.contact_type.save()
 
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.contact = Contact(name='test', contact_type=self.contact_type)
+        self.contact.set_default_user()
+        self.contact.save()
 
-            self.contact_type = ContactType(name='test')
-            self.contact_type.set_default_user()
-            self.contact_type.save()
+        self.status = TicketStatus(name='TestStatus')
+        self.status.set_default_user()
+        self.status.save()
 
-            self.contact = Contact(name='test', contact_type=self.contact_type)
-            self.contact.set_default_user()
-            self.contact.save()
+        self.queue = TicketQueue(
+            name='TestQueue', default_ticket_status=self.status)
+        self.queue.set_default_user()
+        self.queue.save()
 
-            self.status = TicketStatus(name='TestStatus')
-            self.status.set_default_user()
-            self.status.save()
+        self.ticket = Ticket(
+            name='TestTicket', status=self.status, queue=self.queue)
+        self.ticket.set_default_user()
+        self.ticket.save()
 
-            self.queue = TicketQueue(
-                name='TestQueue', default_ticket_status=self.status)
-            self.queue.set_default_user()
-            self.queue.save()
+        self.agent = ServiceAgent(related_user=self.user.profile, available_from=datetime.time(9),
+                                  available_to=datetime.time(17))
+        self.agent.set_default_user()
+        self.agent.save()
 
-            self.ticket = Ticket(
-                name='TestTicket', status=self.status, queue=self.queue)
-            self.ticket.set_default_user()
-            self.ticket.save()
+        self.service = Service(name='test')
+        self.service.set_default_user()
+        self.service.save()
 
-            self.agent = ServiceAgent(related_user=self.user, available_from=datetime.time(9),
-                                      available_to=datetime.time(17))
-            self.agent.set_default_user()
-            self.agent.save()
-
-            self.service = Service(name='test')
-            self.service.set_default_user()
-            self.service.save()
-
-            self.sla = ServiceLevelAgreement(name='test', service=self.service,
-                                             client=self.contact, provider=self.contact)
-            self.sla.set_default_user()
-            self.sla.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.sla = ServiceLevelAgreement(name='test', service=self.service,
+                                         client=self.contact, provider=self.contact)
+        self.sla.set_default_user()
+        self.sla.save()
 
     ######################################
     # Testing views when user is logged in

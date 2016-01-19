@@ -1,127 +1,107 @@
-"""
-Sales: test suites
-"""
-
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting
+from anaf.core.models import Group, Perspective, ModuleSetting
 from anaf.identities.models import Contact, ContactType
-from models import SaleOrder, Product, OrderedProduct, Subscription, \
-    SaleStatus, SaleSource, Lead, Opportunity
+from models import SaleOrder, Product, OrderedProduct, Subscription, SaleStatus, SaleSource, Lead, Opportunity
 from anaf.finance.models import Currency
 
 
 class SalesViewsTest(TestCase):
-    """Sales functional tests for views"""
-
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+        perspective, created = Perspective.objects.get_or_create(name='default')
+        perspective.set_default_user()
+        perspective.save()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-        if not self.prepared:
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
-            self.user, created = User.objects.get_or_create(user=duser)
-            self.user.save()
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.contact_type = ContactType()
+        self.contact_type.slug = 'machine'
+        self.contact_type.name = 'machine'
+        self.contact_type.save()
 
-            self.contact_type = ContactType()
-            self.contact_type.slug = 'machine'
-            self.contact_type.name = 'machine'
-            self.contact_type.save()
+        self.contact = Contact()
+        self.contact.contact_type = self.contact_type
+        self.contact.set_default_user()
+        self.contact.save()
+        self.assertNotEquals(self.contact.id, None)
 
-            self.contact = Contact()
-            self.contact.contact_type = self.contact_type
-            self.contact.set_default_user()
-            self.contact.save()
-            self.assertNotEquals(self.contact.id, None)
+        self.status = SaleStatus()
+        self.status.set_default_user()
+        self.status.save()
+        self.assertNotEquals(self.status.id, None)
 
-            self.status = SaleStatus()
-            self.status.set_default_user()
-            self.status.save()
-            self.assertNotEquals(self.status.id, None)
+        self.currency = Currency(code="GBP",
+                                 name="Pounds",
+                                 symbol="L",
+                                 is_default=True)
+        self.currency.save()
 
-            self.currency = Currency(code="GBP",
-                                     name="Pounds",
-                                     symbol="L",
-                                     is_default=True)
-            self.currency.save()
+        self.source = SaleSource()
+        self.source.set_default_user()
+        self.source.save()
+        self.assertNotEquals(self.source.id, None)
 
-            self.source = SaleSource()
-            self.source.set_default_user()
-            self.source.save()
-            self.assertNotEquals(self.source.id, None)
+        self.product = Product(name="Test")
+        self.product.product_type = 'service'
+        self.product.active = True
+        self.product.sell_price = 10
+        self.product.buy_price = 100
+        self.product.set_default_user()
+        self.product.save()
+        self.assertNotEquals(self.product.id, None)
 
-            self.product = Product(name="Test")
-            self.product.product_type = 'service'
-            self.product.active = True
-            self.product.sell_price = 10
-            self.product.buy_price = 100
-            self.product.set_default_user()
-            self.product.save()
-            self.assertNotEquals(self.product.id, None)
+        self.subscription = Subscription()
+        self.subscription.client = self.contact
+        self.subscription.set_default_user()
+        self.subscription.save()
+        self.assertNotEquals(self.subscription.id, None)
 
-            self.subscription = Subscription()
-            self.subscription.client = self.contact
-            self.subscription.set_default_user()
-            self.subscription.save()
-            self.assertNotEquals(self.subscription.id, None)
+        self.lead = Lead()
+        self.lead.contact_method = 'email'
+        self.lead.status = self.status
+        self.lead.contact = self.contact
+        self.lead.set_default_user()
+        self.lead.save()
+        self.assertNotEquals(self.lead.id, None)
 
-            self.lead = Lead()
-            self.lead.contact_method = 'email'
-            self.lead.status = self.status
-            self.lead.contact = self.contact
-            self.lead.set_default_user()
-            self.lead.save()
-            self.assertNotEquals(self.lead.id, None)
+        self.opportunity = Opportunity()
+        self.opportunity.lead = self.lead
+        self.opportunity.contact = self.contact
+        self.opportunity.status = self.status
+        self.opportunity.amount = 100
+        self.opportunity.amount_currency = self.currency
+        self.opportunity.amount_display = 120
+        self.opportunity.set_default_user()
+        self.opportunity.save()
+        self.assertNotEquals(self.opportunity.id, None)
 
-            self.opportunity = Opportunity()
-            self.opportunity.lead = self.lead
-            self.opportunity.contact = self.contact
-            self.opportunity.status = self.status
-            self.opportunity.amount = 100
-            self.opportunity.amount_currency = self.currency
-            self.opportunity.amount_display = 120
-            self.opportunity.set_default_user()
-            self.opportunity.save()
-            self.assertNotEquals(self.opportunity.id, None)
+        self.order = SaleOrder(reference="Test")
+        self.order.opportunity = self.opportunity
+        self.order.status = self.status
+        self.order.source = self.source
+        self.order.currency = self.currency
+        self.order.total = 0
+        self.order.total_display = 0
+        self.order.set_default_user()
+        self.order.save()
+        self.assertNotEquals(self.order.id, None)
 
-            self.order = SaleOrder(reference="Test")
-            self.order.opportunity = self.opportunity
-            self.order.status = self.status
-            self.order.source = self.source
-            self.order.currency = self.currency
-            self.order.total = 0
-            self.order.total_display = 0
-            self.order.set_default_user()
-            self.order.save()
-            self.assertNotEquals(self.order.id, None)
+        self.ordered_product = OrderedProduct()
+        self.ordered_product.product = self.product
+        self.ordered_product.order = self.order
+        self.ordered_product.rate = 0
+        self.ordered_product.subscription = self.subscription
+        self.ordered_product.set_default_user()
+        self.ordered_product.save()
 
-            self.ordered_product = OrderedProduct()
-            self.ordered_product.product = self.product
-            self.ordered_product.order = self.order
-            self.ordered_product.rate = 0
-            self.ordered_product.subscription = self.subscription
-            self.ordered_product.set_default_user()
-            self.ordered_product.save()
-
-            self.assertNotEquals(self.ordered_product.id, None)
-
-            self.client = Client()
-
-            self.prepared = True
+        self.assertNotEquals(self.ordered_product.id, None)
 
     ######################################
     # Testing views when user is logged in
