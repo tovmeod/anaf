@@ -97,7 +97,7 @@ def perspective_edit(request, perspective_id, response_format='html'):
     # Don't let users delete their last perspective
     other_perspectives = Perspective.objects.filter(
         trash=False).exclude(id=perspective_id)
-    admin_module = Module.objects.filter(name='treeio.core')[0]
+    admin_module = Module.objects.filter(name='anaf.core')[0]
 
     if request.POST:
         if 'cancel' not in request.POST:
@@ -139,7 +139,7 @@ def perspective_delete(request, perspective_id, response_format='html'):
     # Don't let users delete their last perspective
     other_perspectives = Perspective.objects.filter(
         trash=False).exclude(id=perspective_id)
-    admin_module = all_modules.filter(name='treeio.core')[0]
+    admin_module = all_modules.filter(name='anaf.core')[0]
     if not other_perspectives:
         message = _("This is your only Perspective.")
     elif not other_perspectives.filter(Q(modules=admin_module) | Q(modules__isnull=True)):
@@ -729,7 +729,7 @@ def setup(request, response_format='html'):
     modules = Module.objects.all()
 
     for module in modules:
-        if module.name in ('treeio.projects', 'treeio.sales', 'treeio.services'):
+        if module.name in ('anaf.projects', 'anaf.sales', 'anaf.services'):
             module.major = True
         else:
             module.major = False
@@ -752,7 +752,7 @@ def settings_view(request, response_format='html'):
     # default permissions
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.core', 'default_permissions')[0]
+            'anaf.core', 'default_permissions')[0]
         default_permissions = conf.value
     except:
         default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
@@ -765,7 +765,7 @@ def settings_view(request, response_format='html'):
     # default perspective
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.core', 'default_perspective')[0]
+            'anaf.core', 'default_perspective')[0]
         default_perspective = Perspective.objects.get(pk=long(conf.value))
     except:
         default_perspective = None
@@ -773,7 +773,7 @@ def settings_view(request, response_format='html'):
     # language
     language = settings.ANAF_LANGUAGES_DEFAULT
     try:
-        conf = ModuleSetting.get_for_module('treeio.core', 'language')[0]
+        conf = ModuleSetting.get_for_module('anaf.core', 'language')[0]
         language = conf.value
     except IndexError:
         pass
@@ -781,7 +781,7 @@ def settings_view(request, response_format='html'):
 
     logopath = ''
     try:
-        conf = ModuleSetting.get_for_module('treeio.core', 'logopath')[0]
+        conf = ModuleSetting.get_for_module('anaf.core', 'logopath')[0]
         logopath = conf.value
         match = re.match('.*[a-z0-9]{32}__(?P<filename>.+)$', logopath)
         if match:
@@ -793,7 +793,7 @@ def settings_view(request, response_format='html'):
     default_timezone = settings.ANAF_SERVER_DEFAULT_TIMEZONE
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.core', 'default_timezone')[0]
+            'anaf.core', 'default_timezone')[0]
         default_timezone = conf.value
     except Exception:
         default_timezone = settings.ANAF_SERVER_TIMEZONE[default_timezone][0]

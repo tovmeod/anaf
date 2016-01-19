@@ -8,7 +8,7 @@ from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
-from models import KnowledgeFolder, KnowledgeItem, KnowledgeCategory
+from anaf.knowledge.models import KnowledgeFolder, KnowledgeItem, KnowledgeCategory
 
 
 class KnowledgeViewsTest(TestCase):

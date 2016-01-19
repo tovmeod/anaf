@@ -9,7 +9,7 @@ from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
-from models import Item, ItemValue, ItemField, ItemType, ItemStatus, ItemServicing
+from anaf.infrastructure.models import Item, ItemValue, ItemField, ItemType, ItemStatus, ItemServicing
 
 
 class InfrastructureApiTest(TestCase):
