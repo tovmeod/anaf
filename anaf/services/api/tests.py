@@ -3,111 +3,71 @@
 import urllib
 import json
 from django.test import TestCase
-from django.test.client import Client
-from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
-from anaf.services.models import Ticket, TicketQueue, TicketStatus, ServiceAgent, \
-    Service, ServiceLevelAgreement
+from anaf.core.models import User, Group, Perspective, ModuleSetting
+from anaf.services.models import Ticket, TicketQueue, TicketStatus, ServiceAgent, Service, ServiceLevelAgreement
 from anaf.identities.models import Contact, ContactType
 import datetime
 
 
 class ServicesViewsTest(TestCase):
-    "Services functional tests for api"
     username = "api_test"
     password = "api_password"
-    prepared = False
     authentication_headers = {"CONTENT_TYPE": "application/json",
                               "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
     content_type = 'application/json'
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
 
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
-            User.objects.all().delete()
+        self.perspective = Perspective(name='test')
+        self.perspective.set_default_user()
+        self.perspective.save()
 
-            # Create objects
-            try:
-                self.group = Group.objects.get(name='test')
-            except Group.DoesNotExist:
-                Group.objects.all().delete()
-                self.group = Group(name='test')
-                self.group.save()
+        ModuleSetting.set('default_perspective', self.perspective.id)
 
-            try:
-                self.user = DjangoUser.objects.get(username=self.username)
-                self.user.set_password(self.password)
-                try:
-                    self.profile = self.user.profile
-                except Exception:
-                    User.objects.all().delete()
-                    self.user = DjangoUser(username=self.username, password='')
-                    self.user.set_password(self.password)
-                    self.user.save()
-            except DjangoUser.DoesNotExist:
-                User.objects.all().delete()
-                self.user = DjangoUser(username=self.username, password='')
-                self.user.set_password(self.password)
-                self.user.save()
+        self.contact_type = ContactType(name='test')
+        self.contact_type.set_default_user()
+        self.contact_type.save()
 
-            try:
-                perspective = Perspective.objects.get(name='default')
-            except Perspective.DoesNotExist:
-                Perspective.objects.all().delete()
-                perspective = Perspective(name='default')
-                perspective.set_user(self.user.profile)
-                perspective.save()
+        self.contact = Contact(name='test', contact_type=self.contact_type)
+        self.contact.set_default_user()
+        self.contact.save()
 
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.status = TicketStatus(name='TestStatus')
+        self.status.set_default_user()
+        self.status.save()
 
-            self.contact_type = ContactType(name='test')
-            self.contact_type.set_default_user()
-            self.contact_type.save()
+        self.queue = TicketQueue(
+            name='TestQueue', default_ticket_status=self.status)
+        self.queue.set_default_user()
+        self.queue.save()
 
-            self.contact = Contact(name='test', contact_type=self.contact_type)
-            self.contact.set_default_user()
-            self.contact.save()
+        self.ticket = Ticket(
+            name='TestTicket', status=self.status, queue=self.queue)
+        self.ticket.set_default_user()
+        self.ticket.save()
 
-            self.status = TicketStatus(name='TestStatus')
-            self.status.set_default_user()
-            self.status.save()
+        self.agent = ServiceAgent(related_user=self.user.profile, available_from=datetime.time(9),
+                                  available_to=datetime.time(17))
+        self.agent.set_default_user()
+        self.agent.save()
 
-            self.queue = TicketQueue(
-                name='TestQueue', default_ticket_status=self.status)
-            self.queue.set_default_user()
-            self.queue.save()
+        self.service = Service(name='test')
+        self.service.set_default_user()
+        self.service.save()
 
-            self.ticket = Ticket(
-                name='TestTicket', status=self.status, queue=self.queue)
-            self.ticket.set_default_user()
-            self.ticket.save()
-
-            self.agent = ServiceAgent(related_user=self.user.profile, available_from=datetime.time(9),
-                                      available_to=datetime.time(17))
-            self.agent.set_default_user()
-            self.agent.save()
-
-            self.service = Service(name='test')
-            self.service.set_default_user()
-            self.service.save()
-
-            self.sla = ServiceLevelAgreement(name='test', service=self.service,
-                                             client=self.contact, provider=self.contact)
-            self.sla.set_default_user()
-            self.sla.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.sla = ServiceLevelAgreement(name='test', service=self.service,
+                                         client=self.contact, provider=self.contact)
+        self.sla.set_default_user()
+        self.sla.save()
 
     def test_unauthenticated_access(self):
-        "Test index page at /api/services/services"
+        """Test index page at /api/services/services"""
         response = self.client.get('/api/services/services')
         # Redirects as unauthenticated
         self.assertEquals(response.status_code, 401)

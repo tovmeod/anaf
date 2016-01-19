@@ -1,17 +1,10 @@
+#!/usr/bin/env bash
 #/bin/sh
-# Script performs non-interactive instllation of Oracle XE 10g on Debian
+# Script performs non-interactive installation of Oracle XE 10g on Debian
 #
-# Based on oracle10g-update.sh from HTSQL project:
-# https://bitbucket.org/prometheus/htsql
+# Based on before_install.sh from p6spy project:
+# https://github.com/p6spy/p6spy/
 #
-# Modified by Mateusz Loskot <mateusz@loskot.net>
-# Changes:
-# - Add fake swap support (backup /usr/bin/free manually anyway!)
-#
-# Modified by Peter Butkovic <butkovic@gmail.com> to enable i386 install on amd64 architecture (precise 64)
-# based on: http://www.ubuntugeek.com/how-to-install-oracle-10g-xe-in-64-bit-ubuntu.html
-#
-# set -ex
 
 #
 # Utilities
@@ -57,29 +50,31 @@ sudo apt-fast install -qq -y bc apt-transport-https
 # add Oracle repo + key (please note https is a must here, otherwise "apt-get update" fails for this repo with the "Undetermined error")
 sudo bash -c 'echo "deb https://oss.oracle.com/debian/ unstable main non-free" >/etc/apt/sources.list.d/oracle.list'
 wget -q https://oss.oracle.com/el4/RPM-GPG-KEY-oracle -O- | sudo apt-key add -
-sudo apt-fast update -qq -y
+#sudo apt-fast update -qq -y
+sudo apt-get update
+sudo apt-get install oracle-xe-universal -y --force-yes
 
 # only download the package, to manually install afterwards
-sudo apt-fast install -qq -y --force-yes -d oracle-xe-universal:i386
-sudo apt-fast install -qq -y --force-yes libaio:i386
+#sudo apt-fast install -qq -y --force-yes -d oracle-xe-universal:i386
+#sudo apt-fast install -qq -y --force-yes libaio:i386
 
 # remove key + repo (to prevent failures on next updates)
-sudo apt-key del B38A8516
-sudo bash -c 'rm -rf /etc/apt/sources.list.d/oracle.list'
-sudo apt-fast update -qq -y
-sudo apt-get autoremove -qq
+#sudo apt-key del B38A8516
+#sudo bash -c 'rm -rf /etc/apt/sources.list.d/oracle.list'
+#sudo apt-fast update -qq -y
+#sudo apt-get autoremove -qq
 
 # remove bc from the dependencies of the oracle-xe-universal package (to keep 64bit one installed)
-mkdir /tmp/oracle_unpack
-dpkg-deb -x /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb /tmp/oracle_unpack
-cd /tmp/oracle_unpack
-dpkg-deb --control /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb
-sed -i "s/,\ bc//g" /tmp/oracle_unpack/DEBIAN/control
-mkdir /tmp/oracle_repack
-dpkg -b /tmp/oracle_unpack /tmp/oracle_repack/oracle-xe-universal_fixed_10.2.0.1-1.1_i386.deb
+#mkdir /tmp/oracle_unpack
+#dpkg-deb -x /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb /tmp/oracle_unpack
+#cd /tmp/oracle_unpack
+#dpkg-deb --control /var/cache/apt/archives/oracle-xe-universal_10.2.0.1-1.1_i386.deb
+#sed -i "s/,\ bc//g" /tmp/oracle_unpack/DEBIAN/control
+#mkdir /tmp/oracle_repack
+#dpkg -b /tmp/oracle_unpack /tmp/oracle_repack/oracle-xe-universal_fixed_10.2.0.1-1.1_i386.deb
 
 # install Oracle 10g with the fixed dependencies, to prevent i386/amd64 conflicts on bc package
-sudo dpkg -i --force-architecture /tmp/oracle_repack/oracle-xe-universal_fixed_10.2.0.1-1.1_i386.deb
+#sudo dpkg -i --force-architecture /tmp/oracle_repack/oracle-xe-universal_fixed_10.2.0.1-1.1_i386.deb
 
 # Fix the problem when the configuration script eats the last
 # character of the password if it is 'n': replace IFS="\n" with IFS=$'\n'.
@@ -109,14 +104,24 @@ sqlplus -S -L sys/admin AS SYSDBA
 sudo /etc/init.d/oracle-xe restart
 
 # Set Oracle environment variables on login.
-sudo cat <<END >>/root/.bashrc
-. /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/oracle_env.sh
-END
+#sudo cat <<END >>/root/.bashrc
+#. /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/oracle_env.sh
+#END
 
 free_restore
 
-# no more needed - stored in the cloudbees mvn repo
-# need to install jdbc to local repo
-#mvn install:install-file -Dfile=/vagrant/script/travis/ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.4 -Dpackaging=jar -DgeneratePom=true
-sudo apt-get install oracle-xe-client
+
 pip install cx_Oracle
+
+sudo apt-get install libc6:i386 -y
+sudo apt-get install oracle-xe-universal -y --force-yes
+#sudo apt-get install oracle-xe-client -y --force-yes
+wget http://rivenlinux.info/additions/instantclient-basic-linux.x64-11.2.0.3.0.zip
+wget http://rivenlinux.info/additions/instantclient-sdk-linux.x64-11.2.0.3.0.zip
+wget https://github.com/davidgaya/docker-apache-php-oci/raw/master/instantclient-basic-linux.x64-12.1.0.2.0.zip
+    wget https://github.com/davidgaya/docker-apache-php-oci/raw/master/instantclient-sdk-linux.x64-12.1.0.2.0.zip
+unzip instantclient-basic-linux.x64-12.1.0.2.0.zip
+unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip
+ln -s instantclient_12_1/libclntsh.so.12.1 instantclient_11_2/libclntsh.so
+export LD_RUN_PATH=~/instantclient_12_1
+export ORACLE_HOME=~/instantclient_12_1

@@ -285,10 +285,9 @@ class CoreViewsTestNoLogin(TestCase):
 
     def setUp(self):
         self.group, created = Group.objects.get_or_create(name='test')
-        duser, created = DjangoUser.objects.get_or_create(username=self.username)
-        duser.set_password(self.password)
-        duser.save()
-        self.user = duser
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
 
         self.perspective = Perspective(name='test')
         self.perspective.set_default_user()
@@ -387,7 +386,7 @@ class CoreViewsTestNoLogin(TestCase):
         self.assertRedirects(response, reverse('user_login'))
 
     def test_core_group_delete_out(self):
-        "Test group delete at /admin/group/delete/<group_id>"
+        """Test group delete at /admin/group/delete/<group_id>"""
         response = self.client.get(reverse('core_admin_group_delete', args=[self.group.id]))
         self.assertRedirects(response, reverse('user_login'))
 
@@ -440,7 +439,7 @@ class MiddlewareChatTest(TestCase):
         """Test add_new_message"""
         response = self.client.post(
             '/chat', {
-                'json': '{"cmd":"Message","data":{"id":"test_b5e6d0470a5f4656c3bc77f879c3dbbc","text":"test message"},"location":"#"}'})
+                'json': '{"cmd":"Message","data":{"id":"test_b5e6d0470a5f4656c3bc77f879c3dbbc","text":"test message"},"location":"#"}'})  # noqa
         self.assertEqual(response.status_code, 200)
 
     def test_chat_exit_from_conference(self):
@@ -453,7 +452,7 @@ class MiddlewareChatTest(TestCase):
         """Test add_users_in_conference"""
         response = self.client.post(
             '/chat', {
-                'json': '{"cmd":"Add","data":{"id":"guest_006f721c4a59a44d969b9f73fb6360a5","users":["test"]},"location":"#"}'})
+                'json': '{"cmd":"Add","data":{"id":"guest_006f721c4a59a44d969b9f73fb6360a5","users":["test"]},"location":"#"}'})  # noqa
         self.assertEqual(response.status_code, 200)
 
     def test_chat_create_conference(self):

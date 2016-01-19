@@ -2,162 +2,123 @@
 
 import json
 from django.test import TestCase
-from django.test.client import Client
-from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from anaf.identities.models import Contact, ContactType
-from anaf.sales.models import SaleOrder, Product, OrderedProduct, Subscription, \
-    SaleStatus, SaleSource, Lead, Opportunity
+from anaf.sales.models import SaleOrder, Product, OrderedProduct, Subscription, SaleStatus, SaleSource, Lead, \
+    Opportunity
 from anaf.finance.models import Currency
 
 
 class SalesAPITest(TestCase):
-    "Sales functional tests for views"
-
     username = "api_test"
     password = "api_password"
-    prepared = False
     authentication_headers = {"CONTENT_TYPE": "application/json",
                               "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
     content_type = 'application/json'
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
 
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
-            User.objects.all().delete()
+        self.perspective = Perspective(name='test')
+        self.perspective.set_default_user()
+        self.perspective.save()
 
-            # Create objects
-            try:
-                self.group = Group.objects.get(name='test')
-            except Group.DoesNotExist:
-                Group.objects.all().delete()
-                self.group = Group(name='test')
-                self.group.save()
+        ModuleSetting.set('default_perspective', self.perspective.id)
 
-            try:
-                self.user = DjangoUser.objects.get(username=self.username)
-                self.user.set_password(self.password)
-                try:
-                    self.profile = self.user.profile
-                except Exception:
-                    User.objects.all().delete()
-                    self.user = DjangoUser(username=self.username, password='')
-                    self.user.set_password(self.password)
-                    self.user.save()
-            except DjangoUser.DoesNotExist:
-                User.objects.all().delete()
-                self.user = DjangoUser(username=self.username, password='')
-                self.user.set_password(self.password)
-                self.user.save()
+        self.contact_type = ContactType()
+        self.contact_type.slug = 'machine'
+        self.contact_type.name = 'machine'
+        self.contact_type.save()
 
-            try:
-                perspective = Perspective.objects.get(name='default')
-            except Perspective.DoesNotExist:
-                Perspective.objects.all().delete()
-                perspective = Perspective(name='default')
-                perspective.set_default_user()
-                perspective.save()
+        self.contact = Contact()
+        self.contact.contact_type = self.contact_type
+        self.contact.set_default_user()
+        self.contact.save()
+        self.assertNotEquals(self.contact.id, None)
 
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.status = SaleStatus()
+        self.status.active = True
+        self.status.use_sales = True
+        self.status.use_leads = True
+        self.status.use_opportunities = True
+        self.status.set_default_user()
+        self.status.save()
+        self.assertNotEquals(self.status.id, None)
 
-            self.contact_type = ContactType()
-            self.contact_type.slug = 'machine'
-            self.contact_type.name = 'machine'
-            self.contact_type.save()
+        self.currency = Currency(code="GBP",
+                                 name="Pounds",
+                                 symbol="L",
+                                 is_default=True)
+        self.currency.save()
 
-            self.contact = Contact()
-            self.contact.contact_type = self.contact_type
-            self.contact.set_default_user()
-            self.contact.save()
-            self.assertNotEquals(self.contact.id, None)
+        self.source = SaleSource()
+        self.source.active = True
+        self.source.save()
+        self.source.set_user(self.user.profile)
+        self.assertNotEquals(self.source.id, None)
 
-            self.status = SaleStatus()
-            self.status.active = True
-            self.status.use_sales = True
-            self.status.use_leads = True
-            self.status.use_opportunities = True
-            self.status.set_default_user()
-            self.status.save()
-            self.assertNotEquals(self.status.id, None)
+        self.product = Product(name="Test")
+        self.product.product_type = 'service'
+        self.product.active = True
+        self.product.sell_price = 10
+        self.product.buy_price = 100
+        self.product.set_default_user()
+        self.product.save()
+        self.assertNotEquals(self.product.id, None)
 
-            self.currency = Currency(code="GBP",
-                                     name="Pounds",
-                                     symbol="L",
-                                     is_default=True)
-            self.currency.save()
+        self.subscription = Subscription()
+        self.subscription.client = self.contact
+        self.subscription.set_default_user()
+        self.subscription.save()
+        self.assertNotEquals(self.subscription.id, None)
 
-            self.source = SaleSource()
-            self.source.active = True
-            self.source.save()
-            self.source.set_user(self.user.profile)
-            self.assertNotEquals(self.source.id, None)
+        self.lead = Lead()
+        self.lead.contact_method = 'email'
+        self.lead.status = self.status
+        self.lead.contact = self.contact
+        self.lead.set_default_user()
+        self.lead.save()
+        self.assertNotEquals(self.lead.id, None)
 
-            self.product = Product(name="Test")
-            self.product.product_type = 'service'
-            self.product.active = True
-            self.product.sell_price = 10
-            self.product.buy_price = 100
-            self.product.set_default_user()
-            self.product.save()
-            self.assertNotEquals(self.product.id, None)
+        self.opportunity = Opportunity()
+        self.opportunity.lead = self.lead
+        self.opportunity.contact = self.contact
+        self.opportunity.status = self.status
+        self.opportunity.amount = 100
+        self.opportunity.amount_currency = self.currency
+        self.opportunity.amount_display = 120
+        self.opportunity.set_default_user()
+        self.opportunity.save()
+        self.assertNotEquals(self.opportunity.id, None)
 
-            self.subscription = Subscription()
-            self.subscription.client = self.contact
-            self.subscription.set_default_user()
-            self.subscription.save()
-            self.assertNotEquals(self.subscription.id, None)
+        self.order = SaleOrder(reference="Test")
+        self.order.opportunity = self.opportunity
+        self.order.status = self.status
+        self.order.source = self.source
+        self.order.currency = self.currency
+        self.order.total = 0
+        self.order.total_display = 0
+        self.order.set_default_user()
+        self.order.save()
+        self.assertNotEquals(self.order.id, None)
 
-            self.lead = Lead()
-            self.lead.contact_method = 'email'
-            self.lead.status = self.status
-            self.lead.contact = self.contact
-            self.lead.set_default_user()
-            self.lead.save()
-            self.assertNotEquals(self.lead.id, None)
+        self.ordered_product = OrderedProduct()
+        self.ordered_product.product = self.product
+        self.ordered_product.order = self.order
+        self.ordered_product.rate = 0
+        self.ordered_product.subscription = self.subscription
+        self.ordered_product.set_default_user()
+        self.ordered_product.save()
 
-            self.opportunity = Opportunity()
-            self.opportunity.lead = self.lead
-            self.opportunity.contact = self.contact
-            self.opportunity.status = self.status
-            self.opportunity.amount = 100
-            self.opportunity.amount_currency = self.currency
-            self.opportunity.amount_display = 120
-            self.opportunity.set_default_user()
-            self.opportunity.save()
-            self.assertNotEquals(self.opportunity.id, None)
-
-            self.order = SaleOrder(reference="Test")
-            self.order.opportunity = self.opportunity
-            self.order.status = self.status
-            self.order.source = self.source
-            self.order.currency = self.currency
-            self.order.total = 0
-            self.order.total_display = 0
-            self.order.set_default_user()
-            self.order.save()
-            self.assertNotEquals(self.order.id, None)
-
-            self.ordered_product = OrderedProduct()
-            self.ordered_product.product = self.product
-            self.ordered_product.order = self.order
-            self.ordered_product.rate = 0
-            self.ordered_product.subscription = self.subscription
-            self.ordered_product.set_default_user()
-            self.ordered_product.save()
-
-            self.assertNotEquals(self.ordered_product.id, None)
-
-            self.client = Client()
-
-            self.prepared = True
+        self.assertNotEquals(self.ordered_product.id, None)
 
     def test_unauthenticated_access(self):
-        "Test index page at /sales/statuses"
+        """Test index page at /sales/statuses"""
         response = self.client.get('/api/sales/statuses')
         # Redirects as unauthenticated
         self.assertEquals(response.status_code, 401)

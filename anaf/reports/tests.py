@@ -1,19 +1,12 @@
-"""
-Reports: test suites
-"""
-
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from models import Report, Chart
 
 
 class ReportsModelsTest(TestCase):
-    "Reports Models Tests"
     def test_model_report(self):
-        "Test Report Model"
         obj = Report(name='test')
         obj.save()
         self.assertEquals('test', obj.name)
@@ -32,49 +25,32 @@ class ReportsModelsTest(TestCase):
 
 
 class ReportsViewsTest(TestCase):
-    "Reports functional tests for views"
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+        perspective, created = Perspective.objects.get_or_create(name='default')
+        perspective.set_default_user()
+        perspective.save()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-        if not self.prepared:
-            # clean up first
-            Object.objects.all().delete()
-            User.objects.all().delete()
+        self.report = Report(name='test')
+        self.report.set_default_user()
+        self.report.save()
 
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
-            self.user, created = User.objects.get_or_create(user=duser)
-            self.user.save()
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
-
-            self.report = Report(name='test')
-            self.report.set_default_user()
-            self.report.save()
-
-            self.chart = Chart(name='test_chart', report=self.report)
-            self.chart.set_default_user()
-            self.chart.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.chart = Chart(name='test_chart', report=self.report)
+        self.chart.set_default_user()
+        self.chart.save()
 
     ######################################
     # Testing views when user is logged in
     ######################################
     def test_reports_login(self):
-        "Testing /reports/"
+        """Testing /reports/"""
         response = self.client.post('/accounts/login',
                                     {'username': self.username, 'password': self.password})
         self.assertRedirects(response, '/')

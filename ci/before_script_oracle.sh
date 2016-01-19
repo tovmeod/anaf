@@ -1,11 +1,9 @@
-. /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/oracle_env.sh
-
+#. /usr/lib/oracle/xe/app/oracle/product/11.2.0/server/bin/oracle_env.sh
+. /u01/app/oracle/product/11.2.0/xe/bin/oracle_env.sh
 # create user for testing
-echo "CREATE USER treeio IDENTIFIED BY treeio;" | \
-sqlplus -S -L sys/admin AS SYSDBA
+echo "CREATE USER treeio IDENTIFIED BY treeio;" | sudo sqlplus -S -L sys/admin AS SYSDBA
 
-echo "grant connect, resource to treeio;" | \
-sqlplus -S -L sys/admin AS SYSDBA
+echo "grant connect, resource to treeio;" | sqlplus -S -L sys/admin AS SYSDBA
 
 echo "grant create session, alter any procedure to treeio;" | \
 sqlplus -S -L sys/admin AS SYSDBA

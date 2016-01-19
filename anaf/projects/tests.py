@@ -1,12 +1,8 @@
-"""
-Project Management: test suites
-"""
-
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from forms import FilterForm, ProjectForm
 from models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 from anaf.identities.models import Contact, ContactType
@@ -143,7 +139,15 @@ class ProjectsModelsTest(TestCase):
 
 
 class TestModelTaskTimeSlot(TestCase):
+    username = "testuser"
+    password = "password"
+
     def setUp(self):
+        self.group, created = Group.objects.get_or_create(name='test_group')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+
         self.project = Project(name='test')
         self.project.save()
 
@@ -153,12 +157,11 @@ class TestModelTaskTimeSlot(TestCase):
         self.task = Task(name='test', project=self.project, status=self.taskstatus)
         self.task.save()
 
-        duser, created = DjangoUser.objects.get_or_create(username='testuser')
-        self.user = duser
         self.time_from = datetime(year=2015, month=8, day=3)
         self.total_time = timedelta(minutes=61)
         self.time_to = self.time_from + self.total_time
-        self.timeslot = TaskTimeSlot(task=self.task, user=duser.profile, time_from=self.time_from, time_to=self.time_to)
+        self.timeslot = TaskTimeSlot(task=self.task, user=self.user.profile, time_from=self.time_from,
+                                     time_to=self.time_to)
         self.timeslot.save()
 
     def test_get_absolute_url(self):
@@ -340,14 +343,10 @@ class ProjectsViewsNotLoggedIn(TestCase):
 
 
 class ProjectsViewsTest(TestCase):
-    """Projects functional tests for views"""
-
     username = "test"
     password = "password"
 
     def setUp(self):
-        # Create objects
-
         self.group, created = Group.objects.get_or_create(name='test')
         self.user, created = DjangoUser.objects.get_or_create(username=self.username)
         self.user.set_password(self.password)

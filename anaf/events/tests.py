@@ -1,22 +1,14 @@
-"""
-Events: test suites
-"""
-
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from models import Event
 from datetime import datetime
 
 
 class EventsModelTest(TestCase):
-
-    "Events DB models tests"
-
     def test_model_event(self):
-        "Test Event model"
+        """Test Event model"""
         event = Event(name="Test", end=datetime.now())
         event.save()
         self.assertNotEquals(event.id, None)
@@ -25,48 +17,29 @@ class EventsModelTest(TestCase):
 
 
 class EventsViewsTest(TestCase):
-
-    "Events functional tests for views"
-
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+        perspective, created = Perspective.objects.get_or_create(name='default')
+        perspective.set_default_user()
+        perspective.save()
 
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-            # Create objects
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
-            self.user, created = User.objects.get_or_create(user=duser)
-            self.user.save()
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
-
-            ModuleSetting.set('default_perspective', perspective.id)
-
-            self.event = Event(name='TestStatus', end=datetime.now())
-            self.event.set_default_user()
-            self.event.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.event = Event(name='TestStatus', end=datetime.now())
+        self.event.set_default_user()
+        self.event.save()
 
     ######################################
     # Testing views when user is logged in
     ######################################
     def test_index(self):
-        "Test index page with login at /calendar/index"
+        """Test index page with login at /calendar/index"""
         response = self.client.post('/accounts/login',
                                     {'username': self.username, 'password': self.password})
         self.assertRedirects(response, '/')
@@ -74,7 +47,7 @@ class EventsViewsTest(TestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_upcoming(self):
-        "Test index page with login at /calendar/upcoming"
+        """Test index page with login at /calendar/upcoming"""
         response = self.client.post('/accounts/login',
                                     {'username': self.username, 'password': self.password})
         self.assertRedirects(response, '/')

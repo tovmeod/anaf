@@ -1,7 +1,3 @@
-"""
-Knowledge base: test suites
-"""
-
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
@@ -11,11 +7,8 @@ from models import KnowledgeFolder, KnowledgeItem, KnowledgeCategory
 
 
 class KnowledgeModelsTest(TestCase):
-
-    " Knowledge models tests"
-
     def test_model_folder(self):
-        "Test folder model"
+        """Test folder model"""
         obj = KnowledgeFolder(name='test', treepath='test')
         obj.save()
         self.assertEquals('test', obj.name)
@@ -23,7 +16,7 @@ class KnowledgeModelsTest(TestCase):
         obj.delete()
 
     def test_model_item(self):
-        "Test item model"
+        """Test item model"""
         folder = KnowledgeFolder(name='test', treepath='test')
         folder.save()
         category = KnowledgeCategory(name='test', treepath='test')
@@ -36,16 +29,13 @@ class KnowledgeModelsTest(TestCase):
         obj.delete()
 
     def test_model_category(self):
-        "Test category model"
+        """Test category model"""
         obj = KnowledgeCategory(name='test', details='test', treepath='test')
         obj.save()
         obj.delete()
 
 
 class KnowledgeViewsTest(TestCase):
-
-    "Knowledge functional tests for views"
-
     username = "test"
     password = "password"
 

@@ -1,10 +1,4 @@
-"""
-Messaging: test suites
-"""
-from unittest import skip
-
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 from anaf.core.models import Group, Perspective, ModuleSetting
@@ -13,13 +7,11 @@ from anaf.identities.models import Contact, ContactType
 
 
 class MessagingModelsTest(TestCase):
-    """ Messaging models tests"""
-
     username = "test"
     password = "password"
 
     def test_model_message(self):
-        "Test message"
+        """Test message"""
 
         contact_type = ContactType(name='test')
         contact_type.save()
@@ -51,49 +43,36 @@ class MessagingModelsTest(TestCase):
 
 
 class MessagingViewsTest(TestCase):
-
-    "Messaging functional tests for views"
-
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
 
-        if not self.prepared:
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
+        perspective, created = Perspective.objects.get_or_create(name='default')
+        perspective.set_default_user()
+        perspective.save()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.contact_type = ContactType(name='test')
+        self.contact_type.set_default_user()
+        self.contact_type.save()
 
-            self.contact_type = ContactType(name='test')
-            self.contact_type.set_default_user()
-            self.contact_type.save()
+        self.contact = Contact(name='test', contact_type=self.contact_type)
+        self.contact.set_default_user()
+        self.contact.save()
 
-            self.contact = Contact(name='test', contact_type=self.contact_type)
-            self.contact.set_default_user()
-            self.contact.save()
+        self.stream = MessageStream(name='test')
+        self.stream.set_default_user()
+        self.stream.save()
 
-            self.stream = MessageStream(name='test')
-            self.stream.set_default_user()
-            self.stream.save()
-
-            self.message = Message(
-                title='test', body='test', author=self.contact, stream=self.stream)
-            self.message.set_default_user()
-            self.message.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.message = Message(
+            title='test', body='test', author=self.contact, stream=self.stream)
+        self.message.set_default_user()
+        self.message.save()
 
     ######################################
     # Testing views when user is logged in

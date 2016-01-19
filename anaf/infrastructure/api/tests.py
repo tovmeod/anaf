@@ -1,11 +1,6 @@
-"""
-Infrastructure: test api
-"""
-
 import json
 from django.test import TestCase
 from django.test.client import Client
-from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
@@ -13,82 +8,49 @@ from anaf.infrastructure.models import Item, ItemValue, ItemField, ItemType, Ite
 
 
 class InfrastructureApiTest(TestCase):
-    "Infrastructure functional tests for api"
+    """Infrastructure functional tests for api"""
     username = "api_test"
     password = "api_password"
-    prepared = False
     authentication_headers = {"CONTENT_TYPE": "application/json",
                               "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
     content_type = 'application/json'
 
     def setUp(self):
-        "Initial Setup"
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
 
-            # Create objects
-            try:
-                self.group = Group.objects.get(name='test')
-            except Group.DoesNotExist:
-                Group.objects.all().delete()
-                self.group = Group(name='test')
-                self.group.save()
+        self.perspective = Perspective(name='test')
+        self.perspective.set_default_user()
+        self.perspective.save()
+        ModuleSetting.set('default_perspective', self.perspective.id)
 
-            try:
-                self.user = DjangoUser.objects.get(username=self.username)
-                self.user.set_password(self.password)
-                try:
-                    self.profile = self.user.profile
-                except Exception:
-                    User.objects.all().delete()
-                    self.user = DjangoUser(username=self.username, password='')
-                    self.user.set_password(self.password)
-                    self.user.save()
-            except DjangoUser.DoesNotExist:
-                User.objects.all().delete()
-                self.user = DjangoUser(username=self.username, password='')
-                self.user.set_password(self.password)
-                self.user.save()
+        self.field = ItemField(
+            name='test', label='test', field_type='text')
+        self.field.set_default_user()
+        self.field.save()
 
-            try:
-                perspective = Perspective.objects.get(name='default')
-            except Perspective.DoesNotExist:
-                Perspective.objects.all().delete()
-                perspective = Perspective(name='default')
-                perspective.set_default_user()
-                perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.type = ItemType(name='test')
+        self.type.set_default_user()
+        self.type.save()
+        self.type.fields.add(self.field)
 
-            self.field = ItemField(
-                name='test', label='test', field_type='text')
-            self.field.set_default_user()
-            self.field.save()
+        self.status = ItemStatus(name='test')
+        self.status.set_default_user()
+        self.status.save()
 
-            self.type = ItemType(name='test')
-            self.type.set_default_user()
-            self.type.save()
-            self.type.fields.add(self.field)
+        self.item = Item(
+            name='test', item_type=self.type, status=self.status)
+        self.item.set_default_user()
+        self.item.save()
 
-            self.status = ItemStatus(name='test')
-            self.status.set_default_user()
-            self.status.save()
+        self.value = ItemValue(field=self.field, item=self.item)
+        self.value.save()
 
-            self.item = Item(
-                name='test', item_type=self.type, status=self.status)
-            self.item.set_default_user()
-            self.item.save()
-
-            self.value = ItemValue(field=self.field, item=self.item)
-            self.value.save()
-
-            self.servicing = ItemServicing(name='test')
-            self.servicing.set_default_user()
-            self.servicing.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.servicing = ItemServicing(name='test')
+        self.servicing.set_default_user()
+        self.servicing.save()
 
     def test_unauthenticated_access(self):
         "Test index page at /api/infrastructure/types"

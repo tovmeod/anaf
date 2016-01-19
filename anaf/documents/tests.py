@@ -1,21 +1,13 @@
-"""
-Documents: test suites
-"""
-
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from models import Folder, Document, File, WebLink
 
 
 class DocumentsModelsTest(TestCase):
-
-    "Documents Models Tests"
-
     def test_model_folder(self):
-        "Test Folder Model"
+        """Test Folder Model"""
         obj = Folder(name='test')
         obj.save()
         self.assertEquals('test', obj.name)
@@ -23,7 +15,7 @@ class DocumentsModelsTest(TestCase):
         obj.delete()
 
     def test_model_document(self):
-        "Test Document Model"
+        """Test Document Model"""
         folder = Folder(name='test')
         folder.save()
         obj = Document(title='test', folder=folder)
@@ -33,7 +25,7 @@ class DocumentsModelsTest(TestCase):
         obj.delete()
 
     def test_model_file(self):
-        "Test File Model"
+        """Test File Model"""
         folder = Folder(name='test')
         folder.save()
         obj = File(name='test', folder=folder)
@@ -43,7 +35,7 @@ class DocumentsModelsTest(TestCase):
         obj.delete()
 
     def test_model_weblink(self):
-        "Test WebLink Model"
+        """Test WebLink Model"""
         folder = Folder(name='test')
         folder.save()
         obj = WebLink(title='test', folder=folder, url='test')
@@ -54,54 +46,36 @@ class DocumentsModelsTest(TestCase):
 
 
 class DocumentsViewsTest(TestCase):
-
-    "Documents functional tests for views"
-
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+        perspective, created = Perspective.objects.get_or_create(
+            name='default')
+        perspective.set_default_user()
+        perspective.save()
 
-        if not self.prepared:
-            Object.objects.all().delete()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-            # Create objects
+        self.folder = Folder(name='test')
+        self.folder.set_default_user()
+        self.folder.save()
 
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
-            self.user, created = User.objects.get_or_create(user=duser)
-            self.user.save()
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
+        self.document = Document(title='test_document', folder=self.folder)
+        self.document.set_default_user()
+        self.document.save()
 
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.file = File(name='test_file', folder=self.folder)
+        self.file.set_default_user()
+        self.file.save()
 
-            self.folder = Folder(name='test')
-            self.folder.set_default_user()
-            self.folder.save()
-
-            self.document = Document(title='test_document', folder=self.folder)
-            self.document.set_default_user()
-            self.document.save()
-
-            self.file = File(name='test_file', folder=self.folder)
-            self.file.set_default_user()
-            self.file.save()
-
-            self.link = WebLink(title='test', folder=self.folder, url='test')
-            self.link.set_default_user()
-            self.link.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.link = WebLink(title='test', folder=self.folder, url='test')
+        self.link.set_default_user()
+        self.link.save()
 
     ######################################
     # Testing views when user is logged in

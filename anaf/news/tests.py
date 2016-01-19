@@ -1,41 +1,22 @@
-"""
-News: test suites
-"""
-
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting
+from anaf.core.models import Group, Perspective, ModuleSetting
 
 
 class NewsViewsTest(TestCase):
-
-    "Finance functional tests for views"
-
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
-        if not self.prepared:
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
-            self.user, created = User.objects.get_or_create(user=duser)
-            self.user.save()
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
-
-            self.client = Client()
-
-            self.prepared = True
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+        perspective, created = Perspective.objects.get_or_create(name='default')
+        perspective.set_default_user()
+        perspective.save()
+        ModuleSetting.set('default_perspective', perspective.id)
 
     ######################################
     # Testing views when user is logged in

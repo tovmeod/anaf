@@ -1,20 +1,13 @@
-"""
-Identities: test suites
-"""
-
 from django.test import TestCase
 from models import Contact, ContactType, ContactField
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 
 
 class IdentitiesModelsTest(TestCase):
-    "Identities Model Tests"
-
     def test_model_contacttype(self):
-        "Test ContactType model"
+        """Test ContactType model"""
         obj = ContactType(name='Test', slug='test')
         obj.save()
         self.assertEquals('Test', obj.name)
@@ -22,7 +15,7 @@ class IdentitiesModelsTest(TestCase):
         obj.delete()
 
     def test_model_contact(self):
-        "Test Contact model"
+        """Test Contact model"""
         type = ContactType(name='Test', slug='test')
         type.save()
         obj = Contact(name='Test', contact_type=type)
@@ -32,7 +25,7 @@ class IdentitiesModelsTest(TestCase):
         obj.delete()
 
     def test_model_field(self):
-        "Test Field model"
+        """Test Field model"""
         obj = ContactField(name='Test', label='test', field_type='text')
         obj.save()
         self.assertEquals('Test', obj.name)
@@ -41,49 +34,32 @@ class IdentitiesModelsTest(TestCase):
 
 
 class IdentitiesViewsTest(TestCase):
-
-    "Identities View tests"
     username = "test"
     password = "password"
-    prepared = False
 
     def setUp(self):
-        "Initial Setup"
+        self.group, created = Group.objects.get_or_create(name='test')
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user.set_password(self.password)
+        self.user.save()
+        perspective, created = Perspective.objects.get_or_create(
+            name='default')
+        perspective.set_default_user()
+        perspective.save()
+        ModuleSetting.set('default_perspective', perspective.id)
 
-        if not self.prepared:
-            # Clean up first
-            Object.objects.all().delete()
+        self.contact_type = ContactType(name='Person')
+        self.contact_type.set_default_user()
+        self.contact_type.save()
 
-            # Create objects
-            self.group, created = Group.objects.get_or_create(name='test')
-            duser, created = DjangoUser.objects.get_or_create(
-                username=self.username)
-            duser.set_password(self.password)
-            duser.save()
-            self.user, created = User.objects.get_or_create(user=duser)
-            self.user.save()
-            perspective, created = Perspective.objects.get_or_create(
-                name='default')
-            perspective.set_default_user()
-            perspective.save()
-            ModuleSetting.set('default_perspective', perspective.id)
+        self.contact = Contact(name='Test', contact_type=self.contact_type)
+        self.contact.set_default_user()
+        self.contact.save()
 
-            self.contact_type = ContactType(name='Person')
-            self.contact_type.set_default_user()
-            self.contact_type.save()
-
-            self.contact = Contact(name='Test', contact_type=self.contact_type)
-            self.contact.set_default_user()
-            self.contact.save()
-
-            self.field = ContactField(
-                name='Test', label='test', field_type='text')
-            self.field.set_default_user()
-            self.field.save()
-
-            self.client = Client()
-
-            self.prepared = True
+        self.field = ContactField(
+            name='Test', label='test', field_type='text')
+        self.field.set_default_user()
+        self.field.save()
 
     ######################################
     # Testing views when user is logged in

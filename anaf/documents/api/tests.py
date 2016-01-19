@@ -1,25 +1,16 @@
-"""
-Documents: test api
-"""
-
 import json
 
 from django.test import TestCase
-from django.test.client import Client
-from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from anaf.documents.models import Folder, Document, File, WebLink
 
 
 class DocumentsViewsTest(TestCase):
-    "Documents functional tests for api"
-
     username = "api_test"
     password = "api_password"
-    prepared = False
     authentication_headers = {
         "CONTENT_TYPE": "application/json",
         "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"
@@ -54,10 +45,8 @@ class DocumentsViewsTest(TestCase):
         self.link.set_user(self.user.profile)
         self.link.save()
 
-        self.client = Client()
-
     def test_unauthenticated_access(self):
-        "Test index page at /api/documents/folders"
+        """Test index page at /api/documents/folders"""
         response = self.client.get('/api/documents/folders')
         # Redirects as unauthenticated
         self.assertEquals(response.status_code, 401)
