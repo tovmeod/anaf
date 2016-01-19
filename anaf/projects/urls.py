@@ -1,8 +1,8 @@
 from django.conf.urls import url, patterns
 
 urlpatterns = patterns('anaf.projects.views',
-                       url(r'^(\.(?P<response_format>\w+))?$',
-                           'index', name='projects'),
+                       url(r'^dojo$', 'dojo_view', name='dojo_view'),
+                       url(r'^(\.(?P<response_format>\w+))?$', 'index', name='projects'),
                        url(r'^index(\.(?P<response_format>\w+))?/?$',
                            'index', name='projects_index'),
                        url(r'^task/owned(\.(?P<response_format>\w+))?/?$',
@@ -96,3 +96,15 @@ urlpatterns = patterns('anaf.projects.views',
                        url(r'^ajax/tasks(\.(?P<response_format>\w+))?/?$',
                            'ajax_task_lookup', name='projects_ajax_task_lookup'),
                        )
+
+from api.views import ProjectViewSet, ProfileViewSet, ContactViewSet, GroupViewSet, ContactTypeViewSet, PerspectiveViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'projects', ProjectViewSet)
+router.register(r'users', ProfileViewSet)
+router.register(r'contacts', ContactViewSet)
+router.register(r'contacttypes', ContactTypeViewSet)
+router.register(r'groups', GroupViewSet)
+router.register(r'groups', PerspectiveViewSet)
+urlpatterns += router.urls

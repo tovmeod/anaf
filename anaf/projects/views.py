@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response as django_render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
@@ -6,7 +6,7 @@ from django.db.models import Q
 from anaf.core.models import Object, ModuleSetting, UpdateRecord
 from anaf.core.views import user_denied
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import mylogin_required, handle_response_format
+from anaf.core.decorators import treeio_login_required, handle_response_format
 from models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 from forms import ProjectForm, MilestoneForm, TaskForm, FilterForm, TaskRecordForm, \
     MassActionForm, TaskTimeSlotForm, TaskStatusForm, SettingsForm
@@ -16,7 +16,7 @@ import json
 
 
 def _get_filter_query(args):
-    "Creates a query to filter Tasks based on FilterForm arguments"
+    """Creates a query to filter Tasks based on FilterForm arguments"""
     query = Q()
 
     for arg in args:
@@ -123,8 +123,7 @@ def index_owned(request, response_format='html'):
         query = query & Q(status__hidden=False)
 
     tasks = Object.filter_by_request(request, Task.objects.filter(query))
-    milestones = Object.filter_by_request(
-        request, Milestone.objects.filter(status__hidden=False))
+    milestones = Object.filter_by_request(request, Milestone.objects.filter(status__hidden=False))
     filters = FilterForm(request.user.profile, 'status', request.GET)
 
     context = _get_default_context(request)
@@ -1290,3 +1289,31 @@ def gantt_view(request, project_id, response_format='html'):
                                'project': project,
                                'projects': projects},
                               context_instance=RequestContext(request), response_format=response_format)
+
+from coffin.template import loader
+from django.http import HttpResponse
+def dojo_view(request):
+    """Project Management index page"""
+
+    query = Q(parent__isnull=True)
+    if request.GET:
+        if 'status' in request.GET and request.GET['status']:
+            query = query & _get_filter_query(request.GET)
+        else:
+            query = query & Q(status__hidden=False) & _get_filter_query(request.GET)
+    else:
+        query = query & Q(status__hidden=False)
+
+    tasks = Object.filter_by_request(request, Task.objects.filter(query))
+    milestones = Object.filter_by_request(
+        request, Milestone.objects.filter(status__hidden=False))
+    filters = FilterForm(request.user.profile, '', request.GET)
+
+    context = _get_default_context(request)
+    context.update({'milestones': milestones,
+                    'tasks': tasks,
+                    'filters': filters})
+
+    rendered_string = loader.render_to_string('html/dojo/project_index.html',context,
+                                              context_instance=RequestContext(request))
+    return HttpResponse(rendered_string)
