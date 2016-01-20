@@ -433,7 +433,7 @@ def user_invite(request, emails=None, response_format='html'):
         for email in emails:
             email = email.strip()
             if len(email) > 7 and re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is not None:
-                if user_limit > 0 and user_number >= user_limit:
+                if 0 < user_limit <= user_number:
                     break
                 invitation = Invitation(
                     sender=request.user.profile, email=email, default_group=default_group)

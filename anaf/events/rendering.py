@@ -48,14 +48,14 @@ class EventRenderer:
 
     def is_full_day(self, date):
         "True if the event takes place throughout the specified date"
-        if self.start and self.end and self.start.date() < date and self.end.date() > date:
+        if self.start and self.end and self.start.date() < date < self.end.date():
             return True
         return False
 
     def covers(self, date, hour):
         "True if the event covers the given date and/or hour"
         if self.start:
-            if self.start.date() < date and self.end.date() > date:
+            if self.start.date() < date < self.end.date():
                 return True
             elif self.start.date() == date and self.start.hour <= hour:
                 if self.end.date() > date:
@@ -83,7 +83,7 @@ class EventRenderer:
                 return True
             elif self.start and self.start.date() < date and self.end.date() == date:
                 return True
-            elif self.start and self.start.date() < date and self.end.date() > date:
+            elif self.start and self.start.date() < date < self.end.date():
                 return True
             elif not self.start and self.end.date() == date and self.end.hour == hour:
                 return True
@@ -100,7 +100,7 @@ class EventRenderer:
         "Returns duration as hours (float)"
         if date:
             if self.start:
-                if self.start.date() < date and self.end.date() > date:
+                if self.start.date() < date < self.end.date():
                     return start_hour - end_hour + 1
                 else:
                     if self.start.date() == date and self.end.date() > date:

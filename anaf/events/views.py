@@ -137,7 +137,7 @@ def month_view(request, response_format='html'):
             try:
                 year = int(request.GET['date_year'])
                 month = int(request.GET['date_month'])
-                if year >= 1900 and month >= 1 and month <= 12:
+                if year >= 1900 and 1 <= month <= 12:
                     date_current = datetime(year, month, 1)
                     istoday = date_current == now
             except Exception:
