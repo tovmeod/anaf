@@ -118,7 +118,6 @@ class MessagingViewsTest(TestCase):
         self.assertRedirects(response, '/')
         response = self.client.get(reverse('messaging_message_compose'))
         # self.assertEquals(response.status_code, 200)
-        pass
 
     def test_message_view_login(self):
         "Test index page with login at /message/view/<message_id>"
