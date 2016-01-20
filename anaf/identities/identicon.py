@@ -30,7 +30,8 @@ class Matrix2D(list):
     def __init__(self, initial=None):
         if initial is None:
             initial = [0.] * 9
-        assert isinstance(initial, list) and len(initial) == 9
+        assert isinstance(initial, list)
+        assert len(initial) == 9
         list.__init__(self, initial)
 
     def clear(self):
