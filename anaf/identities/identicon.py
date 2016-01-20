@@ -58,7 +58,7 @@ class Matrix2D(list):
             raise NotImplementedError
         return Matrix2D(r)
 
-    def for_PIL(self):
+    def for_pil(self):
         return self[0:6]
 
     @classmethod
@@ -167,7 +167,7 @@ class IdenticonRendererBase(object):
               Matrix2D.translate(*pos) * \
               Matrix2D.scale(size, size)
 
-        patch.transform(mat.for_PIL())
+        patch.transform(mat.for_pil())
         draw.rectangle(
             (pos[0] * size, pos[1] * size, (pos[0] + 1) * size, (pos[1] + 1) * size), fill=backColor)
         draw.polygon(patch, fill=foreColor, outline=foreColor)

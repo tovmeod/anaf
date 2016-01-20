@@ -33,7 +33,7 @@ class TestHTTPHeaders(TestCase):
 def MobileDetectionFactory(uas, expected):
     class MobileDetection(TestCase):
 
-        def test_UA(self, ua):
+        def test_ua(self, ua):
             request = DummyRequest(ua)
             minidetector.Middleware.process_request(request)
             if self.expected:
