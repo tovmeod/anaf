@@ -400,6 +400,9 @@ class Invitation(models.Model):
             hasher.update(str(random.random()) + str(self.email))
             self.key = hasher.hexdigest()
 
+    def __unicode__(self):
+        return 'Invitation to {}'.format(self.email)
+
 
 class Tag(models.Model):
     """Model for Global Tagging"""
@@ -998,7 +1001,7 @@ class Object(models.Model):
 
     def set_field_value(self, field_name, value):
         """Sets the value of a given field"""
-        return setattr(self, field_name)
+        return setattr(self, field_name, value)
 
     def set_last_updated(self, last_updated=timezone.now()):
         self.last_updated = last_updated
@@ -1006,11 +1009,13 @@ class Object(models.Model):
 
 
 class Revision(models.Model):
-    previous = models.OneToOneField(
-        'self', blank=True, null=True, related_name='next')
+    previous = models.OneToOneField('self', blank=True, null=True, related_name='next')
     object = models.ForeignKey(Object)
     change_type = models.CharField(max_length=512, null=True, blank=True)
     date_created = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return 'Revision to object {}'.format(self.object)
 
 
 class RevisionField(models.Model):
@@ -1026,6 +1031,9 @@ class RevisionField(models.Model):
         AccessEntity, null=True, blank=True, related_name='revisionfield_key_acc', on_delete=models.SET_NULL)
     value_m2m_acc = models.ManyToManyField(
         AccessEntity, related_name='revisionfield_m2m_acc')
+
+    def __unicode__(self):
+        return 'Revision Field {}'.format(self.value)
 
 
 class UpdateRecord(models.Model):

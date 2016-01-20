@@ -44,3 +44,6 @@ class Invitation(models.Model):
     status = models.CharField(max_length=255, choices=(('attending', 'Attending'),
                                                        ('pending', 'Pending'),
                                                        ('not-attending', 'Not Attending')))
+
+    def __unicode__(self):
+        return 'Invitation to {}'.format(self.contact)
