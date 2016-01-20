@@ -1136,7 +1136,7 @@ class UpdateRecord(models.Model):
         if self.body:
             result += '<p>' + self.body + '</p>'
         if result.endswith('<br />'):
-            result = result[:len(result) - 6]
+            result = result[:-6]
         return result
     full_message = property(get_full_message)
 
