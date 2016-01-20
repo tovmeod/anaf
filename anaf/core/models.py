@@ -721,7 +721,7 @@ class Object(models.Model):
                         [self.get_human_type(translate=False), updated_text])
                     notification.save()
                     for obj in kwargs['updated']:
-                        if isinstance(obj, AccessEntity) or isinstance(obj, User):
+                        if isinstance(obj, (AccessEntity, User)):
                             notification.recipients.add(obj)
                             self.subscribers.add(obj)
                             try:
@@ -922,7 +922,7 @@ class Object(models.Model):
         # process assigned fields to give auto-permissions to assignees
         if hasattr(self, 'assigned'):
             for obj in self.assigned.all():
-                if isinstance(obj, AccessEntity) or isinstance(obj, User):
+                if isinstance(obj, (AccessEntity, User)):
                     try:
                         if not obj.has_permission(self, mode='w'):
                             self.full_access.add(obj)
