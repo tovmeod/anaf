@@ -305,10 +305,10 @@ class SSLMiddleware(object):
 
     def process_request(self, request):
         """ Revert to SSL/no SSL depending on settings """
-        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED:
-            if settings.ANAF_SUBSCRIPTION_SSL_ENFORCE and not request.is_secure():
-                redirect_url = request.build_absolute_uri()
-                return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
+        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED and settings.ANAF_SUBSCRIPTION_SSL_ENFORCE and \
+                not request.is_secure():
+            redirect_url = request.build_absolute_uri()
+            return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
         elif request.is_secure():
             redirect_url = request.build_absolute_uri()
             return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))

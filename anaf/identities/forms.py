@@ -304,14 +304,11 @@ class ContactForm(forms.Form):
                         if isinstance(self.fields[form_name], forms.ImageField):
                             self._image_resize(value.value)
                     else:
-                        if field.field_type == 'picture' and isinstance(self.fields[form_name],
-                                                                        forms.ChoiceField):
-                            if self.cleaned_data[form_name] != 'delete':
-                                value = ContactValue(field=field, contact=contact,
-                                                     value=self.cleaned_data[form_name])
+                        if field.field_type == 'picture' and isinstance(self.fields[form_name], forms.ChoiceField) and \
+                                        self.cleaned_data[form_name] != 'delete':
+                            value = ContactValue(field=field, contact=contact, value=self.cleaned_data[form_name])
                         else:
-                            value = ContactValue(field=field, contact=contact,
-                                                 value=self.cleaned_data[form_name])
+                            value = ContactValue(field=field, contact=contact, value=self.cleaned_data[form_name])
                     value.save()
         return contact
 
