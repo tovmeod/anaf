@@ -153,10 +153,8 @@ class Asset(Object):
 
     def set_rate(self):
         "Set Rate"
-        if self.depreciation_type == 'straight':
-            if self.lifetime:
-                self.depreciation_rate = (100 /
-                                          self.lifetime).quantize(Decimal('00.01'), rounding=ROUND_UP)
+        if self.depreciation_type == 'straight' and self.lifetime:
+            self.depreciation_rate = (100 / self.lifetime).quantize(Decimal('00.01'), rounding=ROUND_UP)
 
         elif self.depreciation_type == 'reducing':
             if not self.check_depreciate():

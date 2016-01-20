@@ -222,9 +222,8 @@ def render_string_template(template_string, context=None, context_instance=None)
     if context is None:
         context = {}
     template = Template(template_string)
-    if 'user' not in context and context_instance:
-        if 'request' in context_instance:
-            context.update({'user': context_instance['request']})
+    if 'user' not in context and context_instance and 'request' in context_instance:
+        context.update({'user': context_instance['request']})
 
     return template.render(context)
 

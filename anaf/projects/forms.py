@@ -78,21 +78,20 @@ class MassActionForm(Form):
 
     def save(self, *args, **kwargs):
         "Save override to omit empty fields"
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['project']:
-                    self.instance.project = self.cleaned_data['project']
-                if self.cleaned_data['status']:
-                    self.instance.status = self.cleaned_data['status']
-                if self.cleaned_data['milestone']:
-                    self.instance.milestone = self.cleaned_data['milestone']
-                self.instance.save()
-                if self.cleaned_data['delete']:
-                    if self.cleaned_data['delete'] == 'delete':
-                        self.instance.delete()
-                    if self.cleaned_data['delete'] == 'trash':
-                        self.instance.trash = True
-                        self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['project']:
+                self.instance.project = self.cleaned_data['project']
+            if self.cleaned_data['status']:
+                self.instance.status = self.cleaned_data['status']
+            if self.cleaned_data['milestone']:
+                self.instance.milestone = self.cleaned_data['milestone']
+            self.instance.save()
+            if self.cleaned_data['delete']:
+                if self.cleaned_data['delete'] == 'delete':
+                    self.instance.delete()
+                if self.cleaned_data['delete'] == 'trash':
+                    self.instance.trash = True
+                    self.instance.save()
 
 
 class ProjectForm(ModelForm):

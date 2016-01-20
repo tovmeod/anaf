@@ -27,10 +27,9 @@ def _get_filter_query(args, model=SaleOrder):
     query = Q()
 
     for arg in args:
-        if args[arg]:
-            if hasattr(model, arg) or arg == 'products_interested':
-                kwargs = {str(arg + '__id'): long(args[arg])}
-                query = query & Q(**kwargs)
+        if args[arg] and hasattr(model, arg) or arg == 'products_interested':
+            kwargs = {str(arg + '__id'): long(args[arg])}
+            query = query & Q(**kwargs)
 
     return query
 
@@ -211,10 +210,9 @@ def index_status(request, response_format='html'):
     for status in statuses:
         status.count = 0
         for order in orders:
-            if order.status == status:
-                if order.status.hidden is False:
-                    total += 1
-                    status.count += order.quantity
+            if order.status == status and order.status.hidden is False:
+                total += 1
+                status.count += order.quantity
 
     return render_to_response('sales/index_status',
                               {'orders': orders,
@@ -1270,24 +1268,18 @@ def settings_view(request, response_format='html'):
 
     # check not trashed
 
-    if default_opportunity_status:
-        if default_opportunity_status.trash:
-            default_opportunity_status = None
-    if default_lead_status:
-        if default_lead_status.trash:
-            default_lead_status = None
-    if default_order_status:
-        if default_order_status.trash:
-            default_order_status = None
-    if default_order_source:
-        if default_order_source.trash:
-            default_order_source = None
-    if order_fulfil_status:
-        if order_fulfil_status.trash:
-            order_fulfil_status = None
-    if default_order_product:
-        if default_order_product.trash:
-            default_order_product = None
+    if default_opportunity_status and default_opportunity_status.trash:
+        default_opportunity_status = None
+    if default_lead_status and default_lead_status.trash:
+        default_lead_status = None
+    if default_order_status and default_order_status.trash:
+        default_order_status = None
+    if default_order_source and default_order_source.trash:
+        default_order_source = None
+    if order_fulfil_status and order_fulfil_status.trash:
+        order_fulfil_status = None
+    if default_order_product and default_order_product.trash:
+        default_order_product = None
 
     return render_to_response('sales/settings_view',
                               {

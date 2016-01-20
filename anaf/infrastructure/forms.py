@@ -253,14 +253,11 @@ class ItemForm(forms.Form):
                         if isinstance(self.fields[form_name], forms.ImageField):
                             self._image_resize(value.value)
                     else:
-                        if field.field_type == 'picture' and isinstance(self.fields[form_name],
-                                                                        forms.ChoiceField):
-                            if self.cleaned_data[form_name] != 'delete':
-                                value = ItemValue(field=field, item=item,
-                                                  value=self.cleaned_data[form_name])
+                        if field.field_type == 'picture' and isinstance(self.fields[form_name], forms.ChoiceField) and\
+                                        self.cleaned_data[form_name] != 'delete':
+                            value = ItemValue(field=field, item=item, value=self.cleaned_data[form_name])
                         else:
-                            value = ItemValue(
-                                field=field, item=item, value=self.cleaned_data[form_name])
+                            value = ItemValue(field=field, item=item, value=self.cleaned_data[form_name])
                     if value:
                         if not value.value:
                             value.value = ''
@@ -451,19 +448,18 @@ class MassActionForm(forms.Form):
 
     def save(self, *args, **kwargs):
         "Process form"
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['location']:
-                    self.instance.location = self.cleaned_data['location']
-                if self.cleaned_data['status']:
-                    self.instance.status = self.cleaned_data['status']
-                self.instance.save()
-                if self.cleaned_data['delete']:
-                    if self.cleaned_data['delete'] == 'delete':
-                        self.instance.delete()
-                    if self.cleaned_data['delete'] == 'trash':
-                        self.instance.trash = True
-                        self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['location']:
+                self.instance.location = self.cleaned_data['location']
+            if self.cleaned_data['status']:
+                self.instance.status = self.cleaned_data['status']
+            self.instance.save()
+            if self.cleaned_data['delete']:
+                if self.cleaned_data['delete'] == 'delete':
+                    self.instance.delete()
+                if self.cleaned_data['delete'] == 'trash':
+                    self.instance.trash = True
+                    self.instance.save()
 
 
 class SettingsForm(forms.Form):

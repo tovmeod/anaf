@@ -39,14 +39,13 @@ class MassActionForm(forms.Form):
     def save(self, *args, **kwargs):
         "Process form"
 
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['delete']:
-                    if self.cleaned_data['delete'] == 'delete':
-                        self.instance.delete()
-                    if self.cleaned_data['delete'] == 'trash':
-                        self.instance.trash = True
-                        self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['delete']:
+                if self.cleaned_data['delete'] == 'delete':
+                    self.instance.delete()
+                elif self.cleaned_data['delete'] == 'trash':
+                    self.instance.trash = True
+                    self.instance.save()
 
 
 class ContactFieldForm(forms.ModelForm):

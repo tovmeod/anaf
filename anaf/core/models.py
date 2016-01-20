@@ -274,9 +274,8 @@ class User(AccessEntity):
         if obj.full_access.filter(query).exists():
             return True
 
-        if mode in ('r', 'x'):
-            if obj.read_access.filter(query).exists():
-                return True
+        if mode in ('r', 'x') and obj.read_access.filter(query).exists():
+            return True
 
         if not obj.full_access.exists():
             # if no one can have full access, then allow everyone

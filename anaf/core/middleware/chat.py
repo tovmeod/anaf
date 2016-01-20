@@ -44,11 +44,10 @@ def set_memcached(key, obj, lock=True):
     """
     Serialization object and add his in memcached
     """
-    if lock:
-        if create_lock(key):
-            # 60 sec * 60 min * 24 hour * 30 day = 2 592 000 sec
-            cache.set(key, cPickle.dumps(obj), 2592000)
-            delete_lock(key)
+    if lock and create_lock(key):
+        # 60 sec * 60 min * 24 hour * 30 day = 2 592 000 sec
+        cache.set(key, cPickle.dumps(obj), 2592000)
+        delete_lock(key)
     else:
         cache.set(key, cPickle.dumps(obj), 2592000)
 
@@ -178,13 +177,12 @@ def exit_from_conference(id, user):
     :type id: basestring
     :type user: basestring
     """
-    if checking_conference(id):
-        if verification_user(id, user):
-            conferences = get_memcached(get_key("conferences"))
-            if is_owner_user(id, user):
-                delete_conference(id, user)
-            del conferences[id]["users"][user]
-            set_memcached(get_key("conferences"), conferences)
+    if checking_conference(id) and verification_user(id, user):
+        conferences = get_memcached(get_key("conferences"))
+        if is_owner_user(id, user):
+            delete_conference(id, user)
+        del conferences[id]["users"][user]
+        set_memcached(get_key("conferences"), conferences)
     return get_new_message_for_user(user)
 
 
@@ -336,9 +334,8 @@ def get_new_message_for_user(user, **kwargs):
         out_time = 0
         while not data["new_data"] and out_time < settings.CHAT_TIMEOUT:
 
-            if kwargs["user_obj"]:
-                if _location:
-                    update_user(kwargs["user_obj"], _location)
+            if kwargs["user_obj"] and  _location:
+                update_user(kwargs["user_obj"], _location)
 
             out_time += 1
 

@@ -124,36 +124,34 @@ class MassActionForm(forms.Form):
 
     def save(self, *args, **kwargs):
         "Save override to omit empty fields"
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['stream']:
-                    self.instance.stream = self.cleaned_data['stream']
-                if self.user and self.cleaned_data['mark']:
-                    if self.cleaned_data['mark'] == 'read':
-                        try:
-                            self.instance.read_by.add(self.user)
-                        except Exception:
-                            pass
-                    if self.cleaned_data['mark'] == 'unread':
-                        try:
-                            self.instance.read_by.remove(self.user)
-                        except Exception:
-                            pass
-                self.instance.save()
-                if self.user and self.cleaned_data['mark']:
-                    if self.cleaned_data['mark'] == 'delete':
-                        self.instance.delete()
-                    if self.cleaned_data['mark'] == 'trash':
-                        self.instance.trash = True
-                        self.instance.save()
-        else:
-            if self.user and self.cleaned_data['markall']:
-                query = Q(reply_to__isnull=True) & ~Q(read_by=self.user)
-                for message in Object.filter_permitted(self.user, Message.objects.filter(query), mode='x'):
+        if self.instance and self.is_valid():
+            if self.cleaned_data['stream']:
+                self.instance.stream = self.cleaned_data['stream']
+            if self.user and self.cleaned_data['mark']:
+                if self.cleaned_data['mark'] == 'read':
                     try:
-                        message.read_by.add(self.user)
+                        self.instance.read_by.add(self.user)
                     except Exception:
                         pass
+                if self.cleaned_data['mark'] == 'unread':
+                    try:
+                        self.instance.read_by.remove(self.user)
+                    except Exception:
+                        pass
+            self.instance.save()
+            if self.user and self.cleaned_data['mark']:
+                if self.cleaned_data['mark'] == 'delete':
+                    self.instance.delete()
+                if self.cleaned_data['mark'] == 'trash':
+                    self.instance.trash = True
+                    self.instance.save()
+        elif self.user and self.cleaned_data['markall']:
+            query = Q(reply_to__isnull=True) & ~Q(read_by=self.user)
+            for message in Object.filter_permitted(self.user, Message.objects.filter(query), mode='x'):
+                try:
+                    message.read_by.add(self.user)
+                except Exception:
+                    pass
 
 
 class MessageForm(forms.ModelForm):

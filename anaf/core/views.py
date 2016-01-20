@@ -207,10 +207,9 @@ def ajax_popup(request, popup_id='', url='/'):
             pass
 
     response = None
-    if active:
-        if not request.user.profile.has_permission(active):
-            response = user_denied(request, "You do not have access to the %s module" % unicode(active),
-                                   response_format='ajax')
+    if active and not request.user.profile.has_permission(active):
+        response = user_denied(request, "You do not have access to the %s module" % unicode(active),
+                               response_format='ajax')
 
     if not response:
         if view == ajax_popup:

@@ -171,17 +171,15 @@ class Task(Object):
                 if self.milestone.project_id != self.project_id:
                     self.project_id = self.milestone.project_id
 
-            if self.status_id != original.status_id:
-                # Changed status
-                if self.status.hidden:
-                    # Changed to a 'hidden' status, perform same for subtasks
-                    for task in self.child_set.exclude(status=self.status):
-                        task.status_id = self.status_id
-                        task.save()
-                    # Close any open timeslots
-                    for slot in self.tasktimeslot_set.filter(time_to__isnull=True):
-                        slot.time_to = datetime.now()
-                        slot.save()
+            if self.status_id != original.status_id and self.status.hidden:
+                # Changed to a 'hidden' status, perform same for subtasks
+                for task in self.child_set.exclude(status=self.status):
+                    task.status_id = self.status_id
+                    task.save()
+                # Close any open timeslots
+                for slot in self.tasktimeslot_set.filter(time_to__isnull=True):
+                    slot.time_to = datetime.now()
+                    slot.save()
 
         else:
             # New task

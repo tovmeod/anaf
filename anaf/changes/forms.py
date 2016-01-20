@@ -36,11 +36,9 @@ class MassActionForm(forms.Form):
     def save(self, *args, **kwargs):
         "Process form"
 
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['delete']:
-                    if self.cleaned_data['delete'] == 'delete':
-                        self.instance.delete()
+        if self.instance and self.is_valid() and self.cleaned_data['delete'] and \
+                        self.cleaned_data['delete'] == 'delete':
+            self.instance.delete()
 
 
 class ObjectModelChoiceField(forms.ModelChoiceField):

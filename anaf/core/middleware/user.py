@@ -77,13 +77,12 @@ class CommonMiddleware(object):
     def do_fresh_subscribers(self, user, request, sender, instance, created, **kwargs):
         "Adds current user to Subscribers of an Object on creation"
         auto_notify = getattr(instance, 'auto_notify', True)
-        if auto_notify and created:
-            if isinstance(instance, Object) and instance.is_searchable():
-                instance.subscribers.add(user)
-                try:
-                    instance.create_notification('create', user)
-                except:
-                    pass
+        if auto_notify and created and isinstance(instance, Object) and instance.is_searchable():
+            instance.subscribers.add(user)
+            try:
+                instance.create_notification('create', user)
+            except:
+                pass
 
     def send_notifications_on_save(self, user, request, sender, instance, **kwargs):
         "Send notifications to subscribers of an Object on Object change"
@@ -287,21 +286,18 @@ def process_timezone_field(user, instance):
 
     for field in instance.get_fields():
         if field.name not in settings.ANAF_TIMEZONE_BLACKLIST:
-            if isinstance(field, models.DateTimeField) or \
-                    isinstance(field, models.DateField):
-                if getattr(instance, field.name):
-                    cur_date = getattr(instance, field.name)
-                    if sign == "-":
-                        new_date = cur_date + \
-                                   timedelta(hours=hours, minutes=mins)
-                    else:
-                        new_date = cur_date - \
-                                   timedelta(hours=hours, minutes=mins)
-                    setattr(instance, field.name, new_date)
-            elif isinstance(field, models.TimeField):
-                if getattr(instance, field.name):
-                    datetime.combine(date.today(), getattr(
-                        instance, field.name)) + timedelta(hours=hours, minutes=mins)
+            if (isinstance(field, models.DateTimeField) or isinstance(field, models.DateField)) and \
+                    getattr(instance, field.name):
+                cur_date = getattr(instance, field.name)
+                if sign == "-":
+                    new_date = cur_date + \
+                               timedelta(hours=hours, minutes=mins)
+                else:
+                    new_date = cur_date - \
+                               timedelta(hours=hours, minutes=mins)
+                setattr(instance, field.name, new_date)
+            elif isinstance(field, models.TimeField) and getattr(instance, field.name):
+                datetime.combine(date.today(), getattr(instance, field.name)) + timedelta(hours=hours, minutes=mins)
 
 
 class SSLMiddleware(object):
@@ -313,19 +309,16 @@ class SSLMiddleware(object):
             if settings.ANAF_SUBSCRIPTION_SSL_ENFORCE and not request.is_secure():
                 redirect_url = request.build_absolute_uri()
                 return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
-        else:
-            if request.is_secure():
-                redirect_url = request.build_absolute_uri()
-                return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
+        elif request.is_secure():
+            redirect_url = request.build_absolute_uri()
+            return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
 
     def process_response(self, request, response):
         """ Keep protocol """
-        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED:
-            if response.status_code == 302:
-                redirect_url = request.build_absolute_uri(response['Location'])
-                if request.is_secure() or settings.ANAF_SUBSCRIPTION_SSL_ENFORCE:
-                    response['Location'] = redirect_url.replace(
-                        'http://', 'https://')
+        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED and response.status_code == 302:
+            redirect_url = request.build_absolute_uri(response['Location'])
+            if request.is_secure() or settings.ANAF_SUBSCRIPTION_SSL_ENFORCE:
+                response['Location'] = redirect_url.replace('http://', 'https://')
         return response
 
 
