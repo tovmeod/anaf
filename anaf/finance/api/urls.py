@@ -5,7 +5,7 @@ from anaf.core.api.auth import auth_engine
 from anaf.core.api.doc import documentation_view
 from anaf.core.api.resource import CsrfExemptResource
 
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 
 ad = {'authentication': auth_engine}
 

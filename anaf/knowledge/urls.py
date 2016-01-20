@@ -1,7 +1,7 @@
 """
 Knowledge base module URLs
 """
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 
 urlpatterns = patterns('anaf.knowledge.views',
                        url(r'^(\.(?P<response_format>\w+))?$',

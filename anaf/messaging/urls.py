@@ -1,7 +1,7 @@
 """
 Messaging module URLs
 """
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 
 urlpatterns = patterns('anaf.messaging.views',
                        url(r'^(\.(?P<response_format>\w+))?$',
