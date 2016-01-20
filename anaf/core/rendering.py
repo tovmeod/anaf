@@ -154,21 +154,20 @@ def render_to_response(template_name, context=None, context_instance=None, respo
         rendered_string = render_to_string(
             template_name, context, context_instance, response_format)
 
-        f = codecs.open(source, encoding='utf-8', mode='w')
-        pdf_string = unicode(rendered_string)
+        with codecs.open(source, encoding='utf-8', mode='w') as f:
+            pdf_string = unicode(rendered_string)
 
-        if context_instance and context_instance['request']:
-            pdf_string = pdf_string.replace(
-                "a href=\"/", "a href=\"http://" + RequestSite(context_instance['request']).domain + "/")
+            if context_instance and context_instance['request']:
+                pdf_string = pdf_string.replace(
+                    "a href=\"/", "a href=\"http://" + RequestSite(context_instance['request']).domain + "/")
 
-        pdf_string.replace("href=\"/", "href=\"")
+            pdf_string.replace("href=\"/", "href=\"")
 
-        pattern = """Content-Type: text/html|<td>\n\W*<div class="content-list-tick">\n\W.*\n.*</div></td>|<th scope="col">Select</th>"""
-        pdf_string = re.sub(pattern, "", pdf_string).replace(
-            '/static/', 'static/')
+            pattern = """Content-Type: text/html|<td>\n\W*<div class="content-list-tick">\n\W.*\n.*</div></td>|<th scope="col">Select</th>"""
+            pdf_string = re.sub(pattern, "", pdf_string).replace(
+                '/static/', 'static/')
 
-        f.write(pdf_string)
-        f.close()
+            f.write(pdf_string)
 
         wkpath = getattr(settings, 'WKPATH', './bin/wkhtmltopdf-i386')
         x = subprocess.Popen("%s --print-media-type --orientation %s --page-size %s %s %s" %
@@ -181,9 +180,8 @@ def render_to_response(template_name, context=None, context_instance=None, respo
                              cwd=getattr(settings, 'WKCWD', './'))
         x.wait()
 
-        f = open(output)
-        response = HttpResponse(f.read(), content_type='application/pdf')
-        f.close()
+        with open(output) as f:
+            response = HttpResponse(f.read(), content_type='application/pdf')
 
         os.remove(output)
         os.remove(source)

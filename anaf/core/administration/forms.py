@@ -140,10 +140,9 @@ class SettingsForm(forms.Form):
             filepath = self._get_upload_name(file.name)
         except KeyError:
             return ''
-        destination = open(settings.MEDIA_ROOT + filepath, 'wb+')
-        for chunk in file.chunks():
-            destination.write(chunk)
-        destination.close()
+        with open(settings.MEDIA_ROOT + filepath, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
         return filepath
 
     def save(self):
