@@ -21,22 +21,22 @@ def format_error(error):
         (get_version(), django_version(), error)
 
 
-class rc_factory(object):
+class RCFactory(object):
 
     """
     Status codes.
     """
     CODES = dict(ALL_OK=('OK', 200),
-                 CREATED = ('Created', 201),
-                 DELETED = ('', 204),  # 204 says "Don't send a body!"
-                 BAD_REQUEST = ('Bad Request', 400),
-                 FORBIDDEN = ('Forbidden', 401),
-                 NOT_FOUND = ('Not Found', 404),
-                 DUPLICATE_ENTRY = ('Conflict/Duplicate', 409),
-                 NOT_HERE = ('Gone', 410),
-                 INTERNAL_ERROR = ('Internal Error', 500),
-                 NOT_IMPLEMENTED = ('Not Implemented', 501),
-                 THROTTLED = ('Throttled', 503))
+                 CREATED=('Created', 201),
+                 DELETED=('', 204),  # 204 says "Don't send a body!"
+                 BAD_REQUEST=('Bad Request', 400),
+                 FORBIDDEN=('Forbidden', 401),
+                 NOT_FOUND=('Not Found', 404),
+                 DUPLICATE_ENTRY=('Conflict/Duplicate', 409),
+                 NOT_HERE=('Gone', 410),
+                 INTERNAL_ERROR=('Internal Error', 500),
+                 NOT_IMPLEMENTED=('Not Implemented', 501),
+                 THROTTLED=('Throttled', 503))
 
     def __getattr__(self, attr):
         """
@@ -51,7 +51,7 @@ class rc_factory(object):
 
         return HttpResponse(r, content_type='text/plain', status=c)
 
-rc = rc_factory()
+rc = RCFactory()
 
 
 class FormValidationError(Exception):

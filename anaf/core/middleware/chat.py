@@ -461,7 +461,7 @@ def cmd(message, user):
                         content_type='application/json', status=200)
 
 
-class Search_Inactive_Users(threading.Thread):
+class SearchInactiveUsers(threading.Thread):
 
     """
     Delete inactive users
@@ -488,7 +488,7 @@ class ChatAjaxMiddleware(object):
 
     def __init__(self, *args, **kwargs):
         if not settings.ANAF_CRON_DISABLED:
-            Search_Inactive_Users().start()
+            SearchInactiveUsers().start()
         # noinspection PyArgumentList
         super(ChatAjaxMiddleware, self).__init__(*args, **kwargs)
 
