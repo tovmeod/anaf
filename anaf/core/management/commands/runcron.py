@@ -178,7 +178,7 @@ class CronRunner():
                                 cronlogger.debug(
                                     'HIGH PRIORITY set to ' + unicode(cron))
                         cron.start()
-                if len(self.queue) == 0:
+                if self.queue:
                     cronlogger.info(
                         'Cron cycle ' + unicode(self.cycle) + ' completed.')
                     self.cycle += 1

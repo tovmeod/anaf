@@ -161,7 +161,7 @@ class PasswordResetForm(forms.Form):
             users = [email.contact.related_user.user for email in emails]
         else:
             users = User.objects.filter(user__username=username)
-        if len(users) == 0:
+        if users:
             raise forms.ValidationError(
                 _("Sorry, we don't know that user or e-mail."))
         else:
