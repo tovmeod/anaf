@@ -50,8 +50,9 @@ def MobileDetectionFactory(uas, expected):
     MobileDetection.uas = uas
     MobileDetection.expected = expected
     suite = TestSuite()
-    for x in range(len(uas)):
-        if not uas[x].startswith('#'):
+    # for x in range(len(uas)):
+    for x, ua in enumerate(uas):
+        if not ua.startswith('#'):
             setattr(MobileDetection, 'test%s' % x, testnum(x))
             suite.addTest(MobileDetection('test%s' % x))
     return suite
