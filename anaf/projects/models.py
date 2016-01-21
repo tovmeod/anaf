@@ -165,23 +165,20 @@ class Task(Object):
                 # Project changed, check milestone is within selected Project
                 if self.milestone_id and self.milestone.project_id != self.project_id:
                     self.milestone = None
-            elif self.milestone_id and self.milestone_id != original.milestone_id:
+            elif self.milestone_id and self.milestone_id != original.milestone_id and \
+                    self.milestone.project_id != self.project_id:
                 # Milestone changed, check if it belongs to the selected
-                # Project
-                if self.milestone.project_id != self.project_id:
-                    self.project_id = self.milestone.project_id
+                self.project_id = self.milestone.project_id
 
-            if self.status_id != original.status_id:
-                # Changed status
-                if self.status.hidden:
-                    # Changed to a 'hidden' status, perform same for subtasks
-                    for task in self.child_set.exclude(status=self.status):
-                        task.status_id = self.status_id
-                        task.save()
-                    # Close any open timeslots
-                    for slot in self.tasktimeslot_set.filter(time_to__isnull=True):
-                        slot.time_to = datetime.now()
-                        slot.save()
+            if self.status_id != original.status_id and self.status.hidden:
+                # Changed to a 'hidden' status, perform same for subtasks
+                for task in self.child_set.exclude(status=self.status):
+                    task.status_id = self.status_id
+                    task.save()
+                # Close any open timeslots
+                for slot in self.tasktimeslot_set.filter(time_to__isnull=True):
+                    slot.time_to = datetime.now()
+                    slot.save()
 
         else:
             # New task

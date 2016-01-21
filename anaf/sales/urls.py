@@ -1,7 +1,7 @@
 """
 Sales module URLs
 """
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 
 urlpatterns = patterns('anaf.sales.views',
                        url(r'^(\.(?P<response_format>\w+))?$', 'index', name='sales'),

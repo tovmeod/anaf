@@ -39,14 +39,13 @@ class MassActionForm(forms.Form):
     def save(self, *args, **kwargs):
         "Process form"
 
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['delete']:
-                    if self.cleaned_data['delete'] == 'delete':
-                        self.instance.delete()
-                    if self.cleaned_data['delete'] == 'trash':
-                        self.instance.trash = True
-                        self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['delete']:
+                if self.cleaned_data['delete'] == 'delete':
+                    self.instance.delete()
+                elif self.cleaned_data['delete'] == 'trash':
+                    self.instance.trash = True
+                    self.instance.save()
 
 
 class ContactFieldForm(forms.ModelForm):
@@ -193,10 +192,9 @@ class ContactForm(forms.Form):
             filepath = self._get_upload_name(file.name)
         except KeyError:
             return ''
-        destination = open(settings.MEDIA_ROOT + filepath, 'wb+')
-        for chunk in file.chunks():
-            destination.write(chunk)
-        destination.close()
+        with open(settings.MEDIA_ROOT + filepath, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
         return settings.MEDIA_URL + filepath
 
     def _image_resize(self, filepath):
@@ -305,14 +303,11 @@ class ContactForm(forms.Form):
                         if isinstance(self.fields[form_name], forms.ImageField):
                             self._image_resize(value.value)
                     else:
-                        if field.field_type == 'picture' and isinstance(self.fields[form_name],
-                                                                        forms.ChoiceField):
-                            if self.cleaned_data[form_name] != 'delete':
-                                value = ContactValue(field=field, contact=contact,
-                                                     value=self.cleaned_data[form_name])
+                        if field.field_type == 'picture' and isinstance(self.fields[form_name], forms.ChoiceField) and \
+                                        self.cleaned_data[form_name] != 'delete':
+                            value = ContactValue(field=field, contact=contact, value=self.cleaned_data[form_name])
                         else:
-                            value = ContactValue(field=field, contact=contact,
-                                                 value=self.cleaned_data[form_name])
+                            value = ContactValue(field=field, contact=contact, value=self.cleaned_data[form_name])
                     value.save()
         return contact
 

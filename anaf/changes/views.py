@@ -371,9 +371,8 @@ def settings_view(request, response_format='html'):
         default_changeset_status = None
 
     # check not trashed
-    if default_changeset_status:
-        if default_changeset_status.trash:
-            default_changeset_status = None
+    if default_changeset_status and default_changeset_status.trash:
+        default_changeset_status = None
 
     settings_statuses = ChangeSetStatus.objects.filter(trash=False)
 

@@ -30,8 +30,9 @@ class Matrix2D(list):
     def __init__(self, initial=None):
         if initial is None:
             initial = [0.] * 9
-        assert isinstance(initial, list) and len(initial) == 9
-        list.__init__(self, initial)
+        assert isinstance(initial, list)
+        assert len(initial) == 9
+        super(Matrix2D, self).__init__(initial)
 
     def clear(self):
         for i in xrange(9):
@@ -58,18 +59,18 @@ class Matrix2D(list):
             raise NotImplementedError
         return Matrix2D(r)
 
-    def for_PIL(self):
+    def for_pil(self):
         return self[0:6]
 
     @classmethod
-    def translate(kls, x, y):
-        return kls([1.0, 0.0, float(x),
+    def translate(cls, x, y):
+        return cls([1.0, 0.0, float(x),
                     0.0, 1.0, float(y),
                     0.0, 0.0, 1.0])
 
     @classmethod
-    def scale(kls, x, y):
-        return kls([float(x), 0.0, 0.0,
+    def scale(cls, x, y):
+        return cls([float(x), 0.0, 0.0,
                     0.0, float(y), 0.0,
                     0.0, 0.0, 1.0])
 
@@ -87,15 +88,15 @@ class Matrix2D(list):
     """
 
     @classmethod
-    def rotateSquare(kls, theta, pivot=None):
-        theta = theta % 4
+    def rotateSquare(cls, theta, pivot=None):
+        theta %= 4
         c = [1., 0., -1., 0.][theta]
         s = [0., 1., 0., -1.][theta]
 
-        matR = kls([c, -s, 0., s, c, 0., 0., 0., 1.])
+        mat_r = cls([c, -s, 0., s, c, 0., 0., 0., 1.])
         if not pivot:
-            return matR
-        return kls.translate(-pivot[0], -pivot[1]) * matR * kls.translate(*pivot)
+            return mat_r
+        return cls.translate(-pivot[0], -pivot[1]) * mat_r * cls.translate(*pivot)
 
 
 class IdenticonRendererBase(object):
@@ -167,7 +168,7 @@ class IdenticonRendererBase(object):
               Matrix2D.translate(*pos) * \
               Matrix2D.scale(size, size)
 
-        patch.transform(mat.for_PIL())
+        patch.transform(mat.for_pil())
         draw.rectangle(
             (pos[0] * size, pos[1] * size, (pos[0] + 1) * size, (pos[1] + 1) * size), fill=backColor)
         draw.polygon(patch, fill=foreColor, outline=foreColor)
@@ -245,13 +246,13 @@ if __name__ == '__main__':
         print 'usage: python identicon.py [CODE]....'
         raise SystemExit
 
-    for code in sys.argv[1:]:
-        if code.startswith('0x') or code.startswith('0X'):
-            code = int(code[2:], 16)
-        elif code.startswith('0'):
-            code = int(code[1:], 8)
+    for _code in sys.argv[1:]:
+        if _code.startswith('0x') or _code.startswith('0X'):
+            _code = int(_code[2:], 16)
+        elif _code.startswith('0'):
+            _code = int(_code[1:], 8)
         else:
-            code = int(code)
+            _code = int(_code)
 
-        icon = render_identicon(code, 24)
-        icon.save('%08x.png' % code, 'PNG')
+        icon = render_identicon(_code, 24)
+        icon.save('%08x.png' % _code, 'PNG')

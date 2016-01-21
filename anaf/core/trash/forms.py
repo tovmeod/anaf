@@ -25,12 +25,11 @@ class MassActionForm(forms.Form):
 
     def save(self):
         "Process form"
-        if self.instance and self.is_valid():
-            if self.cleaned_data['action']:
-                if self.cleaned_data['action'] == 'delete':
-                    self.instance.delete()
-                elif self.cleaned_data['action'] == 'untrash':
-                    self.instance.trash = False
-                    self.instance.save()
+        if self.instance and self.is_valid() and self.cleaned_data['action']:
+            if self.cleaned_data['action'] == 'delete':
+                self.instance.delete()
+            elif self.cleaned_data['action'] == 'untrash':
+                self.instance.trash = False
+                self.instance.save()
         if self.instance and self.cleaned_data['action'] == 'delete_all' and self.is_valid:
             self.instance.delete()

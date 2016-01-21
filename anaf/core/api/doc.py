@@ -156,12 +156,10 @@ class HandlerDocumentation(object):
             met = getattr(self.handler, CsrfExemptResource.callmap.get(method))
             stale = inspect.getmodule(met) is handler
 
-            if not self.handler.is_anonymous:
-                if met and (not stale or include_default):
+            if not self.handler.is_anonymous and met and (not stale or include_default):
                     yield HandlerMethod(met, stale)
             else:
-                if not stale or met.__name__ == "read" \
-                        and 'GET' in self.allowed_methods:
+                if not stale or met.__name__ == "read" and 'GET' in self.allowed_methods:
                     yield HandlerMethod(met, stale)
 
     def get_all_methods(self):

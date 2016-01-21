@@ -54,9 +54,9 @@ def mylogin_required(f):
         else:
             if request.path[:3] == '/m/':
                 return HttpResponseRedirect('/m/accounts/login')
-            if 'response_format' in kwargs and kwargs['response_format'] == 'rss':
-                if 'secret' in request.GET and verify_secret_key(request):
-                    return f(request, *args, **kwargs)
+            if 'response_format' in kwargs and kwargs['response_format'] == 'rss' and 'secret' in request.GET and \
+                    verify_secret_key(request):
+                return f(request, *args, **kwargs)
             return HttpResponseRedirect('/accounts/login')
 
     wrap.__doc__ = f.__doc__

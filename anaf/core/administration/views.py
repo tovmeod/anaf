@@ -106,10 +106,10 @@ def perspective_edit(request, perspective_id, response_format='html'):
             if form.is_valid():
                 perspective = form.save()
                 modules = perspective.modules.all()
-                if modules and admin_module not in modules:
-                    if not other_perspectives.filter(Q(modules=admin_module) | Q(modules__isnull=True)):
-                        perspective.modules.add(admin_module)
-                        request.session['message'] = _(
+                if modules and admin_module not in modules and\
+                        not other_perspectives.filter(Q(modules=admin_module) | Q(modules__isnull=True)):
+                    perspective.modules.add(admin_module)
+                    request.session['message'] = _(
                             "This is your only Perspective with Administration module. You would be locked out!")
                 return HttpResponseRedirect(reverse('core_admin_perspective_view', args=[perspective.id]))
         else:
@@ -433,7 +433,7 @@ def user_invite(request, emails=None, response_format='html'):
         for email in emails:
             email = email.strip()
             if len(email) > 7 and re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is not None:
-                if user_limit > 0 and user_number >= user_limit:
+                if 0 < user_limit <= user_number:
                     break
                 invitation = Invitation(
                     sender=request.user.profile, email=email, default_group=default_group)

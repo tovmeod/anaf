@@ -29,10 +29,9 @@ def _get_filter_query(model, args):
     query = Q()
 
     for arg in args:
-        if args[arg]:
-            if hasattr(model, arg):
-                kwargs = {str(arg + '__id'): long(args[arg])}
-                query = query & Q(**kwargs)
+        if args[arg] and hasattr(model, arg):
+            kwargs = {str(arg + '__id'): long(args[arg])}
+            query = query & Q(**kwargs)
 
     if 'datefrom' in args and args['datefrom']:
         datefrom = datetime.date(
@@ -1162,12 +1161,10 @@ def settings_view(request, response_format='html'):
         default_account = None
 
     # check not trashed
-    if my_company:
-        if my_company.trash:
-            my_company = None
-    if default_account:
-        if default_account.trash:
-            default_account = None
+    if my_company and my_company.trash:
+        my_company = None
+    if default_account and default_account.trash:
+        default_account = None
 
     categories = Object.filter_by_request(
         request, Category.objects.filter(trash=False))
@@ -1182,14 +1179,13 @@ def settings_view(request, response_format='html'):
         export = ProcessTransactions()
         return export.export_transactions(transactions)
 
-    if request.POST:
-        if 'file' in request.FILES:
-            csv_file = request.FILES['file']
+    if request.POST and 'file' in request.FILES:
+        csv_file = request.FILES['file']
 
-            # TODO: check file extension
-            content = csv_file.read()
-            Import = ProcessTransactions()
-            Import.import_transactions(content)
+        # TODO: check file extension
+        content = csv_file.read()
+        Import = ProcessTransactions()
+        Import.import_transactions(content)
 
     return render_to_response('finance/settings_view',
                               {

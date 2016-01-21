@@ -760,8 +760,8 @@ def number_format(context, value):
     # Ensure we don't get lots of zero's after '.'
     # Cut trailing zeros and only leave two
     while point < len(value) - 3:
-        if value[len(value) - 1] == '0':
-            value = value[:len(value) - 1]
+        if value[-1] == '0':
+            value = value[:-1]
         else:
             break
 

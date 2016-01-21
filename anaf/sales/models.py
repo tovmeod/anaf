@@ -453,10 +453,9 @@ class Subscription(Object):
         """
         if not self.active:
             return 'Inactive'
-        if self.expiry:
-            if datetime.now() > datetime.combine(self.expiry, time.min):
-                self.deactivate()
-                return 'Expired'
+        if self.expiry and datetime.now() > datetime.combine(self.expiry, time.min):
+            self.deactivate()
+            return 'Expired'
 
         if not self.cycle_end:
             self.renew()
@@ -468,7 +467,7 @@ class Subscription(Object):
             cycle_start = self.get_cycle_start()
             # if we haven't already invoiced them, invoice them
             grace = 3
-            if (datetime.now().date() - cycle_end > timedelta(days=grace)):
+            if datetime.now().date() - cycle_end > timedelta(days=grace):
                 # Subscription has overrun and must be shut down
                 return self.deactivate()
 

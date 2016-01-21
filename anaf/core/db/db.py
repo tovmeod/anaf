@@ -47,9 +47,8 @@ class DatabaseDict(UserDict.DictMixin, dict):
         self._ensure_defaults()
 
     def _save_databases(self):
-        f = open(DB_SETTINGS_FILE, 'w')
-        json.dump(self.store, f)
-        f.close()
+        with open(DB_SETTINGS_FILE, 'w') as f:
+            json.dump(self.store, f)
 
     def __getitem__(self, key):
         try:

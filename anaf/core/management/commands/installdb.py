@@ -68,7 +68,7 @@ class Command(BaseCommand):
 
         answer = raw_input(
             'Would you like to create the tables (say no to use an existing database) [y/n] (defaults to yes): ')
-        if not len(answer):
+        if not answer:
             answer = True
         else:
             answer = strtobool(answer)

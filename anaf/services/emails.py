@@ -61,26 +61,23 @@ class EmailMessage(Thread):
             reply_author = self.get_reply_message_author_email()
 
             # if there is no related user and email for message.author
-            if not user and original_author:
+            if not user and original_author and message.stream.outgoing_server_username and reply_author and \
+                    message.reply_to.author != message.author:
+                # don't send email to yourself
 
-                if message.stream.outgoing_server_username and reply_author:
+                fromaddr = "%s" % original_author
+                toaddr = "%s" % reply_author
 
-                    # don't send email to yourself
-                    if message.reply_to.author != message.author:
+                login = message.stream.outgoing_server_username
+                password = message.stream.outgoing_password
 
-                        fromaddr = "%s" % original_author
-                        toaddr = "%s" % reply_author
+                body = self.ticket_record.details + '\r\n\r\n'
+                body += _('Your message is received and a ticket is created, ticket reference is [%s]') % (
+                    self.ticket_record.ticket.reference)
 
-                        login = message.stream.outgoing_server_username
-                        password = message.stream.outgoing_password
+                subject = "[%s] %s\r\n\r\n" % (
+                    self.ticket_record.ticket.reference, self.ticket_record.ticket.message.title)
 
-                        body = self.ticket_record.details + '\r\n\r\n'
-                        body += _('Your message is received and a ticket is created, ticket reference is [%s]') % (
-                            self.ticket_record.ticket.reference)
-
-                        subject = "[%s] %s\r\n\r\n" % (
-                            self.ticket_record.ticket.reference, self.ticket_record.ticket.message.title)
-
-                        BaseEmail(message.stream.outgoing_server_name,
-                                  login, password, fromaddr, toaddr, subject,
-                                  body).process_email()
+                BaseEmail(message.stream.outgoing_server_name,
+                          login, password, fromaddr, toaddr, subject,
+                          body).process_email()

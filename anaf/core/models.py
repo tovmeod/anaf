@@ -274,9 +274,8 @@ class User(AccessEntity):
         if obj.full_access.filter(query).exists():
             return True
 
-        if mode == 'r' or mode == 'x':
-            if obj.read_access.filter(query).exists():
-                return True
+        if mode in ('r', 'x') and obj.read_access.filter(query).exists():
+            return True
 
         if not obj.full_access.exists():
             # if no one can have full access, then allow everyone
@@ -401,6 +400,9 @@ class Invitation(models.Model):
             hasher.update(str(random.random()) + str(self.email))
             self.key = hasher.hexdigest()
 
+    def __unicode__(self):
+        return 'Invitation to {}'.format(self.email)
+
 
 class Tag(models.Model):
     """Model for Global Tagging"""
@@ -473,7 +475,7 @@ class Object(models.Model):
             query = query | models.Q(full_access=user.default_group) | models.Q(
                 full_access__in=user.other_groups.all())
 
-            if mode == 'r' or mode == 'x':
+            if mode in ('r', 'x'):
                 query = query | models.Q(read_access=user)
                 query = query | models.Q(read_access=user.default_group) | models.Q(
                     read_access__in=user.other_groups.all())
@@ -722,7 +724,7 @@ class Object(models.Model):
                         [self.get_human_type(translate=False), updated_text])
                     notification.save()
                     for obj in kwargs['updated']:
-                        if isinstance(obj, AccessEntity) or isinstance(obj, User):
+                        if isinstance(obj, (AccessEntity, User)):
                             notification.recipients.add(obj)
                             self.subscribers.add(obj)
                             try:
@@ -923,7 +925,7 @@ class Object(models.Model):
         # process assigned fields to give auto-permissions to assignees
         if hasattr(self, 'assigned'):
             for obj in self.assigned.all():
-                if isinstance(obj, AccessEntity) or isinstance(obj, User):
+                if isinstance(obj, (AccessEntity, User)):
                     try:
                         if not obj.has_permission(self, mode='w'):
                             self.full_access.add(obj)
@@ -999,7 +1001,7 @@ class Object(models.Model):
 
     def set_field_value(self, field_name, value):
         """Sets the value of a given field"""
-        return setattr(self, field_name)
+        return setattr(self, field_name, value)
 
     def set_last_updated(self, last_updated=timezone.now()):
         self.last_updated = last_updated
@@ -1007,11 +1009,13 @@ class Object(models.Model):
 
 
 class Revision(models.Model):
-    previous = models.OneToOneField(
-        'self', blank=True, null=True, related_name='next')
+    previous = models.OneToOneField('self', blank=True, null=True, related_name='next')
     object = models.ForeignKey(Object)
     change_type = models.CharField(max_length=512, null=True, blank=True)
     date_created = models.DateTimeField(default=timezone.now)
+
+    def __unicode__(self):
+        return 'Revision to object {}'.format(self.object)
 
 
 class RevisionField(models.Model):
@@ -1027,6 +1031,9 @@ class RevisionField(models.Model):
         AccessEntity, null=True, blank=True, related_name='revisionfield_key_acc', on_delete=models.SET_NULL)
     value_m2m_acc = models.ManyToManyField(
         AccessEntity, related_name='revisionfield_m2m_acc')
+
+    def __unicode__(self):
+        return 'Revision Field {}'.format(self.value)
 
 
 class UpdateRecord(models.Model):
@@ -1136,7 +1143,7 @@ class UpdateRecord(models.Model):
         if self.body:
             result += '<p>' + self.body + '</p>'
         if result.endswith('<br />'):
-            result = result[:len(result) - 6]
+            result = result[:-6]
         return result
     full_message = property(get_full_message)
 

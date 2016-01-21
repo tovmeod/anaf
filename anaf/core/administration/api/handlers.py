@@ -163,10 +163,10 @@ class PerspectiveHandler(ObjectHandler):
             other_perspectives = Perspective.objects.filter(
                 trash=False).exclude(id=perspective.id)
             modules = perspective.modules.all()
-            if modules and admin_module not in modules:
-                if not other_perspectives.filter(Q(modules=admin_module) | Q(modules__isnull=True)):
-                    perspective.modules.add(admin_module)
-                    request.session['message'] = _(
+            if modules and admin_module not in modules and \
+                    not other_perspectives.filter(Q(modules=admin_module) | Q(modules__isnull=True)):
+                perspective.modules.add(admin_module)
+                request.session['message'] = _(
                         "This is your only Perspective with Administration module. You would be locked out!")
             return obj
         else:

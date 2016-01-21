@@ -178,7 +178,7 @@ class HTMLSanitizerMixin(object):
                                   token["data"][::-1]
                                   if name in self.allowed_attributes])
                     for attr in self.attr_val_is_uri:
-                        if not attrs.has_key(attr):
+                        if attr not in attrs:
                             continue
                         val_unescaped = re.sub("[`\000-\040\177-\240\s]+", '',
                                                unescape(attrs[attr])).lower()

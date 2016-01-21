@@ -43,7 +43,7 @@ class MultiHiddenWidget(MultiWidget):
             value = self.decompress(value)
         output = [u'<span id="%s_%s">' % (u'multi', name)]
         final_attrs = self.build_attrs(attrs)
-        id_ = final_attrs.get('id', None)
+        id_ = final_attrs.get('id')
         for i, widget in enumerate(self.widgets):
             try:
                 widget_value = value[i]

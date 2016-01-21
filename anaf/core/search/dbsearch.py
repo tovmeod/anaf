@@ -6,10 +6,10 @@ params = []
 for model in get_models():
     if issubclass(model, Object) and getattr(model, 'searcheable', True):
         for field in model._meta.fields:
-            if isinstance(field, CharField) or isinstance(field, TextField):
-                if 'password' not in field.name and 'object_name' not in field.name and 'object_type' not in field.name \
-                        and 'nuvius' not in field.name:
-                    params.append('%s__%s' % (model._meta.module_name, field.name))
+            if isinstance(field, (CharField, TextField)) and 'password' not in field.name and \
+                            'object_name' not in field.name and 'object_type' not in field.name \
+                    and 'nuvius' not in field.name:
+                params.append('%s__%s' % (model._meta.module_name, field.name))
 
 
 def search(term):

@@ -207,10 +207,9 @@ def ajax_popup(request, popup_id='', url='/'):
             pass
 
     response = None
-    if active:
-        if not request.user.profile.has_permission(active):
-            response = user_denied(request, "You do not have access to the %s module" % unicode(active),
-                                   response_format='ajax')
+    if active and not request.user.profile.has_permission(active):
+        response = user_denied(request, "You do not have access to the %s module" % unicode(active),
+                               response_format='ajax')
 
     if not response:
         if view == ajax_popup:
@@ -425,8 +424,8 @@ def invitation_retrieve(request, response_format='html'):
     if request.user.username:
         return HttpResponseRedirect('/')
 
-    email = request.REQUEST.get('email', None)
-    key = request.REQUEST.get('key', None)
+    email = request.REQUEST.get('email')
+    key = request.REQUEST.get('key')
     if email and key:
         try:
             invitation = Invitation.objects.get(email=email, key=key)

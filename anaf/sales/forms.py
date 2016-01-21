@@ -355,19 +355,18 @@ class MassActionForm(forms.Form):
     def save(self, *args, **kwargs):
         "Process form"
 
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['status']:
-                    self.instance.status = self.cleaned_data['status']
-                if self.cleaned_data['assignedto']:
-                    self.instance.assigned.add(self.cleaned_data['assignedto'])
-                self.instance.save()
-                if self.cleaned_data['delete']:
-                    if self.cleaned_data['delete'] == 'delete':
-                        self.instance.delete()
-                    if self.cleaned_data['delete'] == 'trash':
-                        self.instance.trash = True
-                        self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['status']:
+                self.instance.status = self.cleaned_data['status']
+            if self.cleaned_data['assignedto']:
+                self.instance.assigned.add(self.cleaned_data['assignedto'])
+            self.instance.save()
+            if self.cleaned_data['delete']:
+                if self.cleaned_data['delete'] == 'delete':
+                    self.instance.delete()
+                if self.cleaned_data['delete'] == 'trash':
+                    self.instance.trash = True
+                    self.instance.save()
 
 
 class LeadMassActionForm(forms.Form):
@@ -400,13 +399,12 @@ class LeadMassActionForm(forms.Form):
     def save(self, *args, **kwargs):
         "Process form"
 
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['status']:
-                    self.instance.status = self.cleaned_data['status']
-                if self.cleaned_data['assignedto']:
-                    self.instance.assigned.add(self.cleaned_data['assignedto'])
-                self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['status']:
+                self.instance.status = self.cleaned_data['status']
+            if self.cleaned_data['assignedto']:
+                self.instance.assigned.add(self.cleaned_data['assignedto'])
+            self.instance.save()
 
 
 class OpportunityMassActionForm(forms.Form):
@@ -439,13 +437,12 @@ class OpportunityMassActionForm(forms.Form):
     def save(self, *args, **kwargs):
         "Process form"
 
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['status']:
-                    self.instance.status = self.cleaned_data['status']
-                if self.cleaned_data['assignedto']:
-                    self.instance.assigned.add(self.cleaned_data['assignedto'])
-                self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['status']:
+                self.instance.status = self.cleaned_data['status']
+            if self.cleaned_data['assignedto']:
+                self.instance.assigned.add(self.cleaned_data['assignedto'])
+            self.instance.save()
 
 
 class ProductMassActionForm(forms.Form):
@@ -469,13 +466,12 @@ class ProductMassActionForm(forms.Form):
 
     def save(self, *args, **kwargs):
         "Process form"
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['active'] == 'active':
-                    self.instance.active = True
-                if self.cleaned_data['active'] == 'inactive':
-                    self.instance.active = False
-                self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['active'] == 'active':
+                self.instance.active = True
+            if self.cleaned_data['active'] == 'inactive':
+                self.instance.active = False
+            self.instance.save()
 
 
 class SaleStatusForm(forms.ModelForm):

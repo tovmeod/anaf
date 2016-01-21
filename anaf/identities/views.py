@@ -378,14 +378,12 @@ def contact_view(request, contact_id, attribute='', response_format='html'):
 
     module = None
     for key in objects:
-        if not attribute:
-            if objects[key]['count']:
-                # attribute = objects[key]['objects'].keys()[0]
-                module = objects[key]['module']
-        else:
-            if attribute in objects[key]['objects'].keys():
-                module = objects[key]['module']
-                break
+        if not attribute and objects[key]['count']:
+            # attribute = objects[key]['objects'].keys()[0]
+            module = objects[key]['module']
+        elif attribute in objects[key]['objects'].keys():
+            module = objects[key]['module']
+            break
 
     return render_to_response('identities/contact_view',
                               {'contact': contact,
@@ -421,14 +419,12 @@ def contact_me(request, attribute='', response_format='html'):
 
     module = None
     for key in objects:
-        if not attribute:
-            if objects[key]['count']:
-                # attribute = objects[key]['objects'].keys()[0]
-                module = objects[key]['module']
-        else:
-            if attribute in objects[key]['objects'].keys():
-                module = objects[key]['module']
-                break
+        if not attribute and objects[key]['count']:
+            # attribute = objects[key]['objects'].keys()[0]
+            module = objects[key]['module']
+        elif attribute in objects[key]['objects'].keys():
+            module = objects[key]['module']
+            break
 
     return render_to_response('identities/contact_me',
                               {'contact': contact,
@@ -711,16 +707,15 @@ def settings_view(request, response_format='html'):
                     'contact_fields': contact_fields,
                     'contacts': contacts})
 
-    if request.POST:
-        if 'file' in request.FILES:
-            csv_file = request.FILES['file']
+    if request.POST and 'file' in request.FILES:
+        csv_file = request.FILES['file']
 
-            # TODO: check file extension
-            content = csv_file.read()
-            import_c = ProcessContacts()
-            import_c.import_contacts(content)
+        # TODO: check file extension
+        content = csv_file.read()
+        import_c = ProcessContacts()
+        import_c.import_contacts(content)
 
-            return HttpResponseRedirect(reverse('identities_index'))
+        return HttpResponseRedirect(reverse('identities_index'))
 
     return render_to_response('identities/settings_view', context,
                               context_instance=RequestContext(request), response_format=response_format)

@@ -96,9 +96,8 @@ def verify_secret_key(request):
 
 def get_secret_key(request, profile=None):
     "Generates secret key for a request in RSS format"
-    if not profile:
-        if request.user.username:
-            profile = request.user.profile
+    if not profile and request.user.username:
+        profile = request.user.profile
     if profile:
         params = request.GET.copy()
         if 'secret' in params:

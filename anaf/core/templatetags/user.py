@@ -33,7 +33,7 @@ def user_block(context):
     if settings.ANAF_SUBSCRIPTION_USER_LIMIT == 3:
         trial = True
 
-    active = context.get('active', None)
+    active = context.get('active')
 
     return Markup(render_to_string('core/tags/user_block',
                   {'user': user,

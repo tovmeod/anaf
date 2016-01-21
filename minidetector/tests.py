@@ -33,7 +33,7 @@ class TestHTTPHeaders(TestCase):
 def MobileDetectionFactory(uas, expected):
     class MobileDetection(TestCase):
 
-        def testUA(self, ua):
+        def test_ua(self, ua):
             request = DummyRequest(ua)
             minidetector.Middleware.process_request(request)
             if self.expected:
@@ -50,8 +50,8 @@ def MobileDetectionFactory(uas, expected):
     MobileDetection.uas = uas
     MobileDetection.expected = expected
     suite = TestSuite()
-    for x in range(len(uas)):
-        if not uas[x].startswith('#'):
+    for x, ua in enumerate(uas):
+        if not ua.startswith('#'):
             setattr(MobileDetection, 'test%s' % x, testnum(x))
             suite.addTest(MobileDetection('test%s' % x))
     return suite

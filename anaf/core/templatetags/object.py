@@ -27,40 +27,39 @@ def permission_block(context, object):
     if 'response_format_tags' in context:
         response_format_tags = context['response_format_tags']
 
-    if 'permission' in request.GET:
-        if request.user.profile.has_permission(object, mode='w'):
-            if request.POST:
-                if 'cancel' in request.POST:
-                    request.redirect = request.path
-                    return Markup(render_to_string('core/tags/permission_block',
-                                                   {'object': object,
-                                                       'path': request.path},
-                                                   context_instance=RequestContext(
-                                                       request),
-                                                   response_format=response_format))
-                form = PermissionForm(request.POST, instance=object)
-                if form.is_valid():
-                    form.save()
-                    request.redirect = request.path
-                    return Markup(render_to_string('core/tags/permission_block',
-                                                   {'object': object,
-                                                       'path': request.path},
-                                                   context_instance=RequestContext(
-                                                       request),
-                                                   response_format=response_format))
-            else:
-                form = PermissionForm(instance=object)
+    if 'permission' in request.GET and request.user.profile.has_permission(object, mode='w'):
+        if request.POST:
+            if 'cancel' in request.POST:
+                request.redirect = request.path
+                return Markup(render_to_string('core/tags/permission_block',
+                                               {'object': object,
+                                                   'path': request.path},
+                                               context_instance=RequestContext(
+                                                   request),
+                                               response_format=response_format))
+            form = PermissionForm(request.POST, instance=object)
+            if form.is_valid():
+                form.save()
+                request.redirect = request.path
+                return Markup(render_to_string('core/tags/permission_block',
+                                               {'object': object,
+                                                   'path': request.path},
+                                               context_instance=RequestContext(
+                                                   request),
+                                               response_format=response_format))
+        else:
+            form = PermissionForm(instance=object)
 
-            context = {'object': object, 'path': request.path, 'form': form}
+        context = {'object': object, 'path': request.path, 'form': form}
 
-            if 'ajax' in response_format_tags:
-                context = converter.preprocess_context(context)
+        if 'ajax' in response_format_tags:
+            context = converter.preprocess_context(context)
 
-            return Markup(render_to_string('core/tags/permission_block_edit',
-                                           context,
-                                           context_instance=RequestContext(
-                                               request),
-                                           response_format=response_format))
+        return Markup(render_to_string('core/tags/permission_block_edit',
+                                       context,
+                                       context_instance=RequestContext(
+                                           request),
+                                       response_format=response_format))
 
     return Markup(render_to_string('core/tags/permission_block',
                                    {'object': object, 'path': request.path},
@@ -128,14 +127,12 @@ def link_block(context, object):
 
         return Markup(rendered_string)
 
-    elif request.GET and 'link_delete' in request.GET:
-
-        if request.user.profile.has_permission(object, mode='w'):
-            try:
-                link = Object.objects.get(pk=request.GET['link_delete'])
-                object.links.remove(link)
-            except Exception:
-                pass
+    elif request.GET and 'link_delete' in request.GET and request.user.profile.has_permission(object, mode='w'):
+        try:
+            link = Object.objects.get(pk=request.GET['link_delete'])
+            object.links.remove(link)
+        except Exception:
+            pass
 
     links = Object.filter_by_request(context['request'], object.links)
 
@@ -207,11 +204,10 @@ def subscription_block(context, object):
                           context_instance=RequestContext(request),
                           response_format=response_format))
 
-    if 'subscribe' in request.GET:
-        if not subscribed:
-            object.subscribers.add(request.user.profile)
-            subscriptions = object.subscribers.all()
-            subscribed = True
+    if 'subscribe' in request.GET and not subscribed:
+        object.subscribers.add(request.user.profile)
+        subscriptions = object.subscribers.all()
+        subscribed = True
     elif 'unsubscribe' in request.GET and request.GET['unsubscribe']:
         user_id = int(request.GET['unsubscribe'])
         try:

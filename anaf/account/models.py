@@ -19,6 +19,9 @@ class Notification(models.Model):
     ntype = models.CharField(max_length=1, choices=notification_types)
     date_created = models.DateTimeField(default=datetime.now)
 
+    def __unicode__(self):
+        return 'Notification {}'.format(self.ntype)
+
 
 class NotificationSetting(models.Model):
     owner = models.ForeignKey(User, unique=True)

@@ -143,21 +143,20 @@ class MassActionForm(forms.Form):
 
     def save(self, *args, **kwargs):
         "Process form"
-        if self.instance:
-            if self.is_valid():
-                if self.cleaned_data['service']:
-                    self.instance.service = self.cleaned_data['service']
-                if self.cleaned_data['status']:
-                    self.instance.status = self.cleaned_data['status']
-                if self.cleaned_data['queue']:
-                    self.instance.queue = self.cleaned_data['queue']
-                self.instance.save()
-                if self.cleaned_data['delete']:
-                    if self.cleaned_data['delete'] == 'delete':
-                        self.instance.delete()
-                    if self.cleaned_data['delete'] == 'trash':
-                        self.instance.trash = True
-                        self.instance.save()
+        if self.instance and self.is_valid():
+            if self.cleaned_data['service']:
+                self.instance.service = self.cleaned_data['service']
+            if self.cleaned_data['status']:
+                self.instance.status = self.cleaned_data['status']
+            if self.cleaned_data['queue']:
+                self.instance.queue = self.cleaned_data['queue']
+            self.instance.save()
+            if self.cleaned_data['delete']:
+                if self.cleaned_data['delete'] == 'delete':
+                    self.instance.delete()
+                if self.cleaned_data['delete'] == 'trash':
+                    self.instance.trash = True
+                    self.instance.save()
 
 
 class TicketForm(forms.ModelForm):

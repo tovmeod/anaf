@@ -140,10 +140,9 @@ class SettingsForm(forms.Form):
             filepath = self._get_upload_name(file.name)
         except KeyError:
             return ''
-        destination = open(settings.MEDIA_ROOT + filepath, 'wb+')
-        for chunk in file.chunks():
-            destination.write(chunk)
-        destination.close()
+        with open(settings.MEDIA_ROOT + filepath, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
         return filepath
 
     def save(self):
@@ -169,16 +168,13 @@ class SettingsForm(forms.Form):
                     ModuleSetting.set_for_module(
                         'logopath', logopath, 'anaf.core')
 
-                elif isinstance(self.fields['logo'], forms.ChoiceField):
-                    if self.cleaned_data['logo'] == 'delete':
-                        try:
-                            ModuleSetting.get_for_module(
-                                'anaf.core', 'logopath').delete()
-                        except:
-                            pass
-
+                elif isinstance(self.fields['logo'], forms.ChoiceField) and self.cleaned_data['logo'] == 'delete':
+                    try:
+                        ModuleSetting.get_for_module(
+                            'anaf.core', 'logopath').delete()
+                    except:
+                        pass
             return True
-
         except:
             return False
 
