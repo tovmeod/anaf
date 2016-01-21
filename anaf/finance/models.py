@@ -36,9 +36,9 @@ class Currency(Object):
     def __unicode__(self):
         # return self.code
         if self.symbol:
-            return "%s    %s" % (self.symbol, self.name)
+            return "{0!s}    {1!s}".format(self.symbol, self.name)
         else:
-            return "%s  %s" % (self.code, self.name)
+            return "{0!s}  {1!s}".format(self.code, self.name)
 
     def save(self, **kwargs):
         try:

@@ -61,7 +61,7 @@ class DatabaseDict(UserDict.DictMixin, dict):
                 try:
                     if NO_DEFAULT:
                         raise DatabaseNotFound(
-                            'No database found for %s' % key)
+                            'No database found for {0!s}'.format(key))
                     return self.store['default']
                 except KeyError:
                     raise RuntimeError(

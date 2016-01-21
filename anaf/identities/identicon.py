@@ -44,7 +44,7 @@ class Matrix2D(list):
             self[i] = 1.
 
     def __str__(self):
-        return '[%s]' % ', '.join('%3.2f' % v for v in self)
+        return '[{0!s}]'.format(', '.join('{0:3.2f}'.format(v) for v in self))
 
     def __mul__(self, other):
         r = []
@@ -255,4 +255,4 @@ if __name__ == '__main__':
             _code = int(_code)
 
         icon = render_identicon(_code, 24)
-        icon.save('%08x.png' % _code, 'PNG')
+        icon.save('{0:08x}.png'.format(_code), 'PNG')

@@ -105,7 +105,7 @@ def display_chart(context, chart, skip_group=False):
         # chart_dict['xAxis']['gridLineWidth']= 1,
         chart_dict['series'] = [{'name': model.name.split('.')[-1], 'data': []}]
         for x in set(l):
-            chart_dict['series'][0]['data'].append(('%s UTC' % x, l.count(x)))
+            chart_dict['series'][0]['data'].append(('{0!s} UTC'.format(x), l.count(x)))
 
     else:
         l = [unicode(obj.get_field_value(field_name)) for obj in objs]
@@ -222,7 +222,7 @@ register.object(is_field_number)
 @contextfunction
 def select_for_aggregation(context, field_name, value):
     select_str = '<select type="select" name="aggregation-%(field_name)s"><option></option>%(options)s</select>'
-    options = ''.join(['<option value="%s"%s>%s</option>' % (name, ' selected' if value == name else '',
+    options = ''.join(['<option value="{0!s}"{1!s}>{2!s}</option>'.format(name, ' selected' if value == name else '',
                                                              _(func['description'])) for name, func in
                        aggregate_functions.items()])
     return Markup(select_str % {'field_name': field_name,

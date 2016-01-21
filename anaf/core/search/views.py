@@ -54,7 +54,7 @@ def search_query(request, response_format='html'):
             elif search_engine == 'db':
                 objects = dbsearch.search(query)
             else:
-                raise RuntimeError('Unknown Search engine: %s' % search_engine)
+                raise RuntimeError('Unknown Search engine: {0!s}'.format(search_engine))
 
     return render_to_response('core/search/query_view',
                               {'query': query, 'objects': objects},

@@ -222,7 +222,7 @@ def htsort(context, objects):
         if field_name in fields:
             field = objects.model._meta.get_field(field_name)
             if isinstance(field, models.ManyToManyField):
-                agg_field = agg_arg = str('sorting_%s' % field_name)
+                agg_field = agg_arg = str('sorting_{0!s}'.format(field_name))
                 if arg[0] == '-':
                     agg_arg = '-' + agg_arg
                 kwargs = {agg_field: models.Count(field_name)}
@@ -244,7 +244,7 @@ def htsortlink(context, field_name):
     request = context['request']
 
     sort_value = field_name
-    url = u"%s?" % (request.path)
+    url = u"{0!s}?".format((request.path))
     if request.GET:
         for arg in request.GET:
             values = request.GET.getlist(arg)
@@ -252,10 +252,10 @@ def htsortlink(context, field_name):
                 svalue = value.lstrip('-')
                 if arg == 'sorting' and svalue == field_name:
                     if value[0] != '-':
-                        sort_value = u'-%s' % sort_value
+                        sort_value = u'-{0!s}'.format(sort_value)
                 else:
                     url += unicode(arg) + "=" + value + "&"
-    url += "sorting=%s" % sort_value
+    url += "sorting={0!s}".format(sort_value)
 
     return url
 

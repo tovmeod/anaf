@@ -15,5 +15,5 @@ class FileStorage(FileSystemStorage):
             path = safe_join(getattr(settings, 'MEDIA_ROOT'), name)
         except ValueError:
             raise SuspiciousOperation(
-                "Attempted access to '%s' denied." % name)
+                "Attempted access to '{0!s}' denied.".format(name))
         return os.path.normpath(path)

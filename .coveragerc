@@ -1,7 +1,7 @@
 [run]
 branch = True
 source =
-    treeio
+    anaf
     minidetector
 omit =
     */migrations/*

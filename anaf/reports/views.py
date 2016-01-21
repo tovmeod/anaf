@@ -60,8 +60,7 @@ def _get_objects():
     object_types = Object.objects.all().values(
         'object_type').distinct().order_by('object_type')
     # TODO: filter these
-    object_names = ["(%s)  %s" %
-                    (object_types[i]['object_type'].split('.')[1].title(),
+    object_names = ["({0!s})  {1!s}".format(object_types[i]['object_type'].split('.')[1].title(),
                      Object.objects.filter(
                          object_type=object_types[i]['object_type'])
                      .order_by()[0].get_human_type())
@@ -434,7 +433,7 @@ def report_add(request, response_format='html'):
         model = Model(full_object, fields)
 
         report = Report()
-        report.name = "Untitled %s Report" % (obj._meta.object_name)
+        report.name = "Untitled {0!s} Report".format((obj._meta.object_name))
         report.model = dumps(model)
         report.creator = request.user.profile
         report.save()
@@ -459,7 +458,7 @@ def report_add(request, response_format='html'):
         human_type = Object.objects.filter(
             object_type=object_type['object_type'])[0].get_human_type()
 
-        object_names.append("%s: %s" % (module_name, human_type))
+        object_names.append("{0!s}: {1!s}".format(module_name, human_type))
 
     form = ObjChoiceForm(request.user, object_types=object_types, object_names=object_names)
 

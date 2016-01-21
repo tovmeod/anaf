@@ -17,7 +17,7 @@ class ProcessTransactions(object):
 
         response = HttpResponse(content_type='text/csv')
         response[
-            'Content-Disposition'] = 'attachment; filename=Transactions_%s.csv' % datetime.date.today().isoformat()
+            'Content-Disposition'] = 'attachment; filename=Transactions_{0!s}.csv'.format(datetime.date.today().isoformat())
 
         writer = csv.writer(response)
         headers = ['name', 'source', 'target', 'liability',
