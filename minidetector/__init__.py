@@ -47,7 +47,7 @@ def detect_mobile(view):
     def detected(request, *args, **kwargs):
         Middleware.process_request(request)
         return view(request, *args, **kwargs)
-    detected.__doc__ = "%s\n[Wrapped by detect_mobile which detects if the request is from a phone]" % view.__doc__
+    detected.__doc__ = "{0!s}\n[Wrapped by detect_mobile which detects if the request is from a phone]".format(view.__doc__)
     return detected
 
 

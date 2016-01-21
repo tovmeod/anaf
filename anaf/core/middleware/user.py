@@ -41,7 +41,7 @@ class CommonMiddleware(object):
         if hasattr(request, 'user') and request.user.is_authenticated():
 
             domain = getattr(settings, 'CURRENT_DOMAIN', 'default')
-            cache.set('treeio_%s_last' % (domain), time.time())
+            cache.set('treeio_{0!s}_last'.format((domain)), time.time())
             if settings.ANAF_SUBSCRIPTION_BLOCKED and '/accounts' not in request.path:
                 return HttpResponseRedirect('/accounts/logout')
 

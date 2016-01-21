@@ -234,7 +234,7 @@ class SaleOrder(Object):
                 models.Max('id'))['id__max'] + 1
         except:
             next_ref = 1
-        full_ref = '%.5d/%s' % (next_ref, str(str(ttime() * 10)[8:-2]))
+        full_ref = '{0:.5d}/{1!s}'.format(next_ref, str(str(ttime() * 10)[8:-2]))
         return full_ref
 
     def save(self, *args, **kwargs):

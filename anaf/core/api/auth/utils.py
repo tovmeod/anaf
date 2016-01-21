@@ -56,7 +56,7 @@ def require_params(oauth_request, parameters=None):
         param for param in params if not oauth_request or param not in oauth_request)
     if missing:
         response = HttpResponse(
-            'Missing OAuth parameters: %s' % (', '.join(missing)))
+            'Missing OAuth parameters: {0!s}'.format((', '.join(missing))))
         response.status_code = 401
         return response
 

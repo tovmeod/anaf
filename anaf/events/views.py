@@ -386,15 +386,15 @@ PRODID:-//PYVOBJECT//NONSGML Version 1//EN
     for event in events:
         vevent += "BEGIN:VEVENT\n"
         if event.start:
-            vevent += "DTSTART;VALUE=DATE:%s\n" % str(
-                (datetime.strptime(str(event.start)[0:10], '%Y-%m-%d')))[0:10].replace("-", "")
-        vevent += "DTEND;VALUE=DATE:%s\n" % str(
-            (datetime.strptime(str(event.end)[0:10], '%Y-%m-%d')))[0:10].replace("-", "")
+            vevent += "DTSTART;VALUE=DATE:{0!s}\n".format(str(
+                (datetime.strptime(str(event.start)[0:10], '%Y-%m-%d')))[0:10].replace("-", ""))
+        vevent += "DTEND;VALUE=DATE:{0!s}\n".format(str(
+            (datetime.strptime(str(event.end)[0:10], '%Y-%m-%d')))[0:10].replace("-", ""))
         if not event.details:
-            vevent += "SUMMARY:%s\n" % strip_tags(event.name)
+            vevent += "SUMMARY:{0!s}\n".format(strip_tags(event.name))
         else:
-            vevent += "SUMMARY:%s\n" % strip_tags(event.details)
-        vevent += "UID:%s\n" % (event.name)
+            vevent += "SUMMARY:{0!s}\n".format(strip_tags(event.details))
+        vevent += "UID:{0!s}\n".format((event.name))
         vevent += "END:VEVENT\n"
 
     icalstream += vevent

@@ -65,8 +65,8 @@ class EmailMessage(Thread):
                     message.reply_to.author != message.author:
                 # don't send email to yourself
 
-                fromaddr = "%s" % original_author
-                toaddr = "%s" % reply_author
+                fromaddr = "{0!s}".format(original_author)
+                toaddr = "{0!s}".format(reply_author)
 
                 login = message.stream.outgoing_server_username
                 password = message.stream.outgoing_password
@@ -75,7 +75,7 @@ class EmailMessage(Thread):
                 body += _('Your message is received and a ticket is created, ticket reference is [%s]') % (
                     self.ticket_record.ticket.reference)
 
-                subject = "[%s] %s\r\n\r\n" % (
+                subject = "[{0!s}] {1!s}\r\n\r\n".format(
                     self.ticket_record.ticket.reference, self.ticket_record.ticket.message.title)
 
                 BaseEmail(message.stream.outgoing_server_name,

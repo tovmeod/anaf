@@ -709,7 +709,7 @@ class Object(models.Model):
                 if kwargs['updated']:
                     updated_text = ""
                     for obj in kwargs['updated']:
-                        updated_text += '<a href="%s" class="popup-link">%s</a>' % (
+                        updated_text += '<a href="{0!s}" class="popup-link">{1!s}</a>'.format(
                             obj.get_absolute_url(), unicode(obj))
                         if kwargs['updated'].index(obj) < len(kwargs['updated']) - 1:
                             updated_text += ', '
@@ -848,7 +848,7 @@ class Object(models.Model):
         if isinstance(user, django_auth.User):
             user = user.profile
         elif not isinstance(user, User):
-            raise ValueError('user argument should be either a django_auth.User or anaf.core.User object got %s' % type(user))
+            raise ValueError('user argument should be either a django_auth.User or anaf.core.User object got {0!s}'.format(type(user)))
 
         # get default permissions from settings
         try:
@@ -991,10 +991,10 @@ class Object(models.Model):
         if hasattr(value, 'all'):
             # Returns value for ManyToMany fields
             value = value.all()
-        if hasattr(self, 'get_%s_display' % field_name):
+        if hasattr(self, 'get_{0!s}_display'.format(field_name)):
             # Handle choices to ChoiceFields
             try:
-                value = getattr(self, 'get_%s_display' % field_name)()
+                value = getattr(self, 'get_{0!s}_display'.format(field_name))()
             except:
                 pass
         return value
@@ -1154,18 +1154,16 @@ class UpdateRecord(models.Model):
         if author:
             # E-mail contents for e-mail notifications
             full_message = self.get_full_message()
-            html = '%s:<br /><br />\n\n<a href="%s">%s</a> (%s):<br /><br />\n\n%s<br /><br />\n\n' % \
-                (unicode(author), obj.get_absolute_url(), unicode(obj),
+            html = '{0!s}:<br /><br />\n\n<a href="{1!s}">{2!s}</a> ({3!s}):<br /><br />\n\n{4!s}<br /><br />\n\n'.format(unicode(author), obj.get_absolute_url(), unicode(obj),
                  unicode(obj.get_human_type()), full_message)
-            grittertext = '%s:<br />\n\n<a href="#%s">%s</a> (%s):<br />\n\n%s<br />\n\n' % \
-                (unicode(author), obj.get_absolute_url(), unicode(obj),
+            grittertext = '{0!s}:<br />\n\n<a href="#{1!s}">{2!s}</a> ({3!s}):<br />\n\n{4!s}<br />\n\n'.format(unicode(author), obj.get_absolute_url(), unicode(obj),
                  unicode(obj.get_human_type()), full_message)
             if 'request' in kwargs:
                 domain = RequestSite(kwargs['request']).domain
                 html = html.replace('href="', 'href="http://' + domain)
             body = strip_tags(html)
             signature = "This is an automated message from Tree.io service (http://tree.io). Please do not reply to this e-mail."
-            subject = "[Tree.io%s] %s: %s - %s" % (' #%d' % obj.id if self.record_type != 'delete' else '', unicode(author),
+            subject = "[Tree.io{0!s}] {1!s}: {2!s} - {3!s}".format(' #{0:d}'.format(obj.id) if self.record_type != 'delete' else '', unicode(author),
                                                    unicode(obj.get_human_type()), unicode(strip_tags(full_message)[:100]))
 
             for recipient in self.recipients.all():
@@ -1196,7 +1194,7 @@ class UpdateRecord(models.Model):
                         request.user = recipient.user.user
                         storage = default_storage(request)
                         storage._add(
-                            Message(messages.constants.INFO, "%s" % grittertext))
+                            Message(messages.constants.INFO, "{0!s}".format(grittertext)))
                     except:
                         pass
 

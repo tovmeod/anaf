@@ -1243,7 +1243,7 @@ def gantt_view(request, project_id, response_format='html'):
         for task in tasks:
             tlabel = (
                 task.name[:30] + '..') if len(task.name) > 30 else task.name
-            tn = '<a href="%s" class="popup-link">%s</a>' % (
+            tn = '<a href="{0!s}" class="popup-link">{1!s}</a>'.format(
                 reverse('projects_task_view', args=[task.id]), tlabel)
             series.append({'id': task.id,
                            'name': tn,
@@ -1252,7 +1252,7 @@ def gantt_view(request, project_id, response_format='html'):
                            'end': task.end_date.date().isoformat()})
         mlabel = (
             milestone.name[:30] + '..') if len(milestone.name) > 30 else milestone.name
-        mn = '<a href="%s" class="popup-link projects-milestone">%s</a>' % (
+        mn = '<a href="{0!s}" class="popup-link projects-milestone">{1!s}</a>'.format(
             reverse('projects_milestone_view', args=[milestone.id]), mlabel)
         a = {'id': milestone.id, 'name': mn, 'label': mlabel}
         if series:
@@ -1270,7 +1270,7 @@ def gantt_view(request, project_id, response_format='html'):
     series = []
     for task in unclassified:
         tlabel = (task.name[:30] + '..') if len(task.name) > 30 else task.name
-        tn = '<a href="%s" class="popup-link">%s</a>' % (
+        tn = '<a href="{0!s}" class="popup-link">{1!s}</a>'.format(
             reverse('projects_task_view', args=[task.id]), tlabel)
         series.append({'id': task.id,
                        'name': tn,

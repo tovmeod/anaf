@@ -171,13 +171,13 @@ def get_store(path='anaf.core.api.auth.store.db.ModelStore'):
         store_class = getattr(importlib.import_module(module), attr)
     except ValueError:
         raise ImproperlyConfigured(
-            'Invalid piston oauth store string: "%s"' % path)
+            'Invalid piston oauth store string: "{0!s}"'.format(path))
     except ImportError, e:
         raise ImproperlyConfigured(
-            'Error loading piston oauth store module "%s": "%s"' % (module, e))
+            'Error loading piston oauth store module "{0!s}": "{1!s}"'.format(module, e))
     except AttributeError:
         raise ImproperlyConfigured(
-            'Module "%s" does not define a piston oauth store named "%s"' % (module, attr))
+            'Module "{0!s}" does not define a piston oauth store named "{1!s}"'.format(module, attr))
 
     return store_class()
 
