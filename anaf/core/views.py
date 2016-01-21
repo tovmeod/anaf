@@ -424,8 +424,8 @@ def invitation_retrieve(request, response_format='html'):
     if request.user.username:
         return HttpResponseRedirect('/')
 
-    email = request.REQUEST.get('email', None)
-    key = request.REQUEST.get('key', None)
+    email = request.REQUEST.get('email')
+    key = request.REQUEST.get('key')
     if email and key:
         try:
             invitation = Invitation.objects.get(email=email, key=key)

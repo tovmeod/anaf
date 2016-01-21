@@ -100,7 +100,7 @@ def get_access_token(request):
     if not verify_oauth_request(request, oauth_request, consumer, request_token):
         return HttpResponseBadRequest('Could not verify OAuth request.')
 
-    if oauth_request.get('oauth_verifier', None) != request_token.verifier:
+    if oauth_request.get('oauth_verifier') != request_token.verifier:
         return HttpResponseBadRequest('Invalid OAuth verifier.')
 
     access_token = store.create_access_token(

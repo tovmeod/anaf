@@ -490,7 +490,7 @@ def report_edit(request, report_id=None, response_format='html'):
                 aggregations[key[12:]] = request.POST[key]
 
         for field in model.fields:
-            field.aggregation = aggregations.get(field.name, None)
+            field.aggregation = aggregations.get(field.name)
             if field.name in fieldnames:
                 field.display = True
             else:
