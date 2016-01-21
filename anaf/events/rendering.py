@@ -240,8 +240,9 @@ class EventCollection:
                             else:
                                 duration = duration - hour
                         height = duration * float(40) - 5
-                    style = "width: {0:.2f}%; height: {1:d}px; margin-left: {2:.2f}%".format(
-                        width, height, margin)
+
+                    style = "width: {0:.2f}%; height: {1:.0f}px; margin-left: {2:.2f}%".format(width, height, margin)
+
                     output += event.render_for_datehour(date,
                                                         hour, css_class, style)
 
