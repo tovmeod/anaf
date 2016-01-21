@@ -32,7 +32,7 @@ class Matrix2D(list):
             initial = [0.] * 9
         assert isinstance(initial, list)
         assert len(initial) == 9
-        list.__init__(self, initial)
+        super(Matrix2D, self).__init__(initial)
 
     def clear(self):
         for i in xrange(9):
@@ -89,14 +89,14 @@ class Matrix2D(list):
 
     @classmethod
     def rotateSquare(cls, theta, pivot=None):
-        theta = theta % 4
+        theta %= 4
         c = [1., 0., -1., 0.][theta]
         s = [0., 1., 0., -1.][theta]
 
-        matR = cls([c, -s, 0., s, c, 0., 0., 0., 1.])
+        mat_r = cls([c, -s, 0., s, c, 0., 0., 0., 1.])
         if not pivot:
-            return matR
-        return cls.translate(-pivot[0], -pivot[1]) * matR * cls.translate(*pivot)
+            return mat_r
+        return cls.translate(-pivot[0], -pivot[1]) * mat_r * cls.translate(*pivot)
 
 
 class IdenticonRendererBase(object):
@@ -246,13 +246,13 @@ if __name__ == '__main__':
         print 'usage: python identicon.py [CODE]....'
         raise SystemExit
 
-    for code in sys.argv[1:]:
-        if code.startswith('0x') or code.startswith('0X'):
-            code = int(code[2:], 16)
-        elif code.startswith('0'):
-            code = int(code[1:], 8)
+    for _code in sys.argv[1:]:
+        if _code.startswith('0x') or _code.startswith('0X'):
+            _code = int(_code[2:], 16)
+        elif _code.startswith('0'):
+            _code = int(_code[1:], 8)
         else:
-            code = int(code)
+            _code = int(_code)
 
-        icon = render_identicon(code, 24)
-        icon.save('%08x.png' % code, 'PNG')
+        icon = render_identicon(_code, 24)
+        icon.save('%08x.png' % _code, 'PNG')
