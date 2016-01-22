@@ -71,13 +71,15 @@ The Anaf Team
     'HELP_SOURCE': 'http://www.anaf.website/help',
     'LANGUAGES': (
         ('en', u'English'),
-        ('ru', u'Русский'),
-        ('es', u'Español'),
         ('de', u'Deutsche'),
-        ('zh_CN', u'简体中文'),
-        ('fr', u'Français'),
         ('el', u'ελληνικά'),
-        ('pt_BR', u'português')
+        ('es', u'Español'),
+        ('fr', u'Français'),
+        ('it', u'Italiano'),
+        ('pt_BR', u'Português Brasileiro'),
+        ('pt_PT', u'Português'),
+        ('ru', u'Русский'),
+        ('zh_CN', u'简体中文'),
     ),
     'LANGUAGES_DEFAULT': 'en',
     'AJAX_RELOAD_ON_REDIRECT': (
