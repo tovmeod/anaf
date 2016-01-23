@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/static/style.css" media="all" />
     <link rel="stylesheet" href="/static/js/css/jquery-ui-1.css" media="all" />
 	<link rel="stylesheet" href="/static/js/css/datepicker.css" media="all" />
-    <title>{% block title %}{% endblock %}. Tree.io</title>
+    <title>{% block title %}{% endblock %}. Anaf</title>
     <meta name="description" content="{% block meta_description %} {% endblock %}" />
     <meta name="keywords" content="{% block meta_keywords %} {% endblock %}" />
     <!--[if lt IE 7]>

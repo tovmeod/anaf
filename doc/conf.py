@@ -185,7 +185,7 @@ htmlhelp_basename = 'Anafdoc'
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
     ('index', 'Anaf.tex', u'Anaf Documentation',
-     u'Tree.io Limited', 'manual'),
+     u'Anaf Limited', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

@@ -1,6 +1,6 @@
 <div id="menu">
     <ul data-role="listview" data-inset="true" data-theme="c">
-	    <li data-role="list-divider">{% trans %}Tree.io menu{% endtrans %}</li> 
+	    <li data-role="list-divider">{% trans %}Anaf menu{% endtrans %}</li>
 	    
 	    {% for module in modules if module.name != "treeio.knowledge" and module.name != "treeio.infrastructure" -%}
 		

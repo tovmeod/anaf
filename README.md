@@ -11,6 +11,8 @@ Anaf: A Business Management Platform
 
 *Help is always appreciated, create issues and pull requests*
 
+Join our Translation project: https://poeditor.com/join/project/MBZpaTFrAY
+
 My current focus is migrating from piston to DRF
 
 For those coming from Tree.io:

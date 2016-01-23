@@ -1,4 +1,4 @@
-/* Tree.io Mobile JS */
+/* Mobile JS */
 
 $(document).bind("mobileinit", function () {
     $.extend($.mobile, { ajaxFormsEnabled: true });

@@ -1,8 +1,3 @@
-/* Copyright Tree.io 2011
- * This file is part of Treeio
- * License: www.tree.io/license
-*/
-
 var treeio = {
   'put_mce': function(doc) {
       var obj;
