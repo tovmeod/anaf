@@ -140,7 +140,7 @@ class BaseEmail(Thread):
 
 class SystemEmail(BaseEmail):
 
-    "E-mail class to send messages on behalf of Tree.io team"
+    "E-mail class to send messages on behalf of Anaf team"
 
     def __init__(self, toaddr, subject, body, signature=None, html=None):
 
@@ -167,7 +167,7 @@ class EmailInvitation(SystemEmail):
         self.sender = sender
         self.domain = domain
 
-        subject = '{0!s} has invited you to Tree.io'.format((self.sender))
+        subject = '{0!s} has invited you to Anaf'.format((self.sender))
 
         toaddr = self.invitation.email
 
@@ -178,9 +178,9 @@ class EmailInvitation(SystemEmail):
         body = """
 Hi!
 \r\n
-I've invited you to Tree.io.
+I've invited you to Anaf.
 \r\n
-Tree.io is a new online service that helps you manage your business online.
+Anaf is a new online service that helps you manage your business online.
 \r\n
 Use this link to join me:
 \r\n
@@ -198,12 +198,12 @@ class EmailPassword(SystemEmail):
 
     def __init__(self, toaddr, username, password):
 
-        subject = "Password reset on Tree.io"
+        subject = "Password reset on Anaf"
 
         body = """
 Hello!
 \r\n
-You have requested a password reset for your Tree.io account.
+You have requested a password reset for your Anaf account.
 \r\n
 New password for: {0!s}\r\n\r\n Password: {1!s}\r\n\r\n
 """.format(username, password)

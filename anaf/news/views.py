@@ -93,7 +93,7 @@ def index(request, response_format='html'):
     if response_format == 'rss':
         return ObjectFeed(title=_('All Activity'),
                           link=request.path,
-                          description=_('Updates on activity in your Tree.io'),
+                          description=_('Updates on activity in your Anaf'),
                           objects=updates)(request)
 
     context = _get_default_context(request)
@@ -162,7 +162,7 @@ def top_news(request, response_format='html'):
     if response_format == 'rss':
         return ObjectFeed(title=_('Top News'),
                           link=request.path,
-                          description=_('Updates on activity in your Tree.io'),
+                          description=_('Updates on activity in your Anaf'),
                           objects=updates)(request)
 
     context = _get_default_context(request)
@@ -201,7 +201,7 @@ def my_watchlist(request, response_format='html'):
         return ObjectFeed(title=_('My Watchlist'),
                           link=request.path,
                           description=_(
-                              'Updates on your watchlist in Tree.io'),
+                              'Updates on your watchlist in Anaf'),
                           objects=updates)(request)
 
     context = _get_default_context(request)
@@ -237,7 +237,7 @@ def my_activity(request, response_format='html'):
     if response_format == 'rss':
         return ObjectFeed(title=_('My Activity'),
                           link=request.path,
-                          description=_('Updates on activity in your Tree.io'),
+                          description=_('Updates on activity in your Anaf'),
                           objects=updates)(request)
 
     context = _get_default_context(request)
@@ -280,7 +280,7 @@ def index_by_module(request, module_name, response_format='html'):
     if response_format == 'rss':
         return ObjectFeed(title=(_(module.title) + ' ' + _('Activity')),
                           link=request.path,
-                          description=_('Updates on activity in your Tree.io'),
+                          description=_('Updates on activity in your Anaf'),
                           objects=updates)(request)
 
     context = _get_default_context(request)

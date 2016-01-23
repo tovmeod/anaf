@@ -398,8 +398,8 @@ PRODID:-//PYVOBJECT//NONSGML Version 1//EN
         vevent += "END:VEVENT\n"
 
     icalstream += vevent
-    icalstream += """X-WR-CALDESC:Tree.io Calendar
-X-WR-CALNAME:Tree.io
+    icalstream += """X-WR-CALDESC:Anaf Calendar
+X-WR-CALNAME:Anaf
 X-WR-TIMEZONE:London/UK
 END:VCALENDAR
 """
