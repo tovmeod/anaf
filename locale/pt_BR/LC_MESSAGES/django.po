@@ -1,22 +1,22 @@
-# SOME DESCRIPTIVE TITLE. - PACOTE PARA TRADUCAO PT_BR_ESPECIFICO PARA O tree.io.
+# SOME DESCRIPTIVE TITLE. - PACOTE PARA TRADUCAO PT_BR_ESPECIFICO PARA O Anaf.
 # Iniciada a traducao em 17/09/2012
 # Copyright (C) 2012 Davi Antunes Ribeiro
 # This file is distributed under the same license as the Treeio package.
 # Davi Antunes Ribeiro <daviantunes27@hotmail.com>, 2012.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-22 14:44+0200\n"
-"PO-Revision-Date: 2012-09-17 15:55GMT-03\n"
+"POT-Creation-Date: 2016-01-22 18:24+0200\n"
+"PO-Revision-Date: 2016-01-22 18:17+0200\n"
 "Last-Translator: Davi Antunes Ribeiro <daviantunes27@hotmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language-Team: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: .\anaf\account\forms.py:18 .\anaf\account\forms.py:30
 #: .\anaf\documents\forms.py:17 .\anaf\documents\forms.py:28
@@ -1525,8 +1525,6 @@ msgid "Mark all"
 msgstr "Marcar como"
 
 #: .\anaf\messaging\forms.py:97 .\anaf\messaging\forms.py:122
-#, fuzzy
-#| msgid "Mark Read"
 msgid "Mark all as Read"
 msgstr "Marcar como lido"
 
@@ -1600,7 +1598,7 @@ msgstr ""
 
 #: .\anaf\news\forms.py:60
 msgid "About"
-msgstr ""
+msgstr "Sobre"
 
 #: .\anaf\news\views.py:94 .\templates\html\news\page.html:15
 msgid "All Activity"
@@ -1608,8 +1606,8 @@ msgstr "Todas as atividades"
 
 #: .\anaf\news\views.py:96 .\anaf\news\views.py:165 .\anaf\news\views.py:240
 #: .\anaf\news\views.py:283
-msgid "Updates on activity in your Tree.io"
-msgstr "Atualizações de sua atividade no seu Tree.io"
+msgid "Updates on activity in your Anaf"
+msgstr "Atualizações de sua atividade no seu Anaf"
 
 #: .\anaf\news\views.py:163 .\templates\html\news\page.html:14
 msgid "Top News"
@@ -1622,8 +1620,8 @@ msgid "My Watchlist"
 msgstr "Minhas Cotações"
 
 #: .\anaf\news\views.py:204
-msgid "Updates on your watchlist in Tree.io"
-msgstr "Atualizações de suas cotações no Tree.io"
+msgid "Updates on your watchlist in Anaf"
+msgstr "Atualizações de suas cotações no Anaf"
 
 #: .\anaf\news\views.py:238 .\templates\html\news\my_activity.html:5
 #: .\templates\html\news\page.html:18
@@ -4036,22 +4034,16 @@ msgid "No Change Sets available"
 msgstr "Sem confiigurações de mudanças disponíveis"
 
 #: .\templates\html\core\administration\contact_settings.html:7
-#, fuzzy
-#| msgid "Contact Types"
 msgid "Contact settings"
-msgstr "Tipos de contato"
+msgstr "configurações de contato"
 
 #: .\templates\html\core\administration\contact_settings.html:20
-#, fuzzy
-#| msgid "No Contact"
 msgid "Personal contact"
-msgstr "Sem Contatos"
+msgstr "Contato Pessoal"
 
 #: .\templates\html\core\administration\contact_settings.html:24
-#, fuzzy
-#| msgid "My Company"
 msgid "Company"
-msgstr "Minha Empresa"
+msgstr "Empresa"
 
 #: .\templates\html\core\administration\group_add.html:4
 #: .\templates\html\core\administration\group_add.html:6
@@ -4641,8 +4633,10 @@ msgid "Integration with other services made easy"
 msgstr "Facilidade de integração com outros serviços"
 
 #: .\templates\html\core\hints\events.html:8
-msgid "You can now integrate Tree.io Events with other services"
-msgstr "Agora você pode integrar os eventos do Tree.io com outros serviços"
+#, fuzzy
+#| msgid "You can now integrate Tree.io Events with other services"
+msgid "You can now integrate Anaf Events with other services"
+msgstr "Agora você pode integrar os eventos do Anaf com outros serviços"
 
 #: .\templates\html\core\hints\events_all.html:7
 msgid "there are no Events"
@@ -4847,12 +4841,16 @@ msgid "Sorry, but you are not allowed to access this"
 msgstr "Desulpe, mas voce não pode acessar isso"
 
 #: .\templates\html\core\invitation_retrieve.html:17
-msgid "invited you to join the Tree.io service"
-msgstr "convidou você para juntar-se ao serviço Tree.io"
+#, fuzzy
+#| msgid "invited you to join the Tree.io service"
+msgid "invited you to join the Anaf service"
+msgstr "convidou você para juntar-se ao serviço Anaf"
 
 #: .\templates\html\core\invitation_retrieve.html:19
-msgid "You've been invited to join the Tree.io service"
-msgstr "Voce foi convidado para juntar-se ao serviço Tree.io"
+#, fuzzy
+#| msgid "You've been invited to join the Tree.io service"
+msgid "You've been invited to join the Anaf service"
+msgstr "Voce foi convidado para juntar-se ao serviço Anaf"
 
 #: .\templates\html\core\invitation_retrieve.html:22
 msgid "Please fill this form to create your account"
@@ -4971,8 +4969,8 @@ msgstr "Cadastre-se gratuitamente"
 #: .\templates\html\core\tags\easy_invite.html:2
 #, fuzzy
 #| msgid "welcome to Tree.io"
-msgid "Invite to Tree.io"
-msgstr "Bem vindo ao Tree.io"
+msgid "Invite to Anaf"
+msgstr "Bem vindo ao Anaf"
 
 #: .\templates\html\core\tags\easy_invite_failure.html:2
 msgid ""
@@ -5079,8 +5077,10 @@ msgid "Sign up"
 msgstr ""
 
 #: .\templates\html\core\widgets\welcome.html:6
-msgid "welcome to Tree.io"
-msgstr "Bem vindo ao Tree.io"
+#, fuzzy
+#| msgid "welcome to Tree.io"
+msgid "welcome to Anaf"
+msgstr "Bem vindo ao Anaf"
 
 #: .\templates\html\core\widgets\welcome.html:21
 msgid "Press Ctrl+D (or Command+D on a Mac) to bookmark this page"
@@ -5107,8 +5107,10 @@ msgid "Invite other people"
 msgstr "Convide outras pessoas"
 
 #: .\templates\html\core\widgets\welcome.html:59
-msgid "Manage your Tree.io"
-msgstr "Gerencie seu Tree.io"
+#, fuzzy
+#| msgid "Manage your Tree.io"
+msgid "Manage your Anaf"
+msgstr "Gerencie seu Anaf"
 
 #: .\templates\html\core\widgets\welcome.html:64
 msgid "Upload your logo"
@@ -5123,8 +5125,10 @@ msgid "Change the language"
 msgstr "Mude o idioma"
 
 #: .\templates\html\core\widgets\welcome.html:73
-msgid "Tree.io is available in multiple languages"
-msgstr "Tree.io está disponível em multiplos idiomas"
+#, fuzzy
+#| msgid "Tree.io is available in multiple languages"
+msgid "Anaf is available in multiple languages"
+msgstr "Anaf está disponível em multiplos idiomas"
 
 #: .\templates\html\documents\document_add.html:4
 #: .\templates\html\documents\document_add.html:8

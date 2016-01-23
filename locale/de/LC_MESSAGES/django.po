@@ -3,21 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-22 14:44+0200\n"
-"PO-Revision-Date: 2011-07-18 15:21\n"
-"Last-Translator:   <>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2016-01-22 18:24+0200\n"
+"PO-Revision-Date: 2016-01-22 18:10+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.6.2\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: .\anaf\account\forms.py:18 .\anaf\account\forms.py:30
 #: .\anaf\documents\forms.py:17 .\anaf\documents\forms.py:28
@@ -150,11 +150,11 @@ msgstr "Passwörter sind nicht identisch"
 
 #: .\anaf\account\forms.py:127
 msgid "Never (disabled)"
-msgstr ""
+msgstr "Nie (deaktiviert)"
 
 #: .\anaf\account\forms.py:127 .\templates\html\account\settings_view.html:46
 msgid "As-it-happens"
-msgstr ""
+msgstr "Wie-it-Fall"
 
 #: .\anaf\account\forms.py:135 .\anaf\core\administration\forms.py:121
 #: .\templates\html\account\settings_view.html:19
@@ -180,19 +180,15 @@ msgstr "E-Mail Benachrichtigungen"
 
 #: .\anaf\account\models.py:11 .\templates\html\account\settings_view.html:47
 msgid "Daily"
-msgstr ""
+msgstr "Täglich"
 
 #: .\anaf\account\models.py:12 .\templates\html\account\settings_view.html:48
-#, fuzzy
-#| msgid "Week"
 msgid "Weekly"
-msgstr "Woche"
+msgstr "Wöchentlich"
 
 #: .\anaf\account\models.py:13 .\templates\html\account\settings_view.html:49
-#, fuzzy
-#| msgid "Month"
 msgid "Monthly"
-msgstr "Monat"
+msgstr "Monatlich"
 
 #: .\anaf\changes\forms.py:19 .\anaf\changes\forms.py:30
 #: .\anaf\events\forms.py:17 .\anaf\finance\forms.py:22
@@ -1360,10 +1356,8 @@ msgid "factor"
 msgstr "Faktor"
 
 #: .\anaf\finance\models.py:25
-#, fuzzy
-#| msgid "Specifies the difference of the currency to default one."
 msgid "Specifies the ratio to the base currency, e.g. 1.324"
-msgstr "Bestimmt die Differenz der Währung zur Ausgangswährung"
+msgstr "Gibt das Verhältnis zur Basiswährung, z.B. 1,324"
 
 #: .\anaf\finance\models.py:27
 msgid "active"
@@ -1394,6 +1388,8 @@ msgid ""
 "Sorry, field names can only contain letters, numbers, hyphens (-) and "
 "underscores (_)"
 msgstr ""
+"(-) Es tut uns leid, Feldnamen können nur Buchstaben, Zahlen, Bindestriche "
+"und Unterstriche (_)"
 
 #: .\anaf\identities\forms.py:66 .\anaf\infrastructure\forms.py:285
 #: .\templates\html\identities\field_view.html:26
@@ -1416,10 +1412,8 @@ msgid "Fields"
 msgstr "Felder"
 
 #: .\anaf\identities\forms.py:102
-#, fuzzy
-#| msgid "User with username %s already exists."
 msgid "Contact Type with such name already exists."
-msgstr "Ein Benutzer mit diesem %s Namen existiert bereits."
+msgstr "Kontakttyp mit einem solchen Namen existiert bereits."
 
 #: .\anaf\identities\forms.py:158 .\anaf\infrastructure\forms.py:53
 msgid "Delete "
@@ -1526,16 +1520,12 @@ msgid "Mark Unread"
 msgstr "Als ungelesen markieren"
 
 #: .\anaf\messaging\forms.py:97 .\anaf\messaging\forms.py:121
-#, fuzzy
-#| msgid "Mark as"
 msgid "Mark all"
-msgstr "Markieren als"
+msgstr "Alles markieren"
 
 #: .\anaf\messaging\forms.py:97 .\anaf\messaging\forms.py:122
-#, fuzzy
-#| msgid "Mark Read"
 msgid "Mark all as Read"
-msgstr "Als gelesen markieren"
+msgstr "Alles als gelesen markieren"
 
 #: .\anaf\messaging\forms.py:113
 msgid "Move to"
@@ -1597,10 +1587,8 @@ msgid "Streams"
 msgstr "Streams"
 
 #: .\anaf\messaging\views.py:332
-#, fuzzy
-#| msgid "Password reset successfully"
 msgid "E-mails fetched successfully."
-msgstr "Passwort-Reset erfolgreich"
+msgstr "E-Mails abgeholt erfolgreich."
 
 #: .\anaf\messaging\views.py:336
 msgid ""
@@ -1617,8 +1605,10 @@ msgstr "Alle Aktivitäten"
 
 #: .\anaf\news\views.py:96 .\anaf\news\views.py:165 .\anaf\news\views.py:240
 #: .\anaf\news\views.py:283
-msgid "Updates on activity in your Tree.io"
-msgstr "Neue Aktivitäten in Ihrem Tree.io"
+#, fuzzy
+#| msgid "Updates on activity in your Tree.io"
+msgid "Updates on activity in your Anaf"
+msgstr "Neue Aktivitäten in Ihrem Anaf"
 
 #: .\anaf\news\views.py:163 .\templates\html\news\page.html:14
 msgid "Top News"
@@ -1631,8 +1621,10 @@ msgid "My Watchlist"
 msgstr "Meine Watchlist"
 
 #: .\anaf\news\views.py:204
-msgid "Updates on your watchlist in Tree.io"
-msgstr "Neue Updates Ihrer Watchlist in Tree.io"
+#, fuzzy
+#| msgid "Updates on your watchlist in Tree.io"
+msgid "Updates on your watchlist in Anaf"
+msgstr "Neue Updates Ihrer Watchlist in Anaf"
 
 #: .\anaf\news\views.py:238 .\templates\html\news\my_activity.html:5
 #: .\templates\html\news\page.html:18
@@ -1750,7 +1742,7 @@ msgstr "Anrufer"
 
 #: .\anaf\projects\forms.py:253 .\templates\html\projects\task_view.html:152
 msgid "Depends on"
-msgstr ""
+msgstr "Hängt davon ab"
 
 #: .\anaf\projects\forms.py:262 .\anaf\services\forms.py:255
 #: .\templates\html\projects\task_view.html:113
@@ -4049,16 +4041,12 @@ msgid "Contact settings"
 msgstr "Kontakt-Typen"
 
 #: .\templates\html\core\administration\contact_settings.html:20
-#, fuzzy
-#| msgid "No Contact"
 msgid "Personal contact"
-msgstr "Kein Kontakt"
+msgstr "Persönlicher Kontakt"
 
 #: .\templates\html\core\administration\contact_settings.html:24
-#, fuzzy
-#| msgid "My Company"
 msgid "Company"
-msgstr "Mein Unternehmen"
+msgstr "Gesellschaft"
 
 #: .\templates\html\core\administration\group_add.html:4
 #: .\templates\html\core\administration\group_add.html:6
@@ -4650,8 +4638,8 @@ msgid "Integration with other services made easy"
 msgstr "Einfache Integration anderer Dienste"
 
 #: .\templates\html\core\hints\events.html:8
-msgid "You can now integrate Tree.io Events with other services"
-msgstr "Sie können jetzt Ihre Tree.io Events in andere Dienste einbinden."
+msgid "You can now integrate Anaf Events with other services"
+msgstr "Sie können jetzt Ihre Anaf Events in andere Dienste einbinden."
 
 #: .\templates\html\core\hints\events_all.html:7
 msgid "there are no Events"
@@ -4856,12 +4844,14 @@ msgid "Sorry, but you are not allowed to access this"
 msgstr "Es tut uns leid, aber Sie haben keine Zugriffsberechtigung für"
 
 #: .\templates\html\core\invitation_retrieve.html:17
-msgid "invited you to join the Tree.io service"
-msgstr "hat Sie eingeladen Tree.io beizutreten"
+msgid "invited you to join the Anaf service"
+msgstr "hat Sie eingeladen Anaf beizutreten"
 
 #: .\templates\html\core\invitation_retrieve.html:19
-msgid "You've been invited to join the Tree.io service"
-msgstr "Sie wurden eingeladen Tree.io beizutreten"
+#, fuzzy
+#| msgid "You've been invited to join the Tree.io service"
+msgid "You've been invited to join the Anaf service"
+msgstr "Sie wurden eingeladen Anaf beizutreten"
 
 #: .\templates\html\core\invitation_retrieve.html:22
 msgid "Please fill this form to create your account"
@@ -4980,8 +4970,8 @@ msgstr "Gratis anmelden!"
 #: .\templates\html\core\tags\easy_invite.html:2
 #, fuzzy
 #| msgid "welcome to Tree.io"
-msgid "Invite to Tree.io"
-msgstr "Willkommen zu Tree.io"
+msgid "Invite to Anaf"
+msgstr "Willkommen zu Anaf"
 
 #: .\templates\html\core\tags\easy_invite_failure.html:2
 msgid ""
@@ -5088,8 +5078,10 @@ msgid "Sign up"
 msgstr ""
 
 #: .\templates\html\core\widgets\welcome.html:6
-msgid "welcome to Tree.io"
-msgstr "Willkommen zu Tree.io"
+#, fuzzy
+#| msgid "welcome to Tree.io"
+msgid "welcome to Anaf"
+msgstr "Willkommen zu Anaf"
 
 #: .\templates\html\core\widgets\welcome.html:21
 msgid "Press Ctrl+D (or Command+D on a Mac) to bookmark this page"
@@ -5120,8 +5112,10 @@ msgid "Invite other people"
 msgstr "Andere Personen einladen"
 
 #: .\templates\html\core\widgets\welcome.html:59
-msgid "Manage your Tree.io"
-msgstr "Verwalten Sie Ihren Tree.io"
+#, fuzzy
+#| msgid "Manage your Tree.io"
+msgid "Manage your Anaf"
+msgstr "Verwalten Sie Ihren Anaf"
 
 #: .\templates\html\core\widgets\welcome.html:64
 msgid "Upload your logo"
@@ -5136,8 +5130,10 @@ msgid "Change the language"
 msgstr "Sprache wechseln"
 
 #: .\templates\html\core\widgets\welcome.html:73
-msgid "Tree.io is available in multiple languages"
-msgstr "Tree.io ist in mehreren Sprachen verfügbar"
+#, fuzzy
+#| msgid "Tree.io is available in multiple languages"
+msgid "Anaf is available in multiple languages"
+msgstr "Anaf ist in mehreren Sprachen verfügbar"
 
 #: .\templates\html\documents\document_add.html:4
 #: .\templates\html\documents\document_add.html:8

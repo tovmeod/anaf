@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-22 14:44+0200\n"
-"PO-Revision-Date: 2014-07-24 02:43+0100\n"
+"POT-Creation-Date: 2016-01-22 18:24+0200\n"
+"PO-Revision-Date: 2016-01-22 18:21+0200\n"
 "Last-Translator: Jose Lourenco <jose@lourenco.ws>\n"
-"Language-Team: American English <kde-i18n-doc@kde.org>\n"
-"Language: en_US\n"
+"Language-Team: \n"
+"Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: .\anaf\account\forms.py:18 .\anaf\account\forms.py:30
 #: .\anaf\documents\forms.py:17 .\anaf\documents\forms.py:28
@@ -1608,8 +1608,8 @@ msgstr "Todas as atividades"
 
 #: .\anaf\news\views.py:96 .\anaf\news\views.py:165 .\anaf\news\views.py:240
 #: .\anaf\news\views.py:283
-msgid "Updates on activity in your Tree.io"
-msgstr "Atualizações na atividade no seu Tree.io"
+msgid "Updates on activity in your Anaf"
+msgstr "Atualizações na atividade no seu Anaf"
 
 #: .\anaf\news\views.py:163 .\templates\html\news\page.html:14
 msgid "Top News"
@@ -1622,8 +1622,8 @@ msgid "My Watchlist"
 msgstr "Minha Seleção"
 
 #: .\anaf\news\views.py:204
-msgid "Updates on your watchlist in Tree.io"
-msgstr "Atualizações na sua seleção no Tree.io"
+msgid "Updates on your watchlist in Anaf"
+msgstr "Atualizações na sua seleção no Anaf"
 
 #: .\anaf\news\views.py:238 .\templates\html\news\my_activity.html:5
 #: .\templates\html\news\page.html:18
@@ -4046,10 +4046,8 @@ msgid "Personal contact"
 msgstr "Sem Contactos"
 
 #: .\templates\html\core\administration\contact_settings.html:24
-#, fuzzy
-#| msgid "My Company"
 msgid "Company"
-msgstr "Minha Empresa"
+msgstr "Empresa"
 
 #: .\templates\html\core\administration\group_add.html:4
 #: .\templates\html\core\administration\group_add.html:6
@@ -4640,8 +4638,8 @@ msgid "Integration with other services made easy"
 msgstr "integração facilitada com outros serviços"
 
 #: .\templates\html\core\hints\events.html:8
-msgid "You can now integrate Tree.io Events with other services"
-msgstr "Você já pode integrar os eventos do Tree.io com outros serviços"
+msgid "You can now integrate Anaf Events with other services"
+msgstr "Você já pode integrar os eventos do Anaf com outros serviços"
 
 #: .\templates\html\core\hints\events_all.html:7
 msgid "there are no Events"
@@ -4846,12 +4844,12 @@ msgid "Sorry, but you are not allowed to access this"
 msgstr "Desculpe, não lhe é permitido o acesso a isto"
 
 #: .\templates\html\core\invitation_retrieve.html:17
-msgid "invited you to join the Tree.io service"
-msgstr "convidou-o a juntar-se ao serviço Tree.io"
+msgid "invited you to join the Anaf service"
+msgstr "convidou-o a juntar-se ao serviço Anaf"
 
 #: .\templates\html\core\invitation_retrieve.html:19
-msgid "You've been invited to join the Tree.io service"
-msgstr "Você foi convidado a juntar-se ao serviço Tree.io"
+msgid "You've been invited to join the Anaf service"
+msgstr "Você foi convidado a juntar-se ao serviço Anaf"
 
 #: .\templates\html\core\invitation_retrieve.html:22
 msgid "Please fill this form to create your account"
@@ -4968,10 +4966,8 @@ msgid "Sign Up for Free!"
 msgstr "Registe-se gratuitamente"
 
 #: .\templates\html\core\tags\easy_invite.html:2
-#, fuzzy
-#| msgid "welcome to Tree.io"
-msgid "Invite to Tree.io"
-msgstr "Bem vindo ao Tree.io"
+msgid "Invite to Anaf"
+msgstr "Bem vindo ao Anaf"
 
 #: .\templates\html\core\tags\easy_invite_failure.html:2
 msgid ""
@@ -5078,8 +5074,8 @@ msgid "Sign up"
 msgstr ""
 
 #: .\templates\html\core\widgets\welcome.html:6
-msgid "welcome to Tree.io"
-msgstr "Bem vindo ao Tree.io"
+msgid "welcome to Anaf"
+msgstr "Bem vindo ao Anaf"
 
 #: .\templates\html\core\widgets\welcome.html:21
 msgid "Press Ctrl+D (or Command+D on a Mac) to bookmark this page"
@@ -5109,8 +5105,8 @@ msgid "Invite other people"
 msgstr "Convide outras pessoas"
 
 #: .\templates\html\core\widgets\welcome.html:59
-msgid "Manage your Tree.io"
-msgstr "Administre o seu Tree.io"
+msgid "Manage your Anaf"
+msgstr "Administre o seu Anaf"
 
 #: .\templates\html\core\widgets\welcome.html:64
 msgid "Upload your logo"
@@ -5125,8 +5121,8 @@ msgid "Change the language"
 msgstr "Mude o idioma"
 
 #: .\templates\html\core\widgets\welcome.html:73
-msgid "Tree.io is available in multiple languages"
-msgstr "Tree.io está disponível em múltiplos idiomas"
+msgid "Anaf is available in multiple languages"
+msgstr "Anaf está disponível em múltiplos idiomas"
 
 #: .\templates\html\documents\document_add.html:4
 #: .\templates\html\documents\document_add.html:8
