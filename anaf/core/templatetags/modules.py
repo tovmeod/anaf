@@ -552,6 +552,7 @@ def core_logo_content(context, gif=False):
         logopath += '.png'
         mimetype = 'image/png'
 
+    # FIXME: logo file loading logic sucks, maybe use x-sendfile
     customlogo = ''
     try:
         conf = ModuleSetting.get_for_module('treeio.core', 'logopath')[0]
