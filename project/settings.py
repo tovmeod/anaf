@@ -97,15 +97,13 @@ FORMAT_MODULE_PATH = 'anaf.formats'
 # OAUTH_DATA_STORE = 'anaf.core.api.auth.store.store'
 
 # Static files location
-if not DEBUG:
-    STATIC_URL = path.join(BASE_DIR, 'static/')
-else:
+if DEBUG:
     STATICFILES_DIRS = (
         path.join(BASE_DIR, 'anaf/static'),
     )
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(path.dirname(BASE_DIR), 'anaf/static')
-STATIC_DOC_ROOT = os.path.join(BASE_DIR, 'anaf/static')
+STATIC_ROOT = 'static'
+STATIC_DOC_ROOT = 'static'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
