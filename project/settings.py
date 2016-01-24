@@ -102,8 +102,12 @@ if DEBUG:
         path.join(BASE_DIR, 'anaf/static'),
     )
 STATIC_URL = '/static/'
-STATIC_ROOT = path.join(os.getcwd(), 'static')
-STATIC_DOC_ROOT = path.join(os.getcwd(), 'static')
+if TESTING:
+    STATIC_ROOT = path.join(os.getcwd(), 'anaf/static')
+    STATIC_DOC_ROOT = path.join(os.getcwd(), 'anaf/static')
+else:
+    STATIC_ROOT = path.join(os.getcwd(), 'static')
+    STATIC_DOC_ROOT = path.join(os.getcwd(), 'static')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
