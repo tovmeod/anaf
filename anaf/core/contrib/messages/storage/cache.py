@@ -26,7 +26,7 @@ class CacheStorage(BaseStorage):
         super(CacheStorage, self).__init__(request, *args, **kwargs)
         self.user = request.user.id
         self.domain = getattr(settings, 'CURRENT_DOMAIN', 'default')
-        self.prefix = 'treeio_%s_storage_messages_%s'
+        self.prefix = 'anaf_%s_storage_messages_%s'
         self.key = self.prefix % (self.domain, self.user)
 
     def _get(self, *args, **kwargs):

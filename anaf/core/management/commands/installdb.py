@@ -33,18 +33,18 @@ class Command(BaseCommand):
 
         if dbengine.endswith('sqlite3'):
             dbname = raw_input(
-                'Enter database name (defaults to treeio.db): ')
+                'Enter database name (defaults to anaf.db): ')
             if not dbname:
-                dbname = 'treeio.db'
+                dbname = 'anaf.db'
         else:
             dbname = raw_input(
-                'Enter database name (defaults to treeio): ')
+                'Enter database name (defaults to anaf): ')
             if not dbname:
-                dbname = 'treeio'
+                dbname = 'anaf'
 
-            dbuser = raw_input('Database user (defaults to treeio): ')
+            dbuser = raw_input('Database user (defaults to anaf): ')
             if not dbuser:
-                dbuser = 'treeio'
+                dbuser = 'anaf'
 
             dbpassword = raw_input('Database password: ')
 

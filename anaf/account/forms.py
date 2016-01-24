@@ -143,7 +143,7 @@ class SettingsForm(forms.Form):
             user, Perspective.objects)
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.core', 'default_perspective', user=self.user)[0]
+                'anaf.core', 'default_perspective', user=self.user)[0]
             default_perspective = Perspective.objects.get(pk=long(conf.value))
             self.fields['default_perspective'].initial = default_perspective.id
         except:
@@ -196,13 +196,13 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('default_perspective',
                                          self.cleaned_data[
                                              'default_perspective'].id,
-                                         'treeio.core', user=self.user)
+                                         'anaf.core', user=self.user)
             ModuleSetting.set_for_module('default_timezone',
                                          self.cleaned_data['default_timezone'],
-                                         'treeio.core', user=self.user)
+                                         'anaf.core', user=self.user)
             ModuleSetting.set_for_module('language',
                                          self.cleaned_data['language'],
-                                         'treeio.core', user=self.user)
+                                         'anaf.core', user=self.user)
             # notification settings
             email_notifications = self.cleaned_data['email_notifications']
             notification, created = NotificationSetting.objects.get_or_create(
@@ -221,7 +221,7 @@ class SettingsForm(forms.Form):
                 notification.save()
             ModuleSetting.set_for_module('email_notifications',
                                          email_notifications,
-                                         'treeio.core', user=self.user)
+                                         'anaf.core', user=self.user)
             return True
 
         except:

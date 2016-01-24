@@ -24,7 +24,7 @@ def account_notification_count(context):
     account = None
     if user:
         modules = user.get_perspective().get_modules()
-        account = modules.filter(name='treeio.account')
+        account = modules.filter(name='anaf.account')
         if account:
             notifications = user.notification_set.count()
 

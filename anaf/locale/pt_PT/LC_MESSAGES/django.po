@@ -1,6 +1,5 @@
 # Iniciada a traducao em 17/09/2012
 # Copyright (C) 2012 Davi Antunes Ribeiro
-# This file is distributed under the same license as the Treeio package.
 #
 # Davi Antunes Ribeiro <daviantunes27@hotmail.com>, 2012, 2014.
 msgid ""

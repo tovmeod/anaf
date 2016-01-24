@@ -20,11 +20,11 @@ from anaf.finance.forms import TransactionForm, LiabilityForm, AccountForm, Equi
 
 class FinanceCommonHandler(ObjectHandler):
     def check_create_permission(self, request, mode):
-        return True  # request.user.profile.is_admin('treeio.finance')
+        return True  # request.user.profile.is_admin('anaf.finance')
 
     def check_instance_permission(self, request, inst, mode):
         return request.user.profile.has_permission(inst, mode=mode) \
-               or request.user.profile.is_admin('treeio.finance')
+               or request.user.profile.is_admin('anaf.finance')
 
 
 class CurrencyHandler(ObjectHandler):

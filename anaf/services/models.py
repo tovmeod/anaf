@@ -1,7 +1,7 @@
 """
 ServiceSupport module objects.
 
-Depends on: treeio.core, treeio.identities
+Depends on: anaf.core, anaf.identities
 """
 
 from django.core.urlresolvers import reverse
@@ -251,7 +251,7 @@ def email_caller_on_new_ticket(sender, instance, created, **kwargs):
         send_email_to_caller = False
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.services', 'send_email_to_caller')[0]
+                'anaf.services', 'send_email_to_caller')[0]
             send_email_to_caller = conf.value
         except:
             send_email_to_caller = settings.ANAF_SEND_EMAIL_TO_CALLER
@@ -276,7 +276,7 @@ def email_caller_on_new_ticket(sender, instance, created, **kwargs):
                 context = {'ticket': instance}
                 try:
                     conf = ModuleSetting.get_for_module(
-                        'treeio.services', 'send_email_template')[0]
+                        'anaf.services', 'send_email_template')[0]
                     send_email_template = conf.value
                     html = render_string_template(send_email_template, context)
                 except:
@@ -334,7 +334,7 @@ def create_ticket_from_message(sender, instance, created, **kwargs):
                 ticket = Ticket()
                 try:
                     conf = ModuleSetting.get_for_module(
-                        'treeio.services', 'default_ticket_status')[0]
+                        'anaf.services', 'default_ticket_status')[0]
                     ticket.status = TicketStatus.objects.get(
                         pk=long(conf.value))
                 except:

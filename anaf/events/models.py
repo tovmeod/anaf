@@ -1,7 +1,7 @@
 """
 Events module objects.
 
-Depends on: treeio.core, treeio.identities
+Depends on: anaf.core, anaf.identities
 """
 
 from django.db import models

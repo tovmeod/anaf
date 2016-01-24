@@ -85,7 +85,7 @@ var chat = {
         if (json.notifications) {
           json.notifications.length = json.notifications.length || []
           if (json.notifications.length > 0){
-              treeio.process_notifications(json.notifications);
+              anaf.process_notifications(json.notifications);
           }          
         }
     },

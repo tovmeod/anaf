@@ -67,9 +67,9 @@ def _process_mass_form(f):
             for key in request.POST:
                 if 'mass-object' in key:
                     try:
-                        query = Q(object_type='treeio.documents.models.Document') | \
-                            Q(object_type='treeio.documents.models.File') | \
-                            Q(object_type='treeio.documents.models.WebLink')
+                        query = Q(object_type='anaf.documents.models.Document') | \
+                            Q(object_type='anaf.documents.models.File') | \
+                            Q(object_type='anaf.documents.models.WebLink')
                         objects = Object.filter_by_request(
                             request, Object.objects.filter(query))
                         object = objects.get(pk=request.POST[key])
@@ -121,9 +121,9 @@ def _process_mass_form(f):
 def index(request, response_format='html'):
     "Index page: displays all Documents"
 
-    query = Q(object_type='treeio.documents.models.Document') | \
-        Q(object_type='treeio.documents.models.File') | \
-        Q(object_type='treeio.documents.models.WebLink')
+    query = Q(object_type='anaf.documents.models.Document') | \
+        Q(object_type='anaf.documents.models.File') | \
+        Q(object_type='anaf.documents.models.WebLink')
     if request.GET:
         query = _get_filter_query(request.GET) & query
         objects = Object.filter_by_request(
@@ -291,9 +291,9 @@ def folder_view(request, folder_id, response_format='html'):
         return user_denied(request, message="You don't have access to this Folder")
 
     query = Q(
-        object_type='treeio.documents.models.Document') | Q(
-        object_type='treeio.documents.models.File') | Q(
-        object_type='treeio.documents.models.WebLink')
+        object_type='anaf.documents.models.Document') | Q(
+        object_type='anaf.documents.models.File') | Q(
+        object_type='anaf.documents.models.WebLink')
     query = query & (Q(document__folder=folder) | Q(
         file__folder=folder) | Q(weblink__folder=folder))
 
@@ -375,9 +375,9 @@ def folder_delete(request, folder_id, response_format='html'):
         elif 'cancel' in request.POST:
             return HttpResponseRedirect(reverse('documents_folder_view', args=[folder.id]))
 
-    query = Q(object_type='treeio.documents.models.Document') | Q(
-        object_type='treeio.documents.models.File') | Q(
-        object_type='treeio.documents.models.WebLink')
+    query = Q(object_type='anaf.documents.models.Document') | Q(
+        object_type='anaf.documents.models.File') | Q(
+        object_type='anaf.documents.models.WebLink')
     query = query & (Q(document__folder=folder) | Q(
         file__folder=folder) | Q(weblink__folder=folder))
 

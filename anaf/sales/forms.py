@@ -245,7 +245,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_opportunity_status')[0]
+                'anaf.sales', 'default_opportunity_status')[0]
             default_opportunity_status = SaleStatus.objects.get(
                 pk=long(conf.value))
             self.fields[
@@ -255,7 +255,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_lead_status')[0]
+                'anaf.sales', 'default_lead_status')[0]
             default_lead_status = SaleStatus.objects.get(pk=long(conf.value))
             self.fields['default_lead_status'].initial = default_lead_status.id
         except:
@@ -263,7 +263,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_status')[0]
+                'anaf.sales', 'default_order_status')[0]
             default_order_status = SaleStatus.objects.get(pk=long(conf.value))
             self.fields[
                 'default_order_status'].initial = default_order_status.id
@@ -272,7 +272,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_source')[0]
+                'anaf.sales', 'default_order_source')[0]
             default_order_source = SaleSource.objects.get(pk=long(conf.value))
             self.fields[
                 'default_order_source'].initial = default_order_source.id
@@ -281,7 +281,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_product')[0]
+                'anaf.sales', 'default_order_product')[0]
             default_order_product = Product.objects.get(pk=long(conf.value))
             self.fields[
                 'default_order_product'].initial = default_order_product.id
@@ -290,7 +290,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'order_fulfil_status')[0]
+                'anaf.sales', 'order_fulfil_status')[0]
             order_fulfil_status = SaleStatus.objects.get(pk=long(conf.value))
             self.fields['order_fulfil_status'].initial = order_fulfil_status.id
         except:
@@ -306,14 +306,14 @@ class SettingsForm(forms.Form):
                         ModuleSetting.set_for_module('default_currency',
                                                      self.cleaned_data[
                                                          'default_currency'],
-                                                     'treeio.sales')
+                                                     'anaf.sales')
                         currency = Currency.objects.get(
                             pk=self.cleaned_data['default_currency'])
                         currency.is_default = True
                         currency.save()
                     else:
                         ModuleSetting.set_for_module(field, self.cleaned_data[field].id,
-                                                     'treeio.sales')
+                                                     'anaf.sales')
             return True
         except:
             return False
@@ -635,14 +635,14 @@ class OrderedProductForm(forms.ModelForm):
 
         self.fields['product'].queryset = Object.filter_permitted(
             user, Product.objects.filter(active=True))
-        if user.is_admin('treeio.sales'):
+        if user.is_admin('anaf.sales'):
             self.fields['product'].widget.attrs.update(
                 {'popuplink': reverse('sales_product_add')})
             self.fields['product'].label = _("Product")
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_product')[0]
+                'anaf.sales', 'default_order_product')[0]
             # AJAX to set the initial rate as the currency converted value of
             # product sell price
             self.fields['product'].initial = long(conf.value)
@@ -762,7 +762,7 @@ class OrderForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_source')[0]
+                'anaf.sales', 'default_order_source')[0]
             self.fields['source'].initial = long(conf.value)
         except:
             pass
@@ -773,7 +773,7 @@ class OrderForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_status')[0]
+                'anaf.sales', 'default_order_status')[0]
             self.fields['status'].initial = long(conf.value)
         except:
             pass
@@ -895,7 +895,7 @@ class LeadForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_product')[0]
+                'anaf.sales', 'default_order_product')[0]
             self.fields['products_interested'].initial = [long(conf.value)]
         except:
             pass
@@ -906,7 +906,7 @@ class LeadForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_lead_status')[0]
+                'anaf.sales', 'default_lead_status')[0]
             self.fields['status'].initial = long(conf.value)
         except:
             pass
@@ -986,7 +986,7 @@ class OpportunityForm(forms.ModelForm):
             {'popuplink': reverse('sales_product_add')})
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_product')[0]
+                'anaf.sales', 'default_order_product')[0]
             self.fields['products_interested'].initial = [long(conf.value)]
         except:
             pass
@@ -999,7 +999,7 @@ class OpportunityForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_opportunity_status')[0]
+                'anaf.sales', 'default_opportunity_status')[0]
             self.fields['status'].initial = long(conf.value)
         except:
             pass

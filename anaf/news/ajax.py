@@ -25,7 +25,7 @@ def get_more(request, target='#more-news', skip=20):
                               context_instance=RequestContext(request),
                               response_format='html')
 
-    dajax.add_data({'target': target, 'content': output}, 'treeio.add_data')
+    dajax.add_data({'target': target, 'content': output}, 'anaf.add_data')
     return dajax.json()
 
 dajaxice_functions.register(get_more)

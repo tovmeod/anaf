@@ -26,7 +26,7 @@ class ContactFieldHandler(ObjectHandler):
         return {'data': super(ObjectHandler, self).flatten_dict(request.data)}
 
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.identities')
+        return request.user.profile.is_admin('anaf.identities')
 
 
 class ContactTypeHandler(ObjectHandler):
@@ -43,7 +43,7 @@ class ContactTypeHandler(ObjectHandler):
         return ('api_identities_types', [object_id])
 
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.identities')
+        return request.user.profile.is_admin('anaf.identities')
 
 
 class ContactHandler(ObjectHandler):

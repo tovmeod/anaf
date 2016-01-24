@@ -49,7 +49,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.services', 'default_ticket_status')[0]
+                'anaf.services', 'default_ticket_status')[0]
             default_ticket_status = TicketStatus.objects.get(
                 pk=long(conf.value))
             self.fields[
@@ -59,7 +59,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.services', 'default_ticket_queue')[0]
+                'anaf.services', 'default_ticket_queue')[0]
             default_ticket_queue = TicketQueue.objects.get(pk=long(conf.value))
             self.fields[
                 'default_ticket_queue'].initial = default_ticket_queue.id
@@ -68,7 +68,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.services', 'send_email_to_caller')[0]
+                'anaf.services', 'send_email_to_caller')[0]
             self.fields['send_email_to_caller'].initial = conf.value
         except:
             self.fields[
@@ -77,7 +77,7 @@ class SettingsForm(forms.Form):
         # notification template
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.services', 'send_email_template')[0]
+                'anaf.services', 'send_email_template')[0]
             self.fields['send_email_template'].initial = conf.value
         except Exception:
             self.fields['send_email_template'].initial = get_template_source(
@@ -89,19 +89,19 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('default_ticket_status',
                                          self.cleaned_data[
                                              'default_ticket_status'].id,
-                                         'treeio.services')
+                                         'anaf.services')
             ModuleSetting.set_for_module('default_ticket_queue',
                                          self.cleaned_data[
                                              'default_ticket_queue'].id,
-                                         'treeio.services')
+                                         'anaf.services')
             ModuleSetting.set_for_module('send_email_to_caller',
                                          self.cleaned_data[
                                              'send_email_to_caller'],
-                                         'treeio.services')
+                                         'anaf.services')
             ModuleSetting.set_for_module('send_email_template',
                                          self.cleaned_data[
                                              'send_email_template'],
-                                         'treeio.services')
+                                         'anaf.services')
             return True
 
         except Exception:
@@ -218,7 +218,7 @@ class TicketForm(forms.ModelForm):
                 else:
                     try:
                         conf = ModuleSetting.get_for_module(
-                            'treeio.services', 'default_ticket_status')[0]
+                            'anaf.services', 'default_ticket_status')[0]
                         self.fields['status'].initial = long(conf.value)
                     except:
                         pass
@@ -238,13 +238,13 @@ class TicketForm(forms.ModelForm):
             else:
                 try:
                     conf = ModuleSetting.get_for_module(
-                        'treeio.services', 'default_ticket_status')[0]
+                        'anaf.services', 'default_ticket_status')[0]
                     self.fields['status'].initial = long(conf.value)
                 except:
                     pass
                 try:
                     conf = ModuleSetting.get_for_module(
-                        'treeio.services', 'default_ticket_queue')[0]
+                        'anaf.services', 'default_ticket_queue')[0]
                     self.fields['queue'].initial = long(conf.value)
                 except:
                     pass

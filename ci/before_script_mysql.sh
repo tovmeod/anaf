@@ -1,1 +1,1 @@
-mysql -e 'create database treeio;'
+mysql -e 'create database anaf;'

@@ -154,7 +154,7 @@ def status_view(request, status_id, response_format='html'):
     status = get_object_or_404(ChangeSetStatus, pk=status_id)
 
     if not request.user.profile.has_permission(status) \
-            and not request.user.profile.is_admin('treeio.changes'):
+            and not request.user.profile.is_admin('anaf.changes'):
         return user_denied(request, "You don't have access to this Change Set Status.",
                            response_format=response_format)
 
@@ -179,7 +179,7 @@ def status_view(request, status_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-@module_admin_required('treeio.changes')
+@module_admin_required('anaf.changes')
 def status_edit(request, status_id, response_format='html'):
     "Status edit"
 
@@ -203,7 +203,7 @@ def status_edit(request, status_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-@module_admin_required('treeio.changes')
+@module_admin_required('anaf.changes')
 def status_delete(request, status_id, response_format='html'):
     "Status delete"
 
@@ -229,7 +229,7 @@ def status_delete(request, status_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-@module_admin_required('treeio.changes')
+@module_admin_required('anaf.changes')
 def status_add(request, response_format='html'):
     "Status add"
 
@@ -259,7 +259,7 @@ def set_view(request, set_id, response_format='html'):
     changeset = get_object_or_404(ChangeSet, pk=set_id)
 
     if not request.user.profile.has_permission(changeset.object) \
-            and not request.user.profile.is_admin('treeio.changes'):
+            and not request.user.profile.is_admin('anaf.changes'):
         return user_denied(request, "You don't have access to this Change Set.",
                            response_format=response_format)
 
@@ -278,7 +278,7 @@ def set_edit(request, set_id, response_format='html'):
     changeset = get_object_or_404(ChangeSet, pk=set_id)
 
     if not request.user.profile.has_permission(changeset.object, mode='w') \
-            and not request.user.profile.is_admin('treeio.changes'):
+            and not request.user.profile.is_admin('anaf.changes'):
         return user_denied(request, "You don't have access to this Change Set.",
                            response_format=response_format)
 
@@ -307,7 +307,7 @@ def set_delete(request, set_id, response_format='html'):
     changeset = get_object_or_404(ChangeSet, pk=set_id)
 
     if not request.user.profile.has_permission(changeset.object, mode='w') \
-            and not request.user.profile.is_admin('treeio.changes'):
+            and not request.user.profile.is_admin('anaf.changes'):
         return user_denied(request, "You don't have access to this Change Set.",
                            response_format=response_format)
 
@@ -356,14 +356,14 @@ def set_add(request, response_format='html'):
 #
 @handle_response_format
 @mylogin_required
-@module_admin_required('treeio.changes')
+@module_admin_required('anaf.changes')
 def settings_view(request, response_format='html'):
     "Settings"
 
     # default changeset status
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.changes', 'default_changeset_status')[0]
+            'anaf.changes', 'default_changeset_status')[0]
         default_changeset_status = ChangeSetStatus.objects.get(
             pk=long(conf.value))
 
@@ -386,7 +386,7 @@ def settings_view(request, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-@module_admin_required('treeio.changes')
+@module_admin_required('anaf.changes')
 def settings_edit(request, response_format='html'):
     "Settings"
 

@@ -193,7 +193,7 @@ def type_edit(request, type_id, response_format='html'):
 def type_add(request, response_format='html'):
     "ItemType add"
 
-    if not request.user.profile.is_admin('treeio.infrastructure'):
+    if not request.user.profile.is_admin('anaf.infrastructure'):
         return user_denied(request, message="You don't have administrator access to the Infrastructure module",
                            response_format=response_format)
 
@@ -300,7 +300,7 @@ def field_edit(request, field_id, response_format='html'):
 def field_add(request, response_format='html'):
     "ItemField add"
 
-    if not request.user.profile.is_admin('treeio.infrastructure'):
+    if not request.user.profile.is_admin('anaf.infrastructure'):
         return user_denied(request,
                            message="You don't have administrator access to the Infrastructure module",
                            response_format=response_format)
@@ -445,7 +445,7 @@ def status_delete(request, status_id, response_format='html'):
 def status_add(request, response_format='html'):
     "ItemStatus edit"
 
-    if not request.user.profile.is_admin('treeio.infrastructure'):
+    if not request.user.profile.is_admin('anaf.infrastructure'):
         return user_denied(request, message="You are not an Administrator of the Infrastructure module",
                            response_format=response_format)
 
@@ -701,11 +701,11 @@ def location_delete(request, location_id, response_format='html'):
 #
 @handle_response_format
 @mylogin_required
-@module_admin_required('treeio.infrastructure')
+@module_admin_required('anaf.infrastructure')
 def settings_view(request, response_format='html'):
     "Settings"
 
-    if not request.user.profile.is_admin('treeio.infrastructure'):
+    if not request.user.profile.is_admin('anaf.infrastructure'):
         return user_denied(request, message="You are not an Administrator of the Infrastructure module",
                            response_format=response_format)
 
@@ -716,7 +716,7 @@ def settings_view(request, response_format='html'):
     default_item_status = None
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.infrastructure', 'default_item_status')[0]
+            'anaf.infrastructure', 'default_item_status')[0]
         default_item_status = ItemStatus.objects.get(
             pk=long(conf.value), trash=False)
     except Exception:
@@ -734,7 +734,7 @@ def settings_view(request, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-@module_admin_required('treeio.infrastructure')
+@module_admin_required('anaf.infrastructure')
 def settings_edit(request, response_format='html'):
     "Settings"
 
@@ -786,7 +786,7 @@ def service_record_index(request, response_format='html'):
 def service_record_add(request, response_format='html'):
     "New service_record form"
 
-    if not request.user.profile.is_admin('treeio.infrastructure'):
+    if not request.user.profile.is_admin('anaf.infrastructure'):
         return user_denied(request,
                            message="You don't have administrator access to the Infrastructure module")
 

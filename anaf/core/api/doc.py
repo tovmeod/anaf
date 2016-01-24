@@ -214,7 +214,7 @@ class HandlerDocumentation(object):
             lookup_view = get_callable(lookup_view, True)
 
             possibilities = get_resolver(
-                'treeio.core.api.urls').reverse_dict.getlist(lookup_view)
+                'anaf.core.api.urls').reverse_dict.getlist(lookup_view)
 
             for possibility, pattern in possibilities:
                 for result, params in possibility:
@@ -248,7 +248,7 @@ class HandlerDocumentation(object):
                 lookup_view = get_callable(lookup_view, True)
 
                 possibilities = get_resolver(
-                    'treeio.core.api.urls').reverse_dict.getlist(lookup_view)
+                    'anaf.core.api.urls').reverse_dict.getlist(lookup_view)
 
                 for possibility, pattern in possibilities:
                     for result, params in possibility:

@@ -96,7 +96,7 @@ class ChangeSetForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.changes', 'default_changeset_status')[0]
+                'anaf.changes', 'default_changeset_status')[0]
             default_changeset_status = ChangeSetStatus.objects.get(
                 pk=long(conf.value))
             if not default_changeset_status.trash:
@@ -201,7 +201,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.changes', 'default_changeset_status')[0]
+                'anaf.changes', 'default_changeset_status')[0]
             default_changeset_status = ChangeSetStatus.objects.get(
                 pk=long(conf.value))
             if not default_changeset_status.trash:
@@ -216,7 +216,7 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('default_changeset_status',
                                          self.cleaned_data[
                                              'default_changeset_status'].id,
-                                         'treeio.changes')
+                                         'anaf.changes')
             return True
 
         except Exception:

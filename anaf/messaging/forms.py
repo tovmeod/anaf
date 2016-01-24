@@ -33,7 +33,7 @@ class SettingsForm(forms.Form):
         self.fields['default_contact_type'].queryset = Object.filter_permitted(user,
                                                                                ContactType.objects, mode='x')
         try:
-            conf = ModuleSetting.get_for_module('treeio.messaging', 'default_contact_type',
+            conf = ModuleSetting.get_for_module('anaf.messaging', 'default_contact_type',
                                                 user=user)[0]
             default_contact_type = ContactType.objects.get(pk=long(conf.value))
             self.fields[
@@ -43,7 +43,7 @@ class SettingsForm(forms.Form):
 
         self.fields['default_imap_folder'].label = _('Default IMAP Folder')
         try:
-            conf = ModuleSetting.get_for_module('treeio.messaging', 'default_imap_folder',
+            conf = ModuleSetting.get_for_module('anaf.messaging', 'default_imap_folder',
                                                 user=user)[0]
             self.fields['default_imap_folder'].initial = conf.value
         except:
@@ -52,7 +52,7 @@ class SettingsForm(forms.Form):
 
         self.fields['signature'].label = _('Signature')
         try:
-            conf = ModuleSetting.get_for_module('treeio.messaging', 'signature',
+            conf = ModuleSetting.get_for_module('anaf.messaging', 'signature',
                                                 user=user, strict=True)[0]
             signature = conf.value
             self.fields['signature'].initial = signature
@@ -65,7 +65,7 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('default_contact_type',
                                          self.cleaned_data[
                                              'default_contact_type'].id,
-                                         'treeio.messaging')
+                                         'anaf.messaging')
         except:
             pass
 
@@ -73,14 +73,14 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('default_imap_folder',
                                          self.cleaned_data[
                                              'default_imap_folder'],
-                                         'treeio.messaging')
+                                         'anaf.messaging')
         except:
             pass
 
         try:
             ModuleSetting.set_for_module('signature',
                                          self.cleaned_data['signature'],
-                                         'treeio.messaging', user=self.user)
+                                         'anaf.messaging', user=self.user)
         except:
             pass
 
@@ -181,7 +181,7 @@ class MessageForm(forms.ModelForm):
         self.fields['body'].label = _("Body")
         # signature
         try:
-            conf = ModuleSetting.get_for_module('treeio.messaging', 'signature',
+            conf = ModuleSetting.get_for_module('anaf.messaging', 'signature',
                                                 user=user, strict=True)[0]
             signature = conf.value
             self.fields['body'].initial = signature

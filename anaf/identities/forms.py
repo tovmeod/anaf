@@ -259,7 +259,7 @@ class ContactForm(forms.Form):
                 field_name = self._get_free_field_name(field)
                 self.fields[field_name] = self._get_form_field(field)
 
-        if user.is_admin('treeio.identities'):
+        if user.is_admin('anaf.identities'):
             self.fields['related_user'] = forms.ModelChoiceField(label=_('Attach to User'),
                                                                  queryset=[], required=False)
             self.fields['related_user'].queryset = AccessEntity.objects.all()
@@ -355,7 +355,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.identities', 'default_contact_type')[0]
+                'anaf.identities', 'default_contact_type')[0]
             default_task_status = ContactType.objects.get(pk=long(conf.value))
             self.fields[
                 'default_contact_type'].initial = default_task_status.id
@@ -368,7 +368,7 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('default_contact_type',
                                          self.cleaned_data[
                                              'default_contact_type'].id,
-                                         'treeio.identities')
+                                         'anaf.identities')
 
         except Exception:
             return False

@@ -17,11 +17,11 @@ from anaf.sales.forms import OrderForm, ProductForm, SaleStatusForm, LeadForm, O
 
 class SaleCommonHandler(ObjectHandler):
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.sales')
+        return request.user.profile.is_admin('anaf.sales')
 
     def check_instance_permission(self, request, inst, mode):
         return request.user.profile.has_permission(inst, mode=mode) \
-               or request.user.profile.is_admin('treeio.sales')
+               or request.user.profile.is_admin('anaf.sales')
 
 
 class SaleStatusHandler(SaleCommonHandler):

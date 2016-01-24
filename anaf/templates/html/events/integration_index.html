@@ -91,7 +91,7 @@
 {% if response.data.result_name.raw == 'access' %}
 <div class="content-list-item spaced-h spaced-v">
     <span class="heavy">Anaf does not have access to your profile.</span>
-    <a href="javascript:treeio.nuvius.fetch_access();" class="inline-link add-link ajax-link-out">{% trans %}Grant access{% endtrans %}</a>
+    <a href="javascript:anaf.nuvius.fetch_access();" class="inline-link add-link ajax-link-out">{% trans %}Grant access{% endtrans %}</a>
 </div>
 {% else %}
 <div class="content-list-item spaced-h spaced-v">
@@ -111,7 +111,7 @@
 {% else %}
 <script type="text/javascript">
     $( function() {
-        treeio.nuvius.fetch_profile()
+        anaf.nuvius.fetch_profile()
     });
 </script>
 <div class="content-list-item spaced-h spaced-v showjs">
