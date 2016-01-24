@@ -7,7 +7,7 @@ import ConfigParser
 import sys
 
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
-CONFIG_FILE = 'treeio.ini'
+CONFIG_FILE = 'anaf.ini'
 USER_CONFIG_FILE = path.join(path.dirname(BASE_DIR), CONFIG_FILE)
 DEFAULT_CONFIG_FILE = path.join(BASE_DIR, CONFIG_FILE)
 DEBUG = (True if 'DEBUG' not in os.environ else {'true': True, 'false': False}[os.environ['DEBUG'].lower()])
@@ -101,11 +101,11 @@ if not DEBUG:
     STATIC_URL = path.join(BASE_DIR, 'static/')
 else:
     STATICFILES_DIRS = (
-        path.join(BASE_DIR, 'static'),
+        path.join(BASE_DIR, 'anaf/static'),
     )
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(path.dirname(BASE_DIR), 'static')
-STATIC_DOC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(path.dirname(BASE_DIR), 'anaf/static')
+STATIC_DOC_ROOT = os.path.join(BASE_DIR, 'anaf/static')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -179,7 +179,7 @@ MIDDLEWARE_CLASSES = (
     'johnny.middleware.LocalStoreClearMiddleware',
     'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
-    # 'treeio.core.middleware.domain.DomainMiddleware',
+    # 'anaf.core.middleware.domain.DomainMiddleware',
     'anaf.core.middleware.user.SSLMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'anaf.core.middleware.chat.ChatAjaxMiddleware',
@@ -194,7 +194,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'anaf/templates'),
 )
 
 
@@ -255,23 +255,7 @@ AUTHENTICATION_BACKENDS = (
 # AUTH_LDAP_START_TLS = True
 
 
-#
-# Messaging
-#
-
-LOCALE_PATHS = (BASE_DIR + "/locale",)
-
-#
-# htsafe settings
-#
-
-# Replace unsafe tags
-HARDTREE_SAFE_TAGS = ('div', 'ul', 'li', 'label', 'span', 'strong', 'em', 'p', 'input',
-                      'select', 'textarea', 'br')
-HARDTREE_UNSAFE_TAGS = ('script', 'object', 'embed',
-                        'applet', 'noframes', 'noscript', 'noembed', 'iframe',
-                        'frame', 'frameset')
-
+# LOCALE_PATHS = (BASE_DIR + "/anaf/locale",)
 
 #
 # Anaf Subcription settings
@@ -291,7 +275,7 @@ NUVIUS_NEXT = "iframe"
 NUVIUS_CHECK_USER_KEYS = True
 
 NUVIUS_DATA_CACHE_LIFE = 600
-CACHE_KEY_PREFIX = 'treeio_'
+CACHE_KEY_PREFIX = 'anaf_'
 
 #
 # Search index (Whoosh)
@@ -330,7 +314,7 @@ if not TESTING:
 
 # CACHE_BACKEND="johnny.backends.locmem://"
 
-JOHNNY_MIDDLEWARE_KEY_PREFIX = 'jc_treeio'
+JOHNNY_MIDDLEWARE_KEY_PREFIX = 'jc_anaf'
 
 DISABLE_QUERYSET_CACHE = False
 
