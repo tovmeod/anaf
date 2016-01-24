@@ -97,7 +97,7 @@ def settings_view(request, response_format='html'):
     # default permissions
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.core', 'default_permissions', user=user)[0]
+            'anaf.core', 'default_permissions', user=user)[0]
         default_permissions = conf.value
     except:
         default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
@@ -105,7 +105,7 @@ def settings_view(request, response_format='html'):
     # default perspective
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.core', 'default_perspective', user=user)[0]
+            'anaf.core', 'default_perspective', user=user)[0]
         default_perspective = Perspective.objects.get(pk=long(conf.value))
     except:
         default_perspective = None

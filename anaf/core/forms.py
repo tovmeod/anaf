@@ -333,19 +333,19 @@ class SqlSettingsForm(forms.Form):
                 'PASSWORD': self.cleaned_data['sql_password'],
             }
             # creates database
-            settings.DATABASES['treeio_new_db'] = database
+            settings.DATABASES['anaf_new_db'] = database
             try:
-                setup_domain_database('treeio_new_db', True)
+                setup_domain_database('anaf_new_db', True)
             except ImproperlyConfigured as exc:
                 self._errors['sql_engine'] = self.error_class(
                     [_("Can't connect to engine. Error is ") + exc.message])
                 del self.cleaned_data['sql_engine']
             except Exception as exc:
-                del connections._connections['treeio_new_db']
+                del connections._connections['anaf_new_db']
                 raise ValidationError(
                     _("Can't create database. SQL error is") + ' {0!s}'.format(exc))
             finally:
-                del settings.DATABASES['treeio_new_db']
+                del settings.DATABASES['anaf_new_db']
 
             # save database settings
             settings.DATABASES[router.db_for_read(ConfigSetting)] = database

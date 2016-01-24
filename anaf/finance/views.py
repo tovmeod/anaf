@@ -917,7 +917,7 @@ def income_view(request, response_format='html'):
     "Income Statement view page"
 
     try:
-        conf = ModuleSetting.get_for_module('treeio.finance', 'my_company')[0]
+        conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
         my_company = Contact.objects.get(pk=long(conf.value), trash=False)
 
     except Exception:
@@ -1001,7 +1001,7 @@ def balance_sheet(request, response_format='html'):
                'equity_liabilities_total': Decimal('0.0')}
 
     try:
-        conf = ModuleSetting.get_for_module('treeio.finance', 'my_company')[0]
+        conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
         my_company = Contact.objects.get(pk=long(conf.value), trash=False)
     except:
         my_company = None
@@ -1103,7 +1103,7 @@ def balance_sheet(request, response_format='html'):
 def index_accounts(request, response_format='html'):
     "Settings"
 
-    if not request.user.profile.is_admin('treeio.finance'):
+    if not request.user.profile.is_admin('anaf.finance'):
         return user_denied(request, message="You don't have administrator access to the Finance module")
 
     if request.GET:
@@ -1136,7 +1136,7 @@ def settings_view(request, response_format='html'):
     "Settings"
 
     # default currency
-    if not request.user.profile.is_admin('treeio.finance'):
+    if not request.user.profile.is_admin('anaf.finance'):
         return user_denied(request, message="You don't have administrator access to the Finance module")
 
     try:
@@ -1146,7 +1146,7 @@ def settings_view(request, response_format='html'):
 
     # default company
     try:
-        conf = ModuleSetting.get_for_module('treeio.finance', 'my_company')[0]
+        conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
         my_company = Contact.objects.get(pk=long(conf.value))
 
     except Exception:
@@ -1155,7 +1155,7 @@ def settings_view(request, response_format='html'):
     # default account
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.finance', 'default_account')[0]
+            'anaf.finance', 'default_account')[0]
         default_account = Account.objects.get(pk=long(conf.value))
     except Exception:
         default_account = None
@@ -1203,7 +1203,7 @@ def settings_view(request, response_format='html'):
 def settings_edit(request, response_format='html'):
     "Settings"
 
-    if not request.user.profile.is_admin('treeio.finance'):
+    if not request.user.profile.is_admin('anaf.finance'):
         return user_denied(request, message="You don't have administrator access to the Finance module")
 
     if request.POST:
@@ -1233,7 +1233,7 @@ def settings_edit(request, response_format='html'):
 def currency_add(request, response_format='html'):
     "Currency add"
 
-    if not request.user.profile.is_admin('treeio.finance'):
+    if not request.user.profile.is_admin('anaf.finance'):
         return user_denied(request, message="You don't have administrator access to the Finance module")
 
     if request.POST:
@@ -1267,7 +1267,7 @@ def currency_edit(request, currency_id, response_format='html'):
 
     currency = get_object_or_404(Currency, pk=currency_id)
     if not request.user.profile.has_permission(currency, mode='w') \
-            and not request.user.profile.is_admin('treeio_finance'):
+            and not request.user.profile.is_admin('anaf_finance'):
         return user_denied(request, "You don't have access to this Currency", response_format)
 
     if request.POST:
@@ -1295,7 +1295,7 @@ def currency_view(request, currency_id, response_format='html'):
 
     currency = get_object_or_404(Currency, pk=currency_id)
     if not request.user.profile.has_permission(currency, mode='r') \
-            and not request.user.profile.is_admin('treeio_finance'):
+            and not request.user.profile.is_admin('anaf_finance'):
         return user_denied(request, "You don't have access to this Currency", response_format)
 
     return render_to_response('finance/currency_view',
@@ -1341,7 +1341,7 @@ def currency_delete(request, currency_id, response_format='html'):
 def tax_add(request, response_format='html'):
     "Tax add"
 
-    if not request.user.profile.is_admin('treeio.finance'):
+    if not request.user.profile.is_admin('anaf.finance'):
         return user_denied(request, message="You don't have administrator access to the Finance module")
 
     if request.POST:
@@ -1371,7 +1371,7 @@ def tax_edit(request, tax_id, response_format='html'):
 
     tax = get_object_or_404(Tax, pk=tax_id)
     if not request.user.profile.has_permission(tax, mode='w') \
-            and not request.user.profile.is_admin('treeio_finance'):
+            and not request.user.profile.is_admin('anaf_finance'):
         return user_denied(request, "You don't have access to this Tax", response_format)
 
     if request.POST:
@@ -1399,7 +1399,7 @@ def tax_view(request, tax_id, response_format='html'):
 
     tax = get_object_or_404(Tax, pk=tax_id)
     if not request.user.profile.has_permission(tax, mode='r') \
-            and not request.user.profile.is_admin('treeio_finance'):
+            and not request.user.profile.is_admin('anaf_finance'):
         return user_denied(request, "You don't have access to this Tax", response_format)
 
     return render_to_response('finance/tax_view',

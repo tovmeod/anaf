@@ -120,7 +120,7 @@ class BaseEmail(Thread):
             else:
                 import traceback
                 import sys
-                from treeio import core
+                from anaf import core
                 from django.core.mail import mail_admins
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 domain = getattr(settings, 'CURRENT_DOMAIN', 'default')

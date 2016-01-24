@@ -20,8 +20,8 @@ def user_block(context):
 
     user = request.user.profile
     modules = user.get_perspective().get_modules()
-    account = modules.filter(name='treeio.account')
-    admin = modules.filter(name='treeio.core')
+    account = modules.filter(name='anaf.account')
+    admin = modules.filter(name='anaf.core')
     if admin:
         admin = admin[0]
 

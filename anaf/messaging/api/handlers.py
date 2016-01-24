@@ -88,7 +88,7 @@ class MessageHandler(ObjectHandler):
                 if 'multicomplete_recipients' in request.POST and request.POST['multicomplete_recipients']:
                     try:
                         conf = ModuleSetting.get_for_module(
-                            'treeio.messaging', 'default_contact_type')[0]
+                            'anaf.messaging', 'default_contact_type')[0]
                         default_contact_type = ContactType.objects.get(
                             pk=long(conf.value))
                     except Exception:
@@ -154,7 +154,7 @@ class MessageHandler(ObjectHandler):
                 if 'multicomplete_recipients' in request.POST and request.POST['multicomplete_recipients']:
                     try:
                         conf = ModuleSetting.get_for_module(
-                            'treeio.messaging', 'default_contact_type')[0]
+                            'anaf.messaging', 'default_contact_type')[0]
                         default_contact_type = ContactType.objects.get(
                             pk=long(conf.value))
                     except Exception:

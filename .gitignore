@@ -2,8 +2,11 @@
 *.pyc
 treeio/core/db/dbsettings.json
 .*.swp
-treeio.db
+anaf.db
 doc/_build
-build/*
+build
 .idea/*
 static/media/*
+.coverage
+.eggs
+dist

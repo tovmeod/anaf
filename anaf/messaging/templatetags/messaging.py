@@ -50,7 +50,7 @@ def messaging_unread(context):
     messaging = None
     if user:
         modules = user.get_perspective().get_modules()
-        messaging = modules.filter(name='treeio.messaging')
+        messaging = modules.filter(name='anaf.messaging')
         if messaging:
             unread = Object.filter_permitted(user,
                                              Message.objects.filter(reply_to__isnull=True).exclude(read_by=user)).count()

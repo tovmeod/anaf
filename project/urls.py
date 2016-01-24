@@ -47,7 +47,7 @@ urlpatterns = patterns('',
                        (r'^api/', include('anaf.core.api.urls')),
 
                        # Forest
-                       # if_installed('treeio.forest', r'^forest/', include('treeio.forest.urls')),
+                       # if_installed('anaf.forest', r'^forest/', include('anaf.forest.urls')),
 
                        # Mobile handler
                        url(r'^m(?P<url>.+)?$', 'anaf.core.views.mobile_view',

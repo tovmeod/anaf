@@ -6,10 +6,10 @@ from utils import rc
 
 
 def module_admin_required(module_name=None):
-    """ Check that the user has write access to the treeio.core module """
+    """ Check that the user has write access to the anaf.core module """
 
     if not module_name:
-        module_name = 'treeio.core'
+        module_name = 'anaf.core'
 
     def wrap(f):
         "Wrap"

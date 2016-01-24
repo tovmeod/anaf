@@ -1,0 +1,3 @@
+recursive-include anaf/locale *
+recursive-include anaf/templates *
+recursive-include anaf/static *

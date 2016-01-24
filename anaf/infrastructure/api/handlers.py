@@ -16,7 +16,7 @@ from anaf.infrastructure.forms import ItemForm, ItemTypeForm, ItemStatusForm, It
 
 class InfrastructureCommonHandler(ObjectHandler):
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.infrastructure')
+        return request.user.profile.is_admin('anaf.infrastructure')
 
 
 class ItemFieldHandler(InfrastructureCommonHandler):

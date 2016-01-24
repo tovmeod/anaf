@@ -157,7 +157,7 @@ def type_edit(request, type_id, response_format='html'):
 def type_add(request, response_format='html'):
     "ContactType add"
 
-    if not request.user.profile.is_admin('treeio.identities'):
+    if not request.user.profile.is_admin('anaf.identities'):
         return user_denied(request,
                            message="You don't have administrator access to the Infrastructure module",
                            response_format=response_format)
@@ -264,7 +264,7 @@ def field_edit(request, field_id, response_format='html'):
 def field_add(request, response_format='html'):
     "ContactField add"
 
-    if not request.user.profile.is_admin('treeio.identities'):
+    if not request.user.profile.is_admin('anaf.identities'):
         return user_denied(request,
                            message="You don't have administrator access to the Infrastructure module",
                            response_format=response_format)
@@ -693,7 +693,7 @@ def location_delete(request, location_id, response_format='html'):
 def settings_view(request, response_format='html'):
     "Settings"
 
-    if not request.user.profile.is_admin('treeio.identities'):
+    if not request.user.profile.is_admin('anaf.identities'):
         return user_denied(request, message="You are not an Administrator of the Identities module",
                            response_format=response_format)
 

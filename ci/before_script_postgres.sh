@@ -1,1 +1,1 @@
-psql -c 'create database treeio;' -U postgres
+psql -c 'create database anaf;' -U postgres

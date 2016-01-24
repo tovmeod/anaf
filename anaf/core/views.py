@@ -158,6 +158,7 @@ def logo_image(request, gif=False, response_format='html'):
         logopath += '.png'
         mimetype = 'image/png'
 
+    # FIXME: logo file loading logic sucks, maybe use x-sendfile
     customlogo = ''
     try:
         conf = ModuleSetting.get_for_module('anaf.core', 'logopath')[0]

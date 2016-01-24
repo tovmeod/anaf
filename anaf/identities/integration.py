@@ -233,7 +233,7 @@ def sync(user=None):
         if user:
             connector = Connector(profile_id=profile['id'])
             active_resources = ModuleSetting.get_for_module(
-                'treeio.identities', 'integration_resource', user=user, strict=True)
+                'anaf.identities', 'integration_resource', user=user, strict=True)
             for resource in active_resources:
                 res = resource.loads()
                 response = connector.get(

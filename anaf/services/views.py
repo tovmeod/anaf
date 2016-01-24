@@ -206,7 +206,7 @@ def status_edit(request, status_id, response_format='html'):
 
     status = get_object_or_404(TicketStatus, pk=status_id)
     if not request.user.profile.has_permission(status, mode='w') \
-            and not request.user.profile.is_admin('treeio_services'):
+            and not request.user.profile.is_admin('anaf'):
         return user_denied(request, "You don't have access to this Ticket Status", response_format)
 
     if request.POST:
@@ -261,7 +261,7 @@ def status_delete(request, status_id, response_format='html'):
 def status_add(request, response_format='html'):
     "TicketStatus add"
 
-    if not request.user.profile.is_admin('treeio.services'):
+    if not request.user.profile.is_admin('anaf.services'):
         return user_denied(request,
                            message="You don't have administrator access to the Service Support module")
 
@@ -392,7 +392,7 @@ def queue_delete(request, queue_id, response_format='html'):
 def queue_add(request, response_format='html'):
     "Queue add"
 
-    if not request.user.profile.is_admin('treeio.services'):
+    if not request.user.profile.is_admin('anaf.services'):
         return user_denied(request,
                            message="You don't have administrator access to the Service Support module")
 
@@ -568,7 +568,7 @@ def ticket_add(request, queue_id=None, response_format='html'):
                     else:
                         try:
                             conf = ModuleSetting.get_for_module(
-                                'treeio.services', 'default_ticket_status')[0]
+                                'anaf.services', 'default_ticket_status')[0]
                             ticket.status = TicketStatus.objects.get(
                                 pk=long(conf.value))
                         except:
@@ -582,7 +582,7 @@ def ticket_add(request, queue_id=None, response_format='html'):
                 else:
                     try:
                         conf = ModuleSetting.get_for_module(
-                            'treeio.services', 'default_ticket_status')[0]
+                            'anaf.services', 'default_ticket_status')[0]
                         ticket.status = TicketStatus.objects.get(
                             pk=long(conf.value))
                     except:
@@ -593,7 +593,7 @@ def ticket_add(request, queue_id=None, response_format='html'):
                                 pass
                     try:
                         conf = ModuleSetting.get_for_module(
-                            'treeio.services', 'default_ticket_queue')[0]
+                            'anaf.services', 'default_ticket_queue')[0]
                         ticket.queue = TicketQueue.objects.get(
                             pk=long(conf.value))
                     except:
@@ -651,7 +651,7 @@ def service_view(request, service_id, response_format='html'):
 
     service = get_object_or_404(Service, pk=service_id)
     if not request.user.profile.has_permission(service) \
-            and not request.user.profile.is_admin('treeio_services'):
+            and not request.user.profile.is_admin('anaf'):
         return user_denied(request, message="You don't have access to this Service")
 
     context = _get_default_context(request)
@@ -668,7 +668,7 @@ def service_edit(request, service_id, response_format='html'):
 
     service = get_object_or_404(Service, pk=service_id)
     if not request.user.profile.has_permission(service, mode='w') \
-            and not request.user.profile.is_admin('treeio_services'):
+            and not request.user.profile.is_admin('anaf'):
         return user_denied(request, message="You don't have access to this Service")
 
     if request.POST:
@@ -697,7 +697,7 @@ def service_delete(request, service_id, response_format='html'):
 
     service = get_object_or_404(Service, pk=service_id)
     if not request.user.profile.has_permission(service, mode='w') \
-            and not request.user.profile.is_admin('treeio_services'):
+            and not request.user.profile.is_admin('anaf'):
         return user_denied(request, message="You don't have access to this Service")
 
     if request.POST:
@@ -723,7 +723,7 @@ def service_delete(request, service_id, response_format='html'):
 def service_add(request, response_format='html'):
     "Service add"
 
-    if not request.user.profile.is_admin('treeio.services'):
+    if not request.user.profile.is_admin('anaf.services'):
         return user_denied(request,
                            message="You don't have administrator access to the Service Support module")
 
@@ -851,7 +851,7 @@ def sla_delete(request, sla_id, response_format='html'):
 def sla_add(request, response_format='html'):
     "ServiceLevelAgreement add"
 
-    if not request.user.profile.is_admin('treeio.services'):
+    if not request.user.profile.is_admin('anaf.services'):
         return user_denied(request,
                            message="You don't have administrator access to the Service Support module")
 
@@ -884,14 +884,14 @@ def sla_add(request, response_format='html'):
 def settings_view(request, response_format='html'):
     "Settings"
 
-    if not request.user.profile.is_admin('treeio.services'):
+    if not request.user.profile.is_admin('anaf.services'):
         return user_denied(request,
                            message="You don't have administrator access to the Service Support module")
 
     # default ticket status
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.services', 'default_ticket_status')[0]
+            'anaf.services', 'default_ticket_status')[0]
         default_ticket_status = TicketStatus.objects.get(pk=long(conf.value))
     except Exception:
         default_ticket_status = None
@@ -899,7 +899,7 @@ def settings_view(request, response_format='html'):
     # default queue
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.services', 'default_ticket_queue')[0]
+            'anaf.services', 'default_ticket_queue')[0]
         default_ticket_queue = TicketQueue.objects.get(pk=long(conf.value))
     except Exception:
         default_ticket_queue = None
@@ -907,7 +907,7 @@ def settings_view(request, response_format='html'):
     # notify ticket caller by email
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.services', 'send_email_to_caller')[0]
+            'anaf.services', 'send_email_to_caller')[0]
         send_email_to_caller = conf.value
     except Exception:
         send_email_to_caller = settings.ANAF_SEND_EMAIL_TO_CALLER
@@ -916,7 +916,7 @@ def settings_view(request, response_format='html'):
     send_email_example = ''
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.services', 'send_email_template')[0]
+            'anaf.services', 'send_email_template')[0]
         send_email_template = conf.value
     except Exception:
         send_email_template = None
@@ -972,7 +972,7 @@ def settings_view(request, response_format='html'):
 def settings_edit(request, response_format='html'):
     "Settings"
 
-    if not request.user.profile.is_admin('treeio.services'):
+    if not request.user.profile.is_admin('anaf.services'):
         return user_denied(request,
                            message="You don't have administrator access to the Service Support module")
 
@@ -1003,7 +1003,7 @@ def settings_edit(request, response_format='html'):
 def agent_index(request, response_format='html'):
     "All available Agents"
 
-    if not request.user.profile.is_admin('treeio.services'):
+    if not request.user.profile.is_admin('anaf.services'):
         return user_denied(request,
                            message="You don't have administrator access to the Service Support module")
 
@@ -1100,7 +1100,7 @@ def agent_delete(request, agent_id, response_format='html'):
 def agent_add(request, response_format='html'):
     "Agent add"
 
-    if not request.user.profile.is_admin('treeio.services'):
+    if not request.user.profile.is_admin('anaf.services'):
         return user_denied(request,
                            message="You don't have administrator access to the Service Support module")
 

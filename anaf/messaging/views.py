@@ -245,7 +245,7 @@ def stream_view(request, stream_id, response_format='html'):
                     if 'multicomplete_recipients' in request.POST and request.POST['multicomplete_recipients']:
                         try:
                             conf = ModuleSetting.get_for_module(
-                                'treeio.messaging', 'default_contact_type')[0]
+                                'anaf.messaging', 'default_contact_type')[0]
                             default_contact_type = ContactType.objects.get(
                                 pk=long(conf.value))
                         except Exception:
@@ -397,7 +397,7 @@ def messaging_compose(request, response_format='html'):
                     if 'multicomplete_recipients' in request.POST and request.POST['multicomplete_recipients']:
                         try:
                             conf = ModuleSetting.get_for_module(
-                                'treeio.messaging', 'default_contact_type')[0]
+                                'anaf.messaging', 'default_contact_type')[0]
                             default_contact_type = ContactType.objects.get(
                                 pk=long(conf.value))
                         except Exception:
@@ -469,7 +469,7 @@ def messaging_view(request, message_id, response_format='html'):
                 if 'multicomplete_recipients' in request.POST and request.POST['multicomplete_recipients']:
                     try:
                         conf = ModuleSetting.get_for_module(
-                            'treeio.messaging', 'default_contact_type')[0]
+                            'anaf.messaging', 'default_contact_type')[0]
                         default_contact_type = ContactType.objects.get(
                             pk=long(conf.value))
                     except Exception:
@@ -680,7 +680,7 @@ def settings_view(request, response_format='html'):
 
     # default content type
     try:
-        conf = ModuleSetting.get_for_module('treeio.messaging', 'default_contact_type',
+        conf = ModuleSetting.get_for_module('anaf.messaging', 'default_contact_type',
                                             user=request.user.profile)[0]
         default_contact_type = ContactType.objects.get(pk=long(conf.value))
     except:
@@ -689,14 +689,14 @@ def settings_view(request, response_format='html'):
     # default imap folder
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.messaging', 'default_imap_folder')[0]
+            'anaf.messaging', 'default_imap_folder')[0]
         default_imap_folder = conf.value
     except:
         default_imap_folder = settings.ANAF_MESSAGING_IMAP_DEFAULT_FOLDER_NAME
 
     # signature
     try:
-        conf = ModuleSetting.get_for_module('treeio.messaging', 'signature',
+        conf = ModuleSetting.get_for_module('anaf.messaging', 'signature',
                                             user=request.user.profile, strict=True)[0]
         signature = conf.value
     except:

@@ -1,0 +1,8 @@
+{"active":
+{%- if not active %}"anaf-home"{% endif -%}
+{%- for module in modules -%}
+	{%- if module == active -%}
+    "{{ module.name|replace('.', '-')}}"
+	{%- endif -%} 
+{%- endfor -%}
+}

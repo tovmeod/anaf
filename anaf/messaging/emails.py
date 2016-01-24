@@ -21,7 +21,7 @@ class EmailStream(EmailReceiver):
         self.active = True
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.messaging', 'default_imap_folder')[0]
+                'anaf.messaging', 'default_imap_folder')[0]
             folder_name = conf.value
         except:
             folder_name = None
@@ -34,7 +34,7 @@ class EmailStream(EmailReceiver):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.messaging', 'default_contact_type')[0]
+                'anaf.messaging', 'default_contact_type')[0]
             default_contact_type = ContactType.objects.get(pk=long(conf.value))
         except:
             default_contact_type = None

@@ -97,7 +97,7 @@ def modules_active(context):
     if active:
         return active.name.replace(".", "-")
 
-    return "treeio-home"
+    return "anaf-home"
 
 register.object(modules_active)
 
@@ -370,7 +370,7 @@ def htdate(context, date, dateformat='DATE_FORMAT'):
     lang = translation.get_language()
 
     localeformat = dateformat
-    formatspath = getattr(settings, 'FORMAT_MODULE_PATH', 'treeio.formats')
+    formatspath = getattr(settings, 'FORMAT_MODULE_PATH', 'anaf.formats')
     try:
         modulepath = formatspath + "." + lang + ".formats"
         module = __import__(modulepath, fromlist=[str(modulepath)])
@@ -429,7 +429,7 @@ def htdatetime(context, date, dateformat='DATETIME_FORMAT'):
     lang = translation.get_language()
 
     localeformat = dateformat
-    formatspath = getattr(settings, 'FORMAT_MODULE_PATH', 'treeio.formats')
+    formatspath = getattr(settings, 'FORMAT_MODULE_PATH', 'anaf.formats')
     try:
         modulepath = formatspath + "." + lang + ".formats"
         module = __import__(modulepath, fromlist=[str(modulepath)])
@@ -489,7 +489,7 @@ def httime(context, time, timeformat='TIME_FORMAT'):
     lang = translation.get_language()
 
     localeformat = timeformat
-    formatspath = getattr(settings, 'FORMAT_MODULE_PATH', 'treeio.formats')
+    formatspath = getattr(settings, 'FORMAT_MODULE_PATH', 'anaf.formats')
     try:
         modulepath = formatspath + "." + lang + ".formats"
         module = __import__(modulepath, fromlist=[str(modulepath)])
@@ -552,9 +552,10 @@ def core_logo_content(context, gif=False):
         logopath += '.png'
         mimetype = 'image/png'
 
+    # FIXME: logo file loading logic sucks, maybe use x-sendfile
     customlogo = ''
     try:
-        conf = ModuleSetting.get_for_module('treeio.core', 'logopath')[0]
+        conf = ModuleSetting.get_for_module('anaf.core', 'logopath')[0]
         customlogo = getattr(
             settings, 'MEDIA_ROOT', './static/media') + conf.value
     except:

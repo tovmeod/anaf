@@ -243,7 +243,7 @@ class EquityForm(forms.ModelForm):
             {'popuplink': reverse('identities_contact_add')})
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.finance', 'my_company')[0]
+                'anaf.finance', 'my_company')[0]
             self.fields['issuer'].initial = long(conf.value)
         except Exception:
             pass
@@ -353,7 +353,7 @@ class ReceivableForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.finance', 'default_account')[0]
+                'anaf.finance', 'default_account')[0]
             self.fields['account'].initial = long(conf.value)
         except Exception:
             pass
@@ -413,7 +413,7 @@ class TransactionForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.finance', 'default_account')[0]
+                'anaf.finance', 'default_account')[0]
             self.fields['account'].initial = long(conf.value)
         except Exception:
             pass
@@ -431,7 +431,7 @@ class TransactionForm(forms.ModelForm):
             # default company
             try:
                 conf = ModuleSetting.get_for_module(
-                    'treeio.finance', 'my_company')[0]
+                    'anaf.finance', 'my_company')[0]
                 self.fields['target'].initial = Contact.objects.get(
                     pk=long(conf.value))
 
@@ -556,7 +556,7 @@ class LiabilityForm(forms.ModelForm):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.finance', 'default_account')[0]
+                'anaf.finance', 'default_account')[0]
             self.fields['account'].initial = long(conf.value)
         except Exception:
             pass
@@ -680,7 +680,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.finance', 'my_company')[0]
+                'anaf.finance', 'my_company')[0]
             my_company = Contact.objects.get(pk=long(conf.value))
             self.fields['my_company'].initial = my_company.id
         except Exception:
@@ -688,7 +688,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.finance', 'default_account')[0]
+                'anaf.finance', 'default_account')[0]
             default_account = Account.objects.get(pk=long(conf.value))
             self.fields['default_account'].initial = default_account.id
         except Exception:
@@ -724,11 +724,11 @@ class SettingsForm(forms.Form):
         try:
             ModuleSetting.set_for_module('my_company',
                                          self.cleaned_data['my_company'].id,
-                                         'treeio.finance')
+                                         'anaf.finance')
             ModuleSetting.set_for_module('default_account',
                                          self.cleaned_data[
                                              'default_account'].id,
-                                         'treeio.finance')
+                                         'anaf.finance')
             currency = Currency.objects.get(
                 pk=self.cleaned_data['default_currency'])
             currency.is_default = True

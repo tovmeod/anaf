@@ -30,7 +30,7 @@ class TicketStatusHandler(ObjectHandler):
         return ('api_services_status', [object_id])
 
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.services')
+        return request.user.profile.is_admin('anaf.services')
 
 
 class ServiceHandler(ObjectHandler):
@@ -46,11 +46,11 @@ class ServiceHandler(ObjectHandler):
         return ('api_services', [object_id])
 
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.services')
+        return request.user.profile.is_admin('anaf.services')
 
     def check_instance_permission(self, request, inst, mode):
         return request.user.profile.has_permission(inst, mode=mode) \
-               or request.user.profile.is_admin('treeio_services')
+               or request.user.profile.is_admin('anaf_services')
 
 
 class ServiceLevelAgreementHandler(ObjectHandler):
@@ -66,7 +66,7 @@ class ServiceLevelAgreementHandler(ObjectHandler):
         return ('api_services_sla', [object_id])
 
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.services')
+        return request.user.profile.is_admin('anaf.services')
 
 
 class ServiceAgentHandler(ObjectHandler):
@@ -82,7 +82,7 @@ class ServiceAgentHandler(ObjectHandler):
         return ('api_services_agents', [object_id])
 
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.services')
+        return request.user.profile.is_admin('anaf.services')
 
 
 class TicketQueueHandler(ObjectHandler):
@@ -98,7 +98,7 @@ class TicketQueueHandler(ObjectHandler):
         return ('api_services_queues', [object_id])
 
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.services')
+        return request.user.profile.is_admin('anaf.services')
 
 
 class TicketRecordHandler(BaseHandler):
@@ -215,7 +215,7 @@ class TicketHandler(ObjectHandler):
                 else:
                     try:
                         conf = ModuleSetting.get_for_module(
-                            'treeio.services', 'default_ticket_status')[0]
+                            'anaf.services', 'default_ticket_status')[0]
                         ticket.status = TicketStatus.objects.get(
                             pk=long(conf.value))
                     except:
@@ -229,7 +229,7 @@ class TicketHandler(ObjectHandler):
             else:
                 try:
                     conf = ModuleSetting.get_for_module(
-                        'treeio.services', 'default_ticket_status')[0]
+                        'anaf.services', 'default_ticket_status')[0]
                     ticket.status = TicketStatus.objects.get(
                         pk=long(conf.value))
                 except:
@@ -240,7 +240,7 @@ class TicketHandler(ObjectHandler):
                             pass
                 try:
                     conf = ModuleSetting.get_for_module(
-                        'treeio.services', 'default_ticket_queue')[0]
+                        'anaf.services', 'default_ticket_queue')[0]
                     ticket.queue = TicketQueue.objects.get(pk=long(conf.value))
                 except:
                     if 'queues' in request.context:

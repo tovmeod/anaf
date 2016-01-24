@@ -187,7 +187,7 @@ class ItemForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.infrastructure', 'default_item_status')[0]
+                'anaf.infrastructure', 'default_item_status')[0]
             default_item_status = ItemStatus.objects.get(
                 pk=long(conf.value), trash=False)
             self.fields['status'].initial = default_item_status.id
@@ -477,7 +477,7 @@ class SettingsForm(forms.Form):
 
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.infrastructure', 'default_item_status')[0]
+                'anaf.infrastructure', 'default_item_status')[0]
             default_item_status = ItemStatus.objects.get(
                 pk=long(conf.value), trash=False)
             self.fields['default_item_status'].initial = default_item_status.id
@@ -490,7 +490,7 @@ class SettingsForm(forms.Form):
             ModuleSetting.set_for_module('default_item_status',
                                          self.cleaned_data[
                                              'default_item_status'].id,
-                                         'treeio.infrastructure')
+                                         'anaf.infrastructure')
 
         except Exception:
             return False

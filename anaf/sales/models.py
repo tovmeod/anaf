@@ -242,7 +242,7 @@ class SaleOrder(Object):
         super(SaleOrder, self).save(*args, **kwargs)
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'order_fulfil_status')[0]
+                'anaf.sales', 'order_fulfil_status')[0]
             fulfil_status = long(conf.value)
             if self.status.id == fulfil_status:
                 self.fulfil()
@@ -417,7 +417,7 @@ class Subscription(Object):
         new_invoice = SaleOrder()
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.sales', 'default_order_status')[0]
+                'anaf.sales', 'default_order_status')[0]
             new_invoice.status = long(conf.value)
         except Exception:
             ss = SaleStatus.objects.all()[0]
@@ -473,7 +473,7 @@ class Subscription(Object):
 
             try:
                 conf = ModuleSetting.get_for_module(
-                    'treeio.sales', 'order_fulfil_status')[0]
+                    'anaf.sales', 'order_fulfil_status')[0]
                 order_fulfil_status = SaleStatus.objects.get(
                     pk=long(conf.value))
             except Exception:

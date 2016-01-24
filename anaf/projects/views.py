@@ -1046,7 +1046,7 @@ def task_time_slot_delete(request, time_slot_id, response_format='html'):
 def task_status_add(request, response_format='html'):
     """TaskStatus add"""
 
-    if not request.user.profile.is_admin('treeio.projects'):
+    if not request.user.profile.is_admin('anaf.projects'):
         return user_denied(request, message="You don't have administrator access to the Projects module")
 
     if request.POST:
@@ -1138,13 +1138,13 @@ def task_status_delete(request, status_id, response_format='html'):
 def settings_view(request, response_format='html'):
     """Settings"""
 
-    if not request.user.profile.is_admin('treeio.projects'):
+    if not request.user.profile.is_admin('anaf.projects'):
         return user_denied(request, message="You don't have administrator access to the Projects module")
 
     # default task status
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.projects', 'default_task_status')[0]
+            'anaf.projects', 'default_task_status')[0]
         default_task_status = TaskStatus.objects.get(
             pk=long(conf.value), trash=False)
     except Exception:
@@ -1164,7 +1164,7 @@ def settings_view(request, response_format='html'):
 def settings_edit(request, response_format='html'):
     """Settings"""
 
-    if not request.user.profile.is_admin('treeio.projects'):
+    if not request.user.profile.is_admin('anaf.projects'):
         return user_denied(request, message="You don't have administrator access to the Projects module")
 
     form = None

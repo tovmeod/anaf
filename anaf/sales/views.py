@@ -230,7 +230,7 @@ def index_open(request, response_format='html'):
     "SaleOrders owned by current user"
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.sales', 'order_fulfil_status')[0]
+            'anaf.sales', 'order_fulfil_status')[0]
         fulfil_status = long(conf.value)
         query = Q(status__hidden=False) & ~Q(status=fulfil_status)
     except Exception:
@@ -297,7 +297,7 @@ def ordered_product_view(request, ordered_product_id, response_format='html'):
     "Ordered product view"
     ordered_product = get_object_or_404(OrderedProduct, pk=ordered_product_id)
     if not request.user.profile.has_permission(ordered_product) \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have access to this Ordered Product")
 
     return render_to_response('sales/ordered_product_view',
@@ -312,7 +312,7 @@ def ordered_product_edit(request, ordered_product_id, response_format='html'):
 
     ordered_product = get_object_or_404(OrderedProduct, pk=ordered_product_id)
     if not request.user.profile.has_permission(ordered_product, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this OrderedProduct", response_format)
 
     order = ordered_product.order
@@ -347,7 +347,7 @@ def ordered_product_delete(request, ordered_product_id, response_format='html'):
 
     ordered_product = get_object_or_404(OrderedProduct, pk=ordered_product_id)
     if not request.user.profile.has_permission(ordered_product, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -483,7 +483,7 @@ def subscription_edit(request, subscription_id, response_format='html'):
 
     subscription = get_object_or_404(Subscription, pk=subscription_id)
     if not request.user.profile.has_permission(subscription, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Subscription", response_format)
 
     if request.POST:
@@ -510,7 +510,7 @@ def subscription_delete(request, subscription_id, response_format='html'):
 
     subscription = get_object_or_404(Subscription, pk=subscription_id)
     if not request.user.profile.has_permission(subscription, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -576,7 +576,7 @@ def product_index(request, response_format='html'):
 
 @mylogin_required
 @handle_response_format
-@module_admin_required('treeio.sales')
+@module_admin_required('anaf.sales')
 def product_add(request, parent_id=None, response_format='html'):
     "Product add"
 
@@ -610,7 +610,7 @@ def product_edit(request, product_id, response_format='html'):
 
     product = get_object_or_404(Product, pk=product_id)
     if not request.user.profile.has_permission(product, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Product", response_format)
 
     if request.POST:
@@ -642,7 +642,7 @@ def product_view(request, product_id, response_format='html'):
 
     product = get_object_or_404(Product, pk=product_id)
     if not request.user.profile.has_permission(product) \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have access to this Product")
 
     query = Q(product=product)
@@ -674,7 +674,7 @@ def product_delete(request, product_id, response_format='html'):
 
     product = get_object_or_404(Product, pk=product_id)
     if not request.user.profile.has_permission(product, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -795,7 +795,7 @@ def lead_edit(request, lead_id, response_format='html'):
 
     lead = get_object_or_404(Lead, pk=lead_id)
     if not request.user.profile.has_permission(lead, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Lead", response_format)
 
     if request.POST:
@@ -822,7 +822,7 @@ def lead_view(request, lead_id, response_format='html'):
     lead = get_object_or_404(Lead, pk=lead_id)
 
     if not profile.has_permission(lead) \
-            and not profile.is_admin('treeio.sales'):
+            and not profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have access to this Lead")
 
     form = _do_update_record(profile, request, lead)
@@ -844,7 +844,7 @@ def lead_delete(request, lead_id, response_format='html'):
 
     lead = get_object_or_404(Lead, pk=lead_id)
     if not request.user.profile.has_permission(lead, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -964,7 +964,7 @@ def opportunity_edit(request, opportunity_id, response_format='html'):
 
     opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
     if not request.user.profile.has_permission(opportunity, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Opportunity", response_format)
 
     if request.POST:
@@ -999,7 +999,7 @@ def opportunity_view(request, opportunity_id, response_format='html'):
     profile = request.user.profile
     opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
     if not profile.has_permission(opportunity) \
-            and not profile.is_admin('treeio.sales'):
+            and not profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have access to this Opportunity")
 
     form = _do_update_record(profile, request, opportunity)
@@ -1017,7 +1017,7 @@ def opportunity_delete(request, opportunity_id, response_format='html'):
 
     opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
     if not request.user.profile.has_permission(opportunity, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -1082,7 +1082,7 @@ def order_edit(request, order_id, response_format='html'):
 
     order = get_object_or_404(SaleOrder, pk=order_id)
     if not request.user.profile.has_permission(order, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this SaleOrder", response_format)
 
     if request.POST:
@@ -1122,7 +1122,7 @@ def order_view(request, order_id, response_format='html'):
         order = record.object
 
     if not profile.has_permission(order) \
-            and not profile.is_admin('treeio.sales'):
+            and not profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have access to this Sale")
 
     ordered_products = order.orderedproduct_set.filter(trash=False)
@@ -1140,14 +1140,14 @@ def order_invoice_view(request, order_id, response_format='html'):
     "Order view as Invoice"
     order = get_object_or_404(SaleOrder, pk=order_id)
     if not request.user.profile.has_permission(order) \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have access to this Sale")
 
     ordered_products = order.orderedproduct_set.filter(trash=False)
 
     # default company
     try:
-        conf = ModuleSetting.get_for_module('treeio.finance', 'my_company')[0]
+        conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
         my_company = Contact.objects.get(pk=long(conf.value))
 
     except:
@@ -1167,7 +1167,7 @@ def order_delete(request, order_id, response_format='html'):
 
     order = get_object_or_404(SaleOrder, pk=order_id)
     if not request.user.profile.has_permission(order, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -1199,7 +1199,7 @@ def order_delete(request, order_id, response_format='html'):
 def settings_view(request, response_format='html'):
     "Settings"
 
-    if not request.user.profile.is_admin('treeio.sales'):
+    if not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have administrator access to the Sales module")
 
     all_products = Object.filter_by_request(
@@ -1220,7 +1220,7 @@ def settings_view(request, response_format='html'):
     # default lead status
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.sales', 'default_lead_status')[0]
+            'anaf.sales', 'default_lead_status')[0]
         default_lead_status = SaleStatus.objects.get(pk=long(conf.value))
     except:
         default_lead_status = None
@@ -1228,7 +1228,7 @@ def settings_view(request, response_format='html'):
     # default opportunity status
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.sales', 'default_opportunity_status')[0]
+            'anaf.sales', 'default_opportunity_status')[0]
         default_opportunity_status = SaleStatus.objects.get(
             pk=long(conf.value))
     except:
@@ -1237,7 +1237,7 @@ def settings_view(request, response_format='html'):
     # default order status
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.sales', 'default_order_status')[0]
+            'anaf.sales', 'default_order_status')[0]
         default_order_status = SaleStatus.objects.get(pk=long(conf.value))
     except:
         default_order_status = None
@@ -1245,7 +1245,7 @@ def settings_view(request, response_format='html'):
     # default order source
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.sales', 'default_order_source')[0]
+            'anaf.sales', 'default_order_source')[0]
         default_order_source = SaleSource.objects.get(pk=long(conf.value))
     except:
         default_order_source = None
@@ -1253,7 +1253,7 @@ def settings_view(request, response_format='html'):
     # order fulfilment status
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.sales', 'order_fulfil_status')[0]
+            'anaf.sales', 'order_fulfil_status')[0]
         order_fulfil_status = SaleStatus.objects.get(pk=long(conf.value))
     except:
         order_fulfil_status = None
@@ -1261,7 +1261,7 @@ def settings_view(request, response_format='html'):
     # default product
     try:
         conf = ModuleSetting.get_for_module(
-            'treeio.sales', 'default_order_product')[0]
+            'anaf.sales', 'default_order_product')[0]
         default_order_product = Product.objects.get(pk=long(conf.value))
     except:
         default_order_product = None
@@ -1303,7 +1303,7 @@ def settings_view(request, response_format='html'):
 def settings_edit(request, response_format='html'):
     "Settings"
 
-    if not request.user.profile.is_admin('treeio.sales'):
+    if not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have administrator access to the Sales module")
 
     all_products = Object.filter_by_request(
@@ -1334,7 +1334,7 @@ def settings_edit(request, response_format='html'):
 def status_add(request, response_format='html'):
     "TicketStatus add"
 
-    if not request.user.profile.is_admin('treeio.sales'):
+    if not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have administrator access to the Sales module")
 
     status = None
@@ -1370,7 +1370,7 @@ def status_view(request, status_id, response_format='html'):
 
     status = get_object_or_404(SaleStatus, pk=status_id)
     if not request.user.profile.has_permission(status) \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have access to this Sale Status")
 
     query = Q(status=status)
@@ -1391,7 +1391,7 @@ def status_edit(request, status_id, response_format='html'):
 
     status = get_object_or_404(SaleStatus, pk=status_id)
     if not request.user.profile.has_permission(status, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -1419,7 +1419,7 @@ def status_delete(request, status_id, response_format='html'):
 
     status = get_object_or_404(SaleStatus, pk=status_id)
     if not request.user.profile.has_permission(status, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -1447,7 +1447,7 @@ def status_delete(request, status_id, response_format='html'):
 def source_add(request, response_format='html'):
     "TicketStatus add"
 
-    if not request.user.profile.is_admin('treeio.sales'):
+    if not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have administrator access to the Sales module")
 
     if request.POST:
@@ -1483,7 +1483,7 @@ def source_view(request, source_id, response_format='html'):
 
     source = get_object_or_404(SaleSource, pk=source_id)
     if not request.user.profile.has_permission(source) \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, message="You don't have access to this Sale Status")
 
     query = Q(source=source)
@@ -1510,7 +1510,7 @@ def source_edit(request, source_id, response_format='html'):
 
     source = get_object_or_404(SaleSource, pk=source_id)
     if not request.user.profile.has_permission(source, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:
@@ -1544,7 +1544,7 @@ def source_delete(request, source_id, response_format='html'):
 
     source = get_object_or_404(SaleSource, pk=source_id)
     if not request.user.profile.has_permission(source, mode='w') \
-            and not request.user.profile.is_admin('treeio.sales'):
+            and not request.user.profile.is_admin('anaf.sales'):
         return user_denied(request, "You don't have access to this Sale Status", response_format)
 
     if request.POST:

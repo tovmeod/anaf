@@ -112,17 +112,17 @@ class PerspectiveHandler(ObjectHandler):
         return ('api_admin_perspectives', [object_id])
 
     def check_create_permission(self, request, mode):
-        return request.user.profile.is_admin('treeio.core')
+        return request.user.profile.is_admin('anaf.core')
 
     def check_instance_permission(self, request, inst, mode):
-        return request.user.profile.is_admin('treeio.core')
+        return request.user.profile.is_admin('anaf.core')
 
     @module_admin_required()
     def delete_instance(self, request, inst):
         # Don't let users delete their last perspective
         other_perspectives = Perspective.objects.filter(
             trash=False).exclude(id=inst.id)
-        admin_module = Module.objects.all().filter(name='treeio.core')[0]
+        admin_module = Module.objects.all().filter(name='anaf.core')[0]
         if not other_perspectives:
             self.status = 401
             return _("This is your only Perspective.")
@@ -187,7 +187,7 @@ class PageFolderHandler(ObjectHandler):
         return ('api_admin_folders', [object_id])
 
     def check_instance_permission(self, request, inst, mode):
-        return request.user.profile.is_admin('treeio.core')
+        return request.user.profile.is_admin('anaf.core')
 
     def flatten_dict(self, request):
         return {'data': super(ObjectHandler, self).flatten_dict(request.data)}
@@ -206,7 +206,7 @@ class PageHandler(ObjectHandler):
         return ('api_admin_pages', [object_id])
 
     def check_instance_permission(self, request, inst, mode):
-        return request.user.profile.is_admin('treeio.core')
+        return request.user.profile.is_admin('anaf.core')
 
     def flatten_dict(self, request):
         return {'data': super(ObjectHandler, self).flatten_dict(request.data)}

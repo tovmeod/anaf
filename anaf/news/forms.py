@@ -29,7 +29,7 @@ class UpdateRecordForm(forms.ModelForm):
         # get default permissions from settings
         try:
             conf = ModuleSetting.get_for_module(
-                'treeio.core', 'default_permissions')[0]
+                'anaf.core', 'default_permissions')[0]
             default_permissions = conf.value
         except:
             default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
