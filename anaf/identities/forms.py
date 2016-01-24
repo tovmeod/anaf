@@ -13,6 +13,7 @@ from models import Contact, ContactValue, ContactType, ContactField
 from unidecode import unidecode
 from PIL import Image
 import re
+import os
 
 preprocess_form()
 
@@ -192,7 +193,12 @@ class ContactForm(forms.Form):
             filepath = self._get_upload_name(file.name)
         except KeyError:
             return ''
-        with open(settings.MEDIA_ROOT + filepath, 'wb+') as destination:
+        full_filepath = os.path.join(settings.MEDIA_ROOT, filepath)
+        try:
+            os.makedirs(os.path.dirname(full_filepath))
+        except OSError:
+            pass
+        with open(full_filepath, 'wb+') as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
         return settings.MEDIA_URL + filepath
