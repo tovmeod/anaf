@@ -1,5 +1,5 @@
 import oauth2 as oauth
-from django.conf import settings
+from anaf.core.conf import settings
 from django.http import HttpResponse
 
 from store import store, InvalidConsumerError, InvalidTokenError
