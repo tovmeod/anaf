@@ -35,11 +35,11 @@ class ProjectsAPITest(AnafTestCase):
         self.user.save()
         self.profile = self.user.profile
 
-        perspective, created = Perspective.objects.get_or_create(name='default')
-        perspective.set_default_user()
-        perspective.save()
+        self.perspective, created = Perspective.objects.get_or_create(name='default')
+        self.perspective.set_default_user()
+        self.perspective.save()
 
-        ModuleSetting.set('default_perspective', perspective.id)
+        ModuleSetting.set('default_perspective', self.perspective.id)
 
         self.contact_type = ContactType(name='api_test_contacttype')
         self.contact_type.set_default_user()
@@ -74,10 +74,10 @@ class ProjectsAPITest(AnafTestCase):
         self.time_slot.save()
 
         with freeze_time(datetime(year=2016, month=01, day=25, hour=19, minute=58)):
-            self.parent = Project(name='api_test_project_parent')
-        self.parent.set_default_user()
+            self.parent_project = Project(name='api_test_project_parent')
+        self.parent_project.set_default_user()
         with freeze_time(datetime(year=2016, month=01, day=25, hour=21, minute=59)):
-            self.parent.save()
+            self.parent_project.save()
 
         self.parent_task = Task(name='api_test', project=self.project, status=self.status, priority=3)
         self.parent_task.set_default_user()
@@ -104,40 +104,67 @@ class ProjectsAPITest(AnafTestCase):
         data = json.loads(oldresponse.content)
 
         expected = [{u'last_updated': u'2015-11-09T08:26:00', u'name': u'api_test_project', u'parent': None,
-                     u'creator': {u'name': u'api_test', u'default_group': {
-                         u'perspective': {u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
-                                          u'resource_uri': u'/api/core/perspective/1'}, u'name': u'api_test_group',
-                         u'parent': None, u'details': None, u'id': 1, u'resource_uri': u'/api/core/group/1'},
-                                  u'disabled': False, u'other_groups': [],
-                                  u'perspective': {u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
-                                                   u'resource_uri': u'/api/core/perspective/1'},
-                                  u'last_access': u'2015-11-09T08:21:00', u'id': 3,
-                                  u'resource_uri': u'/api/core/user/3'}, u'nuvius_resource': None,
+                     u'creator': {
+                         u'name': u'api_test', u'default_group': {
+                             u'perspective': {
+                                 u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                                 u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                             },
+                             u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                             u'resource_uri': u'/api/core/group/%s' % self.group.id
+                         },
+                         u'disabled': False, u'other_groups': [],
+                         u'perspective': {
+                             u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                             u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                         },
+                         u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
+                         u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
+                     },
+                     u'nuvius_resource': None,
                      u'manager': {u'name': u'api_test_contact', u'parent': None,
-                                  u'contact_type': {u'fields': [], u'details': None, u'id': 2,
+                                  u'contact_type': {u'fields': [], u'details': None, u'id': self.contact_type.id,
                                                     u'name': u'api_test_contacttype',
-                                                    u'resource_uri': u'/api/identities/type/2'},
-                                  u'contactvalue_set': [], u'related_user': None, u'id': 3,
-                                  u'resource_uri': u'/api/identities/contact/3'},
-                     u'client': {u'name': u'api_test_contact', u'parent': None,
-                                 u'contact_type': {u'fields': [], u'details': None, u'id': 2,
-                                                   u'name': u'api_test_contacttype',
-                                                   u'resource_uri': u'/api/identities/type/2'}, u'contactvalue_set': [],
-                                 u'related_user': None, u'id': 3, u'resource_uri': u'/api/identities/contact/3'},
-                     u'details': None, u'date_created': u'2015-11-09T08:21:00', u'trash': False, u'id': 4,
-                     u'resource_uri': u'/api/projects/project/4'},
+                                                    u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id},
+                                  u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
+                                  u'resource_uri': u'/api/identities/contact/%s' % self.contact.id},
+                     u'client': {
+                         u'name': u'api_test_contact', u'parent': None,
+                         u'contact_type': {
+                             u'fields': [], u'details': None, u'id': self.contact_type.id,
+                             u'name': u'api_test_contacttype',
+                             u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
+                         },
+                         u'contactvalue_set': [], u'related_user': None,
+                         u'id': self.contact.id, u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
+                     },
+                     u'details': None, u'date_created': u'2015-11-09T08:21:00', u'trash': False,
+                     u'id': self.project.id, u'resource_uri': u'/api/projects/project/%s' % self.project.id
+                     },
                     {u'last_updated': u'2016-01-25T21:59:00', u'name': u'api_test_project_parent', u'parent': None,
-                     u'creator': {u'name': u'api_test', u'default_group': {
-                         u'perspective': {u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
-                                          u'resource_uri': u'/api/core/perspective/1'}, u'name': u'api_test_group',
-                         u'parent': None, u'details': None, u'id': 1, u'resource_uri': u'/api/core/group/1'},
-                                  u'disabled': False, u'other_groups': [],
-                                  u'perspective': {u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
-                                                   u'resource_uri': u'/api/core/perspective/1'},
-                                  u'last_access': u'2015-11-09T08:21:00', u'id': 3,
-                                  u'resource_uri': u'/api/core/user/3'}, u'nuvius_resource': None, u'manager': None,
+                     u'creator': {
+                         u'name': u'api_test',
+                         u'default_group': {
+                             u'perspective': {
+                                 u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                                 u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                             },
+                             u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                             u'resource_uri': u'/api/core/group/%s' % self.group.id
+                         },
+                         u'disabled': False, u'other_groups': [],
+                         u'perspective': {
+                             u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                             u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                         },
+                         u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
+                         u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
+                     },
+                     u'nuvius_resource': None, u'manager': None,
                      u'client': None, u'details': None, u'date_created': u'2016-01-25T19:58:00', u'trash': False,
-                     u'id': 9, u'resource_uri': u'/api/projects/project/9'}]
+                     u'id': self.parent_project.id,
+                     u'resource_uri': u'/api/projects/project/%s' % self.parent_project.id
+                     }]
 
         self.assertEqual(len(data), 2)
         self.assertEqual(data[0], expected[0])
@@ -184,15 +211,15 @@ class ProjectsAPITest(AnafTestCase):
                 u'name': u'api_test',
                 u'default_group': {
                     u'perspective': {
-                        u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
-                        u'resource_uri': u'/api/core/perspective/1'
+                        u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                        u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
                     },
-                    u'name': u'api_test_group', u'parent': None, u'details': None, u'id': 1,
-                    u'resource_uri': u'/api/core/group/1'
+                    u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                    u'resource_uri': u'/api/core/group/%s' % self.group.id
                 },
                 u'disabled': False, u'other_groups': [], u'perspective': {
-                    u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
-                    u'resource_uri': u'/api/core/perspective/1'
+                    u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                    u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
                 },
                 u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
                 u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
@@ -207,9 +234,10 @@ class ProjectsAPITest(AnafTestCase):
             u'client': {
                 u'name': u'api_test_contact', u'parent': None,
                 u'contact_type': {
-                    u'fields': [], u'details': None, u'id': 2, u'name': u'api_test_contacttype',
-                    u'resource_uri': u'/api/identities/type/2'}, u'contactvalue_set': [], u'related_user': None,
-                u'id': 3, u'resource_uri': u'/api/identities/contact/3'
+                    u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
+                    u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id},
+                u'contactvalue_set': [], u'related_user': None,
+                u'id': self.contact.id, u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
             },
             u'details': None,
             u'date_created': u'2015-11-09T08:21:00', u'trash': False, u'id': self.project.id,
