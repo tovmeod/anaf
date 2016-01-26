@@ -224,12 +224,15 @@ class ProjectsAPITest(AnafTestCase):
                 u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
                 u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
             },
-            u'nuvius_resource': None, u'manager': {
-                u'name': u'api_test_contact', u'parent': None, u'contact_type': {
-                    u'fields': [], u'details': None, u'id': 2, u'name': u'api_test_contacttype',
-                    u'resource_uri': u'/api/identities/type/2'
-                }, u'contactvalue_set': [], u'related_user': None, u'id': 3,
-                u'resource_uri': u'/api/identities/contact/3'
+            u'nuvius_resource': None,
+            u'manager': {
+                u'name': u'api_test_contact', u'parent': None,
+                u'contact_type': {
+                    u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
+                    u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
+                },
+                u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
+                u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
             },
             u'client': {
                 u'name': u'api_test_contact', u'parent': None,
