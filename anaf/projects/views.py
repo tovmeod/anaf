@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render_to_response as django_render_to_response
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
@@ -6,7 +6,7 @@ from django.db.models import Q
 from anaf.core.models import Object, ModuleSetting, UpdateRecord
 from anaf.core.views import user_denied
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import treeio_login_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 from forms import ProjectForm, MilestoneForm, TaskForm, FilterForm, TaskRecordForm, \
     MassActionForm, TaskTimeSlotForm, TaskStatusForm, SettingsForm

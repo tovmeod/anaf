@@ -1,9 +1,15 @@
-"""
-Identities module URLs
-"""
-from django.conf.urls import patterns, url
+from django.conf.urls import patterns, url, include
+from api import views
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.include_root_view = False
+router.register(r'contact', views.ContactView)
+router.register(r'contacttype', views.ContactTypeView)
+router.register(r'contactfield', views.ContactFieldView)
 
 urlpatterns = patterns('anaf.identities.views',
+                       url(r'^', include(router.urls)),
                        url(r'^(\.(?P<response_format>\w+))?$',
                            'index', name='identities'),
 
@@ -88,5 +94,4 @@ urlpatterns = patterns('anaf.identities.views',
                            'ajax_contact_lookup', name='identities_ajax_contact_lookup'),
                        url(r'^ajax/locations(\.(?P<response_format>\w+))?/?$',
                            'ajax_location_lookup', name='identities_ajax_location_lookup'),
-
                        )

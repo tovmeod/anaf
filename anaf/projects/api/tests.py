@@ -4,9 +4,7 @@ API Project Management: test suites
 from time import sleep
 import json
 from datetime import datetime
-from django.test import TestCase
-from anaf.test import TestCase as TreeTestCase
-from django.test.utils import override_settings
+from anaf.test import TestCase as AnafTestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 from freezegun import freeze_time
@@ -16,7 +14,7 @@ from anaf.core.models import User, Group, Perspective, ModuleSetting
 from anaf.projects.models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 
 
-class ProjectsAPITest(TreeTestCase):
+class ProjectsAPITest(AnafTestCase):
     """Projects functional tests for api"""
     username = "api_test"
     password = "api_password"
@@ -75,9 +73,11 @@ class ProjectsAPITest(TreeTestCase):
         self.time_slot.set_default_user()
         self.time_slot.save()
 
-        self.parent = Project(name='api_test_project_parent')
+        with freeze_time(datetime(year=2016, month=01, day=25, hour=19, minute=58)):
+            self.parent = Project(name='api_test_project_parent')
         self.parent.set_default_user()
-        self.parent.save()
+        with freeze_time(datetime(year=2016, month=01, day=25, hour=21, minute=59)):
+            self.parent.save()
 
         self.parent_task = Task(name='api_test', project=self.project, status=self.status, priority=3)
         self.parent_task.set_default_user()
@@ -85,16 +85,64 @@ class ProjectsAPITest(TreeTestCase):
 
     def test_unauthenticated_access(self):
         """Test index page at /projects"""
-        response = self.client.get('/api/projects/projects')
+        oldresponse = self.client.get(reverse('api_projects'))
         # Redirects as unauthenticated
-        self.assertEquals(response.status_code, 401)
+        self.assertEquals(oldresponse.status_code, 401)
+        newresponse = self.client.get(reverse('project-list'))
+        print(newresponse.status_code)
 
     # Get info about projects, milestones, status, tasks, tasktimes.
 
     def test_get_project_list(self):
         """ Test index page api/projects """
-        response = self.client.get(path=reverse('api_projects'), **self.authentication_headers)
-        self.assertEquals(response.status_code, 200)
+        oldresponse = self.client.get(path=reverse('api_projects'), **self.authentication_headers)
+        newresponse = self.client.get(reverse('project-list'), **self.authentication_headers)
+        self.assertEquals(oldresponse.status_code, 200)
+        self.assertEquals(newresponse.status_code, 200)
+
+        data = json.loads(oldresponse.content)
+
+        expected = [{u'last_updated': u'2015-11-09T08:26:00', u'name': u'api_test_project', u'parent': None,
+                     u'creator': {u'name': u'api_test', u'default_group': {
+                         u'perspective': {u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
+                                          u'resource_uri': u'/api/core/perspective/1'}, u'name': u'api_test_group',
+                         u'parent': None, u'details': None, u'id': 1, u'resource_uri': u'/api/core/group/1'},
+                                  u'disabled': False, u'other_groups': [],
+                                  u'perspective': {u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
+                                                   u'resource_uri': u'/api/core/perspective/1'},
+                                  u'last_access': u'2015-11-09T08:21:00', u'id': 3,
+                                  u'resource_uri': u'/api/core/user/3'}, u'nuvius_resource': None,
+                     u'manager': {u'name': u'api_test_contact', u'parent': None,
+                                  u'contact_type': {u'fields': [], u'details': None, u'id': 2,
+                                                    u'name': u'api_test_contacttype',
+                                                    u'resource_uri': u'/api/identities/type/2'},
+                                  u'contactvalue_set': [], u'related_user': None, u'id': 3,
+                                  u'resource_uri': u'/api/identities/contact/3'},
+                     u'client': {u'name': u'api_test_contact', u'parent': None,
+                                 u'contact_type': {u'fields': [], u'details': None, u'id': 2,
+                                                   u'name': u'api_test_contacttype',
+                                                   u'resource_uri': u'/api/identities/type/2'}, u'contactvalue_set': [],
+                                 u'related_user': None, u'id': 3, u'resource_uri': u'/api/identities/contact/3'},
+                     u'details': None, u'date_created': u'2015-11-09T08:21:00', u'trash': False, u'id': 4,
+                     u'resource_uri': u'/api/projects/project/4'},
+                    {u'last_updated': u'2016-01-25T21:59:00', u'name': u'api_test_project_parent', u'parent': None,
+                     u'creator': {u'name': u'api_test', u'default_group': {
+                         u'perspective': {u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
+                                          u'resource_uri': u'/api/core/perspective/1'}, u'name': u'api_test_group',
+                         u'parent': None, u'details': None, u'id': 1, u'resource_uri': u'/api/core/group/1'},
+                                  u'disabled': False, u'other_groups': [],
+                                  u'perspective': {u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
+                                                   u'resource_uri': u'/api/core/perspective/1'},
+                                  u'last_access': u'2015-11-09T08:21:00', u'id': 3,
+                                  u'resource_uri': u'/api/core/user/3'}, u'nuvius_resource': None, u'manager': None,
+                     u'client': None, u'details': None, u'date_created': u'2016-01-25T19:58:00', u'trash': False,
+                     u'id': 9, u'resource_uri': u'/api/projects/project/9'}]
+
+        self.assertEqual(len(data), 2)
+        self.assertEqual(data[0], expected[0])
+        self.maxDiff = None
+        self.assertEqual(data[1], expected[1])
+        self.cmpDataApi(oldresponse.content, newresponse.content)
 
     def test_get_status_list(self):
         """ Test index page api/status """
@@ -116,20 +164,18 @@ class ProjectsAPITest(TreeTestCase):
 
     def test_get_tasktimes_list(self):
         """ Test index page api/tasktimes """
-        response = self.client.get(
-            path=reverse('api_projects_tasktimes'), **self.authentication_headers)
+        response = self.client.get(path=reverse('api_projects_tasktimes'), **self.authentication_headers)
         self.assertEquals(response.status_code, 200)
 
     def test_get_project(self):
-        response = self.client.get(reverse(
+        oldresponse = self.client.get(reverse(
             'api_projects', kwargs={'object_ptr': self.project.id}), **self.authentication_headers)
-        response2 = self.client.get(reverse(
-            'project-detail', kwargs={'pk': self.project.id}), **self.authentication_headers)
-        print(json.loads(response.content))
-        print(json.loads(response2.content))
-        self.assertEquals(response.status_code, 200)
+        newresponse = self.client.get(reverse(
+                'project-detail', kwargs={'pk': self.project.id}), **self.authentication_headers)
+        self.assertEquals(oldresponse.status_code, 200)
+        self.assertEquals(newresponse.status_code, 200)
 
-        data = json.loads(response.content)
+        data = json.loads(oldresponse.content)
         expected = {
             u'last_updated': u'2015-11-09T08:26:00', u'name': u'api_test_project', u'parent': None,
             u'creator': {
@@ -173,7 +219,7 @@ class ProjectsAPITest(TreeTestCase):
         self.assertEquals(data['details'], self.project.details)
         self.assertDictEqual(data, expected)
 
-        self.cmpDataApi(response.content, response2.content)
+        self.cmpDataApi(oldresponse.content, newresponse.content)
 
     def test_get_status(self):
         response = self.client.get(reverse('api_projects_status', kwargs={

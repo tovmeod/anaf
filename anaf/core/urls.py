@@ -1,10 +1,18 @@
-"""
-Core module URLs
-"""
+from django.conf.urls import patterns, url, include
+from api import views
+from rest_framework.routers import DefaultRouter
 
-from django.conf.urls import patterns, url
+router = DefaultRouter()
+router.include_root_view = False
+router.register(r'user', views.ProfileView)
+router.register(r'group', views.GroupView)
+router.register(r'perspective', views.PerspectiveView)
+router.register(r'accessentity', views.AccessEntityView)
+router.register(r'object', views.ObjectView)
+router.register(r'module', views.ModuleView)
 
 urlpatterns = patterns('anaf.core.views',
+                       url(r'^', include(router.urls)),
                        url(r'^logout(\.(?P<response_format>\w+))?/?$',
                            'user_logout', name='user_logout'),
                        url(r'^login(\.(?P<response_format>\w+))?/?$',
@@ -49,6 +57,5 @@ urlpatterns = patterns('anaf.core.views',
                            name='core_logo_image', kwargs={'gif': False}),
                        url(r'^logo/image/ie/$', 'logo_image',
                            name='core_logo_image_ie', kwargs={'gif': True}),
-
 
                        )
