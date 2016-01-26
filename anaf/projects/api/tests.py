@@ -95,6 +95,7 @@ class ProjectsAPITest(AnafTestCase):
 
     def test_get_project_list(self):
         """ Test index page api/projects """
+        self.maxDiff =None
         oldresponse = self.client.get(path=reverse('api_projects'), **self.authentication_headers)
         newresponse = self.client.get(reverse('project-list'), **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
@@ -168,6 +169,7 @@ class ProjectsAPITest(AnafTestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_get_project(self):
+        self.maxDiff =None
         oldresponse = self.client.get(reverse(
             'api_projects', kwargs={'object_ptr': self.project.id}), **self.authentication_headers)
         newresponse = self.client.get(reverse(
