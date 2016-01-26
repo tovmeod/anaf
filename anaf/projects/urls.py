@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.include_root_view = False
-router.register(r'projects', ProjectViewSet)
+router.register(r'project', ProjectViewSet)
 
 urlpatterns = patterns('anaf.projects.views',
                        url(r'^', include(router.urls)),
