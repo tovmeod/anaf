@@ -56,15 +56,17 @@ class ProjectsAPITest(AnafTestCase):
         with freeze_time(datetime(year=2015, month=11, day=9, hour=8, minute=26)):
             self.project.save()
 
-        self.status = TaskStatus(name='api_test_taskstatus')
-        self.status.set_default_user()
-        self.status.save()
+        with freeze_time(datetime(year=2016, month=1, day=27, hour=17, minute=29)):
+            self.taskstatus = TaskStatus(name='api_test_taskstatus')
+        self.taskstatus.set_default_user()
+        with freeze_time(datetime(year=2016, month=1, day=27, hour=17, minute=30)):
+            self.taskstatus.save()
 
-        self.milestone = Milestone(name='api_test_milestone', project=self.project, status=self.status)
+        self.milestone = Milestone(name='api_test_milestone', project=self.project, status=self.taskstatus)
         self.milestone.set_default_user()
         self.milestone.save()
 
-        self.task = Task(name='api_test_task', project=self.project, status=self.status, priority=3)
+        self.task = Task(name='api_test_task', project=self.project, status=self.taskstatus, priority=3)
         self.task.set_default_user()
         self.task.save()
 
@@ -79,7 +81,7 @@ class ProjectsAPITest(AnafTestCase):
         with freeze_time(datetime(year=2016, month=01, day=25, hour=21, minute=59)):
             self.parent_project.save()
 
-        self.parent_task = Task(name='api_test', project=self.project, status=self.status, priority=3)
+        self.parent_task = Task(name='api_test', project=self.project, status=self.taskstatus, priority=3)
         self.parent_task.set_default_user()
         self.parent_task.save()
 
@@ -89,7 +91,7 @@ class ProjectsAPITest(AnafTestCase):
         # Redirects as unauthenticated
         self.assertEquals(oldresponse.status_code, 401)
         newresponse = self.client.get(reverse('project-list'))
-        print(newresponse.status_code)
+        self.assertEquals(newresponse.status_code, 401)
 
     # Get info about projects, milestones, status, tasks, tasktimes.
 
@@ -168,15 +170,44 @@ class ProjectsAPITest(AnafTestCase):
 
         self.assertEqual(len(data), 2)
         self.assertEqual(data[0], expected[0])
-        self.maxDiff = None
         self.assertEqual(data[1], expected[1])
         self.cmpDataApi(oldresponse.content, newresponse.content)
 
     def test_get_status_list(self):
-        """ Test index page api/status """
-        response = self.client.get(
-            path=reverse('api_projects_status'), **self.authentication_headers)
-        self.assertEquals(response.status_code, 200)
+        """ Test index page api/status
+        test for TaskStatus model list
+         """
+        oldresponse = self.client.get(path=reverse('api_projects_status'), **self.authentication_headers)
+        newresponse = self.client.get(reverse('taskstatus-list'), **self.authentication_headers)
+        self.assertEquals(oldresponse.status_code, 200)
+        self.assertEquals(newresponse.status_code, 200)
+        data = json.loads(oldresponse.content)
+        expected = [{
+            u'last_updated': u'2016-01-27T17:30:00', u'name': u'api_test_taskstatus',
+            u'creator': {
+                u'name': u'api_test',
+                u'default_group': {
+                    u'perspective': {
+                        u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                        u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                    },
+                    u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                    u'resource_uri': u'/api/core/group/%s' % self.group.id
+                },
+                u'disabled': False, u'other_groups': [],
+                u'perspective': {
+                    u'details': u'', u'modules': [], u'id': 1, u'name': u'default',
+                    u'resource_uri': u'/api/core/perspective/1'
+                },
+                u'last_access': u'2015-11-09T08:21:00', u'id': 3, u'resource_uri': u'/api/core/user/3'
+            }, u'nuvius_resource': None, u'details': None, u'active': False,
+            u'date_created': u'2016-01-27T17:29:00', u'hidden': False, u'trash': False, u'id': self.taskstatus.id,
+            u'resource_uri': u'/api/projects/status/%s' % self.taskstatus.id
+        }]
+
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0], expected[0])
+        self.cmpDataApi(oldresponse.content, newresponse.content)
 
     def test_get_milestones_list(self):
         """ Test index page api/milestones """
@@ -256,12 +287,12 @@ class ProjectsAPITest(AnafTestCase):
 
     def test_get_status(self):
         response = self.client.get(reverse('api_projects_status', kwargs={
-                                   'object_ptr': self.status.id}), **self.authentication_headers)
+                                   'object_ptr': self.taskstatus.id}), **self.authentication_headers)
         self.assertEquals(response.status_code, 200)
 
         data = json.loads(response.content)
-        self.assertEquals(data['id'], self.status.id)
-        self.assertEquals(data['name'], self.status.name)
+        self.assertEquals(data['id'], self.taskstatus.id)
+        self.assertEquals(data['name'], self.taskstatus.name)
 
     def test_get_milestone(self):
         response = self.client.get(reverse('api_projects_milestones', kwargs={

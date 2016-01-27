@@ -1,10 +1,11 @@
 from django.conf.urls import url, patterns, include
-from api.views import ProjectViewSet
+from api import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.include_root_view = False
-router.register(r'project', ProjectViewSet)
+router.register(r'project', views.ProjectView)
+router.register(r'taskstatus', views.TaskStatusView)
 
 urlpatterns = patterns('anaf.projects.views',
                        url(r'^', include(router.urls)),
