@@ -15,7 +15,7 @@ from models import Object, UpdateRecord, Attachment
 
 class EmailReplier(EmailReceiver):
     subject_regex = re.compile(
-        "(Re:\s*)*\[Tree.io \#(?P<id>\d+)\] .+: .+ '.+' - .+", re.IGNORECASE | re.MULTILINE)
+        "(Re:\s*)*\[Anaf \#(?P<id>\d+)\] .+: .+ '.+' - .+", re.IGNORECASE | re.MULTILINE)
 
     def process_msg(self, msg, attrs, attachments):
         # get user profile by author email

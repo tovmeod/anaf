@@ -1162,8 +1162,8 @@ class UpdateRecord(models.Model):
                 domain = RequestSite(kwargs['request']).domain
                 html = html.replace('href="', 'href="http://' + domain)
             body = strip_tags(html)
-            signature = "This is an automated message from Tree.io service (http://tree.io). Please do not reply to this e-mail."
-            subject = "[Tree.io{0!s}] {1!s}: {2!s} - {3!s}".format(' #{0:d}'.format(obj.id) if self.record_type != 'delete' else '', unicode(author),
+            signature = "This is an automated message from the Anaf. Please do not reply to this e-mail."
+            subject = "[Anaf{0!s}] {1!s}: {2!s} - {3!s}".format(' #{0:d}'.format(obj.id) if self.record_type != 'delete' else '', unicode(author),
                                                    unicode(obj.get_human_type()), unicode(strip_tags(full_message)[:100]))
 
             for recipient in self.recipients.all():

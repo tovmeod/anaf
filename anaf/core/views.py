@@ -74,7 +74,7 @@ def user_login(request, response_format='html'):
                     # Disable account with overdue payment
                     if settings.ANAF_SUBSCRIPTION_BLOCKED:
                         return render_to_response('core/user_login', {
-                            'error_message': 'We are sorry to inform you but your account has been deactivated. Please login to your <a href="https://www.tree.io/login/">control panel</a> to see details.',
+                            'error_message': 'We are sorry to inform you but your account has been deactivated. Please login to your control panel to see details.',
                             'form': Markup(form)},
                                                   context_instance=RequestContext(request),
                                                   response_format=response_format)

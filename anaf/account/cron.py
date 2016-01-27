@@ -41,8 +41,8 @@ class CronNotifier(object):
                 message_html.write('<br /><br />\n\n')
             message_html.write(u'{0!s}:<br />\n{1!s} - {2!s}<br /><br />\n\n'.format(unicode(record.author), unicode(record.date_created.isoformat()),
                                 record.get_full_message()))
-        signature = "This is an automated message from Tree.io service (http://tree.io). Please do not reply to this e-mail."
-        subject = "{0!s} summary of [Tree.io] {1!s}".format(
+        signature = "This is an automated message from the Anaf service. Please do not reply to this e-mail."
+        subject = "{0!s} summary of [Anaf] {1!s}".format(
             note.get_ntype_display(), unicode(note.owner))
 
         # send email notification to recipient
