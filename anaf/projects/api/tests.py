@@ -497,6 +497,8 @@ class ProjectsAPITest(AnafTestCase):
         self.maxDiff = None
 
         self.assertEqual(len(data), 2)
+        data.sort(key=lambda x: x['id'])
+        expected.sort(key=lambda x: x['id'])
         self.assertEqual(data[0], expected[0])
         self.assertEqual(data[1], expected[1])
         self.cmpDataApi(oldresponse.content, newresponse.content)
