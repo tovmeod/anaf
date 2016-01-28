@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from anaf.projects.models import Project, TaskStatus, Milestone
-from serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer
+from anaf.projects.models import Project, TaskStatus, Milestone, Task
+from serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 
 
 class ProjectView(viewsets.ModelViewSet):
@@ -25,3 +25,11 @@ class MilestoneView(viewsets.ModelViewSet):
     """
     queryset = Milestone.objects.all()
     serializer_class = MilestoneSerializer
+
+
+class TaskView(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Tasks to be viewed or edited.
+    """
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer

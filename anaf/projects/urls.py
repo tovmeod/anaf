@@ -7,6 +7,7 @@ router.include_root_view = False
 router.register(r'project', views.ProjectView)
 router.register(r'taskstatus', views.TaskStatusView)
 router.register(r'milestone', views.MilestoneView)
+router.register(r'task', views.TaskView)
 
 urlpatterns = patterns('anaf.projects.views',
                        url(r'^', include(router.urls)),

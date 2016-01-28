@@ -68,9 +68,11 @@ class ProjectsAPITest(AnafTestCase):
         with freeze_time(datetime(year=2016, month=1, day=28, hour=1, minute=10)):
             self.milestone.save()
 
-        self.task = Task(name='api_test_task', project=self.project, status=self.taskstatus, priority=3)
+        with freeze_time(datetime(year=2016, month=01, day=28, hour=3, minute=06)):
+            self.task = Task(name='api_test_task', project=self.project, status=self.taskstatus, priority=3)
         self.task.set_default_user()
-        self.task.save()
+        with freeze_time(datetime(year=2016, month=01, day=28, hour=3, minute=9)):
+            self.task.save()
 
         self.time_slot = TaskTimeSlot(
             task=self.task, details='api_test_tasktimeslot', time_from=datetime.now(), user=self.user.profile)
@@ -83,11 +85,14 @@ class ProjectsAPITest(AnafTestCase):
         with freeze_time(datetime(year=2016, month=01, day=25, hour=21, minute=59)):
             self.parent_project.save()
 
-        self.parent_task = Task(name='api_test', project=self.project, status=self.taskstatus, priority=3)
+        with freeze_time(datetime(year=2016, month=01, day=28, hour=3, minute=7)):
+            self.parent_task = Task(name='api_test_parent_task', project=self.project,
+                                    status=self.taskstatus, priority=3)
         self.parent_task.set_default_user()
-        self.parent_task.save()
+        with freeze_time(datetime(year=2016, month=01, day=28, hour=3, minute=8)):
+            self.parent_task.save()
 
-    def test_unauthenticated_access(self):
+    def test_unauthenticated_access_project(self):
         """Test index page at /projects"""
         oldresponse = self.client.get(reverse('api_projects'))
         # Redirects as unauthenticated
@@ -95,11 +100,16 @@ class ProjectsAPITest(AnafTestCase):
         newresponse = self.client.get(reverse('project-list'))
         self.assertEquals(newresponse.status_code, 401)
 
+    def test_unauthenticated_access_taskstatus(self):
+        self.assertEquals(self.client.get(reverse('taskstatus-list')).status_code, 401)
+
+    def test_unauthenticated_access_milestone(self):
+        self.assertEquals(self.client.get(reverse('milestone-list')).status_code, 401)
+
     # Get info about projects, milestones, status, tasks, tasktimes.
 
     def test_get_project_list(self):
         """ Test index page api/projects """
-        self.maxDiff =None
         oldresponse = self.client.get(path=reverse('api_projects'), **self.authentication_headers)
         newresponse = self.client.get(reverse('project-list'), **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
@@ -240,7 +250,8 @@ class ProjectsAPITest(AnafTestCase):
                 u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
             },
             u'nuvius_resource': None,  u'details': None, u'active': False, u'date_created': u'2016-01-27T17:29:00',
-            u'hidden': False, u'trash': False, u'id': 5, u'resource_uri': u'/api/projects/status/5'
+            u'hidden': False, u'trash': False, u'id': self.taskstatus.id,
+            u'resource_uri': u'/api/projects/status/%s' % self.taskstatus.id
         },
             u'last_updated': u'2016-01-28T01:10:00', u'name': u'api_test_milestone', u'end_date': None,
             u'creator': {
@@ -306,15 +317,189 @@ class ProjectsAPITest(AnafTestCase):
         }]
 
         self.assertEqual(len(data), 1)
-        self.maxDiff = None
         self.assertEqual(data[0], expected[0])
         self.cmpDataApi(oldresponse.content, newresponse.content)
 
     def test_get_task_list(self):
         """ Test index page api/tasks """
-        response = self.client.get(
-            path=reverse('api_projects_tasks'), **self.authentication_headers)
-        self.assertEquals(response.status_code, 200)
+        oldresponse = self.client.get(path=reverse('api_projects_tasks'), **self.authentication_headers)
+        newresponse = self.client.get(reverse('task-list'), **self.authentication_headers)
+        self.assertEquals(oldresponse.status_code, 200)
+        self.assertEquals(newresponse.status_code, 200)
+        data = json.loads(oldresponse.content)
+        expected = [{
+            u'last_updated': u'2016-01-28T03:08:00', u'end_date': None, u'name': u'api_test_parent_task',
+            u'parent': None, u'estimated_time': None, u'caller': None, u'nuvius_resource': None, u'start_date': None,
+            u'priority': 3, u'depends': None, u'details': None, u'milestone': None,
+            u'date_created': u'2016-01-28T03:07:00', u'trash': False, u'id': self.parent_task.id,
+            u'resource_uri': u'/api/projects/task/%s' % self.parent_task.id,
+            u'status': {
+                u'last_updated': u'2016-01-27T17:30:00', u'name': u'api_test_taskstatus',
+                u'creator': {
+                     u'name': u'api_test',
+                     u'default_group': {
+                         u'perspective': {
+                             u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                             u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                         },
+                         u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                         u'resource_uri': u'/api/core/group/%s' % self.group.id
+                     },
+                     u'disabled': False, u'other_groups': [],
+                     u'perspective': {
+                         u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                         u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                     },
+                     u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
+                     u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
+                 },
+                 u'nuvius_resource': None, u'details': None, u'active': False, u'date_created': u'2016-01-27T17:29:00',
+                 u'hidden': False, u'trash': False, u'id': self.taskstatus.id,
+                 u'resource_uri': u'/api/projects/status/%s' % self.taskstatus.id
+            },
+            u'project': {
+                u'last_updated': u'2015-11-09T08:26:00', u'name': u'api_test_project', u'parent': None,
+                u'creator': {
+                    u'name': u'api_test',
+                    u'default_group': {
+                        u'perspective': {
+                            u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                            u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                        },
+                        u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                        u'resource_uri': u'/api/core/group/%s' % self.group.id
+                    },
+                    u'disabled': False, u'other_groups': [],
+                    u'perspective': {
+                        u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                        u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                    },
+                    u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
+                    u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
+                },
+                u'nuvius_resource': None, u'manager': {
+                    u'name': u'api_test_contact', u'parent': None, u'contact_type': {
+                        u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
+                        u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
+                    },
+                    u'contactvalue_set': [], u'related_user': None, u'id': self.user.profile.id,
+                    u'resource_uri': u'/api/identities/contact/%s' % self.user.profile.id
+                },
+                u'client': {u'name': u'api_test_contact', u'parent': None,
+                            u'contact_type': {
+                                u'fields': [], u'details': None, u'id': self.contact_type.id,
+                                u'name': u'api_test_contacttype',
+                                u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
+                            },
+                            u'contactvalue_set': [], u'related_user': None, u'id': self.user.profile.id,
+                            u'resource_uri': u'/api/identities/contact/%s' % self.user.profile.id
+                            },
+                u'details': None, u'date_created': u'2015-11-09T08:21:00', u'trash': False, u'id': self.project.id,
+                u'resource_uri': u'/api/projects/project/%s' % self.project.id
+            },
+            u'creator': {
+                u'name': u'api_test', u'default_group': {
+                    u'perspective': {
+                        u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                        u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                    },
+                    u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                    u'resource_uri': u'/api/core/group/%s' % self.group.id
+                },
+                u'disabled': False, u'other_groups': [], u'perspective': {
+                    u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                    u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                },
+                u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
+                u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
+            },
+        }, {
+            u'estimated_time': None, u'caller': None, u'nuvius_resource': None, u'start_date': None, u'priority': 3,
+            u'depends': None, u'details': None, u'milestone': None, u'date_created': u'2016-01-28T03:06:00',
+            u'trash': False, u'id': self.task.id, u'resource_uri': u'/api/projects/task/%s' % self.task.id,
+            u'last_updated': u'2016-01-28T03:09:00', u'end_date': None, u'name': u'api_test_task', u'parent': None,
+            u'status': {
+                u'last_updated': u'2016-01-27T17:30:00', u'name': u'api_test_taskstatus',
+                u'creator': {
+                    u'name': u'api_test', u'default_group': {
+                        u'perspective': {
+                            u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                            u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                        },
+                        u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                        u'resource_uri': u'/api/core/group/%s' % self.group.id
+                    },
+                    u'disabled': False, u'other_groups': [], u'perspective': {
+                        u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                        u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                    },
+                    u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
+                    u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
+                },
+                u'nuvius_resource': None, u'details': None, u'active': False, u'date_created': u'2016-01-27T17:29:00',
+                u'hidden': False, u'trash': False, u'id': self.taskstatus.id,
+                u'resource_uri': u'/api/projects/status/%s' % self.taskstatus.id
+            },
+            u'project': {
+                u'last_updated': u'2015-11-09T08:26:00', u'name': u'api_test_project', u'parent': None,
+                u'creator': {
+                    u'name': u'api_test', u'default_group': {
+                        u'perspective': {
+                            u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                            u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                        },
+                        u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                        u'resource_uri': u'/api/core/group/%s' % self.group.id
+                    },
+                    u'disabled': False, u'other_groups': [], u'perspective': {
+                        u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                        u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                    },
+                    u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
+                    u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
+                },
+                u'nuvius_resource': None, u'manager': {
+                    u'name': u'api_test_contact', u'parent': None, u'contact_type': {
+                        u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
+                        u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
+                    },
+                    u'contactvalue_set': [], u'related_user': None, u'id': self.user.profile.id,
+                    u'resource_uri': u'/api/identities/contact/%s' % self.user.profile.id
+                },
+                u'client': {
+                    u'name': u'api_test_contact', u'parent': None, u'contact_type': {
+                        u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
+                        u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
+                    },
+                    u'contactvalue_set': [], u'related_user': None, u'id': self.user.profile.id,
+                    u'resource_uri': u'/api/identities/contact/%s' % self.user.profile.id
+                },
+                u'details': None, u'date_created': u'2015-11-09T08:21:00', u'trash': False, u'id': self.project.id,
+                u'resource_uri': u'/api/projects/project/%s' % self.project.id
+            },
+            u'creator': {
+                u'name': u'api_test', u'default_group': {
+                    u'perspective': {
+                        u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                        u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                    },
+                    u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                    u'resource_uri': u'/api/core/group/%s' % self.group.id
+                },
+                u'disabled': False, u'other_groups': [], u'perspective': {
+                    u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
+                    u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
+                },
+                u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
+                u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
+            },
+        }]
+        self.maxDiff = None
+
+        self.assertEqual(len(data), 2)
+        self.assertEqual(data[0], expected[0])
+        self.assertEqual(data[1], expected[1])
+        self.cmpDataApi(oldresponse.content, newresponse.content)
 
     def test_get_tasktimes_list(self):
         """ Test index page api/tasktimes """
@@ -322,7 +507,6 @@ class ProjectsAPITest(AnafTestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_get_project(self):
-        self.maxDiff =None
         oldresponse = self.client.get(reverse(
             'api_projects', kwargs={'object_ptr': self.project.id}), **self.authentication_headers)
         newresponse = self.client.get(reverse(

@@ -1,4 +1,4 @@
-from anaf.projects.models import Project, TaskStatus, Milestone
+from anaf.projects.models import Project, TaskStatus, Milestone, Task
 from rest_framework import serializers
 from anaf.identities.api.serializers import ContactSerializer
 from anaf.core.api.serializers import ProfileSerializer
@@ -30,3 +30,13 @@ class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Milestone
+
+
+class TaskSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+    creator = ProfileSerializer()
+    project = ProjectSerializer()
+    status = TaskStatusSerializer()
+
+    class Meta:
+        model = Task
