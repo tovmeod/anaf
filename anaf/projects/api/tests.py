@@ -10,7 +10,7 @@ from django.contrib.auth.models import User as DjangoUser
 from freezegun import freeze_time
 
 from anaf.identities.models import Contact, ContactType
-from anaf.core.models import User, Group, Perspective, ModuleSetting
+from anaf.core.models import Group, Perspective, ModuleSetting
 from anaf.projects.models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 
 
@@ -463,16 +463,16 @@ class ProjectsAPITest(AnafTestCase):
                         u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
                         u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
                     },
-                    u'contactvalue_set': [], u'related_user': None, u'id': self.user.profile.id,
-                    u'resource_uri': u'/api/identities/contact/%s' % self.user.profile.id
+                    u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
+                    u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
                 },
                 u'client': {
                     u'name': u'api_test_contact', u'parent': None, u'contact_type': {
                         u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
                         u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
                     },
-                    u'contactvalue_set': [], u'related_user': None, u'id': self.user.profile.id,
-                    u'resource_uri': u'/api/identities/contact/%s' % self.user.profile.id
+                    u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
+                    u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
                 },
                 u'details': None, u'date_created': u'2015-11-09T08:21:00', u'trash': False, u'id': self.project.id,
                 u'resource_uri': u'/api/projects/project/%s' % self.project.id
