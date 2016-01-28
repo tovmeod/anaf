@@ -41,6 +41,10 @@ class ProjectsAPITest(AnafTestCase):
 
         ModuleSetting.set('default_perspective', self.perspective.id)
 
+        self.contact_type2 = ContactType(name='api_test_contacttype2')
+        self.contact_type2.set_default_user()
+        self.contact_type2.save()
+
         self.contact_type = ContactType(name='api_test_contacttype')
         self.contact_type.set_default_user()
         self.contact_type.save()
@@ -136,12 +140,16 @@ class ProjectsAPITest(AnafTestCase):
                          u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
                      },
                      u'nuvius_resource': None,
-                     u'manager': {u'name': u'api_test_contact', u'parent': None,
-                                  u'contact_type': {u'fields': [], u'details': None, u'id': self.contact_type.id,
-                                                    u'name': u'api_test_contacttype',
-                                                    u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id},
-                                  u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
-                                  u'resource_uri': u'/api/identities/contact/%s' % self.contact.id},
+                     u'manager': {
+                         u'name': u'api_test_contact', u'parent': None,
+                         u'contact_type': {
+                             u'fields': [], u'details': None, u'id': self.contact_type.id,
+                             u'name': u'api_test_contacttype',
+                             u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
+                         },
+                         u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
+                         u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
+                     },
                      u'client': {
                          u'name': u'api_test_contact', u'parent': None,
                          u'contact_type': {
@@ -382,8 +390,8 @@ class ProjectsAPITest(AnafTestCase):
                         u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
                         u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
                     },
-                    u'contactvalue_set': [], u'related_user': None, u'id': self.user.profile.id,
-                    u'resource_uri': u'/api/identities/contact/%s' % self.user.profile.id
+                    u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
+                    u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
                 },
                 u'client': {u'name': u'api_test_contact', u'parent': None,
                             u'contact_type': {
@@ -391,8 +399,8 @@ class ProjectsAPITest(AnafTestCase):
                                 u'name': u'api_test_contacttype',
                                 u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
                             },
-                            u'contactvalue_set': [], u'related_user': None, u'id': self.user.profile.id,
-                            u'resource_uri': u'/api/identities/contact/%s' % self.user.profile.id
+                            u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
+                            u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
                             },
                 u'details': None, u'date_created': u'2015-11-09T08:21:00', u'trash': False, u'id': self.project.id,
                 u'resource_uri': u'/api/projects/project/%s' % self.project.id
@@ -458,8 +466,10 @@ class ProjectsAPITest(AnafTestCase):
                     u'last_access': u'2015-11-09T08:21:00', u'id': self.user.profile.id,
                     u'resource_uri': u'/api/core/user/%s' % self.user.profile.id
                 },
-                u'nuvius_resource': None, u'manager': {
-                    u'name': u'api_test_contact', u'parent': None, u'contact_type': {
+                u'nuvius_resource': None,
+                u'manager': {
+                    u'name': u'api_test_contact', u'parent': None,
+                    u'contact_type': {
                         u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
                         u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
                     },
@@ -467,7 +477,8 @@ class ProjectsAPITest(AnafTestCase):
                     u'resource_uri': u'/api/identities/contact/%s' % self.contact.id
                 },
                 u'client': {
-                    u'name': u'api_test_contact', u'parent': None, u'contact_type': {
+                    u'name': u'api_test_contact', u'parent': None,
+                    u'contact_type': {
                         u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
                         u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
                     },
