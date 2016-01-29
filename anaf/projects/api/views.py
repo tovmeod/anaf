@@ -1,5 +1,7 @@
 from rest_framework import viewsets
-from anaf.projects.models import Project, TaskStatus, Milestone, Task
+
+from anaf.projects.api.serializers import TaskTimeSlotSerializer
+from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 
 
@@ -33,3 +35,11 @@ class TaskView(viewsets.ModelViewSet):
     """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+
+class TaskTimeSlotView(viewsets.ModelViewSet):
+    """
+    API endpoint that allows TaskTimeSlots to be viewed or edited.
+    """
+    queryset = TaskTimeSlot.objects.all()
+    serializer_class = TaskTimeSlotSerializer

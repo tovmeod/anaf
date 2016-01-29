@@ -8,6 +8,7 @@ router.register(r'project', views.ProjectView)
 router.register(r'taskstatus', views.TaskStatusView)
 router.register(r'milestone', views.MilestoneView)
 router.register(r'task', views.TaskView)
+router.register(r'tasktimeslot', views.TaskTimeSlotView)
 
 urlpatterns = patterns('anaf.projects.views',
                        url(r'^', include(router.urls)),
