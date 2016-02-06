@@ -541,43 +541,39 @@ register.filter('httime', httime)
 
 @contextfunction
 def core_logo_content(context, gif=False):
-    "Return current logo encoded as base64"
-
-    staticpath = getattr(settings, 'STATIC_DOC_ROOT', './static')
-    logopath = staticpath + '/logo'
-    if gif:
-        logopath += '.gif'
-        mimetype = 'image/gif'
-    else:
-        logopath += '.png'
-        mimetype = 'image/png'
+    """Return current logo encoded as base64
+    :param bool gif:
+    """
 
     # FIXME: logo file loading logic sucks, maybe use x-sendfile
-    customlogo = ''
     try:
         conf = ModuleSetting.get_for_module('anaf.core', 'logopath')[0]
-        customlogo = getattr(
-            settings, 'MEDIA_ROOT', './static/media') + conf.value
+        logopath = getattr(settings, 'MEDIA_ROOT', './static/media') + conf.value
+        if logopath.endswith('.gif'):
+            mimetype = 'image/gif'
+        else:
+            mimetype = 'image/png'
     except:
-        pass
+        # if there isn't a custom logo we use the default
+        if settings.DEBUG:
+            from os import path, getcwd
+            logopath = path.join(getcwd(), 'anaf/static/logo')
+        else:
+            logopath = settings.STATIC_ROOT + '/logo'
 
-    logofile = ''
-    if customlogo:
-        try:
-            logofile = open(customlogo, 'r')
-        except:
-            pass
+        if gif:
+            logopath += '.gif'
+            mimetype = 'image/gif'
+        else:
+            logopath += '.png'
+            mimetype = 'image/png'
 
-    if not logofile:
-        try:
-            logofile = open(logopath, 'r')
-        except:
-            pass
-
-    result = "data:" + mimetype + ";base64," + \
-        base64.b64encode(logofile.read())
-
-    return Markup(result)
+    try:
+        with open(logopath, 'rb') as logofile:
+            result = "data:" + mimetype + ";base64," + base64.b64encode(logofile.read())
+            return Markup(result)
+    except IOError:
+        return Markup('data:image/png;base64')
 
 register.object(core_logo_content)
 

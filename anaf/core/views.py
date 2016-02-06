@@ -147,40 +147,39 @@ def user_perspective(request, response_format='html'):
 
 @cache_control(private=True, must_revalidate=True, max_age=60)
 def logo_image(request, gif=False, response_format='html'):
-    "Return current logo image"
-
-    staticpath = getattr(settings, 'STATIC_DOC_ROOT', './static')
-    logopath = staticpath + '/logo'
-    if gif:
-        logopath += '.gif'
-        mimetype = 'image/gif'
-    else:
-        logopath += '.png'
-        mimetype = 'image/png'
+    """Return current logo image
+    :param bool gif: if not gif it is png
+    :param string response_format:
+    """
 
     # FIXME: logo file loading logic sucks, maybe use x-sendfile
-    customlogo = ''
     try:
         conf = ModuleSetting.get_for_module('anaf.core', 'logopath')[0]
-        customlogo = getattr(
-            settings, 'MEDIA_ROOT', './static/media') + conf.value
+        logopath = getattr(settings, 'MEDIA_ROOT', './static/media') + conf.value
+        if logopath.endswith('.gif'):
+            mimetype = 'image/gif'
+        else:
+            mimetype = 'image/png'
     except:
-        pass
+        # if there isn't a custom logo we use the default
+        if settings.DEBUG:
+            from os import path, getcwd
+            logopath = path.join(getcwd(), 'anaf/static/logo')
+        else:
+            logopath = settings.STATIC_ROOT + '/logo'
 
-    logofile = ''
-    if customlogo:
-        try:
-            logofile = open(customlogo, 'rb')
-        except:
-            pass
+        if gif:
+            logopath += '.gif'
+            mimetype = 'image/gif'
+        else:
+            logopath += '.png'
+            mimetype = 'image/png'
 
-    if not logofile:
-        try:
-            logofile = open(logopath, 'rb')
-        except:
-            pass
-
-    return HttpResponse(logofile.read(), content_type=mimetype)
+    try:
+        with open(logopath, 'rb') as logofile:
+            return HttpResponse(logofile.read(), content_type=mimetype)
+    except IOError:
+        raise Http404()
 
 
 def ajax_popup(request, popup_id='', url='/'):
