@@ -103,8 +103,8 @@ if DEBUG:
     )
 STATIC_URL = '/static/'
 if TESTING:
-    STATIC_ROOT = path.join(os.getcwd(), 'anaf/static')
-    STATIC_DOC_ROOT = path.join(os.getcwd(), 'anaf/static')
+    STATIC_ROOT = path.join(os.getcwd(), 'static')
+    STATIC_DOC_ROOT = path.join(os.getcwd(), 'static')
 else:
     STATIC_ROOT = path.join(os.getcwd(), 'static')
     STATIC_DOC_ROOT = path.join(os.getcwd(), 'static')
@@ -232,13 +232,9 @@ INSTALLED_APPS = (
     'captcha',
     'markup_deprecated',
 )
-try:
-    import rosetta
-    INSTALLED_APPS += ('rosetta',)
-except ImportError:
-    pass
-if not DEBUG:
-    INSTALLED_APPS += ('django.contrib.staticfiles',)
+
+# if not DEBUG:
+#     INSTALLED_APPS += ('django.contrib.staticfiles',)
 
 AUTH_PROFILE_MODULE = 'core.User'
 
