@@ -1047,8 +1047,8 @@ class ProjectsAPITest(AnafTestCase):
                         u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
                         u'resource_uri': u'/api/core/perspective/%s' % self.perspective.id
                     },
-                    u'name': u'api_test_group', u'parent': None, u'details': None, u'id': 1,
-                    u'resource_uri': u'/api/core/group/1'
+                    u'name': u'api_test_group', u'parent': None, u'details': None, u'id': self.group.id,
+                    u'resource_uri': u'/api/core/group/%s' % self.group.id
                 },
                 u'disabled': False, u'other_groups': [], u'perspective': {
                     u'details': u'', u'modules': [], u'id': self.perspective.id, u'name': u'default',
