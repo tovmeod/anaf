@@ -300,28 +300,6 @@ def process_timezone_field(user, instance):
                 datetime.combine(date.today(), getattr(instance, field.name)) + timedelta(hours=hours, minutes=mins)
 
 
-class SSLMiddleware(object):
-    """ Keep protocol the same on redirects """
-
-    def process_request(self, request):
-        """ Revert to SSL/no SSL depending on settings """
-        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED and settings.ANAF_SUBSCRIPTION_SSL_ENFORCE and \
-                not request.is_secure():
-            redirect_url = request.build_absolute_uri()
-            return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
-        elif request.is_secure():
-            redirect_url = request.build_absolute_uri()
-            return HttpResponseRedirect(redirect_url.replace('https://', 'http://'))
-
-    def process_response(self, request, response):
-        """ Keep protocol """
-        if settings.ANAF_SUBSCRIPTION_SSL_ENABLED and response.status_code == 302:
-            redirect_url = request.build_absolute_uri(response['Location'])
-            if request.is_secure() or settings.ANAF_SUBSCRIPTION_SSL_ENFORCE:
-                response['Location'] = redirect_url.replace('http://', 'https://')
-        return response
-
-
 class AuthMiddleware(object):
     """ Log in by hash """
 

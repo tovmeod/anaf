@@ -182,7 +182,6 @@ MIDDLEWARE_CLASSES = (
     'johnny.middleware.QueryCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     # 'anaf.core.middleware.domain.DomainMiddleware',
-    'anaf.core.middleware.user.SSLMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'anaf.core.middleware.chat.ChatAjaxMiddleware',
     "django.contrib.messages.middleware.MessageMiddleware",
