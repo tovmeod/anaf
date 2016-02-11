@@ -179,7 +179,7 @@ def logo_image(request, gif=False, response_format='html'):
         with open(logopath, 'rb') as logofile:
             return HttpResponse(logofile.read(), content_type=mimetype)
     except IOError:
-        raise Http404()
+        raise Http404(logopath)
 
 
 def ajax_popup(request, popup_id='', url='/'):
