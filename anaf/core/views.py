@@ -1,7 +1,4 @@
-"""
-Core module views
-"""
-
+from django.contrib.staticfiles import finders
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.sessions.models import Session
 from django.contrib.sites.models import RequestSite
@@ -155,31 +152,26 @@ def logo_image(request, gif=False, response_format='html'):
     # FIXME: logo file loading logic sucks, maybe use x-sendfile
     try:
         conf = ModuleSetting.get_for_module('anaf.core', 'logopath')[0]
-        logopath = getattr(settings, 'MEDIA_ROOT', './static/media') + conf.value
-        if logopath.endswith('.gif'):
+        path = getattr(settings, 'MEDIA_ROOT', './static/media') + conf.value
+        if path.endswith('.gif'):
             mimetype = 'image/gif'
         else:
             mimetype = 'image/png'
     except:
         # if there isn't a custom logo we use the default
-        if settings.DEBUG:
-            from os import path, getcwd
-            logopath = path.join(getcwd(), 'anaf/static/logo')
-        else:
-            logopath = settings.STATIC_ROOT + '/logo'
-
         if gif:
-            logopath += '.gif'
-            mimetype = 'image/gif'
+            extension = 'gif'
         else:
-            logopath += '.png'
-            mimetype = 'image/png'
+            extension = 'png'
+        filename = 'logo.{}'.format(extension)
+        mimetype = 'image/{}'.format(extension)
+        path = finders.find(filename)
 
     try:
-        with open(logopath, 'rb') as logofile:
+        with open(path, 'rb') as logofile:
             return HttpResponse(logofile.read(), content_type=mimetype)
     except IOError:
-        raise Http404(logopath)
+        raise Http404(path)
 
 
 def ajax_popup(request, popup_id='', url='/'):

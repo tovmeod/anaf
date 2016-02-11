@@ -1,7 +1,5 @@
-"""
-Core templatetags
-"""
 from coffin import template
+from django.contrib.staticfiles import finders
 from jinja2 import contextfunction, contextfilter, Markup
 from anaf.core.conf import settings
 from django.utils.translation import ugettext as _
@@ -548,28 +546,23 @@ def core_logo_content(context, gif=False):
     # FIXME: logo file loading logic sucks, maybe use x-sendfile
     try:
         conf = ModuleSetting.get_for_module('anaf.core', 'logopath')[0]
-        logopath = getattr(settings, 'MEDIA_ROOT', './static/media') + conf.value
-        if logopath.endswith('.gif'):
+        path = getattr(settings, 'MEDIA_ROOT', './static/media') + conf.value
+        if path.endswith('.gif'):
             mimetype = 'image/gif'
         else:
             mimetype = 'image/png'
     except:
         # if there isn't a custom logo we use the default
-        if settings.DEBUG:
-            from os import path, getcwd
-            logopath = path.join(getcwd(), 'anaf/static/logo')
-        else:
-            logopath = settings.STATIC_ROOT + '/logo'
-
         if gif:
-            logopath += '.gif'
-            mimetype = 'image/gif'
+            extension = 'gif'
         else:
-            logopath += '.png'
-            mimetype = 'image/png'
+            extension = 'png'
+        filename = 'logo.{}'.format(extension)
+        mimetype = 'image/{}'.format(extension)
+        path = finders.find(filename)
 
     try:
-        with open(logopath, 'rb') as logofile:
+        with open(path, 'rb') as logofile:
             result = "data:" + mimetype + ";base64," + base64.b64encode(logofile.read())
             return Markup(result)
     except IOError:
