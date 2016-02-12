@@ -432,29 +432,22 @@ class Comment(models.Model):
 
 class Object(models.Model):
     """Generic anaf object"""
-    creator = models.ForeignKey(
-        User, blank=True, null=True, related_name='objects_created', on_delete=models.SET_NULL)
-    read_access = models.ManyToManyField(
-        AccessEntity, blank=True, null=True, related_name='objects_read_access')
-    full_access = models.ManyToManyField(
-        AccessEntity, blank=True, null=True, related_name='objects_full_access')
+    creator = models.ForeignKey(User, blank=True, null=True, related_name='objects_created', on_delete=models.SET_NULL)
+    read_access = models.ManyToManyField(AccessEntity, blank=True, null=True, related_name='objects_read_access')
+    full_access = models.ManyToManyField(AccessEntity, blank=True, null=True, related_name='objects_full_access')
 
     object_name = models.CharField(max_length=512, blank=True, null=True)
     object_type = models.CharField(max_length=512, blank=True, null=True)
     trash = models.BooleanField(default=False)
 
     links = models.ManyToManyField('self', blank=True, null=True)
-    subscribers = models.ManyToManyField(
-        User, blank=True, null=True, related_name='subscriptions')
+    subscribers = models.ManyToManyField(User, blank=True, null=True, related_name='subscriptions')
     # subscribers_outside = models.ManyToManyField(Contact, blank=True, null=True, related_name='subscriptions_outside')
     tags = models.ManyToManyField(Tag, blank=True, null=True)
 
-    comments = models.ManyToManyField(
-        Comment, blank=True, null=True, related_name='comments')
-    likes = models.ManyToManyField(
-        User, blank=True, null=True, related_name='objects_liked')
-    dislikes = models.ManyToManyField(
-        User, blank=True, null=True, related_name='objects_disliked')
+    comments = models.ManyToManyField(Comment, blank=True, null=True, related_name='comments')
+    likes = models.ManyToManyField(User, blank=True, null=True, related_name='objects_liked')
+    dislikes = models.ManyToManyField(User, blank=True, null=True, related_name='objects_disliked')
 
     last_updated = models.DateTimeField(auto_now=True)  # todo: don't use auto_now see http://stackoverflow.com/questions/1737017/django-auto-now-and-auto-now-add/1737078#1737078  # noqa
     date_created = models.DateTimeField(default=timezone.now)
