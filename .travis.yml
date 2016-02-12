@@ -7,11 +7,16 @@ env:
     - DB=mysql
     - DB=postgres
     - DB=postgres MC=1
+    - DB=postgres MC=1 SELENIUM=1
     #- DB=db2
     #- DB=firebird
     #- DB=oracle using snap-ci for oracle
 services:
   - memcached
+addons:
+  sauce_connect: true
+    username: "tovmeod"
+    access_key: "61789f41-37c5-49c0-9d65-ca124dd5d61d"
 # command to install dependencies
 install:
   - pip install -r requirements.txt

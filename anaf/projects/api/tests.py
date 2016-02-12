@@ -1,6 +1,3 @@
-"""
-API Project Management: test suites
-"""
 from time import sleep
 import json
 from datetime import datetime
