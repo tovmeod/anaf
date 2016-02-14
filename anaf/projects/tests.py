@@ -1,4 +1,4 @@
-from django.test import TestCase
+from anaf.test import AnafTestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from freezegun import freeze_time
 
 
-class ProjectsModelsTest(TestCase):
+class ProjectsModelsTest(AnafTestCase):
     """ Documents models tests"""
     def setUp(self):
         self.project = Project(name='test')
@@ -138,7 +138,7 @@ class ProjectsModelsTest(TestCase):
         mstone.get_absolute_url()
 
 
-class TestModelTaskTimeSlot(TestCase):
+class TestModelTaskTimeSlot(AnafTestCase):
     username = "testuser"
     password = "password"
 
@@ -221,7 +221,7 @@ class TestModelTaskTimeSlot(TestCase):
         self.assertTrue(self.timeslot.is_open())
 
 
-class ProjectsViewsNotLoggedIn(TestCase):
+class ProjectsViewsNotLoggedIn(AnafTestCase):
     """Test views Behaviour when user is not logged in
     Basically assert that all views are protected by login
     """
@@ -342,7 +342,7 @@ class ProjectsViewsNotLoggedIn(TestCase):
         self.assert_protected('projects_gantt_view', (1,))
 
 
-class ProjectsViewsTest(TestCase):
+class ProjectsViewsTest(AnafTestCase):
     username = "test"
     password = "password"
 

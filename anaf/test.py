@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from importlib import import_module
+import unittest
 import json
 from urlparse import urlparse, urljoin
 from django.test import TestCase as DjangoTestCase
@@ -9,7 +11,8 @@ from anaf.identities.models import Contact, ContactType
 from anaf.core.models import Group
 
 
-class TestCase(DjangoTestCase):
+@unittest.skipIf(not os.environ.get('SELENIUM', ''), 'Selenium env is set to 1')
+class AnafTestCase(DjangoTestCase):
     """
     Base class for tests, common functionality will be here
     """
@@ -51,11 +54,7 @@ class TestCase(DjangoTestCase):
 import datetime
 import os
 import time
-from importlib import import_module
-try:
-    from django.utils import unittest
-except ImportError:
-    import unittest
+
 
 from django.conf import settings
 from django.contrib.auth import get_user_model, authenticate, login

@@ -1,7 +1,7 @@
 from time import sleep
 import json
 from datetime import datetime
-from anaf.test import TestCase as AnafTestCase
+from anaf.test import AnafTestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 from freezegun import freeze_time
