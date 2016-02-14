@@ -2,11 +2,13 @@
 from importlib import import_module
 import unittest
 import json
+import os
 from urlparse import urlparse, urljoin
 from django.test import TestCase as DjangoTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.staticfiles.handlers import StaticFilesHandler
 from django.contrib.auth.models import User as DjangoUser
+from django.core.urlresolvers import reverse
 from anaf.identities.models import Contact, ContactType
 from anaf.core.models import Group
 
@@ -136,6 +138,7 @@ class LiveTestCase(StaticLiveServerTestCase):
         super(LiveTestCase, cls).tearDownClass()
         if cls.driver:
             cls.driver.quit()
+        time.sleep(1)
 
     def setUp(self):
         super(LiveTestCase, self).setUp()
@@ -154,7 +157,22 @@ class LiveTestCase(StaticLiveServerTestCase):
 
     def tearDown(self):
         super(LiveTestCase, self).tearDown()
+        time.sleep(1)
         cache.clear()
+
+    def get(self, viewname):
+        """Get the page based on the viewname and wait it to load
+        """
+        url = urljoin(self.live_server_url, reverse(viewname))
+        self.driver.get(url)
+        time.sleep(0.1)
+        self.wait_load()
+
+    def wait_load(self):
+        """wait for the #loading-splash and #loading-status to not be visible anymore
+        """
+        self.wait_not_selector('#loading-splash')
+        self.wait_not_selector('#loading-status')
 
     def get_log(self):
         return self.driver.get_log('browser')
