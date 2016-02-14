@@ -9,7 +9,7 @@ for model in get_models():
             if isinstance(field, (CharField, TextField)) and 'password' not in field.name and \
                             'object_name' not in field.name and 'object_type' not in field.name \
                     and 'nuvius' not in field.name:
-                params.append('{0!s}__{1!s}'.format(model._meta.module_name, field.name))
+                params.append('{0!s}__{1!s}'.format(model._meta.model_name, field.name))
 
 
 def search(term):
