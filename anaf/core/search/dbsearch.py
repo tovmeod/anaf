@@ -1,9 +1,11 @@
-from django.db.models import Q, get_models, CharField, TextField
+from django.db.models import Q, CharField, TextField
+from django.apps import apps
+
 from anaf.core.models import Object
 
 params = []
 
-for model in get_models():
+for model in apps.get_models():
     if issubclass(model, Object) and getattr(model, 'searcheable', True):
         for field in model._meta.fields:
             if isinstance(field, (CharField, TextField)) and 'password' not in field.name and \
