@@ -75,13 +75,10 @@ class Command(BaseCommand):
 
         if answer:
             exit_code = subprocess.call(
-                [sys.executable, 'manage.py', 'syncdb', '--all', '--noinput'])
+                [sys.executable, 'manage.py', 'migrate'])
             if not exit_code == 0:
                 self.stdout.flush()
                 raise CommandError('Failed to install database.')
-
-            exit_code = subprocess.call(
-                [sys.executable, 'manage.py', 'migrate', '--all', '--fake', '--noinput', '--no-initial-data'])
 
             self.stdout.write(
                 '\n-- Successfully installed database. \n-- You\'re ready to go!\n\n')
