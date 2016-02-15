@@ -1,3 +1,4 @@
+from time import sleep
 from urlparse import urljoin
 from django.core.urlresolvers import reverse
 
@@ -36,7 +37,6 @@ class ProjectTests(LiveTestCase):
         em = self.send_keys('#id_name', name)
         em.submit()
         self.wait_load()
-        from time import sleep
         sleep(0.1)
         p = Project.objects.get(name=name)
         self.assertEqual(p.name, name)
@@ -77,6 +77,7 @@ class ProjectTests(LiveTestCase):
         self.wait_load()
         self.driver.find_element_by_css_selector('#trash').click()
         self.driver.find_element_by_css_selector('[name="delete"]').click()
+        sleep(0.1)
         self.wait_load()
         with self.assertRaises(Project.DoesNotExist):
             Project.objects.get(id=self.project.id)
