@@ -162,9 +162,8 @@ class LiveTestCase(StaticLiveServerTestCase):
 
     def tearDown(self):
         super(LiveTestCase, self).tearDown()
-        if self.USE_SAUCE:
-            if self.driver:
-                self.driver.quit()
+        if self.USE_SAUCE and self.driver:
+            self.driver.quit()
         sleep(1)
         cache.clear()
 
