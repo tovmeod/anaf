@@ -3,6 +3,7 @@ from importlib import import_module
 import unittest
 import json
 import os
+from time import sleep
 from urlparse import urlparse, urljoin
 from django.test import TestCase as DjangoTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -54,8 +55,7 @@ class AnafTestCase(DjangoTestCase):
 
 
 import datetime
-import os
-import time
+
 
 
 from django.conf import settings
@@ -110,24 +110,14 @@ class LiveTestCase(StaticLiveServerTestCase):
     static_handler = MyStaticFilesHandler
     driver = None
 
+    USE_SAUCE = True if os.environ.get("TRAVIS_BUILD_NUMBER") else False
+
     @classmethod
     def setUpClass(cls):
         super(LiveTestCase, cls).setUpClass()
         cache.clear()
-        if os.environ.get("TRAVIS_BUILD_NUMBER"):
-            capabilities = webdriver.DesiredCapabilities.CHROME
-            capabilities['version'] = '45'  # If this capability is null, an empty string, or omitted altogether, the latest version of the browser will be used automatically.  # noqa
-            capabilities['platform'] = 'Windows 7'
-            capabilities['name'] = 'Anaf'
-            capabilities['build'] = os.environ.get("TRAVIS_BUILD_NUMBER")
-            capabilities['tags'] = [os.environ.get("TRAVIS_PYTHON_VERSION"), "CI"]
-            username = os.environ.get("SAUCE_USERNAME")
-            access_key = os.environ.get("SAUCE_ACCESS_KEY")
-            capabilities["tunnel-identifier"] = os.environ.get("TRAVIS_JOB_NUMBER")
-            hub_url = "http://%s:%s@ondemand.saucelabs.com/wd/hub" % (username, access_key)
-            cls.driver = webdriver.Remote(desired_capabilities=capabilities, command_executor=hub_url)
-            cls.driver.implicitly_wait(30)
-        else:
+
+        if not cls.USE_SAUCE:
             # cls.driver = webdriver.Firefox()
             cls.driver = webdriver.Chrome()
             cls.driver.implicitly_wait(5)
@@ -136,9 +126,10 @@ class LiveTestCase(StaticLiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         super(LiveTestCase, cls).tearDownClass()
-        if cls.driver:
-            cls.driver.quit()
-        time.sleep(1)
+        if not cls.USE_SAUCE:
+            if cls.driver:
+                cls.driver.quit()
+            sleep(1)
 
     def setUp(self):
         super(LiveTestCase, self).setUp()
@@ -155,9 +146,26 @@ class LiveTestCase(StaticLiveServerTestCase):
         self.contact.set_default_user()
         self.contact.save()
 
+        if self.USE_SAUCE:
+            capabilities = webdriver.DesiredCapabilities.CHROME
+            capabilities['version'] = '45'  # If this capability is null, an empty string, or omitted altogether, the latest version of the browser will be used automatically.  # noqa
+            capabilities['platform'] = 'Windows 7'
+            capabilities['name'] = self._testMethodName
+            capabilities['build'] = os.environ.get("TRAVIS_BUILD_NUMBER")
+            capabilities['tags'] = [os.environ.get("TRAVIS_PYTHON_VERSION"), "CI"]
+            username = os.environ.get("SAUCE_USERNAME")
+            access_key = os.environ.get("SAUCE_ACCESS_KEY")
+            capabilities["tunnel-identifier"] = os.environ.get("TRAVIS_JOB_NUMBER")
+            hub_url = "http://%s:%s@ondemand.saucelabs.com/wd/hub" % (username, access_key)
+            self.driver = webdriver.Remote(desired_capabilities=capabilities, command_executor=hub_url)
+            self.driver.implicitly_wait(30)
+
     def tearDown(self):
         super(LiveTestCase, self).tearDown()
-        time.sleep(1)
+        if self.USE_SAUCE:
+            if self.driver:
+                self.driver.quit()
+        sleep(1)
         cache.clear()
 
     def get(self, viewname):
@@ -165,7 +173,7 @@ class LiveTestCase(StaticLiveServerTestCase):
         """
         url = urljoin(self.live_server_url, reverse(viewname))
         self.driver.get(url)
-        time.sleep(0.1)
+        sleep(0.1)
         self.wait_load()
 
     def wait_load(self):
