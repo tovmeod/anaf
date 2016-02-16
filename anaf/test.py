@@ -150,7 +150,7 @@ class LiveTestCase(StaticLiveServerTestCase):
             capabilities = webdriver.DesiredCapabilities.CHROME
             capabilities['version'] = '45'  # If this capability is null, an empty string, or omitted altogether, the latest version of the browser will be used automatically.  # noqa
             capabilities['platform'] = 'Windows 7'
-            capabilities['name'] = self._testMethodName
+            capabilities['name'] = self.id()
             capabilities['build'] = os.environ.get("TRAVIS_BUILD_NUMBER")
             capabilities['tags'] = [os.environ.get("TRAVIS_PYTHON_VERSION"), "CI"]
             username = os.environ.get("SAUCE_USERNAME")
