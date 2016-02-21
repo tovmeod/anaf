@@ -30,9 +30,8 @@ class MilestoneView(viewsets.ModelViewSet):
 
 
 class TaskView(viewsets.ModelViewSet):
-    """
-    API endpoint that allows Tasks to be viewed or edited.
-    """
+
+    """API endpoint that allows Tasks to be viewed or edited."""
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
