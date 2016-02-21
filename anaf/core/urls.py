@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url, include
-from api import views
+from anaf.core.api import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
