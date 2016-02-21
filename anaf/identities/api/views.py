@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from anaf.identities.models import Contact, ContactType, ContactField
-import serializers
+from anaf.identities.api import serializers
 
 
 class ContactFieldView(viewsets.ModelViewSet):
