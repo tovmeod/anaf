@@ -2,7 +2,7 @@ from rest_framework import viewsets
 
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
-from serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
+from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 
 
 class ProjectView(viewsets.ModelViewSet):
