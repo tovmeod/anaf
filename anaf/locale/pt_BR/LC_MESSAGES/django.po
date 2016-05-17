@@ -140,7 +140,7 @@ msgstr "Digite o texto da imagem"
 
 #: core/forms.py:90
 msgid "That username doesn't have an associated email."
-msgstr ""
+msgstr "Este usuário não tem um email associado."
 
 #: core/forms.py:281 documents/forms.py:49 infrastructure/forms.py:132 infrastructure/forms.py:269 knowledge/forms.py:49 projects/forms.py:99 projects/forms.py:214 sales/forms.py:499
 #: services/forms.py:324 services/forms.py:359 templates/html/identities/location_delete.html:56 templates/html/identities/location_view.html:22 templates/html/infrastructure/item_delete.html:61
@@ -535,7 +535,7 @@ msgstr "Assunto"
 
 #: messaging/forms.py:111
 msgid "Send as an email to"
-msgstr ""
+msgstr "Enviar como email para"
 
 #: messaging/forms.py:125
 msgid "That stream doesn't have an outgoing email. Check Email Settings or deselect recipient below."
@@ -543,11 +543,11 @@ msgstr ""
 
 #: messaging/forms.py:141
 msgid "Email Name"
-msgstr ""
+msgstr "Nome do email"
 
 #: messaging/forms.py:142
 msgid "Server Name"
-msgstr ""
+msgstr "Nome do servidor"
 
 #: messaging/forms.py:168 messaging/forms.py:175
 msgid "Server Type"
@@ -555,11 +555,11 @@ msgstr "Tipo de Servidor"
 
 #: messaging/forms.py:144
 msgid "Server Username"
-msgstr ""
+msgstr "Nome de usuário no servidor"
 
 #: messaging/forms.py:145
 msgid "Server Password"
-msgstr ""
+msgstr "Senha do servidor"
 
 #: messaging/forms.py:160
 msgid "Email Incoming"
@@ -1072,19 +1072,19 @@ msgstr "Outros grupos"
 #: templates/html/account/page.html:12
 #: templates/html/core/tags/user_block.html:9
 msgid "Notifications"
-msgstr ""
+msgstr "Notificações"
 
 #: templates/html/account/notification_index.html:12
 msgid "Delete All"
-msgstr ""
+msgstr "Apagar todos"
 
 #: templates/html/account/notification_index.html:43
 msgid "There are no notifications for you."
-msgstr ""
+msgstr "Não há notificações para você"
 
 #: templates/html/account/page.html:11
 msgid "Your Account"
-msgstr ""
+msgstr "Sua conta"
 
 #: templates/html/account/page.html:15 templates/html/account/settings_edit.html:3 templates/html/account/settings_edit.html:8 templates/html/account/settings_view.html:3
 #: templates/html/account/settings_view.html:8 templates/html/changes/page.html:28 templates/html/changes/settings_edit.html:3 templates/html/changes/settings_edit.html:7
@@ -1378,7 +1378,7 @@ msgstr "Email enviado"
 
 #: templates/html/core/password_reset_form.html:13
 msgid "Forgotten your password? Enter your username below, and we'll send you a new one"
-msgstr ""
+msgstr "Esqueceu sua senha? Digite seu nome de usuário abaixo, e nós enviaremos uma nova"
 
 #: templates/html/core/hints/user_denied.html:6
 msgid "Access Denied"
@@ -1665,7 +1665,7 @@ msgstr "Todos os ítens"
 
 #: templates/html/documents/index.html:33
 msgid "No Documents available"
-msgstr ""
+msgstr "Não há documentos disponíveis"
 
 #: templates/html/documents/index_files.html:3 templates/html/documents/index_files.html:5 templates/html/documents/page.html:14
 msgid "Files"
@@ -2773,16 +2773,16 @@ msgstr "Todos os Relatórios"
 
 #: templates/html/reports/page.html:12
 msgid "My Reports"
-msgstr ""
+msgstr "Meus relatórios"
 
 #: templates/html/reports/page.html:14
 msgid "By Module"
-msgstr ""
+msgstr "Por módulo"
 
 #: templates/html/reports/page.html:31
 #: templates/html/reports/report_add.html:6
 msgid "New Template"
-msgstr ""
+msgstr "Template novo"
 
 #: templates/html/reports/report_edit.html:40
 msgid "Field Name"
@@ -2870,7 +2870,7 @@ msgstr "Editar oportunidade"
 #: templates/html/sales/opportunity_index.html:58
 #: templates/html/sales/opportunity_index_owned.html:58
 msgid "Closed"
-msgstr ""
+msgstr "Encerrado"
 
 #: templates/html/sales/opportunity_view.html:81
 msgid "Expected Date"
@@ -2972,7 +2972,7 @@ msgstr "Sub Produtos"
 #: templates/html/sales/product_index.html:48
 #: templates/html/sales/product_index_owned.html:48
 msgid "No Products"
-msgstr ""
+msgstr "Sem produtos"
 
 #: templates/html/sales/product_view.html:61
 msgid "Buy Price"
@@ -3261,7 +3261,7 @@ msgstr "Tickets de Suporte Ativos"
 
 #: 
 msgid "By Location"
-msgstr ""
+msgstr "Por localidade"
 
 #: templates/html/reports/index.html:13 templates/html/reports/index_owned.html:13 templates/html/reports/report_add.html:19
 msgid "New Report"
@@ -3277,27 +3277,27 @@ msgstr ""
 
 #: 
 msgid "Password reset successfully"
-msgstr ""
+msgstr "Redefinição de senha com sucesso"
 
 #: 
 msgid "Please enter your new password"
-msgstr ""
+msgstr "Por favor, digite a sua nova senha"
 
 #: 
 msgid "The password reset link was invalid"
-msgstr ""
+msgstr "O link de redefinição de senha é inválido"
 
 #: 
 msgid "Add Category"
-msgstr ""
+msgstr "Adicionar categoria"
 
 #: 
 msgid "Delete Category"
-msgstr ""
+msgstr "Excluir categoria"
 
 #: 
 msgid "Text"
-msgstr ""
+msgstr "Texto"
 
 #: templates/html/forest/email_index.html:121
 msgid "E-mail"
@@ -3305,7 +3305,7 @@ msgstr "E-mail"
 
 #: 
 msgid "Phone"
-msgstr ""
+msgstr "Telefone"
 
 #: 
 msgid "Picture"
