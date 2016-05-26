@@ -1,11 +1,14 @@
+from __future__ import print_function
 # -*- coding: utf-8 -*-
+import base64
 from importlib import import_module
 import unittest
+import socket
 import json
 import os
 from time import sleep
-from urlparse import urlparse, urljoin
-from django.test import TestCase as DjangoTestCase
+from django.test import TestCase as DjangoTestCase, TransactionTestCase
+from django.test.testcases import LiveServerThread as DjangoLiveServerThread, _MediaFilesHandler
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.contrib.staticfiles.handlers import StaticFilesHandler
 from django.contrib.auth.models import User as DjangoUser
@@ -13,50 +16,7 @@ from django.core.urlresolvers import reverse
 from anaf.identities.models import Contact, ContactType
 from anaf.core.models import Group
 
-
-@unittest.skipIf(not os.environ.get('SELENIUM', ''), 'Selenium env is set to 1')
-class AnafTestCase(DjangoTestCase):
-    """
-    Base class for tests, common functionality will be here
-    """
-    def cmpDataApi(self, old, new, fieldname='root'):
-        """
-        Compares data using the old API with data retrieved with the new
-        They don't need to be equivalent, the new API may return at least the data the old API was able to and may add
-        :param str or dict or list old: content retrieved using the old API
-        :param str or dict or list new: content retrieved using the new DRF API
-        :return bool: is it kosher?
-        """
-        if isinstance(old, basestring):
-            old = json.loads(old)
-        if isinstance(new, basestring):
-            new = json.loads(new)
-        if isinstance(old, dict) and isinstance(new, dict):
-            for k, v in sorted(old.items()):
-                if k == 'resource_uri':
-                        continue
-                assert k in new, 'Field {}.{} not found on new.\nold:{}\nnew:{}'.format(fieldname, k, old, new)
-                assert isinstance(v, type(new[k])),\
-                    'Field {}.{} exists but have different content type.\nold:{}\nnew:{}'.format(fieldname, k, v, new[k])
-                if isinstance(v, dict):
-                    self.cmpDataApi(v, new[k], '{}.{}'.format(fieldname, k))
-                elif isinstance(v, basestring):
-                    assert v == new[k], 'Field {}.{} exists but have different value.\nold:{}\nnew:{}'.format(fieldname, k,
-                                                                                                              v, new[k])
-                else:
-                    assert v == new[k]
-        elif isinstance(old, list) and isinstance(new, list):
-            old.sort(key=lambda x: x['id'])
-            new.sort(key=lambda x: x['id'])
-            for i, v in enumerate(old):
-                self.cmpDataApi(v, new[i], str(i))
-        else:
-            assert False, 'old and new have different types'
-
-
 import datetime
-
-
 
 from django.conf import settings
 from django.contrib.auth import get_user_model, authenticate, login
@@ -79,6 +39,242 @@ from selenium.common.exceptions import NoSuchElementException, NoAlertPresentExc
 # from cms.test_utils.project.placeholderapp.models import Example1
 # from cms.utils.conf import get_cms_setting
 
+from django.db import connections
+from django.utils import six
+# from django.utils.six.moves.urllib.parse import urlparse, urljoin  # noqa
+from django.core.exceptions import ImproperlyConfigured
+from django.core.handlers.wsgi import WSGIHandler
+from django.core.servers.basehttp import WSGIServer, WSGIRequestHandler
+import sys
+import errno
+
+
+@unittest.skipIf(not os.environ.get('SELENIUM', ''), 'Selenium env is set to 1')
+class AnafTestCase(DjangoTestCase):
+    """
+    Base class for tests, common functionality will be here
+    """
+    def cmpDataApi(self, old, new, fieldname='root'):
+        """
+        Compares data using the old API with data retrieved with the new
+        They don't need to be equivalent, the new API may return at least the data the old API was able to and may add
+        :param str or dict or list old: content retrieved using the old API
+        :param str or dict or list new: content retrieved using the new DRF API
+        :return bool: is it kosher?
+        """
+        if isinstance(old, six.string_types):
+            old = json.loads(old)
+        if isinstance(new, six.string_types):
+            new = json.loads(new)
+        if isinstance(old, dict) and isinstance(new, dict):
+            for k, v in sorted(old.items()):
+                if k == 'resource_uri':
+                        continue
+                assert k in new, 'Field {}.{} not found on new.\nold:{}\nnew:{}'.format(fieldname, k, old, new)
+                assert isinstance(v, type(new[k])),\
+                    'Field {}.{} exists but have different content type.\nold:{}\nnew:{}'.format(fieldname, k, v, new[k])
+                if isinstance(v, dict):
+                    self.cmpDataApi(v, new[k], '{}.{}'.format(fieldname, k))
+                elif isinstance(v, six.string_types):
+                    assert v == new[k], 'Field {}.{} exists but have different value.\nold:{}\nnew:{}'.format(fieldname, k,
+                                                                                                              v, new[k])
+                else:
+                    assert v == new[k]
+        elif isinstance(old, list) and isinstance(new, list):
+            old.sort(key=lambda x: x['id'])
+            new.sort(key=lambda x: x['id'])
+            for i, v in enumerate(old):
+                self.cmpDataApi(v, new[i], str(i))
+        else:
+            assert False, 'old and new have different types'
+
+
+class MyStaticFilesHandler(StaticFilesHandler):
+    def serve(self, request):
+        if request.path == '/static/favicon.ico':
+            from django.http import HttpResponseForbidden
+            return HttpResponseForbidden()  # I'm not serving favicon during test
+        return super(MyStaticFilesHandler, self).serve(request)
+
+
+class TestWSGIRequestHandler(WSGIRequestHandler):
+    """
+    Just a regular WSGIRequestHandler except it doesn't log to the standard
+    output any of the requests received, so as to not clutter the output for
+    the tests results, instead it saves to a given list, useful to print the logs only when a test fails
+    """
+    def log_message(self, *args):
+        # print(args)
+        self.logs.append(args)
+
+
+class LiveServerThread(DjangoLiveServerThread):
+    """
+    Almost an copy of django's LiveServerThread, but I wanted it to use my own WSGI handler
+    """
+    def __init__(self, *args, **kwargs):
+        self.logs = kwargs.pop('logs', None)
+        super(LiveServerThread, self).__init__(*args, **kwargs)
+
+    def run(self):
+        """
+        Sets up the live server and databases, and then loops over handling
+        http requests.
+        """
+        if self.connections_override:
+            # Override this thread's database connections with the ones
+            # provided by the main thread.
+            for alias, conn in self.connections_override.items():
+                connections[alias] = conn
+        try:
+            # Create the handler for serving static and media files
+            handler = self.static_handler(_MediaFilesHandler(WSGIHandler()))
+
+            # Go through the list of possible ports, hoping that we can find
+            # one that is free to use for the WSGI server.
+            for index, port in enumerate(self.possible_ports):
+                try:
+                    TestWSGIRequestHandler.logs = self.logs
+                    self.httpd = WSGIServer(
+                        (self.host, port), TestWSGIRequestHandler)
+                except socket.error as e:
+                    if (index + 1 < len(self.possible_ports) and
+                            e.errno == errno.EADDRINUSE):
+                        # This port is already in use, so we go on and try with
+                        # the next one in the list.
+                        continue
+                    else:
+                        # Either none of the given ports are free or the error
+                        # is something else than "Address already in use". So
+                        # we let that error bubble up to the main thread.
+                        raise
+                else:
+                    # A free port was found.
+                    self.port = port
+                    break
+
+            self.httpd.set_app(handler)
+            self.is_ready.set()
+            self.httpd.serve_forever()
+        except Exception as e:
+            self.error = e
+            self.is_ready.set()
+
+
+class LiveServerTestCase(TransactionTestCase):
+    """
+    This is almost an copy from django's LiveServerTestCase, I wanted to override setUpClass
+     so it can use my own LiveServerThread
+    """
+
+    static_handler = MyStaticFilesHandler
+
+    @property
+    def live_server_url(self):
+        return 'http://%s:%s' % (self.server_thread.host, self.server_thread.port)
+
+    @classmethod
+    def setUpClass(cls):
+        connections_override = {}
+        for conn in connections.all():
+            # If using in-memory sqlite databases, pass the connections to
+            # the server thread.
+            if (conn.vendor == 'sqlite'
+                    and conn.settings_dict['NAME'] == ':memory:'):
+                # Explicitly enable thread-shareability for this connection
+                conn.allow_thread_sharing = True
+                connections_override[conn.alias] = conn
+
+        # Launch the live server's thread
+        specified_address = os.environ.get(
+            'DJANGO_LIVE_TEST_SERVER_ADDRESS', 'localhost:8081')
+
+        # The specified ports may be of the form '8000-8010,8080,9200-9300'
+        # i.e. a comma-separated list of ports or ranges of ports, so we break
+        # it down into a detailed list of all possible ports.
+        possible_ports = []
+        try:
+            host, port_ranges = specified_address.split(':')
+            for port_range in port_ranges.split(','):
+                # A port range can be of either form: '8000' or '8000-8010'.
+                extremes = list(map(int, port_range.split('-')))
+                assert len(extremes) in [1, 2]
+                if len(extremes) == 1:
+                    # Port range of the form '8000'
+                    possible_ports.append(extremes[0])
+                else:
+                    # Port range of the form '8000-8010'
+                    for port in range(extremes[0], extremes[1] + 1):
+                        possible_ports.append(port)
+        except Exception:
+            msg = 'Invalid address ("%s") for live server.' % specified_address
+            six.reraise(ImproperlyConfigured, ImproperlyConfigured(msg), sys.exc_info()[2])
+        cls.logs = []
+        cls.server_thread = LiveServerThread(host, possible_ports,
+                                             cls.static_handler,
+                                             connections_override=connections_override, logs=cls.logs)
+        cls.server_thread.daemon = True
+        cls.server_thread.start()
+
+        # Wait for the live server to be ready
+        cls.server_thread.is_ready.wait()
+        if cls.server_thread.error:
+            # Clean up behind ourselves, since tearDownClass won't get called in
+            # case of errors.
+            cls._tearDownClassInternal()
+            raise cls.server_thread.error
+
+        super(LiveServerTestCase, cls).setUpClass()
+
+    @classmethod
+    def _tearDownClassInternal(cls):
+        # There may not be a 'server_thread' attribute if setUpClass() for some
+        # reasons has raised an exception.
+        if hasattr(cls, 'server_thread'):
+            # Terminate the live server's thread
+            cls.server_thread.terminate()
+            cls.server_thread.join()
+
+        # Restore sqlite connections' non-shareability
+        for conn in connections.all():
+            if (conn.vendor == 'sqlite'
+                    and conn.settings_dict['NAME'] == ':memory:'):
+                conn.allow_thread_sharing = False
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._tearDownClassInternal()
+        super(LiveServerTestCase, cls).tearDownClass()
+
+    def _ifailed(self):
+        """Call this on tearDown, check if it was the last run test that failed
+        """
+        if self._resultForDoCleanups.failures:
+             for failed_test in self._resultForDoCleanups.failures:
+                failed_test = failed_test[0]
+                failed_test = str(failed_test)
+                tname, modname = failed_test.split()
+                modname = modname[1:-1]
+                failed_test = '{}.{}'.format(modname, tname)
+                if self.id() == failed_test:
+                    print('failed %s' % failed_test)
+                    return True
+                return False
+        elif self._resultForDoCleanups.errors:
+            print('error')
+            print(self._resultForDoCleanups.errors)
+            return True
+        else:
+            print('success')
+            return False
+
+    def tearDown(self):
+        super(LiveServerTestCase, self).tearDown()
+        if self._ifailed():
+            for log in self.logs:
+                print(*log)
+        del self.logs[:]
+
 
 class AttributeObject(object):
     """
@@ -94,16 +290,8 @@ class AttributeObject(object):
         return '<AttributeObject: %r>' % self.kwargs
 
 
-class MyStaticFilesHandler(StaticFilesHandler):
-    def serve(self, request):
-        if request.path == '/static/favicon.ico':
-            from django.http import HttpResponseForbidden
-            return HttpResponseForbidden()  # I'm not serving favicon during test
-        return super(MyStaticFilesHandler, self).serve(request)
-
-
 @unittest.skipIf(not os.environ.get('SELENIUM', ''), 'Selenium env is set to 0')
-class LiveTestCase(StaticLiveServerTestCase):
+class LiveTestCase(LiveServerTestCase):
     username = "fronttestuser"
     password = "password"
 
@@ -126,10 +314,11 @@ class LiveTestCase(StaticLiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         super(LiveTestCase, cls).tearDownClass()
-        if not cls.USE_SAUCE:
-            if cls.driver:
-                cls.driver.quit()
+        if not cls.USE_SAUCE and cls.driver:
+            cls.driver.quit()
             sleep(1)
+        cls.server_thread.terminate()
+        cls.server_thread.join()
 
     def setUp(self):
         super(LiveTestCase, self).setUp()
@@ -164,13 +353,24 @@ class LiveTestCase(StaticLiveServerTestCase):
         super(LiveTestCase, self).tearDown()
         if self.USE_SAUCE and self.driver:
             self.driver.quit()
+            self._report_pass_fail()
         sleep(1)
         cache.clear()
+
+    def _report_pass_fail(self):
+        username = os.environ.get("SAUCE_USERNAME")
+        base64string = base64.encodestring('%s:%s' % (username, os.environ.get("SAUCE_ACCESS_KEY")))[:-1]
+        result = json.dumps({'public': 'true', 'passed': sys.exc_info() == (None, None, None)})
+        connection = six.moves.http_client.HTTPConnection("saucelabs.com")
+        connection.request('PUT', '/rest/v1/%s/jobs/%s' % (username, self.driver.session_id), result,
+                           headers={"Authorization": "Basic %s" % base64string})
+        result = connection.getresponse()
+        return result.status == 200
 
     def get(self, viewname):
         """Get the page based on the viewname and wait it to load
         """
-        url = urljoin(self.live_server_url, reverse(viewname))
+        url = six.moves.urllib.parse.urljoin(self.live_server_url, reverse(viewname))
         self.driver.get(url)
         sleep(0.1)
         self.wait_load()
@@ -192,7 +392,7 @@ class LiveTestCase(StaticLiveServerTestCase):
         return em
 
     def _login(self):
-        url = urljoin(self.live_server_url, '/')
+        url = six.moves.urllib.parse.urljoin(self.live_server_url, '/')
         self.driver.get(url)
         self.send_keys('#username', self.username)
         password_input = self.send_keys('#password', self.password)
@@ -217,7 +417,7 @@ class LiveTestCase(StaticLiveServerTestCase):
             'name': settings.SESSION_COOKIE_NAME,
             'value': session.session_key,
             'path': '/',
-            'domain': urlparse(self.live_server_url).hostname
+            'domain': six.moves.urllib.parse.urlparse(self.live_server_url).hostname
         })
         self.driver.get('{0}/?{1}'.format(
             self.live_server_url,
