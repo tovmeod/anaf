@@ -81,6 +81,7 @@ class ProjectTests(LiveTestCase):
         self.wait_load()
         with self.assertRaises(Project.DoesNotExist):
             Project.objects.get(id=self.project.id)
+        self.fail()
 
     # send to trash, and open trash page to check it is there
     # add milestone
