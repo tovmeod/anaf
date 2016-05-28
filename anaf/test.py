@@ -7,6 +7,10 @@ import socket
 import json
 import os
 from time import sleep
+try:
+    from sauceclient import SauceClient
+except ImportError:
+    pass
 from django.test import TestCase as DjangoTestCase, TransactionTestCase
 from django.test.testcases import LiveServerThread as DjangoLiveServerThread, _MediaFilesHandler
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -250,12 +254,12 @@ class LiveServerTestCase(TransactionTestCase):
         """Call this on tearDown, check if it was the last run test that failed
         """
         if self._resultForDoCleanups.failures:
-             for failed_test in self._resultForDoCleanups.failures:
+            for failed_test in self._resultForDoCleanups.failures:
                 failed_test = failed_test[0]
                 failed_test = str(failed_test)
                 tname, modname = failed_test.split()
                 modname = modname[1:-1]
-                failed_test = '{}.{}'.format(modname, tname)
+                failed_test = '{0}.{1}'.format(modname, tname)
                 if self.id() == failed_test:
                     print('failed %s' % failed_test)
                     return True
@@ -358,14 +362,12 @@ class LiveTestCase(LiveServerTestCase):
         cache.clear()
 
     def _report_pass_fail(self):
-        username = os.environ.get("SAUCE_USERNAME")
-        base64string = base64.encodestring('%s:%s' % (username, os.environ.get("SAUCE_ACCESS_KEY")))[:-1]
-        result = json.dumps({'public': 'true', 'passed': sys.exc_info() == (None, None, None)})
-        connection = six.moves.http_client.HTTPConnection("saucelabs.com")
-        connection.request('PUT', '/rest/v1/%s/jobs/%s' % (username, self.driver.session_id), result,
-                           headers={"Authorization": "Basic %s" % base64string})
-        result = connection.getresponse()
-        return result.status == 200
+        session_id = self.driver.session_id
+        job_name = self.id()
+        sauce_client = SauceClient(os.environ.get("SAUCE_USERNAME"), os.environ.get("SAUCE_ACCESS_KEY"))
+        status = (sys.exc_info() == (None, None, None))
+        sauce_client.jobs.update_job(session_id, passed=status)
+        print("SauceOnDemandSessionID=%s job-name=%s" % (session_id, job_name))
 
     def get(self, viewname):
         """Get the page based on the viewname and wait it to load
