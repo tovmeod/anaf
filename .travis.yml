@@ -23,7 +23,8 @@ matrix:
 
 # command to install dependencies
 install:
-  - pip install -r requirements.txt
+  - pip install -r requirements-test.txt
+  - pip install pytest-sugar
   - pip install coveralls
   - if [ $MC == '1' ]; then pip install -q pylibmc ; fi
   - if [ $SELENIUM == '1' ]; then pip install -q sauceclient ; fi

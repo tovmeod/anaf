@@ -1,0 +1,4 @@
+-r requirements.txt
+selenium==2.50.1
+pytest
+pytest-django

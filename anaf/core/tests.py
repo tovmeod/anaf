@@ -5,11 +5,10 @@ Middleware: test chat
 import datetime
 
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
 from anaf.identities.models import Contact
-from models import User, Group, ModuleSetting, Module, Object, Perspective, AccessEntity
+from models import User, Group, Module, Perspective, AccessEntity
 
 
 class CoreModelsTest(TestCase):
