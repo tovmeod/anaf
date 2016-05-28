@@ -253,24 +253,7 @@ class LiveServerTestCase(TransactionTestCase):
     def _ifailed(self):
         """Call this on tearDown, check if it was the last run test that failed
         """
-        if self._resultForDoCleanups.failures:
-            for failed_test in self._resultForDoCleanups.failures:
-                failed_test = failed_test[0]
-                failed_test = str(failed_test)
-                tname, modname = failed_test.split()
-                modname = modname[1:-1]
-                failed_test = '{0}.{1}'.format(modname, tname)
-                if self.id() == failed_test:
-                    print('failed %s' % failed_test)
-                    return True
-                return False
-        elif self._resultForDoCleanups.errors:
-            print('error')
-            print(self._resultForDoCleanups.errors)
-            return True
-        else:
-            print('success')
-            return False
+        return sys.exc_info() == (None, None, None)
 
     def tearDown(self):
         super(LiveServerTestCase, self).tearDown()
