@@ -1,7 +1,6 @@
 from time import sleep
-from urlparse import urljoin
 from django.core.urlresolvers import reverse
-
+from django.utils import six
 from anaf.projects.models import Project
 from anaf.test import LiveTestCase
 from datetime import datetime
@@ -20,7 +19,7 @@ class ProjectTests(LiveTestCase):
 
     def test_project_index(self):
         self._login()
-        url = urljoin(self.live_server_url, reverse('projects'))
+        url = six.moves.urllib.parse.urljoin(self.live_server_url, reverse('projects'))
         self.driver.get(url)
         self.assertTrue(self.driver.find_element_by_css_selector('#menu-anaf-projects.active'))
 
