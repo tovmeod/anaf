@@ -18,13 +18,12 @@ class CoreAPITest(TestCase):
     content_type = 'application/json'
 
     def setUp(self):
-        self.group, created = Group.objects.get_or_create(name='test')
-        duser, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.group = Group.objects.get_or_create(name='test')[0]
+        duser = DjangoUser.objects.get_or_create(username=self.username)[0]
         duser.set_password(self.password)
         duser.save()
         self.user = duser
-        perspective, created = Perspective.objects.get_or_create(
-            name='default')
+        perspective = Perspective.objects.get_or_create(name='default')[0]
         perspective.set_default_user()
         perspective.save()
         ModuleSetting.set('default_perspective', perspective.id)
