@@ -6,7 +6,7 @@ from piston3.handler import BaseHandler, HandlerMetaClass, typemapper
 import base64
 from utils import rc
 from decorators import module_admin_required
-from cStringIO import StringIO
+from django.utils.six import StringIO
 
 
 class ObjectHandlerMetaClass(HandlerMetaClass):
