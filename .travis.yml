@@ -35,6 +35,6 @@ before_install:
   - ci/before_install_${DB}.sh
 before_script: ci/before_script_${DB}.sh
 # command to run tests
-script: py.test --cov
+script: py.test --cov --cov-report=
 after_success:
   coveralls
