@@ -2,9 +2,6 @@
 
 from __future__ import absolute_import, with_statement
 
-__all__ = ['GroupHandler', 'UserHandler', 'ModuleHandler',
-           'PerspectiveHandler', 'PageFolderHandler', 'PageHandler']
-
 from django.utils.translation import ugettext as _
 
 from anaf.core.api.utils import rc
@@ -14,6 +11,9 @@ from anaf.core.api.handlers import AccessHandler, ObjectHandler
 from anaf.core.api.decorators import module_admin_required
 from anaf.core.models import User, Group, Perspective, Module, Page, PageFolder
 from anaf.core.administration.forms import PerspectiveForm, UserForm, GroupForm, PageForm, PageFolderForm
+
+__all__ = ['GroupHandler', 'UserHandler', 'ModuleHandler',
+           'PerspectiveHandler', 'PageFolderHandler', 'PageHandler']
 
 
 class GroupHandler(AccessHandler):
@@ -27,7 +27,7 @@ class GroupHandler(AccessHandler):
         object_id = "id"
         if obj is not None:
             object_id = obj.id
-        return ('api_admin_groups', [object_id])
+        return 'api_admin_groups', [object_id]
 
     @staticmethod
     def perspective(data):
@@ -82,7 +82,7 @@ class UserHandler(AccessHandler):
 
 
 class ModuleHandler(BaseHandler):
-    "Entrypoint for Module model."
+    """Entrypoint for Module model."""
     allowed_methods = ('GET',)
     model = Module
     exclude = ('object_type', 'object_ptr', 'object_name')
@@ -94,7 +94,7 @@ class ModuleHandler(BaseHandler):
         object_id = "id"
         if obj is not None:
             object_id = obj.id
-        return ('api_admin_modules', [object_id])
+        return 'api_admin_modules', [object_id]
 
 
 class PerspectiveHandler(ObjectHandler):
@@ -175,7 +175,7 @@ class PerspectiveHandler(ObjectHandler):
 
 
 class PageFolderHandler(ObjectHandler):
-    "Entrypoint for PageFolder model."
+    """Entrypoint for PageFolder model."""
     model = PageFolder
     form = PageFolderForm
 
@@ -184,17 +184,17 @@ class PageFolderHandler(ObjectHandler):
         object_id = "id"
         if obj is not None:
             object_id = obj.id
-        return ('api_admin_folders', [object_id])
+        return 'api_admin_folders', [object_id]
 
     def check_instance_permission(self, request, inst, mode):
         return request.user.profile.is_admin('anaf.core')
 
     def flatten_dict(self, request):
-        return {'data': super(ObjectHandler, self).flatten_dict(request.data)}
+        return {'data': super(PageFolderHandler, self).flatten_dict(request.data)}
 
 
 class PageHandler(ObjectHandler):
-    "Entrypoint for Page model."
+    """Entrypoint for Page model."""
     model = Page
     form = PageForm
 
@@ -203,10 +203,10 @@ class PageHandler(ObjectHandler):
         object_id = "id"
         if obj is not None:
             object_id = obj.id
-        return ('api_admin_pages', [object_id])
+        return 'api_admin_pages', [object_id]
 
     def check_instance_permission(self, request, inst, mode):
         return request.user.profile.is_admin('anaf.core')
 
     def flatten_dict(self, request):
-        return {'data': super(ObjectHandler, self).flatten_dict(request.data)}
+        return {'data': super(PageHandler, self).flatten_dict(request.data)}

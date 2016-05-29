@@ -428,13 +428,13 @@ class ContactSetupForm(ContactForm):
     files = {}
 
     def __init__(self, contact_type, instance=None, *args, **kwargs):
-        "Populates form with fields from given ContactType"
+        """Populates form with fields from given ContactType"""
 
         if instance:
             self.instance = instance
             values = instance.contactvalue_set.all()
 
-        super(ContactForm, self).__init__(*args, **kwargs)
+        super(ContactSetupForm, self).__init__(*args, **kwargs)
 
         self.fields['name'].label = _('Name')
 
