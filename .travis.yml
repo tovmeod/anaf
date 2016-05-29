@@ -24,9 +24,7 @@ matrix:
 # command to install dependencies
 install:
   - pip install -r requirements-test.txt
-  - pip install pytest-sugar
-  - pip install pytest-cov
-  - pip install coveralls
+  - pip install pytest-sugar pytest-cov coveralls
   - if [ $MC == '1' ]; then pip install -q pylibmc ; fi
   - if [ $SELENIUM == '1' ]; then pip install -q sauceclient ; fi
 before_install:
@@ -37,6 +35,6 @@ before_install:
   - ci/before_install_${DB}.sh
 before_script: ci/before_script_${DB}.sh
 # command to run tests
-script: py.test
+script: py.test --cov
 after_success:
   coveralls
