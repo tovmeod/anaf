@@ -2,7 +2,7 @@
 Account: backend admin definitions
 """
 
-from models import NotificationSetting, Notification
+from anaf.account.models import NotificationSetting, Notification
 from django.contrib import admin
 
 
@@ -12,7 +12,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
 class NotificationSettingAdmin(admin.ModelAdmin):
 
-    "NotificationSetting backend definition"
+    """NotificationSetting backend definition"""
     list_display = ('owner', 'ntype',)
 
 admin.site.register(NotificationSetting, NotificationSettingAdmin)

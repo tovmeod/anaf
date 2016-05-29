@@ -14,6 +14,7 @@ from anaf.core.forms import TagsForm
 from anaf.core.ajax import converter
 from dajaxice.core import dajaxice_functions
 from dajax.core import Dajax
+from django.utils.six import text_type as unicode
 
 
 def comments_likes(request, target, form, expand=True):
@@ -102,14 +103,14 @@ def tags(request, target, object_id, edit=False, formdata=None):
     response_format = 'html'
     obj = Object.objects.get(pk=object_id)
 
-    tags = obj.tags.all()
+    tag_lst = obj.tags.all()
     form = None
     if 'tags' in formdata and not type(formdata['tags']) == list:
         formdata['tags'] = [formdata['tags']]
 
     if edit or formdata:
         if formdata.get('tags_object', 0) == unicode(obj.id):
-            form = TagsForm(tags, formdata)
+            form = TagsForm(tag_lst, formdata)
             if form.is_valid():
                 if 'multicomplete_tags' in formdata:
                     tag_names = formdata.get('multicomplete_tags').split(',')
@@ -129,13 +130,13 @@ def tags(request, target, object_id, edit=False, formdata=None):
                 obj.tags.clear()
                 for tag in new_tags:
                     obj.tags.add(tag)
-                tags = obj.tags.all()
+                tag_lst = obj.tags.all()
                 form = None
         else:
-            form = TagsForm(tags)
+            form = TagsForm(tag_lst)
 
     context = {'object': obj,
-               'tags': tags,
+               'tags': tag_lst,
                'form': form}
 
     context = converter.preprocess_context(context)
