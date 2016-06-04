@@ -48,12 +48,12 @@ class ChangeSet(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
+        """Returns absolute URL of the object"""
         return reverse('changes_set_view', args=[self.id])
 
     class Meta:
 
-        "ChangeSet"
+        """ChangeSet"""
         ordering = ('-date_created', 'name')
 
 # Change Model
@@ -73,10 +73,10 @@ class Change(models.Model):
         return self.status
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
+        """Returns absolute URL of the object"""
         return reverse('changes_change_view', args=[self.id])
 
     class Meta:
 
-        "Change"
+        """Change"""
         ordering = ['-date_created']

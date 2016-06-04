@@ -30,7 +30,7 @@ class ItemField(Object):
 
     class Meta:
 
-        "ItemField"
+        """ItemField"""
         ordering = ['name']
 
     def __unicode__(self):
@@ -50,7 +50,7 @@ class ItemType(Object):
 
     class Meta:
 
-        "ItemType"
+        """ItemType"""
         ordering = ['name']
 
     def __unicode__(self):
@@ -59,7 +59,7 @@ class ItemType(Object):
 
 class ItemStatus(Object):
 
-    "State information about an infrastructure Item"
+    """State information about an infrastructure Item"""
     name = models.CharField(max_length=256)
     details = models.TextField(blank=True, null=True)
     active = models.BooleanField(default=True)
@@ -67,7 +67,7 @@ class ItemStatus(Object):
 
     class Meta:
 
-        "ItemStatus"
+        """ItemStatus"""
         ordering = ('hidden', '-active', 'name')
 
     def __unicode__(self):
@@ -97,23 +97,20 @@ class Item(Object):
 
     class Meta:
 
-        "Item"
+        """Item"""
         ordering = ['name']
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('infrastructure_item_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('infrastructure_item_view', args=[self.id])
 
     def get_servicing(self):
-        "Returns a QuerySet of all ItemServicing records"
+        """Returns a QuerySet of all ItemServicing records"""
 
         return self.itemservicing_set.filter()
 
     def get_active_servicing(self):
-        "Returns a QuerySet of active ItemServicing records with expiry date in the future"
+        """Returns a QuerySet of active ItemServicing records with expiry date in the future"""
         now = datetime.datetime.now()
         return self.itemservicing_set.filter(expiry_date__gte=now.date())
 
@@ -152,12 +149,9 @@ class ItemServicing(Object):
 
     class Meta:
 
-        "ItemServicing"
+        """ItemServicing"""
         ordering = ['-expiry_date']
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('infrastructure_service_record_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('infrastructure_service_record_view', args=[self.id])

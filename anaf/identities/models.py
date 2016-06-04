@@ -2,17 +2,18 @@
 Identities module objects
 """
 
+from unidecode import unidecode
+from django.utils.six import text_type as unicode
 from django.db import models
-from anaf.core.models import AccessEntity, User, Object
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
-from anaf.core.conf import settings
 from django.template import defaultfilters
-from unidecode import unidecode
+from anaf.core.conf import settings
+from anaf.core.models import AccessEntity, User, Object
 
 
 class ContactField(Object):
-    "Represents a field within a ContentType"
+    """Represents a field within a ContentType"""
     FIELD_TYPES = (
         ('text', 'Text'),
         ('textarea', 'Multiline Text'),
@@ -34,7 +35,7 @@ class ContactField(Object):
     searchable = False
 
     class Meta:
-        "ContactField"
+        """ContactField"""
         ordering = ['name']
 
     def __unicode__(self):
@@ -42,28 +43,25 @@ class ContactField(Object):
 
 
 class ContactType(Object):
-    "Defines a type of Contact entities"
+    """Defines a type of Contact entities"""
     name = models.CharField(max_length=256)
     slug = models.CharField(max_length=256)
     details = models.TextField(blank=True, null=True)
     fields = models.ManyToManyField(ContactField, blank=True, null=True)
 
     class Meta:
-        "ContactType"
+        """ContactType"""
         ordering = ['name']
 
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('identities_index_by_type', args=[self.slug])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('identities_index_by_type', args=[self.slug])
 
     def save(self, *args, **kwargs):
-        "Override to auto-set slug"
+        """Override to auto-set slug"""
         self.slug = unicode(self.name).replace(" ", "-")
         self.slug = defaultfilters.slugify(unidecode(self.slug))
         super(ContactType, self).save(*args, **kwargs)
@@ -81,21 +79,18 @@ class Contact(Object):
     access_inherit = ('parent', '*module', '*user')
 
     class Meta:
-        "Contact"
+        """Contact"""
         ordering = ['name']
 
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('identities_contact_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('identities_contact_view', args=[self.id])
 
     def get_email(self):
-        "Returns the first available e-mail"
+        """Returns the first available e-mail"""
         values = self.contactvalue_set.filter(
             field__field_type='email', value__isnull=False)
         if values:
@@ -150,7 +145,7 @@ class Contact(Object):
 
 
 class ContactValue(models.Model):
-    "A value selected for a Contact"
+    """A value selected for a Contact"""
     field = models.ForeignKey(ContactField)
     contact = models.ForeignKey(Contact)
     value = models.CharField(max_length=1024, null=True, blank=True)
@@ -163,7 +158,7 @@ class ContactValue(models.Model):
 
 
 def contact_autocreate_handler(sender, instance, created, **kwargs):
-    "When a User is created, automatically create a Contact of type Person"
+    """When a User is created, automatically create a Contact of type Person"""
     if created:
         try:
             contact_type = ContactType.objects.filter(

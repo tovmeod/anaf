@@ -1,11 +1,12 @@
 """
 Knowledge base module objects
 """
+from unidecode import unidecode
+from django.utils.six import text_type as unicode
 from django.db import models
-from anaf.core.models import Object
 from django.core.urlresolvers import reverse
 from django.template import defaultfilters
-from unidecode import unidecode
+from anaf.core.models import Object
 
 # KnowledgeFolder model
 
@@ -26,18 +27,15 @@ class KnowledgeFolder(Object):
 
     class Meta:
 
-        " Type "
+        """ Type """
         ordering = ['name']
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('knowledge_folder_view', args=[self.treepath])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('knowledge_folder_view', args=[self.treepath])
 
     def treewalk(self, save=True):
-        "Walks up the tree to construct Type treepath"
+        """Walks up the tree to construct Type treepath"""
         treepath = ''
 
         for folder in self.get_tree_path():
@@ -51,7 +49,7 @@ class KnowledgeFolder(Object):
         return self
 
     def by_path(treePath):
-        "Returns a KnowledgeFolder instance matching the given treepath"
+        """Returns a KnowledgeFolder instance matching the given treepath"""
         folder = KnowledgeFolder.objects.filter(treepath=unicode(treePath))
         if folder:
             folder = folder[0]
@@ -80,18 +78,15 @@ class KnowledgeCategory(Object):
 
     class Meta:
 
-        " Category "
+        """ Category """
         ordering = ['name']
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('knowledge_category_view', args=[self.treepath])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('knowledge_category_view', args=[self.treepath])
 
     def treewalk(self, save=True):
-        "Walks up the tree to construct Category"
+        """Walks up the tree to construct Category"""
         slug = unicode(self.name).replace(" ", "-")
         slug = defaultfilters.slugify(unidecode(slug))
         treepath = slug + "/"
@@ -103,7 +98,7 @@ class KnowledgeCategory(Object):
         return self
 
     def by_path(path):
-        "Returns a Knowledge Category instance matching the given treepath"
+        """Returns a Knowledge Category instance matching the given treepath"""
         category = KnowledgeCategory.objects.filter(treepath=unidecode(path))
 
         if category:
@@ -143,11 +138,8 @@ class KnowledgeItem(Object):
         ordering = ['-last_updated']
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('knowledge_item_view', args=[self.folder.treepath, self.treepath])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('knowledge_item_view', args=[self.folder.treepath, self.treepath])
 
     def treewalk(self, save=True):
         "Walks up the tree to construct both Item treepath and item.name from database"

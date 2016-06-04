@@ -22,18 +22,15 @@ class Event(Object):
 
     class Meta:
 
-        "Event"
+        """Event"""
         ordering = ['-end']
 
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('events_event_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('events_event_view', args=[self.id])
 
 
 class Invitation(models.Model):

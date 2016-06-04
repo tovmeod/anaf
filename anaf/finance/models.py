@@ -2,6 +2,7 @@
 Finance module objects
 """
 
+from django.utils.six import text_type as unicode
 from django.db import models
 from anaf.core.models import Object
 from anaf.identities.models import Contact
@@ -14,7 +15,7 @@ from decimal import Decimal, ROUND_UP
 
 class Currency(Object):
 
-    "Currency Object"
+    """Currency Object"""
 
     code = models.CharField(_('code'), max_length=3)
     name = models.CharField(_('name'), max_length=255)
@@ -105,18 +106,15 @@ class Asset(Object):
 
     class Meta:
 
-        "Event"
+        """Event"""
         ordering = ['-purchase_date']
 
     def check_depreciate(self):
-        "Check Depreciate"
-        if (self.purchase_date and self.endlife_value is not None and self.initial_value and self.lifetime):
-            return True
-        else:
-            return False
+        """Check Depreciate"""
+        return self.purchase_date and self.endlife_value is not None and self.initial_value and self.lifetime
 
     def get_depreciation(self):
-        "Get Depreciation"
+        """Get Depreciation"""
         if self.check_depreciate():  # Edited by Renat
 
             self.set_rate()
@@ -128,7 +126,7 @@ class Asset(Object):
                 return (self.initial_value - self.endlife_value).quantize(Decimal('.01'), rounding=ROUND_UP)
 
             straight = Decimal(((self.initial_value -
-                                 self.endlife_value) / ((self.lifetime * 365)) *
+                                 self.endlife_value) / (self.lifetime * 365) *
                                 days_from_purchase)).quantize(Decimal('.01'), rounding=ROUND_UP)
 
             if self.depreciation_type == 'reducing':
@@ -152,7 +150,7 @@ class Asset(Object):
             return Decimal('0.00')
 
     def set_rate(self):
-        "Set Rate"
+        """Set Rate"""
         if self.depreciation_type == 'straight' and self.lifetime:
             self.depreciation_rate = (100 / self.lifetime).quantize(Decimal('00.01'), rounding=ROUND_UP)
 
@@ -161,7 +159,8 @@ class Asset(Object):
                 return Decimal('0.00')
             self.depreciation_rate = Decimal(str(100 / (1 -
                                                         math.pow((self.endlife_value / self.initial_value),
-                                                                 (1 / self.lifetime))))).quantize(Decimal('00.01'), rounding=ROUND_UP)
+                                                                 (1 / self.lifetime))))).quantize(Decimal('00.01'),
+                                                                                                  rounding=ROUND_UP)
         else:
             return Decimal('0.00')
         if self.depreciation_rate == Decimal('100.00'):
@@ -171,7 +170,7 @@ class Asset(Object):
         return self
 
     def set_current_value(self):
-        "Set current value"
+        """Set current value"""
         if not self.check_depreciate():
             return self.initial_value
 
@@ -184,11 +183,8 @@ class Asset(Object):
         return unicode(self.name)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
-        try:
-            return reverse('finance_asset_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL"""
+        return reverse('finance_asset_view', args=[self.id])
 
 
 class Account(Object):
@@ -204,11 +200,11 @@ class Account(Object):
 
     class Meta:
 
-        "Event"
+        """Event"""
         ordering = ['name']
 
     def get_balance(self):
-        "Returns balance"
+        """Returns balance"""
         bal = self.balance
         transactions = Transaction.objects.filter(account=self.id)
         for transaction in transactions:
@@ -219,11 +215,8 @@ class Account(Object):
         return unicode(self.name)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
-        try:
-            return reverse('finance_account_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL"""
+        return reverse('finance_account_view', args=[self.id])
 
 
 class Equity(Object):
@@ -243,18 +236,15 @@ class Equity(Object):
 
     class Meta:
 
-        "Event"
+        """Event"""
         ordering = ['-purchase_date']
 
     def __unicode__(self):
         return unicode(unicode(self.issuer) + " (" + unicode(self.equity_type) + ")")
 
     def get_absolute_url(self):
-        "Returns absolute URL"
-        try:
-            return reverse('finance_equity_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL"""
+        return reverse('finance_equity_view', args=[self.id])
 
 
 class Liability(Object):
@@ -277,21 +267,18 @@ class Liability(Object):
 
     class Meta:
 
-        "Event"
+        """Event"""
         ordering = ['-due_date']
 
     def __unicode__(self):
         return unicode(self.name)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
-        try:
-            return reverse('finance_liability_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL"""
+        return reverse('finance_liability_view', args=[self.id])
 
     def is_receivable(self):
-        "Returns True if self is receivable relative to self.account"
+        """Returns True if self is receivable relative to self.account"""
         return self.account.owner == self.target
 
 
@@ -317,14 +304,14 @@ class Transaction(Object):
 
     class Meta:
 
-        "Event"
+        """Event"""
         ordering = ['-datetime']
 
     def __unicode__(self):
         return unicode(self.name)
 
     def get_relative_value(self):
-        "Get Relative Value"
+        """Get Relative Value"""
         if self.trash:
             return 0
         elif self.account.owner_id == self.source_id:
@@ -335,8 +322,5 @@ class Transaction(Object):
             return 0
 
     def get_absolute_url(self):
-        "Returns absolute URL"
-        try:
-            return reverse('finance_transaction_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL"""
+        return reverse('finance_transaction_view', args=[self.id])

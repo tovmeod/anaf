@@ -2,6 +2,7 @@
 Core system objects
 """
 
+from django.utils.six import text_type as unicode
 from django.contrib import messages
 from django.http import HttpRequest
 from django.contrib.messages.storage import default_storage
@@ -17,10 +18,10 @@ from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import date as djangodate
 import django.contrib.auth.models as django_auth
 
+from anaf import long_type
 from conf import settings
 from mail import SystemEmail
 
-from datetime import datetime
 import re
 import os
 import pickle
@@ -75,15 +76,9 @@ class Group(AccessEntity):
     def get_absolute_url(self, module='identities'):
         """Returns absolute URL of the Group"""
         if not module or module == 'identities':
-            try:
-                return reverse('identities_group_view', args=[self.id])
-            except NoReverseMatch:
-                return ""
+            return reverse('identities_group_view', args=[self.id])
         else:
-            try:
-                return reverse('core_administration_group_view', args=[self.id])
-            except NoReverseMatch:
-                return ""
+            return reverse('core_administration_group_view', args=[self.id])
 
     def get_root(self):
         """Get the root Group"""
@@ -144,14 +139,14 @@ class Group(AccessEntity):
         ids = []
         try:
             for setting in ModuleSetting.get_for_module('anaf.core', name='default_perspective', group=self):
-                ids.append(long(setting.value))
+                ids.append(long_type(setting.value))
             _id = ids[0]
             perspective = get_object_or_404(Perspective, pk=_id)
         except:
             try:
                 conf = ModuleSetting.get_for_module(
                     'anaf.core', 'default_perspective')[0]
-                perspective = Perspective.objects.get(pk=long(conf.value))
+                perspective = Perspective.objects.get(pk=long_type(conf.value))
             except:
                 try:
                     perspective = Perspective.objects.all()[0]
@@ -188,8 +183,7 @@ class User(AccessEntity):
     """A record about a user registered within the system"""
     name = models.CharField(max_length=256)
     user = models.OneToOneField(django_auth.User, related_name='profile')
-    default_group = models.ForeignKey(
-        Group, related_name='default_user_set', blank=True, null=True)
+    default_group = models.ForeignKey(Group, related_name='default_user_set', blank=True, null=True)
     other_groups = models.ManyToManyField(Group, blank=True, null=True)
     disabled = models.BooleanField(default=False)
     last_access = models.DateTimeField(default=timezone.now)
@@ -235,15 +229,9 @@ class User(AccessEntity):
     def get_absolute_url(self, module='identities'):
         """Returns absolute URL of the User"""
         if not module or module == 'identities':
-            try:
-                return reverse('identities_user_view', args=[self.id])
-            except Exception:
-                return ""
+            return reverse('identities_user_view', args=[self.id])
         else:
-            try:
-                return reverse('core_administration_user_view', args=[self.id])
-            except Exception:
-                return ""
+            return reverse('core_administration_user_view', args=[self.id])
 
     def generate_new_password(self, size=8):
         """Generates a new password and sets it to the user"""
@@ -320,7 +308,7 @@ class User(AccessEntity):
         ids = []
         try:
             for setting in ModuleSetting.get_for_module('anaf.core', name='default_perspective', user=self):
-                ids.append(long(setting.value))
+                ids.append(long_type(setting.value))
             perspective_id = ids[0]
             perspective = get_object_or_404(Perspective, pk=perspective_id)
         except:
@@ -330,7 +318,7 @@ class User(AccessEntity):
                 try:
                     conf = ModuleSetting.get_for_module(
                         'anaf.core', 'default_perspective')[0]
-                    perspective = Perspective.objects.get(pk=long(conf.value))
+                    perspective = Perspective.objects.get(pk=long_type(conf.value))
                 except Exception:
                     try:
                         perspective = Perspective.objects.all()[0]
@@ -623,11 +611,10 @@ class Object(models.Model):
             return self.object_type
 
     def get_absolute_url(self):
-        """Returns a URL to the child object, if available"""
-        try:
-            return self.get_related_object().get_absolute_url()
-        except Exception:
-            return ""
+        """Returns a URL to the child object, if available
+        :rtype: str
+        """
+        return self.get_related_object().get_absolute_url()
 
     def is_searchable(self):
         """Returns True if the item should be included in Search index"""
@@ -1209,10 +1196,7 @@ class Module(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('core_admin_module_view', args=[self.id])
-        except Exception:
-            pass
+        return reverse('core_admin_module_view', args=[self.id])
 
     def __unicode__(self):
         return self.title
@@ -1229,10 +1213,7 @@ class Perspective(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('core_admin_perspective_view', args=[self.id])
-        except Exception:
-            pass
+        return reverse('core_admin_perspective_view', args=[self.id])
 
     def get_modules(self):
         """Get Modules"""
@@ -1412,11 +1393,8 @@ class Location(Object):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL"
-        try:
-            return reverse('identities_location_view', args=[self.id])
-        except Exception:
-            pass
+        """Returns absolute URL"""
+        return reverse('identities_location_view', args=[self.id])
 
 
 class PageFolder(Object):
@@ -1431,10 +1409,7 @@ class PageFolder(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('core_admin_pagefolder_view', args=[self.id])
-        except Exception:
-            pass
+        return reverse('core_admin_pagefolder_view', args=[self.id])
 
 
 class Page(Object):
@@ -1456,10 +1431,7 @@ class Page(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('core_admin_page_view', args=[self.id])
-        except Exception:
-            pass
+        return reverse('core_admin_page_view', args=[self.id])
 
 
 class Widget(models.Model):

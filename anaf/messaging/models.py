@@ -18,7 +18,7 @@ import re
 
 class Template(Object):
 
-    "A template for sending emails using template tags"
+    """A template for sending emails using template tags"""
     name = models.CharField(max_length=255)
     body = models.TextField()
     subject = models.CharField(max_length=255)
@@ -26,7 +26,7 @@ class Template(Object):
 
 class MailingList(Object):
 
-    "A mailling list for mass mailing"
+    """A mailling list for mass mailing"""
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     from_contact = models.ForeignKey(Contact, related_name="from_contact_set")
@@ -36,7 +36,7 @@ class MailingList(Object):
 
     class Meta:
 
-        "Message"
+        """Message"""
         ordering = ['-date_created']
 
     def __unicode__(self):
@@ -79,7 +79,7 @@ class MessageStream(Object):
 
     class Meta:
 
-        "MessageStream"
+        """MessageStream"""
         ordering = ['name', 'last_updated']
         verbose_name = _("Stream")
         verbose_name_plural = _("Streams")
@@ -88,16 +88,13 @@ class MessageStream(Object):
         return self.name
 
     def process_email(self):
-        "Get email from the email box"
+        """Get email from the email box"""
         email = EmailStream(self)
         email.get_emails()
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('messaging_stream_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('messaging_stream_view', args=[self.id])
 
 
 class Message(Object):
@@ -121,21 +118,18 @@ class Message(Object):
     access_inherit = ('stream', '*module', '*user')
 
     class Meta:
-        "Message"
+        """Message"""
         ordering = ['-date_created']
 
     def __unicode__(self):
         return self.title
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('messaging_message_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('messaging_message_view', args=[self.id])
 
     def save(self, *args, **kwargs):
-        "Automatically set message title"
+        """Automatically set message title"""
 
         if not self.title:
             self.title = self.body
@@ -146,23 +140,23 @@ class Message(Object):
         super(Message, self).save(*args, **kwargs)
 
     def is_read(self, user):
-        "Checks if the message is read by the given user"
+        """Checks if the message is read by the given user"""
         if not isinstance(user, User):
             raise TypeError("The given user is not an instance of core.User")
         return self.read_by.filter(pk=user.id).exists()
 
     def get_stripped_body(self):
-        "Returns body without HTML tags and other shit"
+        """Returns body without HTML tags and other shit"""
         return do_striptags(htsafe(self.body)).replace(u"\u00A0", " ")
 
     def send_email(self):
-        "Send email"
+        """Send email"""
         email = EmailMessage(self)
         if self.stream and self.stream.outgoing_server_name:
             email.send_email()
 
     def get_original_message_author_email(self):
-        "Returns email of the original message author"
+        """Returns email of the original message author"""
         message = self.message
         contact = message.author
 

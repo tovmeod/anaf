@@ -1,6 +1,7 @@
 """
 Documents module objects
 """
+from django.utils.six import text_type as unicode
 from django.db import models
 from django.core.urlresolvers import reverse
 from anaf.core.models import Object
@@ -26,11 +27,8 @@ class Folder(Object):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('documents_folder_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('documents_folder_view', args=[self.id])
 
 
 def generate_filename(instance, old_filename):
@@ -62,26 +60,19 @@ class File(Object):
             return ''
 
     def can_preview(self):
-        filetype = self.get_file_type()
-        for ext in ('PNG', 'JPG', 'JPEG', 'BMP', 'GIF', 'SVG'):
-            if filetype == ext:
-                return True
-        return False
+        return self.get_file_type() in ('PNG', 'JPG', 'JPEG', 'BMP', 'GIF', 'SVG')
 
     def get_preview_url(self):
         return getattr(settings, 'MEDIA_URL', '/static/media/') + unicode(self.content)
 
     class Meta:
 
-        " File "
+        """ File """
         ordering = ['-last_updated']
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('documents_file_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('documents_file_view', args=[self.id])
 
 
 # Document model
@@ -99,15 +90,12 @@ class Document(Object):
 
     class Meta:
 
-        " File "
+        """ File """
         ordering = ['-last_updated']
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('documents_document_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('documents_document_view', args=[self.id])
 
 # WebLink model
 
@@ -126,12 +114,9 @@ class WebLink(Object):
 
     class Meta:
 
-        " File "
+        """ File """
         ordering = ['-last_updated']
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('documents_weblink_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('documents_weblink_view', args=[self.id])

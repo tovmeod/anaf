@@ -12,25 +12,22 @@ from anaf.reports.helpers import aggregate_functions
 
 class Report(Object):
 
-    "Generated Report"
+    """Generated Report"""
     name = models.CharField(max_length=512)
     model = models.TextField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
 
     class Meta:
 
-        "Report"
+        """Report"""
         ordering = ['-date_created']
 
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL for the Report"
-        try:
-            return reverse('reports_report_view', args=[self.id])
-        except Exception:
-            pass
+        """Returns absolute URL for the Report"""
+        return reverse('reports_report_view', args=[self.id])
 
 
 class Model:
@@ -46,11 +43,11 @@ class Model:
         return None
 
     def get_class_object(self):
-        object = self.name
-        object = object.split('.')
+        obj = self.name
+        obj = obj.split('.')
 
-        module_name = object[0] + '.' + object[1] + '.' + object[2]
-        import_name = object[3]
+        module_name = obj[0] + '.' + obj[1] + '.' + obj[2]
+        import_name = obj[3]
 
         module = __import__(
             module_name, globals(), locals(), [import_name], -1)
@@ -68,13 +65,13 @@ class Field:
         self.join = join
 
     def get_human_name(self):
-        "Returns translated name in Camel Case"
+        """Returns translated name in Camel Case"""
         human = self.name.replace('_', ' ')
         human = _(do_title(human))
         return human
 
     def get_aggregate_name(self):
-        "Returns translated name in Camel Case"
+        """Returns translated name in Camel Case"""
         if self.aggregation and self.aggregation in aggregate_functions:
             return _(aggregate_functions[self.aggregation]['description'])
         return ''
@@ -91,8 +88,5 @@ class Chart(Object):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL for the Report"
-        try:
-            return reverse('reports_report_view', args=[self.report_id])
-        except Exception:
-            pass
+        """Returns absolute URL for the Report"""
+        return reverse('reports_report_view', args=[self.report_id])

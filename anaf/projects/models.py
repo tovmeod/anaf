@@ -1,12 +1,13 @@
 """
 Project management models
 """
+from datetime import datetime, timedelta
+from django.utils.six import text_type as unicode
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from anaf.core.models import Object, User
 from anaf.identities.models import Contact
-from datetime import datetime, timedelta
 
 # Project Model
 
@@ -157,7 +158,6 @@ class Task(Object):
     def save(self, *args, **kwargs):
         """Override save method to check for Milestone-Project links and auto-Status child Tasks"""
 
-        original = None
         if self.id:
             # Existing task
             original = Task.objects.get(pk=self.id)

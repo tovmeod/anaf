@@ -34,10 +34,7 @@ class SaleStatus(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('sales_status_view', args=[self.id])
-        except Exception:
-            return ""
+        return reverse('sales_status_view', args=[self.id])
 
     class Meta:
 
@@ -85,10 +82,7 @@ class Product(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('sales_product_view', args=[self.id])
-        except:
-            return ""
+        return reverse('sales_product_view', args=[self.id])
 
     class Meta:
 
@@ -109,10 +103,7 @@ class SaleSource(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('sales_source_view', args=[self.id])
-        except Exception:
-            return ""
+        return reverse('sales_source_view', args=[self.id])
 
     class Meta:
         ordering = ('-active', 'name')
@@ -145,10 +136,7 @@ class Lead(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('sales_lead_view', args=[self.id])
-        except Exception:
-            return ""
+        return reverse('sales_lead_view', args=[self.id])
 
     class Meta:
 
@@ -179,10 +167,7 @@ class Opportunity(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('sales_opportunity_view', args=[self.id])
-        except Exception:
-            return ""
+        return reverse('sales_opportunity_view', args=[self.id])
 
     class Meta:
 
@@ -247,11 +232,8 @@ class SaleOrder(Object):
         return unicode(self.reference)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
-        try:
-            return reverse('sales_order_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL"""
+        return reverse('sales_order_view', args=[self.id])
 
     def get_taxes(self, base=False):
         # TODO: Compound taxes
@@ -488,10 +470,7 @@ class Subscription(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('sales_subscription_view', args=[self.id])
-        except Exception:
-            return ""
+        return reverse('sales_subscription_view', args=[self.id])
 
     class Meta:
         """Subscription"""
@@ -499,7 +478,7 @@ class Subscription(Object):
 
 
 class OrderedProduct(Object):
-    "Ordered Product"
+    """Ordered Product"""
     subscription = models.ForeignKey(Subscription, blank=True, null=True)
     product = models.ForeignKey(Product)
     quantity = models.DecimalField(max_digits=30, decimal_places=2, default=1)
@@ -520,10 +499,7 @@ class OrderedProduct(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL"""
-        try:
-            return reverse('sales_ordered_view', args=[self.id])
-        except Exception:
-            return ""
+        return reverse('sales_ordered_view', args=[self.id])
 
     def get_total(self):
         """Returns total sum for this item"""

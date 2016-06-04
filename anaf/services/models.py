@@ -4,11 +4,14 @@ ServiceSupport module objects.
 Depends on: anaf.core, anaf.identities
 """
 
+from django.utils.six import text_type as unicode
 from django.core.urlresolvers import reverse
 from django.db.models import signals
 from django.db import models
 from django.utils.translation import ugettext as _
 from django.utils.html import strip_tags
+
+from anaf import long_type
 from anaf.core.conf import settings
 from anaf.identities.models import Contact
 from anaf.core.models import User, Object, ModuleSetting, UpdateRecord
@@ -19,7 +22,7 @@ from anaf.messaging.models import Message, MessageStream
 
 class TicketStatus(Object):
 
-    "State information about a ticket"
+    """State information about a ticket"""
     name = models.CharField(max_length=256)
     details = models.TextField(blank=True, null=True)
     active = models.BooleanField(default=True)
@@ -31,18 +34,18 @@ class TicketStatus(Object):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
+        """Returns absolute URL of the object"""
         return reverse('services_status_view', args=[self.id])
 
     class Meta:
 
-        "TicketStatus"
+        """TicketStatus"""
         ordering = ('hidden', '-active', 'name')
 
 
 class Service(Object):
 
-    "Technical service supported by a company"
+    """Technical service supported by a company"""
     name = models.CharField(max_length=256)
     parent = models.ForeignKey(
         'self', blank=True, null=True, related_name='child_set')
@@ -54,21 +57,18 @@ class Service(Object):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('services_service_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('services_service_view', args=[self.id])
 
     class Meta:
 
-        "Service"
+        """Service"""
         ordering = ['name']
 
 
 class ServiceLevelAgreement(Object):
 
-    "Formal terms for service support"
+    """Formal terms for service support"""
     name = models.CharField(max_length=256)
     service = models.ForeignKey(Service)
     default = models.BooleanField(default=False)
@@ -84,23 +84,20 @@ class ServiceLevelAgreement(Object):
 
     class Meta:
 
-        "SLA"
+        """SLA"""
         ordering = ('name', 'client')
 
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('services_sla_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('services_sla_view', args=[self.id])
 
 
 class ServiceAgent(Object):
 
-    "User responsible for service support"
+    """User responsible for service support"""
     related_user = models.ForeignKey(User)
     active = models.BooleanField(default=True)
     occupied = models.BooleanField(default=False)
@@ -109,32 +106,30 @@ class ServiceAgent(Object):
 
     class Meta:
 
-        "ServiceAgent"
+        """ServiceAgent"""
         ordering = ('related_user', '-active', 'occupied')
 
     def __unicode__(self):
         return unicode(self.related_user)
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('services_agent_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('services_agent_view', args=[self.id])
+
+
+priority_choices = ((5, _('Highest')), (4, _('High')), (3, _('Normal')), (2, _('Low')), (1, _('Lowest')))
 
 
 class TicketQueue(Object):
 
-    "Queue for incoming tickets"
+    """Queue for incoming tickets"""
     name = models.CharField(max_length=256)
     active = models.BooleanField(default=True)
     parent = models.ForeignKey(
         'self', blank=True, null=True, related_name='child_set')
     default_ticket_status = models.ForeignKey(
         TicketStatus, blank=True, null=True, on_delete=models.SET_NULL)
-    default_ticket_priority = models.IntegerField(default=3,
-                                                  choices=((5, 'Highest'), (4, 'High'), (3, 'Normal'),
-                                                           (2, 'Low'), (1, 'Lowest')))
+    default_ticket_priority = models.IntegerField(default=3, choices=priority_choices)
     default_service = models.ForeignKey(
         Service, blank=True, null=True, on_delete=models.SET_NULL)
     waiting_time = models.PositiveIntegerField(blank=True, null=True)
@@ -148,33 +143,26 @@ class TicketQueue(Object):
 
     class Meta:
 
-        "TicketQueue"
+        """TicketQueue"""
         ordering = ('name', '-active', 'ticket_code')
 
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('services_queue_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('services_queue_view', args=[self.id])
 
 
 class Ticket(Object):
 
-    "Problem or support request ticket"
+    """Problem or support request ticket"""
     reference = models.CharField(max_length=256)
     name = models.CharField(max_length=256)
     caller = models.ForeignKey(
         Contact, blank=True, null=True, on_delete=models.SET_NULL)
-    urgency = models.IntegerField(default=3,
-                                  choices=((5, _('Highest')), (4, _('High')), (3, _('Normal')), (2, _('Low')),
-                                           (1, _('Lowest'))))
-    priority = models.IntegerField(default=3,
-                                   choices=((5, _('Highest')), (4, _('High')), (3, _('Normal')), (2, _('Low')),
-                                            (1, _('Lowest'))))
+    urgency = models.IntegerField(default=3, choices=priority_choices)
+    priority = models.IntegerField(default=3, choices=priority_choices)
     status = models.ForeignKey(TicketStatus)
     service = models.ForeignKey(
         Service, blank=True, null=True, on_delete=models.SET_NULL)
@@ -187,34 +175,30 @@ class Ticket(Object):
     details = models.TextField(blank=True, null=True)
     resolution = models.TextField(blank=True, null=True)
 
-    #access_inherit = ('queue', '*module', '*user')
+    # access_inherit = ('queue', '*module', '*user')
 
     class Meta:
 
-        "Ticket"
+        """Ticket"""
         ordering = ('-priority', 'reference')
 
     def __unicode__(self):
         return self.name
 
     def priority_human(self):
-        "Returns a Human-friendly priority name"
-        choices = ((5, _('Highest')), (4, _('High')), (
-            3, _('Normal')), (2, _('Low')), (1, _('Lowest')))
-        for choice in choices:
+        """Returns a Human-friendly priority name"""
+        for choice in priority_choices:
             if choice[0] == self.priority:
                 return choice[1]
 
     def urgency_human(self):
-        "Returns a Human-friendly urgency name"
-        choices = ((5, _('Highest')), (4, _('High')), (
-            3, _('Normal')), (2, _('Low')), (1, _('Lowest')))
-        for choice in choices:
-            if choice[0] == self.priority:
+        """Returns a Human-friendly urgency name"""
+        for choice in priority_choices:
+            if choice[0] == self.urgency:
                 return choice[1]
 
     def save(self, *args, **kwargs):
-        "Automatically set ticket reference and send message to caller"
+        """Automatically set ticket reference and send message to caller"""
         super(Ticket, self).save(*args, **kwargs)
 
         if not self.reference:
@@ -225,16 +209,13 @@ class Ticket(Object):
             self.save()
 
     def get_absolute_url(self):
-        "Returns absolute URL of the object"
-        try:
-            return reverse('services_ticket_view', args=[self.id])
-        except Exception:
-            return ""
+        """Returns absolute URL of the object"""
+        return reverse('services_ticket_view', args=[self.id])
 
 
 class TicketRecord(UpdateRecord):
 
-    "Update for a Ticket"
+    """Update for a Ticket"""
     # Messaging integration
     message = models.ForeignKey(Message, blank=True, null=True)
     notify = models.BooleanField(default=False, blank=True)
@@ -336,7 +317,7 @@ def create_ticket_from_message(sender, instance, created, **kwargs):
                     conf = ModuleSetting.get_for_module(
                         'anaf.services', 'default_ticket_status')[0]
                     ticket.status = TicketStatus.objects.get(
-                        pk=long(conf.value))
+                        pk=long_type(conf.value))
                 except:
                     statuses = TicketStatus.objects.all()
                     ticket.status = statuses[0]
