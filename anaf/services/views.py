@@ -6,14 +6,15 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+from anaf import long_type
 from anaf.core.conf import settings
 from anaf.core.rendering import render_to_response, render_string_template, render_to_string
 from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.core.views import user_denied
 from anaf.core.models import Object, ModuleSetting
-from models import Ticket, TicketRecord, TicketStatus, TicketQueue, Service, \
+from anaf.services.models import Ticket, TicketRecord, TicketStatus, TicketQueue, Service, \
     ServiceLevelAgreement, ServiceAgent
-from forms import SettingsForm, MassActionForm, TicketForm, TicketStatusForm, \
+from anaf.services.forms import SettingsForm, MassActionForm, TicketForm, TicketStatusForm, \
     TicketRecordForm, QueueForm, ServiceForm, ServiceLevelAgreementForm, \
     AgentForm, FilterForm, SLAFilterForm, AgentFilterForm
 from anaf.identities.models import Contact
@@ -25,14 +26,14 @@ def _get_filter_query(args, model=Ticket):
 
     for arg in args:
         if hasattr(model, arg) and args[arg]:
-            kwargs = {str(arg + '__id'): long(args[arg])}
+            kwargs = {str(arg + '__id'): long_type(args[arg])}
             query = query & Q(**kwargs)
 
     return query
 
 
 def _get_default_context(request):
-    "Returns default context for all views as dict()"
+    """Returns default context for all views as dict()"""
 
     queues = Object.filter_by_request(
         request, TicketQueue.objects.filter(active=True, parent__isnull=True))
@@ -55,10 +56,10 @@ def _get_default_context(request):
 
 
 def _process_mass_form(f):
-    "Pre-process request to handle mass action form for Tasks and Milestones"
+    """Pre-process request to handle mass action form for Tasks and Milestones"""
 
     def wrap(request, *args, **kwargs):
-        "wrap"
+        """wrap"""
         if 'massform' in request.POST:
             for key in request.POST:
                 if 'mass-ticket' in key:
@@ -83,7 +84,7 @@ def _process_mass_form(f):
 @mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
-    "All available tickets"
+    """All available tickets"""
 
     if request.GET:
         if 'status' in request.GET and request.GET['status']:
@@ -111,7 +112,7 @@ def index(request, response_format='html'):
 @mylogin_required
 @_process_mass_form
 def index_assigned(request, response_format='html'):
-    "Tickets assigned to current user"
+    """Tickets assigned to current user"""
 
     context = _get_default_context(request)
     agent = context['agent']
@@ -144,7 +145,7 @@ def index_assigned(request, response_format='html'):
 @mylogin_required
 @_process_mass_form
 def index_owned(request, response_format='html'):
-    "Tickets owned by current user"
+    """Tickets owned by current user"""
 
     context = _get_default_context(request)
 
@@ -177,7 +178,7 @@ def index_owned(request, response_format='html'):
 @mylogin_required
 @_process_mass_form
 def status_view(request, status_id, response_format='html'):
-    "Tickets filtered by status"
+    """Tickets filtered by status"""
 
     status = get_object_or_404(TicketStatus, pk=status_id)
     if not request.user.profile.has_permission(status):

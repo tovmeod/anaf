@@ -4,7 +4,9 @@ Sales module objects.
 """
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.six import text_type as unicode
 
+from anaf import long_type
 from anaf.core.models import Object, User, ModuleSetting
 from anaf.identities.models import Contact
 from anaf.finance.models import Transaction, Currency, Tax
@@ -16,7 +18,7 @@ from time import time as ttime
 
 
 class SaleStatus(Object):
-    "Status of the Sale"
+    """Status of the Sale"""
     name = models.CharField(max_length=512)
     use_leads = models.BooleanField(default=False)
     use_opportunities = models.BooleanField(default=False)
@@ -31,7 +33,7 @@ class SaleStatus(Object):
         return unicode(self.name)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
+        """Returns absolute URL"""
         try:
             return reverse('sales_status_view', args=[self.id])
         except Exception:
@@ -39,12 +41,12 @@ class SaleStatus(Object):
 
     class Meta:
 
-        "SalesStatus"
+        """SalesStatus"""
         ordering = ('hidden', '-active', 'name')
 
 
 class Product(Object):
-    "Single Product"
+    """Single Product"""
     PRODUCT_TYPES = (
         ('service', 'Service'),
         ('good', 'Good'),
@@ -82,7 +84,7 @@ class Product(Object):
         return unicode(self.name)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
+        """Returns absolute URL"""
         try:
             return reverse('sales_product_view', args=[self.id])
         except:
@@ -90,12 +92,12 @@ class Product(Object):
 
     class Meta:
 
-        "Product"
+        """Product"""
         ordering = ['code']
 
 
 class SaleSource(Object):
-    "Source of Sale e.g. Search Engine"
+    """Source of Sale e.g. Search Engine"""
     name = models.CharField(max_length=512)
     active = models.BooleanField(default=False)
     details = models.TextField(blank=True, null=True)
@@ -106,7 +108,7 @@ class SaleSource(Object):
         return unicode(self.name)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
+        """Returns absolute URL"""
         try:
             return reverse('sales_source_view', args=[self.id])
         except Exception:
@@ -117,7 +119,7 @@ class SaleSource(Object):
 
 
 class Lead(Object):
-    "Lead"
+    """Lead"""
     CONTACT_METHODS = (
         ('email', 'E-Mail'),
         ('phone', 'Phone'),
@@ -142,7 +144,7 @@ class Lead(Object):
         return unicode(self.contact.name)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
+        """Returns absolute URL"""
         try:
             return reverse('sales_lead_view', args=[self.id])
         except Exception:
@@ -150,29 +152,24 @@ class Lead(Object):
 
     class Meta:
 
-        "Lead"
+        """Lead"""
         ordering = ['contact']
 
 
 class Opportunity(Object):
-    "Opportunity"
-    lead = models.ForeignKey(
-        Lead, blank=True, null=True, on_delete=models.SET_NULL)
+    """Opportunity"""
+    lead = models.ForeignKey(Lead, blank=True, null=True, on_delete=models.SET_NULL)
     contact = models.ForeignKey(Contact)
     products_interested = models.ManyToManyField(Product)
-    source = models.ForeignKey(
-        SaleSource, blank=True, null=True, on_delete=models.SET_NULL)
+    source = models.ForeignKey(SaleSource, blank=True, null=True, on_delete=models.SET_NULL)
     expected_date = models.DateField(blank=True, null=True)
     closed_date = models.DateField(blank=True, null=True)
-    assigned = models.ManyToManyField(
-        User, related_name='sales_opportunity_assigned', blank=True, null=True)
+    assigned = models.ManyToManyField(User, related_name='sales_opportunity_assigned', blank=True, null=True)
     status = models.ForeignKey(SaleStatus)
-    probability = models.DecimalField(
-        max_digits=3, decimal_places=0, blank=True, null=True)
+    probability = models.DecimalField(max_digits=3, decimal_places=0, blank=True, null=True)
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     amount_currency = models.ForeignKey(Currency)
-    amount_display = models.DecimalField(
-        max_digits=20, decimal_places=2, default=0)
+    amount_display = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     details = models.TextField(blank=True, null=True)
 
     access_inherit = ('lead', 'contact', '*module', '*user')
@@ -181,7 +178,7 @@ class Opportunity(Object):
         return unicode(self.contact)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
+        """Returns absolute URL"""
         try:
             return reverse('sales_opportunity_view', args=[self.id])
         except Exception:
@@ -189,18 +186,16 @@ class Opportunity(Object):
 
     class Meta:
 
-        "Opportunity"
+        """Opportunity"""
         ordering = ['-expected_date']
 
 
 class SaleOrder(Object):
-    "Sale Order"
+    """Sale Order"""
     reference = models.CharField(max_length=512, blank=True, null=True)
     datetime = models.DateTimeField(default=datetime.now)
-    client = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL)
-    opportunity = models.ForeignKey(
-        Opportunity, blank=True, null=True, on_delete=models.SET_NULL)
+    client = models.ForeignKey(Contact, blank=True, null=True, on_delete=models.SET_NULL)
+    opportunity = models.ForeignKey(Opportunity, blank=True, null=True, on_delete=models.SET_NULL)
     payment = models.ManyToManyField(Transaction, blank=True, null=True)
     source = models.ForeignKey(SaleSource)
     assigned = models.ManyToManyField(
@@ -208,14 +203,13 @@ class SaleOrder(Object):
     status = models.ForeignKey(SaleStatus)
     currency = models.ForeignKey(Currency)
     total = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    total_display = models.DecimalField(
-        max_digits=20, decimal_places=2, default=0)
+    total_display = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     details = models.TextField(blank=True, null=True)
 
     access_inherit = ('opportunity', 'client', '*module', '*user')
 
     def fulfil(self):
-        "Fulfil"
+        """Fulfil"""
         for p in self.orderedproduct_set.all():
             if not p.fulfilled:
                 product = p.product
@@ -243,7 +237,7 @@ class SaleOrder(Object):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'order_fulfil_status')[0]
-            fulfil_status = long(conf.value)
+            fulfil_status = long_type(conf.value)
             if self.status.id == fulfil_status:
                 self.fulfil()
         except Exception:
@@ -286,34 +280,34 @@ class SaleOrder(Object):
         return total
 
     def get_subtotal(self):
-        sum = 0
+        total = 0
         for p in self.orderedproduct_set.filter(trash=False):
-            sum += p.get_total()
-        self.total = sum
-        return sum
+            total += p.get_total()
+        self.total = total
+        return total
 
     def get_subtotal_display(self):
-        sum = 0
+        total = 0
         for p in self.orderedproduct_set.filter(trash=False):
-            sum += p.get_total_display()
-        self.total_display = sum
-        return sum
+            total += p.get_total_display()
+        self.total_display = total
+        return total
 
     def get_total(self):
-        sum = 0
+        total = 0
         for p in self.orderedproduct_set.filter(trash=False):
-            sum += p.get_total()
-        sum += self.get_taxes_total()
-        self.total = sum
-        return sum
+            total += p.get_total()
+            total += self.get_taxes_total()
+        self.total = total
+        return total
 
     def get_total_display(self):
-        sum = 0
+        total = 0
         for p in self.orderedproduct_set.filter(trash=False):
-            sum += p.get_total_display()
-        sum += self.get_taxes_total()
-        self.total_display = sum
-        return sum
+            total += p.get_total_display()
+            total += self.get_taxes_total()
+        self.total_display = total
+        return total
 
     def update_total(self):
         self.get_total()
@@ -329,12 +323,12 @@ class SaleOrder(Object):
 
     class Meta:
 
-        "SaleOrder"
+        """SaleOrder"""
         ordering = ['-datetime']
 
 
 class Subscription(Object):
-    "Subscription"
+    """Subscription"""
     CYCLE_PERIODS = (
         ('daily', 'Daily'),
         ('weekly', 'Weekly'),
@@ -343,8 +337,7 @@ class Subscription(Object):
         ('yearly', 'Yearly')
     )
 
-    client = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL)
+    client = models.ForeignKey(Contact, blank=True, null=True, on_delete=models.SET_NULL)
     product = models.ForeignKey(Product, blank=True, null=True)
     start = models.DateField(default=datetime.now)
     expiry = models.DateField(blank=True, null=True)
@@ -356,7 +349,7 @@ class Subscription(Object):
     access_inherit = ('client', 'product', '*module', '*user')
 
     def get_cycle_start(self):
-        "Get the cycle start date"
+        """Get the cycle start date"""
         if not self.cycle_end:
             return None
 
@@ -380,7 +373,7 @@ class Subscription(Object):
         return cycle_start
 
     def renew(self):
-        "Renew"
+        """Renew"""
         if self.cycle_period == 'monthly':
             p = relativedelta(months=+1)
         elif self.cycle_period == 'daily':
@@ -398,7 +391,7 @@ class Subscription(Object):
         self.save()
 
     def activate(self):
-        "Activate"
+        """Activate"""
         if self.active:
             return
         self.renew()
@@ -406,19 +399,19 @@ class Subscription(Object):
         self.save()
 
     def deactivate(self):
-        "Deactivate"
+        """Deactivate"""
         if not self.active:
             return
         self.active = False
         self.save()
 
     def invoice(self):
-        "Create a new sale order for self"
+        """Create a new sale order for self"""
         new_invoice = SaleOrder()
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_status')[0]
-            new_invoice.status = long(conf.value)
+            new_invoice.status = long_type(conf.value)
         except Exception:
             ss = SaleStatus.objects.all()[0]
             new_invoice.status = ss
@@ -475,7 +468,7 @@ class Subscription(Object):
                 conf = ModuleSetting.get_for_module(
                     'anaf.sales', 'order_fulfil_status')[0]
                 order_fulfil_status = SaleStatus.objects.get(
-                    pk=long(conf.value))
+                    pk=long_type(conf.value))
             except Exception:
                 order_fulfil_status = None
 
@@ -494,14 +487,14 @@ class Subscription(Object):
         return unicode(self.product)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
+        """Returns absolute URL"""
         try:
             return reverse('sales_subscription_view', args=[self.id])
         except Exception:
             return ""
 
     class Meta:
-        "Subscription"
+        """Subscription"""
         ordering = ['expiry']
 
 
@@ -526,26 +519,26 @@ class OrderedProduct(Object):
         return unicode(self.product)
 
     def get_absolute_url(self):
-        "Returns absolute URL"
+        """Returns absolute URL"""
         try:
             return reverse('sales_ordered_view', args=[self.id])
         except Exception:
             return ""
 
     def get_total(self):
-        "Returns total sum for this item"
+        """Returns total sum for this item"""
         total = self.rate * self.quantity
         if self.discount:
-            total = total - (total * self.discount / 100)
+            total -= total * self.discount / 100
         if total < 0:
             total = Decimal(0)
         return total.quantize(Decimal('.01'), rounding=ROUND_UP)
 
     def get_total_display(self):
-        "Returns total sum for this item in the display currency"
+        """Returns total sum for this item in the display currency"""
         total = self.rate_display * self.quantity
         if self.discount:
-            total = total - (total * self.discount / 100)
+            total -= total * self.discount / 100
         if total < 0:
             total = Decimal(0)
         return total.quantize(Decimal('.01'), rounding=ROUND_UP)

@@ -1,8 +1,10 @@
 """
 Handle objects from this module relevant to a Contact or a User
 """
+from copy import deepcopy
+
 from anaf.core.models import Object
-from templatetags.sales import sales_order_list, sales_lead_list, sales_opportunity_list
+from anaf.sales.templatetags.sales import sales_order_list, sales_lead_list, sales_opportunity_list
 
 CONTACT_OBJECTS = {'saleorder_set': {
     'label': 'Sale Orders',
@@ -29,7 +31,7 @@ def get_contact_objects(current_user, contact):
     and values as dictionaries with labels and set of relevant objects.
     """
 
-    objects = dict(CONTACT_OBJECTS)
+    objects = deepcopy(CONTACT_OBJECTS)
 
     for key in objects:
         if hasattr(contact, key):
@@ -45,7 +47,7 @@ def get_user_objects(current_user, user):
     and values as dictionaries with labels and set of relevant objects.
     """
 
-    objects = dict(USER_OBJECTS)
+    objects = deepcopy(USER_OBJECTS)
 
     for key in objects:
         if hasattr(user, key):

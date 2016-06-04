@@ -5,6 +5,7 @@ from django import forms
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+from anaf import long_type
 from anaf.core.conf import settings
 from anaf.identities.models import Contact
 from anaf.core.decorators import preprocess_form
@@ -12,8 +13,8 @@ from anaf.core.models import Object, ModuleSetting
 from anaf.core.rendering import get_template_source
 from anaf.messaging.models import Message
 from anaf.messaging.emails import EmailMessage
-from models import Ticket, TicketRecord, ServiceAgent, TicketStatus, Service
-from models import ServiceLevelAgreement, TicketQueue
+from anaf.services.models import Ticket, TicketRecord, ServiceAgent, TicketStatus, Service, ServiceLevelAgreement, \
+    TicketQueue
 
 preprocess_form()
 
@@ -32,7 +33,7 @@ class SettingsForm(forms.Form):
         label="E-mail Template", widget=forms.Textarea, required=False)
 
     def __init__(self, user, *args, **kwargs):
-        "Sets choices and initial value"
+        """Sets choices and initial value"""
         super(SettingsForm, self).__init__(*args, **kwargs)
 
         # Translate
@@ -51,7 +52,7 @@ class SettingsForm(forms.Form):
             conf = ModuleSetting.get_for_module(
                 'anaf.services', 'default_ticket_status')[0]
             default_ticket_status = TicketStatus.objects.get(
-                pk=long(conf.value))
+                pk=long_type(conf.value))
             self.fields[
                 'default_ticket_status'].initial = default_ticket_status.id
         except Exception:
@@ -60,7 +61,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.services', 'default_ticket_queue')[0]
-            default_ticket_queue = TicketQueue.objects.get(pk=long(conf.value))
+            default_ticket_queue = TicketQueue.objects.get(pk=long_type(conf.value))
             self.fields[
                 'default_ticket_queue'].initial = default_ticket_queue.id
         except Exception:
@@ -119,7 +120,7 @@ class MassActionForm(forms.Form):
     instance = None
 
     def __init__(self, user, *args, **kwargs):
-        "Sets allowed values"
+        """Sets allowed values"""
         if 'instance' in kwargs:
             self.instance = kwargs['instance']
             del kwargs['instance']
@@ -142,7 +143,7 @@ class MassActionForm(forms.Form):
                                                   required=False)
 
     def save(self, *args, **kwargs):
-        "Process form"
+        """Process form"""
         if self.instance and self.is_valid():
             if self.cleaned_data['service']:
                 self.instance.service = self.cleaned_data['service']
@@ -219,7 +220,7 @@ class TicketForm(forms.ModelForm):
                     try:
                         conf = ModuleSetting.get_for_module(
                             'anaf.services', 'default_ticket_status')[0]
-                        self.fields['status'].initial = long(conf.value)
+                        self.fields['status'].initial = long_type(conf.value)
                     except:
                         pass
 
@@ -239,13 +240,13 @@ class TicketForm(forms.ModelForm):
                 try:
                     conf = ModuleSetting.get_for_module(
                         'anaf.services', 'default_ticket_status')[0]
-                    self.fields['status'].initial = long(conf.value)
+                    self.fields['status'].initial = long_type(conf.value)
                 except:
                     pass
                 try:
                     conf = ModuleSetting.get_for_module(
                         'anaf.services', 'default_ticket_queue')[0]
-                    self.fields['queue'].initial = long(conf.value)
+                    self.fields['queue'].initial = long_type(conf.value)
                 except:
                     pass
 
@@ -591,7 +592,7 @@ class AgentFilterForm(forms.ModelForm):
     """ Agent Filters definition """
 
     def __init__(self, user, skip=None, *args, **kwargs):
-        "Sets allowed values"
+        """Sets allowed values"""
         if skip is None:
             skip = []
         super(AgentFilterForm, self).__init__(*args, **kwargs)
@@ -600,6 +601,6 @@ class AgentFilterForm(forms.ModelForm):
         self.fields['related_user'].label = _("Related user")
 
     class Meta:
-        "ServiceAgent specified as model"
+        """ServiceAgent specified as model"""
         model = ServiceAgent
         fields = ['related_user']

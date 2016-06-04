@@ -6,9 +6,10 @@ from django.template import RequestContext
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from models import Product, SaleOrder, SaleSource, Lead, Opportunity, \
-    SaleStatus, Subscription, OrderedProduct
-from forms import SettingsForm, OrderForm, ProductForm, SaleStatusForm, UpdateRecordForm, \
+from anaf import long_type
+from anaf.sales.models import Product, SaleOrder, SaleSource, Lead, Opportunity, SaleStatus, Subscription, \
+    OrderedProduct
+from anaf.sales.forms import SettingsForm, OrderForm, ProductForm, SaleStatusForm, UpdateRecordForm, \
     LeadForm, OpportunityForm, OrderedProductForm, SubscriptionForm, \
     OrderFilterForm, LeadFilterForm, OpportunityFilterForm, ProductFilterForm, \
     MassActionForm, ProductMassActionForm, LeadMassActionForm, \
@@ -23,22 +24,22 @@ from anaf.finance.helpers import convert
 
 
 def _get_filter_query(args, model=SaleOrder):
-    "Compose a filter query based on filter form submission"
+    """Compose a filter query based on filter form submission"""
     query = Q()
 
     for arg in args:
         if args[arg] and hasattr(model, arg) or arg == 'products_interested':
-            kwargs = {str(arg + '__id'): long(args[arg])}
+            kwargs = {str(arg + '__id'): long_type(args[arg])}
             query = query & Q(**kwargs)
 
     return query
 
 
 def _process_mass_form(f):
-    "Pre-process request to handle mass action form for Orders"
+    """Pre-process request to handle mass action form for Orders"""
 
     def wrap(request, *args, **kwargs):
-        "Wrap"
+        """Wrap"""
         if 'massform' in request.POST:
             for key in request.POST:
                 if 'mass-order' in key:
@@ -60,10 +61,10 @@ def _process_mass_form(f):
 
 
 def _process_mass_lead_form(f):
-    "Pre-process request to handle mass action form for Orders"
+    """Pre-process request to handle mass action form for Orders"""
 
     def wrap(request, *args, **kwargs):
-        "Wrap"
+        """Wrap"""
         if 'massform' in request.POST:
             for key in request.POST:
                 if 'mass-lead' in key:
@@ -111,20 +112,20 @@ def _process_mass_opportunity_form(f):
     return wrap
 
 
-def _do_update_record(profile, request, object):
-    "Get the Update Record Form"
-    if profile.has_permission(object, mode='x'):
+def _do_update_record(profile, request, obj):
+    """Get the Update Record Form"""
+    if profile.has_permission(obj, mode='x'):
         if request.POST:
             record = UpdateRecord()
-            record.object = object
+            record.object = obj
             record.record_type = 'manual'
             form = UpdateRecordForm(request.POST, instance=record)
             if form.is_valid():
                 record = form.save()
                 record.set_user_from_request(request)
                 record.save()
-                record.about.add(object)
-                object.set_last_updated()
+                record.about.add(obj)
+                obj.set_last_updated()
         else:
             form = UpdateRecordForm()
     else:
@@ -136,7 +137,7 @@ def _do_update_record(profile, request, object):
 @handle_response_format
 @_process_mass_form
 def index(request, response_format='html'):
-    "Sales index page"
+    """Sales index page"""
 
     query = Q(status__hidden=False)
     if request.GET:
@@ -231,7 +232,7 @@ def index_open(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'order_fulfil_status')[0]
-        fulfil_status = long(conf.value)
+        fulfil_status = long_type(conf.value)
         query = Q(status__hidden=False) & ~Q(status=fulfil_status)
     except Exception:
         query = Q(status__hidden=False)
@@ -1148,7 +1149,7 @@ def order_invoice_view(request, order_id, response_format='html'):
     # default company
     try:
         conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
-        my_company = Contact.objects.get(pk=long(conf.value))
+        my_company = Contact.objects.get(pk=long_type(conf.value))
 
     except:
         my_company = None
@@ -1221,7 +1222,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_lead_status')[0]
-        default_lead_status = SaleStatus.objects.get(pk=long(conf.value))
+        default_lead_status = SaleStatus.objects.get(pk=long_type(conf.value))
     except:
         default_lead_status = None
 
@@ -1230,7 +1231,7 @@ def settings_view(request, response_format='html'):
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_opportunity_status')[0]
         default_opportunity_status = SaleStatus.objects.get(
-            pk=long(conf.value))
+            pk=long_type(conf.value))
     except:
         default_opportunity_status = None
 
@@ -1238,7 +1239,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_order_status')[0]
-        default_order_status = SaleStatus.objects.get(pk=long(conf.value))
+        default_order_status = SaleStatus.objects.get(pk=long_type(conf.value))
     except:
         default_order_status = None
 
@@ -1246,7 +1247,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_order_source')[0]
-        default_order_source = SaleSource.objects.get(pk=long(conf.value))
+        default_order_source = SaleSource.objects.get(pk=long_type(conf.value))
     except:
         default_order_source = None
 
@@ -1254,7 +1255,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'order_fulfil_status')[0]
-        order_fulfil_status = SaleStatus.objects.get(pk=long(conf.value))
+        order_fulfil_status = SaleStatus.objects.get(pk=long_type(conf.value))
     except:
         order_fulfil_status = None
 
@@ -1262,7 +1263,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_order_product')[0]
-        default_order_product = Product.objects.get(pk=long(conf.value))
+        default_order_product = Product.objects.get(pk=long_type(conf.value))
     except:
         default_order_product = None
 
@@ -1575,7 +1576,7 @@ def source_delete(request, source_id, response_format='html'):
 
 @mylogin_required
 def ajax_subscription_lookup(request, response_format='html'):
-    "Returns a list of matching tasks"
+    """Returns a list of matching tasks"""
 
     subscriptions = []
     if request.GET and 'term' in request.GET:
@@ -1588,4 +1589,3 @@ def ajax_subscription_lookup(request, response_format='html'):
                               {'subscriptions': subscriptions},
                               context_instance=RequestContext(request),
                               response_format=response_format)
-#

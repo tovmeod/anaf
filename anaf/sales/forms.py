@@ -5,13 +5,14 @@ Sales module forms
 from django.shortcuts import get_object_or_404
 from django import forms
 from django.db.models import Q
-from models import Product, SaleOrder, SaleSource, Lead, Opportunity, \
-    SaleStatus, OrderedProduct, Subscription, Currency
+from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
+from anaf import long_type
+from anaf.sales.models import Product, SaleOrder, SaleSource, Lead, Opportunity, SaleStatus, OrderedProduct, \
+    Subscription, Currency
 from anaf.identities.models import Contact
 from anaf.core.models import Object, ModuleSetting, User, UpdateRecord
-from django.core.urlresolvers import reverse
 from anaf.core.decorators import preprocess_form
-from django.utils.translation import ugettext as _
 
 preprocess_form()
 
@@ -208,14 +209,15 @@ class SettingsForm(forms.Form):
         label=_('Order Fulfilment Status'), queryset=[])
 
     def __init__(self, user, *args, **kwargs):
-        "Sets choices and initial value"
+        """Sets choices and initial value"""
         super(SettingsForm, self).__init__(*args, **kwargs)
         self.fields['default_lead_status'].queryset = Object.filter_permitted(user,
                                                                               SaleStatus.objects.filter(use_leads=True))
-        self.fields['default_opportunity_status'].queryset = Object.filter_permitted(user,
-                                                                                     SaleStatus.objects.filter(use_opportunities=True))
+        self.fields['default_opportunity_status'].queryset = \
+            Object.filter_permitted(user,SaleStatus.objects.filter(use_opportunities=True))
         self.fields['default_order_status'].queryset = Object.filter_permitted(user,
-                                                                               SaleStatus.objects.filter(use_sales=True))
+                                                                               SaleStatus.objects.filter(use_sales=True)
+                                                                               )
         self.fields['default_order_source'].queryset = Object.filter_permitted(user,
                                                                                SaleSource.objects.all())
         self.fields['order_fulfil_status'].queryset = Object.filter_permitted(user,
@@ -247,7 +249,7 @@ class SettingsForm(forms.Form):
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_opportunity_status')[0]
             default_opportunity_status = SaleStatus.objects.get(
-                pk=long(conf.value))
+                pk=long_type(conf.value))
             self.fields[
                 'default_opportunity_status'].initial = default_opportunity_status.id
         except:
@@ -256,7 +258,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_lead_status')[0]
-            default_lead_status = SaleStatus.objects.get(pk=long(conf.value))
+            default_lead_status = SaleStatus.objects.get(pk=long_type(conf.value))
             self.fields['default_lead_status'].initial = default_lead_status.id
         except:
             pass
@@ -264,7 +266,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_status')[0]
-            default_order_status = SaleStatus.objects.get(pk=long(conf.value))
+            default_order_status = SaleStatus.objects.get(pk=long_type(conf.value))
             self.fields[
                 'default_order_status'].initial = default_order_status.id
         except:
@@ -273,7 +275,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_source')[0]
-            default_order_source = SaleSource.objects.get(pk=long(conf.value))
+            default_order_source = SaleSource.objects.get(pk=long_type(conf.value))
             self.fields[
                 'default_order_source'].initial = default_order_source.id
         except:
@@ -282,7 +284,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_product')[0]
-            default_order_product = Product.objects.get(pk=long(conf.value))
+            default_order_product = Product.objects.get(pk=long_type(conf.value))
             self.fields[
                 'default_order_product'].initial = default_order_product.id
         except:
@@ -291,7 +293,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'order_fulfil_status')[0]
-            order_fulfil_status = SaleStatus.objects.get(pk=long(conf.value))
+            order_fulfil_status = SaleStatus.objects.get(pk=long_type(conf.value))
             self.fields['order_fulfil_status'].initial = order_fulfil_status.id
         except:
             pass
@@ -345,7 +347,8 @@ class MassActionForm(forms.Form):
         self.fields['delete'] = forms.ChoiceField(label=_("Delete"), choices=(('', '-----'),
                                                                               ('delete', _(
                                                                                   'Delete Completely')),
-                                                                              ('trash', _('Move to Trash'))), required=False)
+                                                                              ('trash', _('Move to Trash'))),
+                                                  required=False)
 
         self.fields['assignedto'].queryset = User.objects
         self.fields['assignedto'].label = _("Assign To:")
@@ -353,7 +356,7 @@ class MassActionForm(forms.Form):
         #                                               'callback': reverse('identities_ajax_user_lookup')})
 
     def save(self, *args, **kwargs):
-        "Process form"
+        """Process form"""
 
         if self.instance and self.is_valid():
             if self.cleaned_data['status']:
@@ -386,9 +389,7 @@ class LeadMassActionForm(forms.Form):
         super(LeadMassActionForm, self).__init__(*args, **kwargs)
 
         self.fields['status'].queryset = Object.filter_permitted(user,
-                                                                 SaleStatus.objects.filter(
-                                                                     use_leads=True),
-                                                                 mode='x')
+                                                                 SaleStatus.objects.filter(use_leads=True), mode='x')
         self.fields['status'].label = _("Status:")
 
         self.fields['assignedto'].queryset = User.objects
@@ -397,7 +398,7 @@ class LeadMassActionForm(forms.Form):
         #                                                'callback': reverse('identities_ajax_user_lookup')})
 
     def save(self, *args, **kwargs):
-        "Process form"
+        """Process form"""
 
         if self.instance and self.is_valid():
             if self.cleaned_data['status']:
@@ -645,7 +646,7 @@ class OrderedProductForm(forms.ModelForm):
                 'anaf.sales', 'default_order_product')[0]
             # AJAX to set the initial rate as the currency converted value of
             # product sell price
-            self.fields['product'].initial = long(conf.value)
+            self.fields['product'].initial = long_type(conf.value)
         except:
             pass
 
@@ -763,7 +764,7 @@ class OrderForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_source')[0]
-            self.fields['source'].initial = long(conf.value)
+            self.fields['source'].initial = long_type(conf.value)
         except:
             pass
 
@@ -774,7 +775,7 @@ class OrderForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_status')[0]
-            self.fields['status'].initial = long(conf.value)
+            self.fields['status'].initial = long_type(conf.value)
         except:
             pass
 
@@ -896,7 +897,7 @@ class LeadForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_product')[0]
-            self.fields['products_interested'].initial = [long(conf.value)]
+            self.fields['products_interested'].initial = [long_type(conf.value)]
         except:
             pass
 
@@ -907,7 +908,7 @@ class LeadForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_lead_status')[0]
-            self.fields['status'].initial = long(conf.value)
+            self.fields['status'].initial = long_type(conf.value)
         except:
             pass
 
@@ -987,7 +988,7 @@ class OpportunityForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_product')[0]
-            self.fields['products_interested'].initial = [long(conf.value)]
+            self.fields['products_interested'].initial = [long_type(conf.value)]
         except:
             pass
         self.fields['source'].queryset = Object.filter_permitted(user,
@@ -1000,7 +1001,7 @@ class OpportunityForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_opportunity_status')[0]
-            self.fields['status'].initial = long(conf.value)
+            self.fields['status'].initial = long_type(conf.value)
         except:
             pass
 

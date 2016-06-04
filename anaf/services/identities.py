@@ -1,9 +1,11 @@
 """
 Handle objects from this module relevant to a Contact or a User
 """
+from copy import deepcopy
+
 from anaf.core.models import Object
-from models import Ticket
-from templatetags.services import services_ticket_list
+from anaf.services.models import Ticket
+from anaf.services.templatetags.services import services_ticket_list
 
 CONTACT_OBJECTS = {'ticket_set': {'label': 'Tickets',
                                   'objects': [],
@@ -24,8 +26,7 @@ def get_contact_objects(current_user, contact):
     Returns a dictionary with keys specified as contact attributes
     and values as dictionaries with labels and set of relevant objects.
     """
-
-    objects = dict(CONTACT_OBJECTS)
+    objects = deepcopy(CONTACT_OBJECTS)
 
     for key in objects:
         if hasattr(contact, key):
@@ -46,7 +47,7 @@ def get_user_objects(current_user, user):
     and values as dictionaries with labels and set of relevant objects.
     """
 
-    objects = dict(USER_OBJECTS)
+    objects = deepcopy(CONTACT_OBJECTS)
 
     for key in objects:
         if hasattr(user, key):

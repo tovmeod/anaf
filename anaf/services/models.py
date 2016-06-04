@@ -246,7 +246,7 @@ Service Support signals
 
 
 def email_caller_on_new_ticket(sender, instance, created, **kwargs):
-    "When a new ticket is created send an email to the caller"
+    """When a new ticket is created send an email to the caller"""
     if created:
         send_email_to_caller = False
         try:

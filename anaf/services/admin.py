@@ -2,27 +2,26 @@
 Service Support: back-end administrator definitions
 """
 from django.contrib import admin
-from models import Ticket, TicketStatus, TicketQueue
-from models import Service, ServiceAgent, ServiceLevelAgreement
+from anaf.services.models import Ticket, TicketStatus, TicketQueue, Service, ServiceAgent, ServiceLevelAgreement
 
 
 class TicketAdmin(admin.ModelAdmin):
 
-    "Ticket backend definition"
+    """Ticket backend definition"""
     list_display = ['name']
     search_fields = ['name']
 
 
 class TicketStatusAdmin(admin.ModelAdmin):
 
-    "TicketStatus backend definition"
+    """TicketStatus backend definition"""
     list_display = ['name', 'active', 'hidden']
     search_fields = ['name']
 
 
 class TicketQueueAdmin(admin.ModelAdmin):
 
-    "TicketQueue backend definition"
+    """TicketQueue backend definition"""
     list_display = ['name', 'parent', 'default_ticket_status']
     search_fields = ['name']
 
@@ -33,21 +32,21 @@ admin.site.register(TicketQueue, TicketQueueAdmin)
 
 class ServiceAdmin(admin.ModelAdmin):
 
-    "Service backend definition"
+    """Service backend definition"""
     list_display = ['name']
     search_fields = ['name']
 
 
 class ServiceAgentAdmin(admin.ModelAdmin):
 
-    "ServiceAgent backend definition"
+    """ServiceAgent backend definition"""
     list_display = ['related_user', 'available_from', 'available_to', 'active']
     list_filter = ['active']
 
 
 class ServiceLevelAgreementAdmin(admin.ModelAdmin):
 
-    "ServiceLevelAgreement backend definition"
+    """ServiceLevelAgreement backend definition"""
     list_display = ['name', 'response_time', 'uptime_rate']
     search_fields = ['name']
 

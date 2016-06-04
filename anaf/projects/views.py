@@ -3,12 +3,13 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+from anaf import long_type
 from anaf.core.models import Object, ModuleSetting, UpdateRecord
 from anaf.core.views import user_denied
 from anaf.core.rendering import render_to_response
 from anaf.core.decorators import mylogin_required, handle_response_format
-from models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
-from forms import ProjectForm, MilestoneForm, TaskForm, FilterForm, TaskRecordForm, \
+from anaf.projects.models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
+from anaf.projects.forms import ProjectForm, MilestoneForm, TaskForm, FilterForm, TaskRecordForm, \
     MassActionForm, TaskTimeSlotForm, TaskStatusForm, SettingsForm
 from django.utils.translation import ugettext as _
 from datetime import datetime
@@ -21,14 +22,14 @@ def _get_filter_query(args):
 
     for arg in args:
         if hasattr(Task, arg) and args[arg]:
-            kwargs = {str(arg + '__id'): long(args[arg])}
+            kwargs = {str(arg + '__id'): long_type(args[arg])}
             query = query & Q(**kwargs)
 
     return query
 
 
 def _get_default_context(request):
-    "Returns default context as a dict()"
+    """Returns default context as a dict()"""
 
     projects = Object.filter_by_request(request, Project.objects)
     statuses = Object.filter_by_request(request, TaskStatus.objects)

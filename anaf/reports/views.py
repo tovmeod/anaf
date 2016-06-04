@@ -1,24 +1,25 @@
 """
 Reports module views
 """
+from itertools import groupby
+from datetime import datetime
+import json
+import re
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
-from anaf.core.conf import settings
 from django.db.models import Q
+from django.utils.six import text_type as unicode
+from anaf.core.conf import settings
 from anaf.core.views import user_denied
 from anaf.core.models import Object, Module
 from anaf.core.rendering import render_to_response
 from anaf.core.decorators import mylogin_required, handle_response_format
-from forms import ObjChoiceForm, MassActionForm, ChartForm, FilterForm
-from models import Report, Field, Model, Chart
-from helpers import dumps, loads, aggregate_functions, number_field_regex
-from itertools import groupby
-from datetime import datetime
-import json
-import re
+from anaf.reports.forms import ObjChoiceForm, MassActionForm, ChartForm, FilterForm
+from anaf.reports.models import Report, Field, Model, Chart
+from anaf.reports.helpers import dumps, loads, aggregate_functions, number_field_regex
 
 
 def _get_default_context(request):
@@ -90,7 +91,7 @@ def _get_module_name(path):
 
 
 def _get_chart_ajax(request, chart_id=None, div_id=None):
-    "For AJAX"
+    """For AJAX"""
     "Reports index page"
 
     options = json.dumps({
@@ -129,11 +130,11 @@ def _get_chart_ajax(request, chart_id=None, div_id=None):
 def _get_report_content(report, request=None):
     model = loads(report.model)
 
-    object = model.name
-    object = object.split('.')
+    obj = model.name
+    obj = obj.split('.')
 
-    module_name = object[0] + '.' + object[1] + '.' + object[2]
-    import_name = object[3]
+    module_name = obj[0] + '.' + obj[1] + '.' + obj[2]
+    import_name = obj[3]
 
     module = __import__(module_name, globals(), locals(), [import_name], -1)
     classobj = getattr(module, import_name)
@@ -147,21 +148,21 @@ def _get_report_content(report, request=None):
     filters = {}
     excludes = {}
     for field in model.fields:
-        for filter in field.filters:
-            if filter['operand'] == 'is':
-                filters.setdefault(field.name + '__in', []).append(filter['choice'])
-            elif filter['operand'] == 'not':
-                excludes.setdefault(field.name + '__in', []).append(filter['choice'])
-            elif filter['operand'] == 'beforedate':
-                filters[field.name + '__gte'] = datetime.date(datetime.strptime(filter['choice'], '%m/%d/%Y'))
-            elif filter['operand'] == 'afterdate':
-                filters[field.name + '__lte'] = datetime.date(datetime.strptime(filter['choice'], '%m/%d/%Y'))
-            elif filter['operand'] == 'beforedatetime':
-                filters[field.name + '__gte'] = datetime.strptime(filter['choice'], '%m/%d/%Y %H:%M')
-            elif filter['operand'] == 'afterdatetime':
-                filters[field.name + '__lte'] = datetime.strptime(filter['choice'], '%m/%d/%Y %H:%M')
-            elif filter['operand'] == 'on':
-                filters.setdefault(field.name + '__in', []).append(datetime.strptime(filter['choice'], '%m/%d/%Y'))
+        for filt in field.filters:
+            if filt['operand'] == 'is':
+                filters.setdefault(field.name + '__in', []).append(filt['choice'])
+            elif filt['operand'] == 'not':
+                excludes.setdefault(field.name + '__in', []).append(filt['choice'])
+            elif filt['operand'] == 'beforedate':
+                filters[field.name + '__gte'] = datetime.date(datetime.strptime(filt['choice'], '%m/%d/%Y'))
+            elif filt['operand'] == 'afterdate':
+                filters[field.name + '__lte'] = datetime.date(datetime.strptime(filt['choice'], '%m/%d/%Y'))
+            elif filt['operand'] == 'beforedatetime':
+                filters[field.name + '__gte'] = datetime.strptime(filt['choice'], '%m/%d/%Y %H:%M')
+            elif filt['operand'] == 'afterdatetime':
+                filters[field.name + '__lte'] = datetime.strptime(filt['choice'], '%m/%d/%Y %H:%M')
+            elif filt['operand'] == 'on':
+                filters.setdefault(field.name + '__in', []).append(datetime.strptime(filt['choice'], '%m/%d/%Y'))
 
     set = unfiltered_set.filter(**filters).exclude(**excludes)
 
@@ -224,8 +225,7 @@ def _get_report_content(report, request=None):
                     groups.append(('None', ng))
 
         else:
-            set = sorted(set, key=lambda item: unicode(
-                item.get_field_value(groupname)), reverse=True)
+            set = sorted(set, key=lambda item: unicode(item.get_field_value(groupname)), reverse=True)
             groups = []
             for g, ks in groupby(set, key=lambda item: unicode(item.get_field_value(groupname))):
                 groups.append((g, list(ks)))
@@ -403,21 +403,20 @@ def index_owned(request, response_format='html'):
 @mylogin_required
 @handle_response_format
 def report_add(request, response_format='html'):
-    "Create new report based on user choice"
+    """Create new report based on user choice"""
     if 'report' in request.POST:
         report_id = request.POST['report']
         return HttpResponseRedirect(reverse('reports_report_edit', args=[report_id]))
     # FIRST TIME AN OBJECT IS CHOSEN
     if 'choice' in request.POST:
         form = None
-        object = request.POST['choice']
-        object = str(
-            object.replace("{'object_type': u'", '').replace("'}", ''))
-        full_object = object
-        object = object.split('.', 3)
+        obj = request.POST['choice']
+        obj = str(obj.replace("{'object_type': u'", '').replace("'}", ''))
+        full_object = obj
+        obj = obj.split('.', 3)
 
-        module_name = object[0] + '.' + object[1] + '.' + object[2]
-        import_name = object[3]
+        module_name = obj[0] + '.' + obj[1] + '.' + obj[2]
+        import_name = obj[3]
 
         module = __import__(
             module_name, globals(), locals(), [import_name], -1)
@@ -469,7 +468,7 @@ def report_add(request, response_format='html'):
 @mylogin_required
 @handle_response_format
 def report_edit(request, report_id=None, response_format='html'):
-    "Create new report based on user choice"
+    """Create new report based on user choice"""
     report = get_object_or_404(Report, pk=report_id)
 
     if not request.user.profile.has_permission(report, mode='w'):
@@ -515,7 +514,7 @@ def report_edit(request, report_id=None, response_format='html'):
 @mylogin_required
 @handle_response_format
 def report_filter(request, report_id, field_name, response_format='html'):
-    "View to Filter over a given field for a Report"
+    """View to Filter over a given field for a Report"""
 
     report = get_object_or_404(Report, pk=report_id)
     if not request.user.profile.has_permission(report, mode='w'):
@@ -540,7 +539,7 @@ def report_filter(request, report_id, field_name, response_format='html'):
 @mylogin_required
 @handle_response_format
 def report_filter_remove(request, report_id, field_name, filter_index, response_format='html'):
-    "Remove a Filter on a given field for a Report"
+    """Remove a Filter on a given field for a Report"""
 
     report = get_object_or_404(Report, pk=report_id)
     if not request.user.profile.has_permission(report, mode='w'):
@@ -558,7 +557,7 @@ def report_filter_remove(request, report_id, field_name, filter_index, response_
 @mylogin_required
 @handle_response_format
 def report_group(request, report_id, field_name, response_format='html'):
-    "View to Group by a given field in a report"
+    """View to Group by a given field in a report"""
 
     t = get_object_or_404(Report, pk=report_id)
     if not request.user.profile.has_permission(t, mode='w'):
@@ -591,7 +590,7 @@ def report_group(request, report_id, field_name, response_format='html'):
 @mylogin_required
 @handle_response_format
 def report_view(request, response_format='html', report_id=None):
-    "Display the report"
+    """Display the report"""
 
     report = get_object_or_404(Report, pk=report_id)
     report_context = _get_report_content(report, request)

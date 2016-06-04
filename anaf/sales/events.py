@@ -1,13 +1,12 @@
 """
 Sales integration with Events module
 """
-
-from models import Opportunity
-from anaf.core.models import Object
-from anaf.events.rendering import EventRenderer
-from django.db.models import Q
 import datetime
 import time
+from django.db.models import Q
+from anaf.core.models import Object
+from anaf.events.rendering import EventRenderer
+from anaf.sales.models import Opportunity
 
 
 def get_events(request):

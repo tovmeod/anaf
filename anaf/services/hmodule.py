@@ -1,7 +1,7 @@
 """
 Service Support: module definition
 """
-
+from anaf.services.cron import tickets_escalate
 PROPERTIES = {
     'title': 'Service Support',
     'details': 'Service delivery and support management',
@@ -18,6 +18,5 @@ URL_PATTERNS = [
 # Cron
 #
 
-from cron import tickets_escalate
 
 CRON = [tickets_escalate]

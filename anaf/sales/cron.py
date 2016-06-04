@@ -1,7 +1,7 @@
 """
 Sales Cron jobs
 """
-from models import Subscription
+from anaf.sales.models import Subscription
 
 
 def subscription_check():

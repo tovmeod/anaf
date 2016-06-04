@@ -1,13 +1,14 @@
 """
 Services Cron jobs
 """
-from models import TicketQueue, TicketRecord
-from django.core.urlresolvers import reverse
 import datetime
+from django.utils.six import text_type as unicode
+from django.core.urlresolvers import reverse
+from anaf.services.models import TicketQueue, TicketRecord
 
 
 def tickets_escalate():
-    "Automatically move tickets to upper queues when no action taken"
+    """Automatically move tickets to upper queues when no action taken"""
 
     # Collect queues which have waiting time and next queue specified
     queues = TicketQueue.objects.filter(
