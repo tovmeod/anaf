@@ -7,8 +7,8 @@ import ConfigParser
 import sys
 
 BASE_DIR = path.dirname(path.dirname(path.abspath(__file__)))
-CONFIG_FILE = path.join(os.getcwd(), 'anaf.ini')
-USER_CONFIG_FILE = CONFIG_FILE
+CONFIG_FILE = 'anaf.ini'
+USER_CONFIG_FILE = path.join(os.getcwd(), CONFIG_FILE)
 DEFAULT_CONFIG_FILE = path.join(BASE_DIR, CONFIG_FILE)
 DEBUG = (True if 'DEBUG' not in os.environ else {'true': True, 'false': False}[os.environ['DEBUG'].lower()])
 DEBUG = True
