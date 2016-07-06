@@ -1,9 +1,8 @@
 import json
 from django.test import TestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
-from anaf.core.models import User, Group, Perspective, ModuleSetting, Object
+from anaf.core.models import Group, Perspective, ModuleSetting
 from anaf.knowledge.models import KnowledgeFolder, KnowledgeItem, KnowledgeCategory
 
 
