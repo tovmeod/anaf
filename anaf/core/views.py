@@ -2,13 +2,12 @@ from django.contrib.staticfiles import finders
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.sessions.models import Session
 from django.contrib.sites.models import RequestSite
-# from django.contrib.csrf.middleware import CsrfMiddleware as csrf
 from django.utils.encoding import smart_unicode
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import cache_control
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseBadRequest
-from django.core.urlresolvers import resolve, reverse
+from django.core.urlresolvers import resolve, reverse, Resolver404
 from django.shortcuts import get_object_or_404
 from conf import settings
 from decorators import mylogin_required, handle_response_format
@@ -174,14 +173,7 @@ def logo_image(request, gif=False, response_format='html'):
         raise Http404(path)
 
 
-def ajax_popup(request, popup_id='', url='/'):
-    "Handles pop up forms and requests, by extracting only the required content from response content"
-
-    view, args, kwargs = resolve(url)
-
-    if not request.user.username:
-        return HttpResponseRedirect('/accounts/login')
-
+def get_active(url):
     modules = Module.objects.all()
     active = None
     for module in modules:
@@ -197,14 +189,27 @@ def ajax_popup(request, popup_id='', url='/'):
             pass
         except AttributeError:
             pass
+    return active
 
-    response = None
+
+def ajax_popup(request, popup_id='', url='/'):
+    """Handles pop up forms and requests, by extracting only the required content from response content"""
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/accounts/login')
+    try:
+        view, args, kwargs = resolve(url)
+    except Resolver404:
+        raise Http404('Invalid popup URL')
+
+    active = get_active(url)
+
     if active and not request.user.profile.has_permission(active):
         response = user_denied(request, "You do not have access to the {0!s} module".format(unicode(active)),
                                response_format='ajax')
 
-    if not response:
+    else:
         if view == ajax_popup:
+            # todo: return 401 and not 404 HttpResponseBadRequest()
             raise Http404("OMG, I see myself!")
 
         kwargs['request'] = request
@@ -421,7 +426,7 @@ def invitation_retrieve(request, response_format='html'):
     if email and key:
         try:
             invitation = Invitation.objects.get(email=email, key=key)
-        except:
+        except Invitation.DoesNotExist:
             raise Http404
     else:
         raise Http404

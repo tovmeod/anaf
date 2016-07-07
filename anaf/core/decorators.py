@@ -19,7 +19,6 @@ def mylogin_required(f):
     def wrap(request, *args, **kwargs):
         if request.user.is_authenticated():
             user = request.user.profile
-            user_modules = user.get_perspective().get_modules()
             all_modules = Module.objects.all()
             active = None
             for module in all_modules:
@@ -38,7 +37,7 @@ def mylogin_required(f):
                 except AttributeError:
                     pass
             if active:
-                if active in user_modules:
+                if active in user.get_perspective().get_modules():
                     if user.has_permission(active):
                         return f(request, *args, **kwargs)
                     else:

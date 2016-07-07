@@ -1202,6 +1202,7 @@ class Module(Object):
         return self.title
 
 
+
 class Perspective(Object):
     """Defines a set of modules enabled for a given user"""
     name = models.CharField(max_length=256)

@@ -1,14 +1,78 @@
+from __future__ import print_function
+
+from itertools import chain
+
 """
 Core: test suites
 Middleware: test chat
 """
 import datetime
-
+import pytest
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
 from django.contrib.auth.models import User as DjangoUser
+from django.core.urlresolvers import get_resolver
+from django.utils import six
 from anaf.identities.models import Contact
+from anaf.test import AnafTestCase
 from models import User, Group, Module, Perspective, AccessEntity
+
+
+def _get_url_patterns():
+    """Returns list of (pattern-name, pattern) tuples"""
+    resolver = get_resolver(None)
+    for key, value in sorted(resolver.reverse_dict.items()):
+        # sorted because xdist get's crazy if fixtures re returned in a different order
+        if isinstance(key, six.string_types):
+            yield key, value[0][0][1]
+
+
+def _get_noargs_urls():
+    for name, args in _get_url_patterns():
+        if not args:
+            match = (resolve(reverse(name)))
+            # if match.args:
+            #     print(match)
+            yield reverse(name)
+
+
+def _get_withargs_urls():
+    skip = ('dajaxice-call-endpoint', )
+    for name, args in _get_url_patterns():
+        if name not in skip and args:
+            args = list(args)
+            for i in six.moves.range(len(args)):
+                args[i] = str(args[i].lower().replace('_', ''))
+                if 'id' in args[i] or 'ptr' in args[i]:
+                    args[i] = i
+                elif 'path' in args[i]:
+                    args[i] += '/'
+                elif name == 'events_event_add_to_date':
+                    args[i] = i
+            yield reverse(name, args=args)
+
+
+@pytest.mark.parametrize('url', chain(_get_noargs_urls(), _get_withargs_urls()))
+@pytest.mark.django_db(transaction=True)
+def test_urls_protected(url, client):
+    """All URLs should redirect to the login page or 401 Unauthorized with a few exceptions"""
+    response = client.get(url)
+    unprotected = ('/accounts/login', '/accounts/password_reset/', '/accounts/password_reset/done/',
+                   '/accounts/logo/image/ie/', '/accounts/logo/image/', '/iframe', '/accounts/denied',
+                   '/accounts/setup', '/reports/chart/0/options/1')
+    if url.endswith('/doc') or url in unprotected:
+        assert response.status_code == 200
+    elif url in ('/captcha/refresh/', '/captcha/audio/key/', '/accounts/invitation/', '/dajaxice/'):
+        # captcha lib incorrectly returns 404 not found
+        assert response.status_code == 404
+    elif url in ('/captcha/image/key@2/', '/captcha/image/key/'):
+        assert response.status_code == 410
+    else:
+        assert response.status_code in (302, 401)
+        if response.status_code == 302:
+            assert response.url in ('http://testserver/accounts/login',
+                                    'http://testserver/m/accounts/login',
+                                    'http://testserver/accounts/login/?next=/api/auth/authorize_request_token')
 
 
 class CoreModelsTest(TestCase):

@@ -12,7 +12,7 @@ router.register(r'tasktimeslot', views.TaskTimeSlotView)
 
 urlpatterns = patterns('anaf.projects.views',
                        url(r'^', include(router.urls)),
-                       url(r'^dojo$', 'dojo_view', name='dojo_view'),
+                       # url(r'^dojo$', 'dojo_view', name='dojo_view'),
                        url(r'^(\.(?P<response_format>\w+))?$', 'index', name='projects'),
                        url(r'^index(\.(?P<response_format>\w+))?/?$',
                            'index', name='projects_index'),
