@@ -38,3 +38,6 @@ before_script: ci/before_script_${DB}.sh
 script: py.test --cov --cov-report=
 after_success:
   coveralls
+
+notifications:
+  slack: anafteam:ftaeRk3d0Rh0MS5xrAUMasAC
