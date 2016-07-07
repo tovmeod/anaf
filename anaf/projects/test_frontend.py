@@ -5,11 +5,13 @@ from anaf.projects.models import Project
 from anaf.test import LiveTestCase
 from datetime import datetime
 from freezegun import freeze_time
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.action_chains import ActionChains
 
 
-class ProjectTests(LiveTestCase):
+class ProjectTestCase(LiveTestCase):
     def setUp(self):
-        super(ProjectTests, self).setUp()
+        super(ProjectTestCase, self).setUp()
         # self.driver.implicitly_wait(2)
 
         with freeze_time(datetime(year=2015, month=11, day=9, hour=8, minute=21)):
@@ -17,6 +19,8 @@ class ProjectTests(LiveTestCase):
         with freeze_time(datetime(year=2015, month=11, day=9, hour=8, minute=26)):
             self.project.save()
 
+
+class ProjectBasicTests(ProjectTestCase):
     def test_project_index(self):
         self._login()
         url = six.moves.urllib.parse.urljoin(self.live_server_url, reverse('projects'))
@@ -26,9 +30,9 @@ class ProjectTests(LiveTestCase):
     def test_new_simple_project(self):
         """Test creating a minimal project
         """
-        name = 'simple_project_name'
         self._login()
         self.get('projects')
+        name = 'simple_project_name'
         btn = self.driver.find_element_by_css_selector('a[href="#/projects/add"]')
         btn.click()
         self.wait_loaded_selector('.popup-block')
@@ -40,12 +44,18 @@ class ProjectTests(LiveTestCase):
         p = Project.objects.get(name=name)
         self.assertEqual(p.name, name)
 
-    def test_edit_project(self):
-        name = 'edited name'
+
+class ProjectTests(ProjectTestCase):
+    def setUp(self):
+        super(ProjectTests, self).setUp()
         self._login()
         self.get('projects')
         self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id)).click()
         self.wait_load()
+
+    def test_edit_project(self):
+        name = 'edited name'
+
         self.driver.find_element_by_css_selector('a[href="#/projects/edit/{}"]'.format(self.project.id)).click()
         self.wait_load()
         em = self.send_keys('#id_name', name, clear=True)
@@ -55,10 +65,6 @@ class ProjectTests(LiveTestCase):
         self.assertEqual(p.name, name)
 
     def test_trash_project(self):
-        self._login()
-        self.get('projects')
-        self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id)).click()
-        self.wait_load()
         self.driver.find_element_by_css_selector('a[href="#/projects/delete/{}"]'.format(self.project.id)).click()
         self.wait_load()
         self.assertFalse(self.project.trash)
@@ -66,12 +72,24 @@ class ProjectTests(LiveTestCase):
         self.wait_load()
         p = Project.objects.get(id=self.project.id)
         self.assertTrue(p.trash)
+        # after sending to the trash it won't be visible anymore
+        with self.assertRaises(NoSuchElementException):
+            self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id))
+
+        # go to trash page and check if project is there
+        self.driver.find_element_by_css_selector('a[href="#/trash/"]').click()
+        # untrash the project and check if it is really on the projects page
+        untrashbtn = self.driver.find_element_by_css_selector('a[href="#/trash/untrash/{}"]'.format(self.project.id))
+        builder = ActionChains(self.driver)
+        builder.move_to_element(untrashbtn).perform()
+        self.wait_until(lambda driver: untrashbtn.is_displayed())
+        untrashbtn.click()
+        p = Project.objects.get(id=self.project.id)
+        self.assertFalse(p.trash)
+        self.get('projects')
+        self.driver.find_element_by_css_selector('a[href="#/projects/delete/{}"]'.format(self.project.id))
 
     def test_delete_project(self):
-        self._login()
-        self.get('projects')
-        self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id)).click()
-        self.wait_load()
         self.driver.find_element_by_css_selector('a[href="#/projects/delete/{}"]'.format(self.project.id)).click()
         self.wait_load()
         self.driver.find_element_by_css_selector('#trash').click()
@@ -80,7 +98,6 @@ class ProjectTests(LiveTestCase):
         self.wait_load()
         with self.assertRaises(Project.DoesNotExist):
             Project.objects.get(id=self.project.id)
-        self.fail()
 
     # send to trash, and open trash page to check it is there
     # add milestone

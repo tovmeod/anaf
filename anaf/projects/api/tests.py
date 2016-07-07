@@ -20,6 +20,7 @@ class ProjectsAPITest(AnafTestCase):
     content_type = 'application/json'
 
     def setUp(self):
+        super(ProjectsAPITest, self).setUp()
         # Create objects
         self.group, created = Group.objects.get_or_create(name='api_test_group')
         with freeze_time(datetime(year=2015, month=10, day=8, hour=7, minute=20)):

@@ -10,8 +10,9 @@ from time import sleep
 import pytest
 try:
     from sauceclient import SauceClient
+    USE_SAUCE = True
 except ImportError:
-    pass
+    USE_SAUCE = False
 from django.test import TestCase as DjangoTestCase, TransactionTestCase
 from django.test.testcases import LiveServerThread as DjangoLiveServerThread, _MediaFilesHandler
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -285,14 +286,12 @@ class LiveTestCase(LiveServerTestCase):
     static_handler = MyStaticFilesHandler
     driver = None
 
-    USE_SAUCE = True if os.environ.get("TRAVIS_BUILD_NUMBER") else False
-
     @classmethod
     def setUpClass(cls):
         super(LiveTestCase, cls).setUpClass()
         cache.clear()
 
-        if not cls.USE_SAUCE:
+        if not USE_SAUCE:
             # cls.driver = webdriver.Firefox()
             cls.driver = webdriver.Chrome()
             cls.driver.implicitly_wait(5)
@@ -301,7 +300,7 @@ class LiveTestCase(LiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         super(LiveTestCase, cls).tearDownClass()
-        if not cls.USE_SAUCE and cls.driver:
+        if not USE_SAUCE and cls.driver:
             cls.driver.quit()
             sleep(1)
         cls.server_thread.terminate()
@@ -322,7 +321,7 @@ class LiveTestCase(LiveServerTestCase):
         self.contact.set_default_user()
         self.contact.save()
 
-        if self.USE_SAUCE:
+        if USE_SAUCE:
             capabilities = webdriver.DesiredCapabilities.CHROME
             capabilities['version'] = '45'  # If this capability is null, an empty string, or omitted altogether, the latest version of the browser will be used automatically.  # noqa
             capabilities['platform'] = 'Windows 7'
@@ -338,7 +337,7 @@ class LiveTestCase(LiveServerTestCase):
 
     def tearDown(self):
         super(LiveTestCase, self).tearDown()
-        if self.USE_SAUCE and self.driver:
+        if USE_SAUCE and self.driver:
             self.driver.quit()
             self._report_pass_fail()
         sleep(1)
