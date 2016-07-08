@@ -84,6 +84,7 @@ class ProjectTests(ProjectTestCase):
         builder.move_to_element(untrashbtn).perform()
         self.wait_until(lambda driver: untrashbtn.is_displayed())
         untrashbtn.click()
+        self.wait_load()
         p = Project.objects.get(id=self.project.id)
         self.assertFalse(p.trash)
         self.get('projects')
@@ -99,7 +100,6 @@ class ProjectTests(ProjectTestCase):
         with self.assertRaises(Project.DoesNotExist):
             Project.objects.get(id=self.project.id)
 
-    # send to trash, and open trash page to check it is there
     # add milestone
     # add task
     # new status

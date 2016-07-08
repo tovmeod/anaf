@@ -1,12 +1,11 @@
-from __future__ import print_function
-
-from itertools import chain
-
 """
 Core: test suites
 Middleware: test chat
 """
+from __future__ import print_function
+import os
 import datetime
+from itertools import chain
 import pytest
 from django.test import TestCase
 from django.core.urlresolvers import reverse, resolve
@@ -14,7 +13,6 @@ from django.contrib.auth.models import User as DjangoUser
 from django.core.urlresolvers import get_resolver
 from django.utils import six
 from anaf.identities.models import Contact
-from anaf.test import AnafTestCase
 from models import User, Group, Module, Perspective, AccessEntity
 
 
@@ -54,6 +52,7 @@ def _get_withargs_urls():
 
 @pytest.mark.parametrize('url', chain(_get_noargs_urls(), _get_withargs_urls()))
 @pytest.mark.django_db(transaction=True)
+@pytest.mark.skipif(os.environ.get('SELENIUM', ''), reason='Selenium env is set to 1')
 def test_urls_protected(url, client):
     """All URLs should redirect to the login page or 401 Unauthorized with a few exceptions"""
     response = client.get(url)
