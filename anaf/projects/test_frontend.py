@@ -88,7 +88,7 @@ class ProjectTests(ProjectTestCase):
         p = Project.objects.get(id=self.project.id)
         self.assertFalse(p.trash)
         self.get('projects')
-        self.driver.find_element_by_css_selector('a[href="#/projects/delete/{}"]'.format(self.project.id))
+        self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id))
 
     def test_delete_project(self):
         self.driver.find_element_by_css_selector('a[href="#/projects/delete/{}"]'.format(self.project.id)).click()
