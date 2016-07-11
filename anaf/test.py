@@ -54,7 +54,7 @@ import sys
 import errno
 
 
-@unittest.skipIf(os.environ.get('SELENIUM', ''), 'Selenium env is set to 1')
+@pytest.mark.skipif(os.environ.get('SELENIUM', False), reason='Selenium env is set to 1')
 class AnafTestCase(DjangoTestCase):
     """
     Base class for tests, common functionality will be here
@@ -278,7 +278,7 @@ class AttributeObject(object):
         return '<AttributeObject: %r>' % self.kwargs
 
 
-@pytest.mark.skipif(not os.environ.get('SELENIUM', ''), reason="Selenium env is set to 0")
+@pytest.mark.skipif(not os.environ.get('SELENIUM', False), reason='Selenium env is set to 0')
 class LiveTestCase(LiveServerTestCase):
     username = "fronttestuser"
     password = "password"

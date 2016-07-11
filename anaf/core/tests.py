@@ -50,9 +50,9 @@ def _get_withargs_urls():
             yield reverse(name, args=args)
 
 
+@pytest.mark.skipif(os.environ.get('SELENIUM', False), reason='Selenium env is set to 1')
 @pytest.mark.parametrize('url', chain(_get_noargs_urls(), _get_withargs_urls()))
 @pytest.mark.django_db(transaction=True)
-@pytest.mark.skipif(os.environ.get('SELENIUM', ''), reason='Selenium env is set to 1')
 def test_urls_protected(url, client):
     """All URLs should redirect to the login page or 401 Unauthorized with a few exceptions"""
     response = client.get(url)
