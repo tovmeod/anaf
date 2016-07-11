@@ -3,3 +3,4 @@ freezegun==0.3.5
 selenium==2.50.1
 pytest
 pytest-django
+pytest-xdist
