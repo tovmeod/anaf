@@ -545,6 +545,7 @@ def ajax_upload(request, object_id=None, record=None):
             else:
                 object = Object.objects.get(id=object_id)
                 attachment.attached_object = object
+                # TODO: return 404 on object.doesnotexist, also create test
 
             attachment.save()
 
