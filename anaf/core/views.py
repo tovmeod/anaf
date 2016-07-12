@@ -4,6 +4,7 @@ from django.contrib.sessions.models import Session
 from django.contrib.sites.models import RequestSite
 from django.utils.encoding import smart_unicode
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_POST
 from django.views.decorators.cache import cache_control
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpResponseBadRequest
@@ -486,6 +487,7 @@ def save_upload(uploaded, filename, raw_data):
     return False
 
 
+@require_POST
 @mylogin_required
 def ajax_upload(request, object_id=None, record=None):
     try:
@@ -568,8 +570,8 @@ def ajax_upload(request, object_id=None, record=None):
 
 
 @mylogin_required
-def ajax_upload_record(request, record_id=None):
-    record = UpdateRecord.objects.get(id=record_id)
+def ajax_upload_record(request, record_id):
+    record = get_object_or_404(UpdateRecord, id=record_id)
     return ajax_upload(request, None, record)
 
 
