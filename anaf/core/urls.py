@@ -37,9 +37,8 @@ urlpatterns = patterns('anaf.core.views',
                            'ajax_tag_lookup', name='core_ajax_tag_lookup'),
 
                        # Attachments
-                       url(r'^ajax/upload/(?P<object_id>\d+)?/?$',
-                           'ajax_upload', name="ajax_upload"),
-                       url(r'^ajax/upload/record/(?P<record_id>\d+)?/?$',
+                       url(r'^ajax/upload/(?P<object_id>\d+)/$', 'ajax_upload', name="ajax_upload"),
+                       url(r'^ajax/upload/record/(?P<record_id>\d+)/$',
                            'ajax_upload_record', name="ajax_upload_record"),
                        url(r'^attachment/download/(?P<attachment_id>\d+)/?$',
                            'attachment_download', name='core_attachment_download'),
