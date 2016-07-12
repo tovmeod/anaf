@@ -1202,7 +1202,6 @@ class Module(Object):
         return self.title
 
 
-
 class Perspective(Object):
     """Defines a set of modules enabled for a given user"""
     name = models.CharField(max_length=256)
@@ -1239,7 +1238,7 @@ class ModuleSetting(models.Model):
         result = None
         if self.value:
             try:
-                result = pickle.loads(base64.b64decode((self.value)))
+                result = pickle.loads(base64.b64decode(self.value))
             except pickle.PickleError:
                 pass
         return result
@@ -1338,7 +1337,7 @@ class ConfigSetting(models.Model):
         """Unpickle a ModuleSetting value"""
         result = None
         try:
-            result = pickle.loads(base64.b64decode((self.value)))
+            result = pickle.loads(base64.b64decode(self.value))
         except:
             result = self.value
         return result
