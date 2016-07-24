@@ -1,7 +1,7 @@
 """
 Finance module objects
 """
-
+from __future__ import unicode_literals
 from django.utils.six import text_type as unicode
 from django.db import models
 from anaf.core.models import Object
@@ -42,13 +42,14 @@ class Currency(Object):
             return "{0!s}  {1!s}".format(self.code, self.name)
 
     def save(self, **kwargs):
-        try:
-            default_currency = Currency.objects.get(is_default=True)
-            if self.is_default and not self == default_currency:
-                default_currency.is_default = False
-                default_currency.save()
-        except:
-            pass
+        # if I'm trying to set the current as default
+        # and there's already a default currency
+        # and current currency is not already saved as default
+        # then set the previous default currency to not default
+        if self.is_default:
+            if Currency.objects.filter(is_default=True).exists():
+                if not Currency.objects.filter(is_default=True, id=self.id).exists():
+                    Currency.objects.filter(is_default=True).update(is_default=False)
         super(Currency, self).save(**kwargs)
 
 
