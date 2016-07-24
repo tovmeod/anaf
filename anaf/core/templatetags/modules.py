@@ -5,6 +5,7 @@ from anaf.core.conf import settings
 from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_unicode
 from django.utils import translation
+from django.utils.six import text_type as unicode
 from django.template.defaultfilters import date as djangodate, time as djangotime
 from django.db import models
 from anaf.core.rendering import render_to_string
@@ -701,11 +702,13 @@ def currency_format(context, value, currency=None):
 
     # get default currency
     if not currency:
-        currency = Currency.objects.get(is_default=True)
+        try:
+            currency = Currency.objects.get(is_default=True)
+        except Currency.DoesNotExist:
+            return unicode(value)
     if not currency.symbol:
         return unicode(value) + " " + currency.code
-    else:
-        return currency.symbol + unicode(value)
+    return currency.symbol + unicode(value)
 
 register.filter('currency_format', currency_format)
 
