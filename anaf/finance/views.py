@@ -6,6 +6,8 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Sum
+
+from anaf import long_type
 from anaf.core.rendering import render_to_response
 from anaf.core.models import Object, ModuleSetting
 from anaf.core.decorators import mylogin_required, handle_response_format
@@ -30,7 +32,7 @@ def _get_filter_query(model, args):
 
     for arg in args:
         if args[arg] and hasattr(model, arg):
-            kwargs = {str(arg + '__id'): long(args[arg])}
+            kwargs = {str(arg + '__id'): long_type(args[arg])}
             query = query & Q(**kwargs)
 
     if 'datefrom' in args and args['datefrom']:
@@ -826,7 +828,7 @@ def index_receivables(request, response_format='html'):
 @handle_response_format
 @mylogin_required
 def receivable_add(request, response_format='html'):
-    "new receivable form"
+    """new receivable form"""
     if request.POST:
         if 'cancel' not in request.POST:
             receivable = Liability()
@@ -914,11 +916,11 @@ def receivable_delete(request, receivable_id, response_format='html'):
 @handle_response_format
 @mylogin_required
 def income_view(request, response_format='html'):
-    "Income Statement view page"
+    """Income Statement view page"""
 
     try:
         conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
-        my_company = Contact.objects.get(pk=long(conf.value), trash=False)
+        my_company = Contact.objects.get(pk=long_type(conf.value), trash=False)
 
     except Exception:
         my_company = None
@@ -1002,7 +1004,7 @@ def balance_sheet(request, response_format='html'):
 
     try:
         conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
-        my_company = Contact.objects.get(pk=long(conf.value), trash=False)
+        my_company = Contact.objects.get(pk=long_type(conf.value), trash=False)
     except:
         my_company = None
 
@@ -1147,7 +1149,7 @@ def settings_view(request, response_format='html'):
     # default company
     try:
         conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
-        my_company = Contact.objects.get(pk=long(conf.value))
+        my_company = Contact.objects.get(pk=long_type(conf.value))
 
     except Exception:
         my_company = None
@@ -1156,7 +1158,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.finance', 'default_account')[0]
-        default_account = Account.objects.get(pk=long(conf.value))
+        default_account = Account.objects.get(pk=long_type(conf.value))
     except Exception:
         default_account = None
 
