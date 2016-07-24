@@ -31,7 +31,9 @@ def mylogin_required(f):
                     for regexp in urls:
                         if re.match(regexp, request.path):
                             active = module
-                            # todo: this is inefficient, after finding the active module it continues the loop
+                            break
+                    if active:
+                        break
                 except ImportError:
                     pass
                 except AttributeError:
