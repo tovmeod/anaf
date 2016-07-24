@@ -570,11 +570,10 @@ def group_view(request, group_id, response_format='html'):
 #
 @mylogin_required
 @handle_response_format
-def location_index(request, location_id, response_format='html'):
-    "Location index"
+def location_index(request, response_format='html'):
+    """Location index"""
 
-    locations = Object.filter_permitted(request.user.profile,
-                                        Location.objects)
+    locations = Object.filter_permitted(request.user.profile, Location.objects)
 
     context = _get_default_context(request)
     context.update({
