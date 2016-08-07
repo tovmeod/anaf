@@ -284,8 +284,7 @@ class UserForm(forms.ModelForm):
             new_user.set_password(self.cleaned_data['password'])
             models.signals.post_save.disconnect(user_autocreate_handler, sender=django_auth.User)
             new_user.save()
-            if settings.ANAF_SIGNALS_AUTOCREATE_USER:
-                models.signals.post_save.connect(user_autocreate_handler, sender=django_auth.User)
+            models.signals.post_save.connect(user_autocreate_handler, sender=django_auth.User)
             self.instance.user = new_user
             super(UserForm, self).save(*args, **kwargs)
 

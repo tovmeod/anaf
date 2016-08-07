@@ -182,7 +182,7 @@ class Group(AccessEntity):
 class User(AccessEntity):
     """A record about a user registered within the system"""
     name = models.CharField(max_length=256)
-    user = models.OneToOneField(django_auth.User, related_name='profile')
+    user = models.OneToOneField(django_auth.User, related_name='profile', on_delete=models.CASCADE)
     default_group = models.ForeignKey(Group, related_name='default_user_set', blank=True, null=True)
     other_groups = models.ManyToManyField(Group, blank=True, null=True)
     disabled = models.BooleanField(default=False)
@@ -245,7 +245,8 @@ class User(AccessEntity):
         return password
 
     def get_groups(self):
-        """Returns the list of all groups the user belongs to"""
+        """Returns the list of all groups the user belongs to
+        :rtype: list of Group"""
         groups = list(self.other_groups.all())
         groups.append(self.default_group)
 
@@ -360,16 +361,10 @@ class User(AccessEntity):
 def user_autocreate_handler(sender, instance, created, **kwargs):
     """When a Django User is created, automatically create a anaf User"""
     if created:
-        try:
-            profile = instance.profile
-        except:
-            profile = User(user=instance)
-            profile.save()
+        User.objects.get_or_create(user=instance)
 
-# Autocreate a anaf user when Django user is created
-if settings.ANAF_SIGNALS_AUTOCREATE_USER:
-    models.signals.post_save.connect(
-        user_autocreate_handler, sender=django_auth.User)
+# Create a anaf user when Django user is created
+models.signals.post_save.connect(user_autocreate_handler, sender=django_auth.User)
 
 
 class Invitation(models.Model):
