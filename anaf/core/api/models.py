@@ -83,7 +83,7 @@ class Token(models.Model):
     secret = models.CharField(max_length=SECRET_SIZE)
     verifier = models.CharField(max_length=VERIFIER_SIZE)
     token_type = models.IntegerField(choices=TOKEN_TYPES)
-    timestamp = models.IntegerField(default=long(time.time()))
+    timestamp = models.IntegerField(default=time.time)
     is_approved = models.BooleanField(default=False)
 
     user = models.ForeignKey(
