@@ -492,80 +492,79 @@ def save_upload(uploaded, filename, raw_data):
 def ajax_upload(request, object_id=None, record=None):
     try:
         object = None
-        if request.method == "POST":
-            if request.is_ajax():
-                # the file is stored raw in the request
-                upload = request
-                is_raw = True
-                # AJAX Upload will pass the filename in the querystring if it
-                # is the "advanced" ajax upload
-                try:
-                    filename = request.GET['qqfile']
-                    content_type = "application/octet-stream"
-                except KeyError:
-                    return HttpResponseBadRequest("AJAX request not valid")
-            # not an ajax upload, so it was the "basic" iframe version with
-            # submission via form
+        if request.is_ajax():
+            # the file is stored raw in the request
+            upload = request
+            is_raw = True
+            # AJAX Upload will pass the filename in the querystring if it
+            # is the "advanced" ajax upload
+            try:
+                filename = request.GET['qqfile']
+                content_type = "application/octet-stream"
+            except KeyError:
+                return HttpResponseBadRequest("AJAX request not valid")
+        # not an ajax upload, so it was the "basic" iframe version with
+        # submission via form
+        else:
+            is_raw = False
+            if len(request.FILES) == 1:
+                # FILES is a dictionary in Django but Ajax Upload gives the uploaded file an
+                # ID based on a random number, so it cannot be guessed here in the code.
+                # Rather than editing Ajax Upload to pass the ID in the querystring,
+                # observer that each upload is a separate request,
+                # so FILES should only have one entry.
+                # Thus, we can just grab the first (and only) value in the
+                # dict.
+                upload = request.FILES.values()[0]
+                content_type = upload.content_type
             else:
-                is_raw = False
-                if len(request.FILES) == 1:
-                    # FILES is a dictionary in Django but Ajax Upload gives the uploaded file an
-                    # ID based on a random number, so it cannot be guessed here in the code.
-                    # Rather than editing Ajax Upload to pass the ID in the querystring,
-                    # observer that each upload is a separate request,
-                    # so FILES should only have one entry.
-                    # Thus, we can just grab the first (and only) value in the
-                    # dict.
-                    upload = request.FILES.values()[0]
-                    content_type = upload.content_type
-                else:
-                    raise Http404("Bad Upload")
-                filename = upload.name
+                raise Http404("Bad Upload")
+            filename = upload.name
 
-            random.seed()
-            filehash = str(random.getrandbits(128))
+        random.seed()
+        filehash = str(random.getrandbits(128))
 
-            savefile = join(
-                getattr(settings, 'MEDIA_ROOT'), 'attachments', filehash)
+        savefile = join(
+            getattr(settings, 'MEDIA_ROOT'), 'attachments', filehash)
 
-            # save the file
-            success = save_upload(upload, savefile, is_raw)
+        # save the file
+        success = save_upload(upload, savefile, is_raw)
 
-            attachment = Attachment(filename=filename,
-                                    content_type=content_type,
-                                    uploaded_by=request.user.profile,
-                                    attached_file=filehash)
+        attachment = Attachment(filename=filename,
+                                content_type=content_type,
+                                uploaded_by=request.user.profile,
+                                attached_file=filehash)
 
-            if record:
-                attachment.attached_record = record
-                about = record.about.all()
-                if about.count():
-                    attachment.attached_object = about[0]
-                    object = attachment.attached_object
-            else:
-                object = Object.objects.get(id=object_id)
-                attachment.attached_object = object
-                # TODO: return 404 on object.doesnotexist, also create test
+        if record:
+            attachment.attached_record = record
+            about = record.about.all()
+            if about.count():
+                attachment.attached_object = about[0]
+                object = attachment.attached_object
+        else:
+            object = Object.objects.get(id=object_id)
+            attachment.attached_object = object
+            # TODO: return 404 on object.doesnotexist, also create test
 
-            attachment.save()
+        attachment.save()
 
-            if object:
-                object.set_last_updated()
+        if object:
+            object.set_last_updated()
 
-            # TODO: smart markup and return as string, and object id, different
-            # classnames,id or attribute for update records and objects
+        # TODO: smart markup and return as string, and object id, different
+        # classnames,id or attribute for update records and objects
 
-            if success:
-                ret_json = {'success': success,
-                            'object_id': object.id if object else None,
-                            'update_id': record.id if record else None}
+        if success:
+            ret_json = {'success': success,
+                        'object_id': object.id if object else None,
+                        'update_id': record.id if record else None}
 
-            else:
-                ret_json = {'success': False,
-                            'object_id': None,
-                            'update_id': None}
+        else:
+            ret_json = {'success': False,
+                        'object_id': None,
+                        'update_id': None}
 
-            return HttpResponse(json.dumps(ret_json))
+        return HttpResponse(json.dumps(ret_json))
     except:
         pass
 
