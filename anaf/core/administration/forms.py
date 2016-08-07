@@ -4,13 +4,14 @@ Administration module forms
 from django.db import models
 from django import forms
 from django.forms import ModelChoiceField
+from django.utils.six import text_type as unicode
+from anaf import long_type
 from anaf.core.conf import settings
 from django.db.models import Q
 from django.core.files.storage import default_storage
 import django.contrib.auth.models as django_auth
 from django.utils.translation import ugettext as _
 from anaf.core.decorators import preprocess_form
-from anaf.identities.forms import ContactForm
 from anaf.core.models import User, Group, Perspective, ModuleSetting, Page, PageFolder, user_autocreate_handler
 import hashlib
 import random
@@ -63,7 +64,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.core', 'default_perspective')[0]
-            default_perspective = Perspective.objects.get(pk=long(conf.value))
+            default_perspective = Perspective.objects.get(pk=long_type(conf.value))
             self.fields['default_perspective'].initial = default_perspective.id
         except:
             pass
@@ -134,19 +135,19 @@ class SettingsForm(forms.Form):
                 return filepath
 
     def _handle_uploaded_file(self, field_name):
-        "Process an uploaded file"
+        """Process an uploaded file"""
         try:
-            file = self.files[field_name]
-            filepath = self._get_upload_name(file.name)
+            file_ = self.files[field_name]
+            filepath = self._get_upload_name(file_.name)
         except KeyError:
             return ''
         with open(settings.MEDIA_ROOT + filepath, 'wb+') as destination:
-            for chunk in file.chunks():
+            for chunk in file_.chunks():
                 destination.write(chunk)
         return filepath
 
     def save(self):
-        "Form processor"
+        """Form processor"""
         try:
             ModuleSetting.set_for_module('default_perspective',
                                          self.cleaned_data[
@@ -415,45 +416,3 @@ class FilterForm(forms.ModelForm):
         "Filter"
         model = Perspective
         fields = ('name', 'modules')
-
-
-class ContactSetupForm(ContactForm):
-
-    """ ContactSetupForm """
-
-    name = forms.CharField(
-        max_length=256, widget=forms.TextInput(attrs={'size': '50'}))
-    instance = None
-    files = {}
-
-    def __init__(self, contact_type, instance=None, *args, **kwargs):
-        """Populates form with fields from given ContactType"""
-
-        if instance:
-            self.instance = instance
-            values = instance.contactvalue_set.all()
-
-        super(ContactSetupForm, self).__init__(*args, **kwargs)
-
-        self.fields['name'].label = _('Name')
-
-        if 'files' in kwargs:
-            self.files = kwargs['files']
-
-        for field in contact_type.fields.all():
-            if self.instance:
-                initial_field_name = self._get_free_field_name(field)
-                self.fields[initial_field_name] = self._get_form_field(field)
-                for value in values:
-                    if value.field == field:
-                        field_name = self._get_free_field_name(field)
-                        self.fields[field_name] = self._get_form_field(
-                            field, value)
-                        if initial_field_name in self.fields:
-                            del self.fields[initial_field_name]
-            else:
-                field_name = self._get_free_field_name(field)
-                self.fields[field_name] = self._get_form_field(field)
-
-        if self.instance:
-            self.fields['name'].initial = self.instance.name

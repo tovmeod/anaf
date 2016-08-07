@@ -8,17 +8,19 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
 from django.utils.translation import ugettext as _
+
+from anaf import long_type
 from anaf.core.conf import settings
 from django.db.models import Q
 from anaf.core.rendering import render_to_response
 from anaf.core.models import User, Group, Invitation, Perspective, Module, ModuleSetting, Page, PageFolder
 from forms import PerspectiveForm, UserForm, PasswordForm, \
-    GroupForm, PageForm, PageFolderForm, FilterForm, SettingsForm, PERMISSION_CHOICES, ContactSetupForm
+    GroupForm, PageForm, PageFolderForm, FilterForm, SettingsForm, PERMISSION_CHOICES
 from anaf.core.mail import EmailInvitation
 from anaf.core.decorators import module_admin_required, mylogin_required, handle_response_format
 
-from anaf.identities.models import ContactType
 import re
+from django.utils.six import text_type as unicode
 
 
 def _get_filter_query(args):
@@ -27,7 +29,7 @@ def _get_filter_query(args):
 
     for arg in args:
         if hasattr(Perspective, arg) and args[arg]:
-            kwargs = {unicode(arg + '__id'): long(args[arg])}
+            kwargs = {unicode(arg + '__id'): long_type(args[arg])}
             query = query & Q(**kwargs)
 
     return query
@@ -263,59 +265,6 @@ def user_edit(request, user_id, response_format='html'):
     return render_to_response('core/administration/user_edit',
                               {'profile': profile,
                                'form': form},
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
-@module_admin_required()
-def contact_setup(request, response_format='html'):
-
-    profile = request.user.profile
-    contact = profile.get_contact()
-
-    def get_contact_type(description):
-        c_type = None
-        slug = description.lower()
-        name = slug.capitalize()
-        try:
-            c_type = ContactType.objects.get(Q(name=name) | Q(slug=slug))
-        except:
-            contact_types = ContactType.objects.all()
-            if contact_types.count():
-                c_type = contact_types[0]
-        return c_type
-
-    company_type = get_contact_type('company')
-
-    company = None
-    if contact:
-        person_type = contact.contact_type
-        if contact.parent and contact.parent.contact_type == company_type:
-            company = contact.parent
-    else:
-        person_type = get_contact_type('person')
-
-    if person_type and request.POST:
-        contact_form = ContactSetupForm(
-            person_type, instance=contact, data=request.POST, files=request.FILES, prefix='person')
-        company_form = ContactSetupForm(
-            company_type, instance=company, data=request.POST, files=request.FILES, prefix='company')
-        if contact_form.is_valid() and company_form.is_valid():
-            company = company_form.save(request, company_type)
-            contact_form.cleaned_data['parent'] = company
-            contact_form.cleaned_data['related_user'] = profile
-            contact_form.save(request, person_type)
-            return HttpResponseRedirect(reverse('identities_contact_me'))
-    else:
-        contact_form = ContactSetupForm(
-            person_type, instance=contact, prefix='person') if person_type else None
-        company_form = ContactSetupForm(
-            company_type, instance=company, prefix='company') if company_type else None
-
-    return render_to_response('core/administration/contact_settings',
-                              {'contact_form': contact_form,
-                               'company_form': company_form},
                               context_instance=RequestContext(request), response_format=response_format)
 
 

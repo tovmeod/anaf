@@ -42,9 +42,6 @@ urlpatterns = patterns('anaf.core.administration.views',
                        url(r'^user/invite(\.(?P<response_format>\w+))?/?$',
                            'user_invite', name='core_admin_user_invite'),
 
-                       url(r'^contact/setup(\.(?P<response_format>\w+))?/?$',
-                           'contact_setup', name='core_admin_contact_setup'),
-
                        # Groups
                        url(r'^groups(\.(?P<response_format>\w+))?/?$',
                            'index_groups', name='core_admin_index_groups'),
