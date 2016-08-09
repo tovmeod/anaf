@@ -17,7 +17,8 @@ from anaf.sales.forms import SettingsForm, OrderForm, ProductForm, SaleStatusFor
 from anaf.core.rendering import render_to_response
 from anaf.core.models import Object, ModuleSetting, UpdateRecord
 from anaf.core.views import user_denied
-from anaf.core.decorators import mylogin_required, handle_response_format, module_admin_required
+from anaf.core.decorators import mylogin_required, handle_response_format, module_admin_required, \
+    require_response_format
 from anaf.identities.models import Contact
 from anaf.finance.models import Currency
 from anaf.finance.helpers import convert
@@ -1574,8 +1575,9 @@ def source_delete(request, source_id, response_format='html'):
 # AJAX handlers
 
 
+@require_response_format(['json'])
 @mylogin_required
-def ajax_subscription_lookup(request, response_format='html'):
+def ajax_subscription_lookup(request, response_format='json'):
     """Returns a list of matching tasks"""
 
     subscriptions = []

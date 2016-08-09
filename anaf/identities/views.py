@@ -12,7 +12,7 @@ from anaf.core.rendering import render_to_response
 from anaf.core.forms import LocationForm
 from anaf.core.models import User, Group, Object, Location, AccessEntity
 from anaf.core.views import user_denied
-from anaf.core.decorators import mylogin_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format, require_response_format
 from csvapi import ProcessContacts
 from models import Contact, ContactType, ContactField
 from forms import ContactForm, FilterForm, ContactTypeForm, ContactFieldForm, \
@@ -568,20 +568,21 @@ def group_view(request, group_id, response_format='html'):
 #
 # Locations
 #
-@mylogin_required
-@handle_response_format
-def location_index(request, response_format='html'):
-    """Location index"""
-
-    locations = Object.filter_permitted(request.user.profile, Location.objects)
-
-    context = _get_default_context(request)
-    context.update({
-        'locations': locations,
-    })
-
-    return render_to_response('identities/location_index', context,
-                              context_instance=RequestContext(request), response_format=response_format)
+# todo remove view and url entry or create a template for this view
+# @mylogin_required
+# @handle_response_format
+# def location_index(request, response_format='html'):
+#     """Location index"""
+#
+#     locations = Object.filter_permitted(request.user.profile, Location.objects)
+#
+#     context = _get_default_context(request)
+#     context.update({
+#         'locations': locations,
+#     })
+#
+#     return render_to_response('identities/location_index', context,
+#                               context_instance=RequestContext(request), response_format=response_format)
 
 
 @mylogin_required
@@ -725,9 +726,10 @@ def settings_view(request, response_format='html'):
 #
 
 
+@require_response_format(['json'])
 @mylogin_required
-def ajax_access_lookup(request, response_format='html'):
-    "Returns a list of matching users"
+def ajax_access_lookup(request, response_format='json'):
+    """Returns a list of matching users"""
 
     entities = []
     if request.GET and 'term' in request.GET:
@@ -756,9 +758,10 @@ def ajax_user_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
+@require_response_format(['json'])
 @mylogin_required
-def ajax_contact_lookup(request, response_format='html'):
-    "Returns a list of matching contacts"
+def ajax_contact_lookup(request, response_format='json'):
+    """Returns a list of matching contacts"""
 
     contacts = []
     if request.GET and 'term' in request.GET:
@@ -772,9 +775,10 @@ def ajax_contact_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
+@require_response_format(['json'])
 @mylogin_required
-def ajax_location_lookup(request, response_format='html'):
-    "Returns a list of matching locations"
+def ajax_location_lookup(request, response_format='json'):
+    """Returns a list of matching locations"""
 
     locations = []
     if request.GET and 'term' in request.GET:

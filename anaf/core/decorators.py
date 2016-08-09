@@ -2,15 +2,18 @@
 Core decorators for views
 """
 
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.core.urlresolvers import reverse, NoReverseMatch
-from conf import settings
-from django.utils.html import escape
-from jinja2.loaders import TemplateNotFound
-from models import Module
-from rss import verify_secret_key
 import json
 import re
+from functools import wraps
+from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.core.urlresolvers import reverse, NoReverseMatch
+from django.http.response import HttpResponseNotFound
+from django.utils.decorators import available_attrs
+from django.utils.html import escape
+from jinja2.loaders import TemplateNotFound
+from conf import settings
+from models import Module
+from rss import verify_secret_key
 
 
 def mylogin_required(f):
@@ -186,3 +189,31 @@ def add_required_label_tag(original_function):
 def preprocess_form():
     "Add Asterisk To Field Labels"
     BoundField.label_tag = add_required_label_tag(BoundField.label_tag)
+
+
+def require_response_format(format_list):
+    """
+    Decorator to make a view only accept particular response formats.  Usage::
+
+        @require_response_format(["html", "json"])
+        def my_view(request, response_format):
+            # I can assume now that only html or json response_format
+            ...
+
+    Note that response formats should be in lowercase.
+    """
+
+    def decorator(func):
+        @wraps(func, assigned=available_attrs(func))
+        def inner(request, *args, **kwargs):
+            response_format = kwargs.get('response_format', None)
+            if not response_format:
+                # If format is None or empty then it will be whatever the view defined as default
+                del kwargs['response_format']
+            elif response_format not in format_list:
+                return HttpResponseNotFound('View not available in the requested format. Available in %s' % format_list)
+            return func(request, *args, **kwargs)
+
+        return inner
+
+    return decorator

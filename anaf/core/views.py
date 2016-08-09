@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse, HttpRespons
 from django.core.urlresolvers import resolve, reverse, Resolver404
 from django.shortcuts import get_object_or_404
 from conf import settings
-from decorators import mylogin_required, handle_response_format
+from decorators import mylogin_required, handle_response_format, require_response_format
 from forms import LoginForm, PasswordResetForm, InvitationForm, SqlSettingsForm
 from models import Object, Module, ModuleSetting, Perspective, User, Attachment, Invitation, Tag, \
     UpdateRecord
@@ -354,9 +354,10 @@ def ajax_object_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
+@require_response_format(['json'])
 @mylogin_required
-def ajax_tag_lookup(request, response_format='html'):
-    "Returns a list of matching tags"
+def ajax_tag_lookup(request, response_format='json'):
+    """Returns a list of matching tags"""
 
     tags = []
     if request.GET and 'term' in request.GET:

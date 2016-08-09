@@ -9,7 +9,7 @@ from django.db.models import Q
 from anaf import long_type
 from anaf.core.conf import settings
 from anaf.core.rendering import render_to_response, render_string_template, render_to_string
-from anaf.core.decorators import mylogin_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format, require_response_format
 from anaf.core.views import user_denied
 from anaf.core.models import Object, ModuleSetting
 from anaf.services.models import Ticket, TicketRecord, TicketStatus, TicketQueue, Service, \
@@ -1163,9 +1163,10 @@ def widget_index_assigned(request, response_format='html'):
 #
 # AJAX lookups
 #
+@require_response_format(['json'])
 @mylogin_required
-def ajax_ticket_lookup(request, response_format='html'):
-    "Returns a list of matching tickets"
+def ajax_ticket_lookup(request, response_format='json'):
+    """Returns a list of matching tickets"""
 
     tickets = []
     if request.GET and 'term' in request.GET:
@@ -1178,9 +1179,10 @@ def ajax_ticket_lookup(request, response_format='html'):
                               response_format=response_format)
 
 
+@require_response_format(['json'])
 @mylogin_required
-def ajax_agent_lookup(request, response_format='html'):
-    "Returns a list of matching agents"
+def ajax_agent_lookup(request, response_format='json'):
+    """Returns a list of matching agents"""
 
     agents = []
     if request.GET and 'term' in request.GET:

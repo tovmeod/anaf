@@ -7,7 +7,7 @@ from anaf import long_type
 from anaf.core.models import Object, ModuleSetting, UpdateRecord
 from anaf.core.views import user_denied
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import mylogin_required, handle_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format, require_response_format
 from anaf.projects.models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 from anaf.projects.forms import ProjectForm, MilestoneForm, TaskForm, FilterForm, TaskRecordForm, \
     MassActionForm, TaskTimeSlotForm, TaskStatusForm, SettingsForm
@@ -1190,8 +1190,9 @@ def settings_edit(request, response_format='html'):
 #
 
 
+@require_response_format(['json'])
 @mylogin_required
-def ajax_task_lookup(request, response_format='html'):
+def ajax_task_lookup(request, response_format='json'):
     """Returns a list of matching tasks"""
 
     if request.GET and 'term' in request.GET:
