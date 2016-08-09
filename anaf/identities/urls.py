@@ -73,8 +73,8 @@ urlpatterns = patterns('anaf.identities.views',
                            'settings_view', name='identities_settings_view'),
 
                        # Locations
-                       url(r'^location/index(\.(?P<response_format>\w+))?/?$',
-                           'location_index', name='identities_location_index'),
+                       # url(r'^location/index(\.(?P<response_format>\w+))?/?$',
+                       #     'location_index', name='identities_location_index'),
                        url(r'^location/view/(?P<location_id>\d+)(\.(?P<response_format>\w+))?/?$',
                            'location_view', name='identities_location_view'),
                        url(r'^location/edit/(?P<location_id>\d+)(\.(?P<response_format>\w+))?/?$',
