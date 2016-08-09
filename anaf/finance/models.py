@@ -46,10 +46,9 @@ class Currency(Object):
         # and there's already a default currency
         # and current currency is not already saved as default
         # then set the previous default currency to not default
-        if self.is_default:
-            if Currency.objects.filter(is_default=True).exists():
-                if not Currency.objects.filter(is_default=True, id=self.id).exists():
-                    Currency.objects.filter(is_default=True).update(is_default=False)
+        if self.is_default and Currency.objects.filter(is_default=True).exists() and \
+                not Currency.objects.filter(is_default=True, id=self.id).exists():
+            Currency.objects.filter(is_default=True).update(is_default=False)
         super(Currency, self).save(**kwargs)
 
 
