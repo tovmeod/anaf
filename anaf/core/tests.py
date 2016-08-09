@@ -81,7 +81,7 @@ def userpsw():
     username = 'test_username'
     password = 'password'
     Group.objects.get_or_create(name='test')
-    duser, created = DjangoUser.objects.get_or_create(username=username)
+    duser = DjangoUser.objects.get_or_create(username=username)[0]
     duser.set_password(password)
     duser.save()
 
@@ -97,7 +97,7 @@ def authentication_headers():
     username = "api_test"
     password = "api_password"
     headers = {"CONTENT_TYPE": "application/json", "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
-    user, created = DjangoUser.objects.get_or_create(username=username)
+    user = DjangoUser.objects.get_or_create(username=username)[0]
     user.set_password(password)
     user.save()
     return headers
