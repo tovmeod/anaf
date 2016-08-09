@@ -66,12 +66,75 @@ def test_urls_protected(url, client):
         assert response.status_code == 404
     elif url in ('/captcha/image/key@2/', '/captcha/image/key/'):
         assert response.status_code == 410
+    elif url == '/accounts/ajax/upload/0/':
+        assert response.status_code == 405
     else:
         assert response.status_code in (302, 401)
         if response.status_code == 302:
             assert response.url in ('http://testserver/accounts/login',
                                     'http://testserver/m/accounts/login',
                                     'http://testserver/accounts/login/?next=/api/auth/authorize_request_token')
+
+
+@pytest.fixture
+def userpsw():
+    username = 'test_username'
+    password = 'password'
+    Group.objects.get_or_create(name='test')
+    duser, created = DjangoUser.objects.get_or_create(username=username)
+    duser.set_password(password)
+    duser.save()
+
+    perspective = Perspective(name='test')
+    perspective.set_default_user()
+    perspective.save()
+
+    return username, password
+
+
+@pytest.fixture
+def authentication_headers():
+    username = "api_test"
+    password = "api_password"
+    headers = {"CONTENT_TYPE": "application/json", "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
+    user, created = DjangoUser.objects.get_or_create(username=username)
+    user.set_password(password)
+    user.save()
+    return headers
+
+
+@pytest.mark.skipif(os.environ.get('SELENIUM', False), reason='Selenium env is set to 1')
+@pytest.mark.parametrize('url', _get_noargs_urls())
+@pytest.mark.django_db(transaction=True)
+def test_no_args_urls_loggedin(url, client, userpsw, authentication_headers):
+    """All URLs without arguments should return 200 if logged in"""
+    # todo this is very ugly but it is a workaround because pytest is not running my data migration,
+    # this is probably a bug in pytest-django, remove once it is fixed
+    if url in ('/finance/liability/add', '/finance/receivable/add', '/sales/order/add', '/sales/opportunity/add'):
+        import importlib
+        my_module = importlib.import_module('anaf.finance.migrations.0002_initial_data')
+        from anaf.finance.models import Currency
+        my_module._add_data(Currency)
+    if url.startswith('/api/'):
+        # piston can only do http basic auth
+        response = client.get(path=url, **authentication_headers)
+    else:
+        user, psw = userpsw
+        client.login(username=user, password=psw)
+        response = client.get(url)
+
+    if url in ('/api/auth/get_access_token', '/api/auth/get_request_token'):
+        assert response.status_code == 401
+    elif url in ('/accounts/logout', '/accounts/login', '/accounts/invitation/', '/accounts/setup',
+                 '/dashboard/widget/arrange/', '/api/auth/authorize_request_token'):
+        assert response.status_code == 302
+    elif response.status_code == 302:
+        print('%s redirects to %s' % (url, response.url))
+    elif url in ('/captcha/refresh/', '/dajaxice/'):
+        # captcha lib incorrectly returns 404 not found
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 200
 
 
 class CoreModelsTest(TestCase):
