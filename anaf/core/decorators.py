@@ -206,7 +206,7 @@ def require_response_format(format_list):
     def decorator(func):
         @wraps(func, assigned=available_attrs(func))
         def inner(request, *args, **kwargs):
-            response_format = kwargs.get('response_format', None)
+            response_format = kwargs.get('response_format')
             if not response_format:
                 # If format is None or empty then it will be whatever the view defined as default
                 del kwargs['response_format']
