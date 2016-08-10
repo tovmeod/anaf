@@ -23,7 +23,7 @@ class ContactFieldHandler(ObjectHandler):
         return ('api_identities_fields', [object_id])
 
     def flatten_dict(self, request):
-        return {'data': super(ObjectHandler, self).flatten_dict(request.data)}
+        return {'data': super(ContactFieldHandler, self).flatten_dict(request.data)}
 
     def check_create_permission(self, request, mode):
         return request.user.profile.is_admin('anaf.identities')
