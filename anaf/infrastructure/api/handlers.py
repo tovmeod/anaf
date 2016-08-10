@@ -32,7 +32,7 @@ class ItemFieldHandler(InfrastructureCommonHandler):
         return ('api_infrastructure_fields', [object_id])
 
     def flatten_dict(self, request):
-        return {'data': super(ItemFieldHandler, self).flatten_dict(request.data)}
+        return {'data': super(ObjectHandler, self).flatten_dict(request.data)}
 
 
 class ItemTypeHandler(InfrastructureCommonHandler):
