@@ -70,31 +70,31 @@ class ProjectsAPITest(AnafTestCase):
         with freeze_time(datetime(year=2016, month=1, day=28, hour=1, minute=10)):
             self.milestone.save()
 
-        with freeze_time(datetime(year=2016, month=01, day=28, hour=3, minute=06)):
+        with freeze_time(datetime(year=2016, month=1, day=28, hour=3, minute=6)):
             self.task = Task(name='api_test_task', project=self.project, status=self.taskstatus, priority=3)
         self.task.set_default_user()
-        with freeze_time(datetime(year=2016, month=01, day=28, hour=3, minute=9)):
+        with freeze_time(datetime(year=2016, month=1, day=28, hour=3, minute=9)):
             self.task.save()
 
-        with freeze_time(datetime(year=2016, month=01, day=29, hour=13, minute=51)):
+        with freeze_time(datetime(year=2016, month=1, day=29, hour=13, minute=51)):
             self.time_slot = TaskTimeSlot(task=self.task, details='api_test_tasktimeslot',
-                                          time_from=datetime(year=2016, month=01, day=29, hour=13, minute=52),
+                                          time_from=datetime(year=2016, month=1, day=29, hour=13, minute=52),
                                           user=self.user.profile)
         self.time_slot.set_default_user()
-        with freeze_time(datetime(year=2016, month=01, day=29, hour=13, minute=53)):
+        with freeze_time(datetime(year=2016, month=1, day=29, hour=13, minute=53)):
             self.time_slot.save()
 
-        with freeze_time(datetime(year=2016, month=01, day=25, hour=19, minute=58)):
+        with freeze_time(datetime(year=2016, month=1, day=25, hour=19, minute=58)):
             self.parent_project = Project(name='api_test_project_parent')
         self.parent_project.set_default_user()
-        with freeze_time(datetime(year=2016, month=01, day=25, hour=21, minute=59)):
+        with freeze_time(datetime(year=2016, month=1, day=25, hour=21, minute=59)):
             self.parent_project.save()
 
-        with freeze_time(datetime(year=2016, month=01, day=28, hour=3, minute=7)):
+        with freeze_time(datetime(year=2016, month=1, day=28, hour=3, minute=7)):
             self.parent_task = Task(name='api_test_parent_task', project=self.project,
                                     status=self.taskstatus, priority=3)
         self.parent_task.set_default_user()
-        with freeze_time(datetime(year=2016, month=01, day=28, hour=3, minute=8)):
+        with freeze_time(datetime(year=2016, month=1, day=28, hour=3, minute=8)):
             self.parent_task.save()
 
     def test_unauthenticated_access_project(self):
