@@ -13,6 +13,9 @@ env:
 services:
   - memcached
 
+code_climate:
+        repo_token: 643c9e479557f45d4eb29e84fce0f0ed845a224f67340a07bc529803ea33e92b
+
 matrix:
   include:
     - python: 2.7
