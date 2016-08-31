@@ -1,0 +1,6 @@
+exclude_paths:
+- spec/**/*
+- "*.min.js"
+- "*/tinymce/*"
+- "*/jquery-ui-*/*"
+- "*/colorbox/*"
