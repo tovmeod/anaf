@@ -1,6 +1,30 @@
+engines:
+  csslint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+      - python
+    exclude_paths:
+    - "*/jquery-ui-*/*"
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  phpmd:
+    enabled: true
+  radon:
+    enabled: true
+ratings:
+  paths:
+  - "**.css"
+  - "**.inc"
+  - "**.js"
 exclude_paths:
-- spec/**/*
-- "*.min.js"
-- "*/tinymce/*"
-- "*/jquery-ui-*/*"
-- "*/colorbox/*"
+- *.js
+#- "*.min.js"
+#- "*/tinymce/*"
+#- "*/jquery-ui-*/*"
+#- "*/colorbox/*"
