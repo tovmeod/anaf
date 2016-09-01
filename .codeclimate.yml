@@ -23,4 +23,8 @@ ratings:
   - "**.inc"
   - "**.js"
 exclude_paths:
-- *.js
+- "*.js"
+#- "*.min.js"
+#- "*/tinymce/*"
+#- "*/jquery-ui-*/*"
+#- "*/colorbox/*"
