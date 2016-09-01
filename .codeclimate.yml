@@ -13,8 +13,6 @@ engines:
     enabled: true
   fixme:
     enabled: true
-  phpmd:
-    enabled: true
   radon:
     enabled: true
 ratings:
@@ -24,6 +22,7 @@ ratings:
   - "**.js"
 exclude_paths:
 - "*.js"
+- "*/migrations/"
 #- "*.min.js"
 #- "*/tinymce/*"
 #- "*/jquery-ui-*/*"
