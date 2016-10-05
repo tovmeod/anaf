@@ -2,13 +2,17 @@
 Rendering routines
 """
 
+from django.utils.six import text_type as unicode
 from django.http import HttpResponse
 from django.contrib.sites.models import RequestSite
 from django.utils.translation import ugettext as _
 from django.forms import BaseForm
 from django.contrib import messages
+from django.template import RequestContext
 from jinja2 import Template
 from coffin.template import loader
+from rest_framework.renderers import TemplateHTMLRenderer
+
 from conf import settings
 from models import UpdateRecord
 from ajax.converter import preprocess_context as preprocess_context_ajax, convert_to_ajax
@@ -41,31 +45,32 @@ def _preprocess_context_html(context):
 
 
 def render_to_string(template_name, context=None, context_instance=None, response_format='html'):
-    "Picks up the appropriate template to render to string"
+    """Picks up the appropriate template to render to string"""
     if context is None:
         context = {}
+    from django.utils.six import string_types
+    if isinstance(template_name, string_types):
+        template_name = (template_name,)
+
     if not response_format or 'pdf' in response_format or response_format not in settings.ANAF_RESPONSE_FORMATS:
         response_format = 'html'
 
-    if not ("." + response_format) in template_name:
-        template_name += "." + response_format
-
-    template_name = response_format + "/" + template_name
+    template_name = map(lambda name: name if "." + response_format in name else name + "." + response_format ,
+                        template_name)
+    template_name = map(lambda name: response_format + "/" + name, template_name)
 
     context['response_format'] = response_format
     if context_instance:
-        context['site_domain'] = RequestSite(
-            context_instance['request']).domain
+        context['site_domain'] = RequestSite(context_instance['request']).domain
 
     context = _preprocess_context_html(context)
 
-    rendered_string = loader.render_to_string(
-        template_name, context, context_instance)
+    rendered_string = loader.render_to_string(template_name, context, context_instance)
     return rendered_string
 
 
 def render_to_ajax(template_name, context=None, context_instance=None):
-    "Render request into JSON object to be handled by AJAX on the server-side"
+    """Render request into JSON object to be handled by AJAX on the server-side"""
     if context is None:
         context = {}
     response_format = 'html'
@@ -112,8 +117,7 @@ def render_to_ajax(template_name, context=None, context_instance=None):
             pass
     context['notifications'] = json.dumps(notifications)
 
-    rendered_string = render_to_string(
-        'ajax_base', context, context_instance, response_format='json')
+    rendered_string = render_to_string('ajax_base', context, context_instance, response_format='json')
 
     return rendered_string
 
@@ -239,3 +243,42 @@ def get_template_source(template_name, response_format='html'):
     f = open(t.filename, 'r')
 
     return f.read()
+
+
+class JinjaRenderer(TemplateHTMLRenderer):
+    def render(self, data, accepted_media_type=None, renderer_context=None):
+        """
+        Renders data to HTML, using Jinja template rendering.
+
+        The template name is determined by (in order of preference):
+
+        1. An explicit .template_name set on the response.
+        2. An explicit .template_name set on this class.
+        3. The return result of calling view.get_template_names().
+        """
+        renderer_context = renderer_context or {}
+        view = renderer_context['view']
+        request = renderer_context['request']
+        response = renderer_context['response']
+
+        if response.exception:
+            if response.status_code == 401 and not request.user.is_authenticated():
+                template_names = 'core/user_login.html'
+            else:
+                template_names = [name % {'status_code': response.status_code} for name in self.exception_template_names]
+        else:
+            template_names = self.get_template_names(response, view)
+
+        context = self.resolve_context(data, request, response)
+        return self._render(template_names, context, RequestContext(request), 'html')
+
+    def _render(self, template_name, context, context_instance, response_format):
+        return render_to_string(template_name, context, context_instance, response_format)
+
+
+class JinjaAjaxRenderer(JinjaRenderer):
+    media_type = 'text/plain'
+    format = 'ajax'
+
+    def _render(self, template_name, context, context_instance, response_format):
+        return render_to_ajax(template_name, context, context_instance)
