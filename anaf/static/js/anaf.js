@@ -239,16 +239,24 @@ var anaf = {
   },
   
   'prepare_url': function(url) {
-        if ((url.indexOf("!") != -1) || (url.indexOf("?") != -1)) {
-            url = url.replace("!", "?");
-            if (url.indexOf(".ajax") == -1) {
-                url = url.replace("?", ".ajax?");
-            }
-        }
-        if (url.indexOf(".ajax") == -1) {
-            url += ".ajax?";
-        }
-    return url;
+      if (url.endsWith('/')){
+          // remove ending slash so we can append .ajax
+          url = url.slice(0, -1);
+      }
+      console.log('oooooo');
+      console.log(url);
+      if ((url.indexOf("!") != -1) || (url.indexOf("?") != -1)) {
+          url = url.replace("!", "?");
+          if (url.indexOf(".ajax") == -1) {
+              url = url.replace("?", ".ajax?");
+          }
+      }
+      if (url.endsWith('.html')) {
+          url = url.replace('.html', '.ajax');
+      }
+      else if (url.indexOf(".ajax") == -1) {
+          url += ".ajax?";
+      }
   },
   
   'showhidejs': function(doc) {
@@ -261,7 +269,7 @@ var anaf = {
       }
       showjs.each(function() {
         $(this).css('display', 'block');
-      })
+      });
       hidejs.each(function() {
         $(this).css('display', 'none');
       })
@@ -994,10 +1002,10 @@ var anaf = {
 	            window.location.hash = '#' + url;
 	            return false;
 	           }
-	        }
+	        };
 	        $(this).ajaxForm(options);
 	      } else {
-	        url = anaf.prepare_url(url);
+	        var url = anaf.prepare_url(url);
                 console.log("PREPARE"+url);
 	        var options = {
 	          'beforeSubmit': function(data) {
@@ -1006,11 +1014,11 @@ var anaf = {
 	          'url': url,
 	          'dataType': 'json',
 	          'success': anaf.process_ajax
-	        }
+	        };
 	        $(this).ajaxForm(options);
 	      }
       }
-    })
+    });
     anaf.prepare_mass_form(doc);
     anaf.prepare_filter_form(doc);
     anaf.prepare_autocomplete(doc);
