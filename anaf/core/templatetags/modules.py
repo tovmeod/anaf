@@ -65,10 +65,10 @@ def modules_header_block(context):
     for module in modules:
         module.title = _(module.title)
 
-    response_format = 'html'
     if 'response_format' in context:
         response_format = context['response_format']
-
+    else:
+        response_format = 'html'
     return Markup(render_to_string('core/tags/modules_header_block',
                                    {'modules': modules,
                                     'active': active,
