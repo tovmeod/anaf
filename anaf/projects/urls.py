@@ -1,6 +1,6 @@
 from django.conf.urls import url, patterns, include
-from anaf.projects.api import views
 from rest_framework.routers import DefaultRouter
+from anaf.projects.api import views
 
 router = DefaultRouter()
 router.include_root_view = False
@@ -14,8 +14,7 @@ urlpatterns = patterns('anaf.projects.views',
                        url(r'^', include(router.urls)),
                        # url(r'^dojo$', 'dojo_view', name='dojo_view'),
                        url(r'^(\.(?P<response_format>\w+))?$', 'index', name='projects'),
-                       url(r'^index(\.(?P<response_format>\w+))?/?$',
-                           'index', name='projects_index'),
+                       url(r'^index(\.(?P<response_format>\w+))?/?$', 'index', name='projects_index'),
                        url(r'^task/owned(\.(?P<response_format>\w+))?/?$',
                            'index_owned', name='projects_index_owned'),
                        url(r'^task/assigned(\.(?P<response_format>\w+))?/?$',

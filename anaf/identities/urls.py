@@ -4,9 +4,10 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.include_root_view = False
-router.register(r'contact', views.ContactView)
-router.register(r'contacttype', views.ContactTypeView)
-router.register(r'contactfield', views.ContactFieldView)
+router.register(r'contactfield', views.ContactField)
+router.register(r'contacttype', views.ContactType)
+router.register(r'contact', views.Contact)
+router.register(r'contactvalue', views.ContactValue)
 
 urlpatterns = patterns('anaf.identities.views',
                        url(r'^', include(router.urls)),
