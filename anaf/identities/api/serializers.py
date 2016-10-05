@@ -1,31 +1,30 @@
 from rest_framework import serializers
-from anaf.identities.models import Contact, ContactType, ContactValue, ContactField
+from anaf.identities import models
 
 
-class ContactFieldSerializer(serializers.HyperlinkedModelSerializer):
+class ContactField(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
 
     class Meta:
-        model = ContactField
+        model = models.ContactField
 
 
-class ContactTypeSerializer(serializers.HyperlinkedModelSerializer):
+class ContactType(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
 
     class Meta:
-        model = ContactType
+        model = models.ContactType
 
 
-class ContactValueSerializer(serializers.HyperlinkedModelSerializer):
+class ContactValue(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = ContactValue
+        model = models.ContactValue
 
 
-class ContactSerializer(serializers.HyperlinkedModelSerializer):
+class Contact(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
-    contact_type = ContactTypeSerializer()
-    contactvalue_set = ContactValueSerializer(many=True)
+    contact_type = ContactType()
+    contactvalue_set = ContactValue(many=True)
 
     class Meta:
-        model = Contact
-
+        model = models.Contact

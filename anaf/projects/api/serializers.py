@@ -1,6 +1,6 @@
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from rest_framework import serializers
-from anaf.identities.api.serializers import ContactSerializer
+from anaf.identities.api.serializers import Contact as ContactSerializer
 from anaf.core.api.serializers import ProfileSerializer
 
 
