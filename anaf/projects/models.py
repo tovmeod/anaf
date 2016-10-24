@@ -95,8 +95,7 @@ class Milestone(Object):
 class Task(Object):
 
     """ Single task """
-    parent = models.ForeignKey(
-        'self', blank=True, null=True, related_name='child_set')
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='child_set')
     project = models.ForeignKey(Project)
     milestone = models.ForeignKey(Milestone, null=True, blank=True)
     status = models.ForeignKey(TaskStatus, default=26)
@@ -105,8 +104,7 @@ class Task(Object):
     assigned = models.ManyToManyField(User, blank=True, null=True)
     depends = models.ForeignKey('Task', blank=True, null=True, related_name='blocked_set',
                                 limit_choices_to={'status__hidden': False})
-    caller = models.ForeignKey(
-        Contact, blank=True, null=True, on_delete=models.SET_NULL)
+    caller = models.ForeignKey(Contact, blank=True, null=True, on_delete=models.SET_NULL)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     PRIORITY_CHOICES = ((5, _('Highest')), (4, _('High')), (3, _('Normal')), (2, _('Low')), (1, _('Lowest')))
