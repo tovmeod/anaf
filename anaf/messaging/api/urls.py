@@ -16,18 +16,11 @@ messageResource = CsrfExemptResource(handler=handlers.MessageHandler, **ad)
 
 urlpatterns = patterns('',
                        # Messaging
-                       url(r'^doc$', documentation_view, kwargs={
-                           'module': handlers}, name="api_messaging_doc"),
-                       url(r'^mlist$', mlistResource,
-                           name="api_messaging_mlist"),
-                       url(r'^mlist/(?P<object_ptr>\d+)',
-                           mlistResource, name="api_messaging_mlist"),
-                       url(r'^streams$', streamResource,
-                           name="api_messaging_streams"),
-                       url(r'^stream/(?P<object_ptr>\d+)',
-                           streamResource, name="api_messaging_streams"),
-                       url(r'^messages$', messageResource,
-                           name="api_messaging_messages"),
-                       url(r'^message/(?P<object_ptr>\d+)',
-                           messageResource, name="api_messaging_messages"),
+                       url(r'^doc$', documentation_view, kwargs={'module': handlers}, name="api_messaging_doc"),
+                       url(r'^mlist$', mlistResource, name="api_messaging_mlist"),
+                       url(r'^mlist/(?P<object_ptr>\d+)', mlistResource, name="api_messaging_mlist"),
+                       url(r'^streams$', streamResource, name="api_messaging_streams"),
+                       url(r'^stream/(?P<object_ptr>\d+)', streamResource, name="api_messaging_streams"),
+                       url(r'^messages$', messageResource, name="api_messaging_messages"),
+                       url(r'^message/(?P<object_ptr>\d+)', messageResource, name="api_messaging_messages"),
                        )

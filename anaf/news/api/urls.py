@@ -14,10 +14,7 @@ updateRecordsResource = CsrfExemptResource(
 
 urlpatterns = patterns('',
                        # News
-                       url(r'^doc$', documentation_view, kwargs={
-                           'module': handlers}, name="api_news_doc"),
-                       url(r'^records$', updateRecordsResource,
-                           name="api_news_update_records"),
-                       url(r'^record/(?P<record_id>\d+)', updateRecordsResource,
-                           name="api_news_update_records"),
+                       url(r'^doc$', documentation_view, kwargs={'module': handlers}, name="api_news_doc"),
+                       url(r'^records$', updateRecordsResource, name="api_news_update_records"),
+                       url(r'^record/(?P<record_id>\d+)', updateRecordsResource, name="api_news_update_records"),
                        )
