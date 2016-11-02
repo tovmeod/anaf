@@ -815,7 +815,7 @@ class Object(models.Model):
 
     def set_user(self, user):
         """Sets owner of the Object to the given user
-        :param User:
+        :param anaf.core.User user:
         """
         # TODO: check every call that it send only anaf.core.User model
         if user is None:
