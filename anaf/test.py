@@ -35,7 +35,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
+from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException, ElementNotVisibleException
 
 # from cms.api import create_page, create_title, add_plugin
 # from cms.apphook_pool import apphook_pool
@@ -254,7 +254,7 @@ class LiveServerTestCase(TransactionTestCase):
     def _ifailed(self):
         """Call this on tearDown, check if it was the last run test that failed
         """
-        return sys.exc_info() == (None, None, None)
+        return not sys.exc_info() == (None, None, None)
 
     def tearDown(self):
         super(LiveServerTestCase, self).tearDown()
@@ -294,6 +294,7 @@ class LiveTestCase(LiveServerTestCase):
         if not USE_SAUCE:
             # cls.driver = webdriver.Firefox()
             cls.driver = webdriver.Chrome()
+            cls.driver.set_window_size(1366, 768)
             cls.driver.implicitly_wait(5)
         cls.accept_next_alert = True
 
@@ -301,6 +302,7 @@ class LiveTestCase(LiveServerTestCase):
     def tearDownClass(cls):
         super(LiveTestCase, cls).tearDownClass()
         if not USE_SAUCE and cls.driver:
+            cls.driver.refresh()
             cls.driver.quit()
             sleep(1)
         cls.server_thread.terminate()
@@ -317,9 +319,17 @@ class LiveTestCase(LiveServerTestCase):
         self.contact_type.set_default_user()
         self.contact_type.save()
 
+        self.contact_type2 = ContactType(name='front_test second contacttype')
+        self.contact_type2.set_default_user()
+        self.contact_type2.save()
+
         self.contact = Contact(name='front_test_contact', contact_type=self.contact_type)
         self.contact.set_default_user()
         self.contact.save()
+
+        self.contact2 = Contact(name='front_test second contact', contact_type=self.contact_type2)
+        self.contact2.set_default_user()
+        self.contact2.save()
 
         if USE_SAUCE:
             capabilities = webdriver.DesiredCapabilities.CHROME
@@ -354,7 +364,7 @@ class LiveTestCase(LiveServerTestCase):
     def get(self, viewname):
         """Get the page based on the viewname and wait it to load
         """
-        url = six.moves.urllib.parse.urljoin(self.live_server_url, reverse(viewname))
+        url = six.moves.urllib.parse.urljoin(self.live_server_url, '#'+reverse(viewname))
         self.driver.get(url)
         sleep(0.1)
         self.wait_load()
@@ -374,6 +384,17 @@ class LiveTestCase(LiveServerTestCase):
             em.clear()
         em.send_keys(value)
         return em
+
+    def click_wait(self, css_selector):
+        for btn in self.driver.find_elements_by_css_selector(css_selector):
+            if btn.is_displayed():
+                btn.click()
+                break
+        else:
+            # else clause is executed when the loop terminates through exhaustion of the list,
+            # but not when the loop is terminated by a break
+            raise ElementNotVisibleException()
+        self.wait_load()
 
     def _login(self):
         url = six.moves.urllib.parse.urljoin(self.live_server_url, '/')

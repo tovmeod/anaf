@@ -1,11 +1,11 @@
 from time import sleep
 from django.core.urlresolvers import reverse
 from django.utils import six
-from anaf.projects.models import Project
+from anaf.projects.models import Project, TaskStatus, Task, TaskTimeSlot
 from anaf.test import LiveTestCase
-from datetime import datetime
+from datetime import datetime, timedelta
 from freezegun import freeze_time
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.common.action_chains import ActionChains
 
 
@@ -15,9 +15,35 @@ class ProjectTestCase(LiveTestCase):
         # self.driver.implicitly_wait(2)
 
         with freeze_time(datetime(year=2015, month=11, day=9, hour=8, minute=21)):
-            self.project = Project(name='front_test_project', manager=self.contact, client=self.contact)
+            self.project = Project(name='front_test_project 1', manager=self.contact, client=self.contact)
         with freeze_time(datetime(year=2015, month=11, day=9, hour=8, minute=26)):
             self.project.save()
+
+        with freeze_time(datetime(year=2016, month=10, day=25, hour=12, minute=11)):
+            self.project2 = Project(name='Front test Second project', manager=self.contact, client=self.contact)
+        with freeze_time(datetime(year=2016, month=10, day=25, hour=12, minute=26)):
+            self.project2.save()
+
+        self.taskstatus1 = TaskStatus(name='taskstatus1')
+        self.taskstatus1.save()
+        self.taskstatus2 = TaskStatus(name='taskstatus 2')
+        self.taskstatus2.save()
+        self.taskstatus3 = TaskStatus(name='Task Status 3')
+        self.taskstatus3.save()
+
+        self.task = Task(name='Test Task', project=self.project, status=self.taskstatus1)
+        self.task.save()
+        self.task2 = Task(name='Second Test Task', project=self.project, status=self.taskstatus2)
+        self.task2.save()
+        self.task3 = Task(name='Test Task 3', project=self.project, status=self.taskstatus3)
+        self.task3.save()
+
+        self.time_from = datetime(year=2015, month=8, day=3)
+        self.total_time = timedelta(minutes=61)
+        self.time_to = self.time_from + self.total_time
+        self.timeslot = TaskTimeSlot(task=self.task, user=self.user.profile, time_from=self.time_from,
+                                     time_to=self.time_to)
+        self.timeslot.save()
 
 
 class ProjectBasicTests(ProjectTestCase):
@@ -56,8 +82,8 @@ class ProjectTests(ProjectTestCase):
     def test_edit_project(self):
         name = 'edited name'
 
-        self.driver.find_element_by_css_selector('a[href="#/projects/edit/{}"]'.format(self.project.id)).click()
-        self.wait_load()
+        # self.assertTrue(False)
+        self.click_wait('a[href="#/projects/edit/{}"]'.format(self.project.id))
         em = self.send_keys('#id_name', name, clear=True)
         em.submit()
         self.wait_load()
@@ -65,19 +91,23 @@ class ProjectTests(ProjectTestCase):
         self.assertEqual(p.name, name)
 
     def test_trash_project(self):
-        self.driver.find_element_by_css_selector('a[href="#/projects/delete/{}"]'.format(self.project.id)).click()
-        self.wait_load()
+        import time
+        self.click_wait('a[href="#/projects/delete/{}"]'.format(self.project.id))
         self.assertFalse(self.project.trash)
-        self.driver.find_element_by_css_selector('[name="delete"]').click()
-        self.wait_load()
+        self.click_wait('[name="delete"]')
+        # self.driver.find_element_by_css_selector('[name="delete"]').click()
+        # self.wait_load()
         p = Project.objects.get(id=self.project.id)
         self.assertTrue(p.trash)
+        # after sending to trash confirm it redirects to the projects page
+        # print(self.driver.current_url)
+        self.assertEqual(six.moves.urllib.parse.urlparse(self.driver.current_url).fragment, '/projects/index')
         # after sending to the trash it won't be visible anymore
         with self.assertRaises(NoSuchElementException):
             self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id))
 
         # go to trash page and check if project is there
-        self.driver.find_element_by_css_selector('a[href="#/trash/"]').click()
+        self.click_wait('a[href="#/trash"]')
         # untrash the project and check if it is really on the projects page
         untrashbtn = self.driver.find_element_by_css_selector('a[href="#/trash/untrash/{}"]'.format(self.project.id))
         builder = ActionChains(self.driver)
@@ -85,6 +115,7 @@ class ProjectTests(ProjectTestCase):
         self.wait_until(lambda driver: untrashbtn.is_displayed())
         untrashbtn.click()
         self.wait_load()
+        # time.sleep(10)
         p = Project.objects.get(id=self.project.id)
         self.assertFalse(p.trash)
         self.get('projects')
