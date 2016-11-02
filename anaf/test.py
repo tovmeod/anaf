@@ -333,8 +333,9 @@ class LiveTestCase(LiveServerTestCase):
 
         if USE_SAUCE:
             capabilities = webdriver.DesiredCapabilities.CHROME
-            capabilities['version'] = '45'  # If this capability is null, an empty string, or omitted altogether, the latest version of the browser will be used automatically.  # noqa
+            # capabilities['version'] = '45'  # If this capability is null, an empty string, or omitted altogether, the latest version of the browser will be used automatically.  # noqa
             capabilities['platform'] = 'Windows 7'
+            capabilities['screenResolution'] = '1920x1080'
             capabilities['name'] = self.id()
             capabilities['build'] = os.environ.get("TRAVIS_BUILD_NUMBER")
             capabilities['tags'] = [os.environ.get("TRAVIS_PYTHON_VERSION"), "CI"]
