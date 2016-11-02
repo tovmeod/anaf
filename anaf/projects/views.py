@@ -43,27 +43,24 @@ def _get_default_context(request):
 
 
 def _process_mass_form(f):
-    "Pre-process request to handle mass action form for Tasks and Milestones"
+    """Pre-process request to handle mass action form for Tasks and Milestones"""
 
     def wrap(request, *args, **kwargs):
-        "Wrap"
+        """Wrap"""
         if 'massform' in request.POST:
             for key in request.POST:
                 if 'mass-milestone' in key:
                     try:
                         milestone = Milestone.objects.get(pk=request.POST[key])
-                        form = MassActionForm(
-                            request.user.profile, request.POST, instance=milestone)
+                        form = MassActionForm(request.user.profile, request.POST, instance=milestone)
                         if form.is_valid() and request.user.profile.has_permission(milestone, mode='w'):
                             form.save()
                     except Exception:
                         pass
-            for key in request.POST:
-                if 'mass-task' in key:
+                elif 'mass-task' in key:
                     try:
                         task = Task.objects.get(pk=request.POST[key])
-                        form = MassActionForm(
-                            request.user.profile, request.POST, instance=task)
+                        form = MassActionForm(request.user.profile, request.POST, instance=task)
                         if form.is_valid() and request.user.profile.has_permission(task, mode='w'):
                             form.save()
                     except Exception:
