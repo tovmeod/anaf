@@ -246,6 +246,7 @@ def get_template_source(template_name, response_format='html'):
 
 
 class JinjaRenderer(TemplateHTMLRenderer):
+    """Same as the html renderer, but it will use jinja instead of the standard django template"""
     def render(self, data, accepted_media_type=None, renderer_context=None):
         """
         Renders data to HTML, using Jinja template rendering.
@@ -277,6 +278,7 @@ class JinjaRenderer(TemplateHTMLRenderer):
 
 
 class JinjaAjaxRenderer(JinjaRenderer):
+    """This is the same as the Jinja renderer, but will use the ajax rendering logic to return a partial page"""
     media_type = 'text/plain'
     format = 'ajax'
 
