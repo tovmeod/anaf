@@ -102,7 +102,7 @@ class MyStaticFilesHandler(StaticFilesHandler):
         return super(MyStaticFilesHandler, self).serve(request)
 
 
-class TestWSGIRequestHandler(WSGIRequestHandler):
+class WSGITestRequestHandler(WSGIRequestHandler):
     """
     Just a regular WSGIRequestHandler except it doesn't log to the standard
     output any of the requests received, so as to not clutter the output for
@@ -139,9 +139,9 @@ class LiveServerThread(DjangoLiveServerThread):
             # one that is free to use for the WSGI server.
             for index, port in enumerate(self.possible_ports):
                 try:
-                    TestWSGIRequestHandler.logs = self.logs
+                    WSGITestRequestHandler.logs = self.logs
                     self.httpd = WSGIServer(
-                        (self.host, port), TestWSGIRequestHandler)
+                        (self.host, port), WSGITestRequestHandler)
                 except socket.error as e:
                     if (index + 1 < len(self.possible_ports) and
                             e.errno == errno.EADDRINUSE):
