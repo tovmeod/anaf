@@ -11,5 +11,5 @@ PROPERTIES = {
 }
 
 URL_PATTERNS = [
-    '^/projects/',
+    '^/projects',
 ]

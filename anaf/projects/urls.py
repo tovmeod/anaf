@@ -11,19 +11,27 @@ router.register(r'milestone', views.MilestoneView)
 router.register(r'task', views.TaskView)
 router.register(r'tasktimeslot', views.TaskTimeSlotView)
 
+route_list = (
+    (r'project', views.ProjectView),
+    (r'taskstatus', views.TaskStatusView),
+    (r'milestone', views.MilestoneView),
+    (r'task', views.TaskView),
+    (r'tasktimeslot', views.TaskTimeSlotView)
+)
+
 urlpatterns = patterns('anaf.projects.views',
-                       url(r'^/?(\.(?P<response_format>\w+))?$', 'index', name='projects'),
+                       url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
                        url(r'^/', include(patterns('',
                            url(r'^', include(router.urls)),
                            # url(r'^dojo$', 'dojo_view', name='dojo_view'),
 
                            url(r'^index(\.(?P<response_format>\w+))?/?$', oldviews.index, name='projects_index'),
-                           url(r'^task/owned(\.(?P<response_format>\w+))?/?$',
-                               oldviews.index_owned, name='projects_index_owned'),
-                           url(r'^task/assigned(\.(?P<response_format>\w+))?/?$',
-                               oldviews.index_assigned, name='projects_index_assigned'),
-                           url(r'^task/in_progress(\.(?P<response_format>\w+))?/?$',
-                               oldviews.index_in_progress, name='projects_tasks_in_progress'),
+                           # url(r'^task/owned(\.(?P<response_format>\w+))?/?$',
+                           #     oldviews.index_owned, name='projects_index_owned'),
+                           #url(r'^task/assigned(\.(?P<response_format>\w+))?/?$',
+                           #    oldviews.index_assigned, name='projects_index_assigned'),
+                           # url(r'^task/in_progress(\.(?P<response_format>\w+))?/?$',
+                           #     oldviews.index_in_progress, name='projects_tasks_in_progress'),
 
                            # Projects
                            url(r'^add(\.(?P<response_format>\w+))?/?$', oldviews.project_add, name='project_add'),

@@ -228,22 +228,27 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
 
     def assert_protected(self, name, args=None):
         response = self.client.get(reverse(name, args=args))
-        self.assertRedirects(response, reverse('user_login'))
+        # old view redirects to login page
+        if response.status_code == 302:
+            self.assertRedirects(response, reverse('user_login'))
+        else:
+            # DRF based view returns 401 unauthorized
+            self.assertEqual(response.status_code, 401)
 
     def test_index(self):
         self.assert_protected('projects')
 
     def test_index_owned(self):
-        self.assert_protected('projects_index_owned')
+        self.assert_protected('task-owned')
 
     def test_index_assigned(self):
-        self.assert_protected('projects_index_assigned')
+        self.assert_protected('task-assigned')
 
     def test_index_by_status(self):
         self.assert_protected('projects_index_by_status', (1,))
 
     def test_index_in_progress(self):
-        self.assert_protected('projects_tasks_in_progress')
+        self.assert_protected('task-in-progress')
 
     def test_project_add(self):
         self.assert_protected('project_add')
@@ -413,9 +418,8 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_index_owned(self):
         """Test owned tasks page at /task/owned/"""
-        response = self.client.get(reverse('projects_index_owned'))
+        response = self.client.get(reverse('task-owned'))
         self.assertEquals(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['milestones'], [self.milestone])
         self.assertQuerysetEqual(response.context['tasks'], [self.task])
         self.assertEqual(type(response.context['filters']), FilterForm)
         # todo: actually test the form generated, if it has the right fields and querysets
@@ -423,9 +427,8 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_index_assigned(self):
         """Test assigned tasks page at /task/assigned/"""
-        response = self.client.get(reverse('projects_index_assigned'))
+        response = self.client.get(reverse('task-assigned'))
         self.assertEquals(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['milestones'], [self.milestone])
         self.assertQuerysetEqual(response.context['tasks'], [self.task_assigned])
         self.assertEqual(type(response.context['filters']), FilterForm)
 

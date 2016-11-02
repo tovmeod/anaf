@@ -1,14 +1,51 @@
 from django.db.models import Q
+from django.utils.translation import ugettext as _
 from rest_framework import viewsets
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+from rest_framework.decorators import detail_route, list_route
+from rest_framework import mixins
 
 from anaf.core.models import Object
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
-from anaf.projects.forms import FilterForm
+from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
 from anaf.core.ajax.converter import preprocess_context
+from anaf import API_RENDERERS
+
+
+def process_mass_form(f):
+    """Pre-process request to handle mass action form for Tasks and Milestones"""
+
+    def wrap(view, request, *args, **kwargs):
+        """Wrap"""
+        if 'massform' in request.POST:
+            for key in request.POST:
+                if 'mass-milestone' in key:
+                    try:
+                        milestone = Milestone.objects.get(pk=request.POST[key])
+                        form = MassActionForm(request.user.profile, request.POST, instance=milestone)
+                        if form.is_valid() and request.user.profile.has_permission(milestone, mode='w'):
+                            form.save()
+                    except Exception:
+                        pass
+                elif 'mass-task' in key:
+                    try:
+                        task = Task.objects.get(pk=request.POST[key])
+                        form = MassActionForm(request.user.profile, request.POST, instance=task)
+                        if form.is_valid() and request.user.profile.has_permission(task, mode='w'):
+                            form.save()
+                    except Exception:
+                        pass
+
+        return f(view, request, *args, **kwargs)
+
+    wrap.__doc__ = f.__doc__
+    wrap.__name__ = f.__name__
+
+    return wrap
 
 
 class ProjectView(viewsets.ModelViewSet):
@@ -36,9 +73,7 @@ class ProjectView(viewsets.ModelViewSet):
         tasks = Object.filter_by_request(request, Task.objects.filter(query))
         filters = FilterForm(request.user.profile, '', request.GET)
         context = _get_default_context(request)
-        context.update({'milestones': milestones,
-                        'tasks': tasks,
-                        'filters': filters})
+        context.update({'milestones': milestones, 'tasks': tasks, 'filters': filters})
         context = preprocess_context(context)
         return Response(context, template_name='projects/index.html')
 
@@ -50,6 +85,8 @@ class TaskStatusView(viewsets.ModelViewSet):
     queryset = TaskStatus.objects.all()
     serializer_class = TaskStatusSerializer
 
+    renderer_classes = API_RENDERERS
+
 
 class MilestoneView(viewsets.ModelViewSet):
     """
@@ -58,12 +95,139 @@ class MilestoneView(viewsets.ModelViewSet):
     queryset = Milestone.objects.all()
     serializer_class = MilestoneSerializer
 
+    renderer_classes = API_RENDERERS
+
 
 class TaskView(viewsets.ModelViewSet):
-
-    """API endpoint that allows Tasks to be viewed or edited."""
+    """
+    API endpoint that allows Tasks to be viewed or edited.
+    """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    template_name = 'projects/index_owned.html'
+    accepted_formats = ('html', 'ajax')
+
+    def get_queryset(self):
+        query = Q(parent__isnull=True)
+        if 'status' in self.request.GET and self.request.GET['status']:
+            query = query & _get_filter_query(self.request.GET)
+        else:
+            query = query & Q(status__hidden=False) & _get_filter_query(self.request.GET)
+
+        return Object.filter_by_request(self.request, Task.objects.filter(query))
+
+    def _list(self, request, queryset, *args, **kwargs):
+        """This is an almost copy from the method from the mixin, but it gets the queryset as an argument"""
+        # queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        """Basically all tasks current user can read"""
+        tasks = self.get_queryset()
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return self._list(request, tasks, *args, **kwargs)
+
+        filters = FilterForm(request.user.profile, 'assigned', request.GET)
+        time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(time_from__isnull=False,
+                                                                                   time_to__isnull=True))
+
+        context = _get_default_context(request)
+        context.update({'tasks': tasks, 'filters': filters, 'time_slots': time_slots})
+
+        context = preprocess_context(context)
+        return Response(context, template_name='projects/index_owned.html')
+
+    @list_route(methods=('GET', 'POST'))
+    @process_mass_form
+    def owned(self, request, *args, **kwargs):
+        """Tasks owned by current user"""
+        tasks = self.get_queryset().filter(Q(caller__related_user=self.request.user.profile))
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return self._list(request, tasks, *args, **kwargs)
+
+        filters = FilterForm(request.user.profile, 'status', request.GET)
+        time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(time_from__isnull=False,
+                                                                                   time_to__isnull=True))
+
+        context = _get_default_context(request)
+        context.update({'sidebar_link': 'owned', 'tasks': tasks, 'filters': filters, 'time_slots': time_slots})
+
+        context = preprocess_context(context)
+        return Response(context, template_name='projects/index_owned.html')
+
+    @list_route()
+    def assigned(self, request, *args, **kwargs):
+        """Tasks assigned to current user"""
+        tasks = self.get_queryset().filter(Q(assigned=request.user.profile))
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return self._list(request, tasks, *args, **kwargs)
+
+        filters = FilterForm(request.user.profile, 'assigned', request.GET)
+        time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(time_from__isnull=False,
+                                                                                   time_to__isnull=True))
+
+        context = _get_default_context(request)
+        context.update({'sidebar_link': 'assigned', 'tasks': tasks, 'filters': filters, 'time_slots': time_slots})
+
+        context = preprocess_context(context)
+        return Response(context, template_name='projects/index_owned.html')
+
+    @list_route()
+    def in_progress(self, request, *args, **kwargs):
+        """A page with a list of tasks in progress"""
+        tasks = self.get_queryset().filter(Q(tasktimeslot__time_from__isnull=False, tasktimeslot__time_to__isnull=True))
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return self._list(request, tasks, *args, **kwargs)
+
+        filters = FilterForm(request.user.profile, 'status', request.GET)
+        time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(time_from__isnull=False,
+                                                                                   time_to__isnull=True))
+
+        context = _get_default_context(request)
+        context.update({'sidebar_link': 'in_progress', 'tasks': tasks, 'filters': filters, 'time_slots': time_slots})
+
+        context = preprocess_context(context)
+        return Response(context, template_name='projects/index_owned.html')
+
+    def retrieve(self, request, *args, **kwargs):
+        """Single task view page"""
+        task = self.get_object()
+        has_permission = request.user.profile.has_permission(task)
+        message = _("You don't have permission to view this Task")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(task)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if request.user.profile.has_permission(task, mode='x'):
+            form = TaskRecordForm(request.user.profile)
+        else:
+            form = None
+
+        subtasks = Object.filter_by_request(request, Task.objects.filter(parent=task))
+        time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(task=task))
+
+        context.update({'task': task, 'subtasks': subtasks, 'record_form': form, 'time_slots': time_slots})
+
+        if 'massform' in context and 'project' in context['massform'].fields:
+            del context['massform'].fields['project']
+
+        return Response(context, template_name='projects/task_view.html')
 
 
 class TaskTimeSlotView(viewsets.ModelViewSet):
@@ -72,3 +236,5 @@ class TaskTimeSlotView(viewsets.ModelViewSet):
     """
     queryset = TaskTimeSlot.objects.all()
     serializer_class = TaskTimeSlotSerializer
+
+    renderer_classes = API_RENDERERS
