@@ -613,7 +613,7 @@ class ProjectsAPITest(AnafTestCase):
                          u'date_created': u'2016-01-27T17:29:00', u'hidden': False, u'trash': False,
                          u'id': self.taskstatus.id, u'tags': [], u'comments': []},
                      u'end_date': None, u'tags': [], u'dislikes': [], u'subscribers': [], u'milestone': None,
-                     u'name': u'api_test_task', u'url': u'http://testserver/projects/task/126.json',
+                     u'name': u'api_test_task', u'url': u'http://testserver/projects/task/%s.json' % task.id,
                      u'caller': u'http://testserver/contacts/contact/%s.json' % contact.id,
                      u'project': {
                          u'last_updated': u'2015-11-09T08:26:00', u'links': [],
@@ -622,12 +622,12 @@ class ProjectsAPITest(AnafTestCase):
                              u'url': u'http://testserver/accounts/user/%s.json' % self.profile.id,
                              u'default_group': {
                                  u'last_updated': u'2015-10-08T07:19:00', u'name': u'api_test_group',
-                                 u'parent': None, u'url': u'http://testserver/accounts/group/1.json',
+                                 u'parent': None, u'url': u'http://testserver/accounts/group/%s.json' % self.group.id,
                                  u'details': None, u'id': self.group.id,
                                  u'perspective': {
                                      u'likes': [], u'last_updated': u'2015-12-10T09:24:00', u'name': u'default',
                                      u'links': [], u'creator': u'http://testserver/accounts/user/%s.json' % self.profile.id,
-                                     u'url': u'http://testserver/accounts/perspective/114.json', u'dislikes': [],
+                                     u'url': u'http://testserver/accounts/perspective/%s.json' % self.perspective.id, u'dislikes': [],
                                      u'object_type': u'anaf.core.models.Perspective', u'nuvius_resource': None,
                                      u'modules': [], u'read_access': [], u'object_name': u'default', u'full_access': [],
                                      u'details': u'', u'subscribers': [],
@@ -637,12 +637,13 @@ class ProjectsAPITest(AnafTestCase):
                              u'perspective': {
                                  u'likes': [], u'last_updated': u'2015-12-10T09:24:00', u'name': u'default',
                                  u'links': [], u'creator': u'http://testserver/accounts/user/%s.json' % self.profile.id,
-                                 u'url': u'http://testserver/accounts/perspective/114.json', u'dislikes': [],
-                                 u'object_type': u'anaf.core.models.Perspective', u'nuvius_resource': None,
-                                 u'modules': [], u'read_access': [], u'object_name': u'default', u'full_access': [],
-                                 u'details': u'', u'subscribers': [], u'date_created': u'2015-12-10T09:23:00',
-                                 u'trash': False, u'id': self.perspective.id, u'tags': [], u'comments': []},
-                             u'last_access': u'2015-11-09T08:21:00', u'id': 3,
+                                 u'url': u'http://testserver/accounts/perspective/%s.json' % self.perspective.id,
+                                 u'dislikes': [], u'object_type': u'anaf.core.models.Perspective',
+                                 u'nuvius_resource': None, u'modules': [], u'read_access': [],
+                                 u'object_name': u'default', u'full_access': [], u'details': u'', u'subscribers': [],
+                                 u'date_created': u'2015-12-10T09:23:00', u'trash': False, u'id': self.perspective.id,
+                                 u'tags': [], u'comments': []},
+                             u'last_access': u'2015-11-09T08:21:00', u'id': self.user.id,
                              u'user': u'http://testserver/accounts/user/%s.json' % self.user.id},
                          u'object_type': u'anaf.projects.models.Project', u'nuvius_resource': None,
                          u'manager': {
@@ -668,7 +669,8 @@ class ProjectsAPITest(AnafTestCase):
                          u'likes': [], u'id': self.project.id, u'comments': [], u'read_access': [],
                          u'object_name': u'api_test_project', u'full_access': [], u'details': None, u'trash': False,
                          u'parent': None, u'tags': [], u'dislikes': [], u'subscribers': [],
-                         u'name': u'api_test_project', u'url': u'http://testserver/projects/project/118.json',
+                         u'name': u'api_test_project',
+                         u'url': u'http://testserver/projects/project/%s.json' % self.project.id,
                          u'client': {
                              u'last_updated': u'2016-10-27T16:31:00', u'links': [],
                              u'creator': u'http://testserver/accounts/user/%s.json' % self.profile.id,
