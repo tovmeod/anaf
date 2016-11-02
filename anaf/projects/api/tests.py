@@ -22,7 +22,9 @@ class ProjectsAPITest(AnafTestCase):
     def setUp(self):
         super(ProjectsAPITest, self).setUp()
         # Create objects
-        self.group, created = Group.objects.get_or_create(name='api_test_group')
+        #2016-10-27T16:20:34.997000
+        with freeze_time(datetime(year=2015, month=10, day=8, hour=7, minute=19)):
+            self.group, created = Group.objects.get_or_create(name='api_test_group')
         with freeze_time(datetime(year=2015, month=10, day=8, hour=7, minute=20)):
             DjangoUser.objects.get_or_create(username='api_test_first_user')
         with freeze_time(datetime(year=2015, month=11, day=9, hour=8, minute=21)):
@@ -33,9 +35,11 @@ class ProjectsAPITest(AnafTestCase):
         self.user.save()
         self.profile = self.user.profile
 
-        self.perspective, created = Perspective.objects.get_or_create(name='default')
+        with freeze_time(datetime(year=2015, month=12, day=10, hour=9, minute=23)):
+            self.perspective, created = Perspective.objects.get_or_create(name='default')
         self.perspective.set_default_user()
-        self.perspective.save()
+        with freeze_time(datetime(year=2015, month=12, day=10, hour=9, minute=24)):
+            self.perspective.save()
 
         ModuleSetting.set('default_perspective', self.perspective.id)
 
@@ -43,13 +47,17 @@ class ProjectsAPITest(AnafTestCase):
         self.contact_type2.set_default_user()
         self.contact_type2.save()
 
-        self.contact_type = ContactType(name='api_test_contacttype')
+        with freeze_time(datetime(year=2016, month=10, day=27, hour=16, minute=28)):
+            self.contact_type = ContactType(name='api_test_contacttype')
         self.contact_type.set_default_user()
-        self.contact_type.save()
+        with freeze_time(datetime(year=2016, month=10, day=27, hour=16, minute=29)):
+            self.contact_type.save()
 
-        self.contact = Contact(name='api_test_contact', contact_type=self.contact_type)
+        with freeze_time(datetime(year=2016, month=10, day=27, hour=16, minute=30)):
+            self.contact = Contact(name='api_test_contact', contact_type=self.contact_type)
         self.contact.set_default_user()
-        self.contact.save()
+        with freeze_time(datetime(year=2016, month=10, day=27, hour=16, minute=31)):
+            self.contact.save()
 
         with freeze_time(datetime(year=2015, month=11, day=9, hour=8, minute=21)):
             self.project = Project(name='api_test_project', manager=self.contact, client=self.contact)
@@ -116,7 +124,7 @@ class ProjectsAPITest(AnafTestCase):
     def test_get_project_list(self):
         """ Test index page api/projects """
         oldresponse = self.client.get(path=reverse('api_projects'), **self.authentication_headers)
-        newresponse = self.client.get(reverse('project-list'), **self.authentication_headers)
+        newresponse = self.client.get(reverse('project-list', kwargs={'format': 'json'}), **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
 
@@ -199,7 +207,8 @@ class ProjectsAPITest(AnafTestCase):
         test for TaskStatus model list
          """
         oldresponse = self.client.get(path=reverse('api_projects_status'), **self.authentication_headers)
-        newresponse = self.client.get(reverse('taskstatus-list'), **self.authentication_headers)
+        newresponse = self.client.get(reverse('taskstatus-list', kwargs={'format': 'json'}),
+                                      **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
         data = json.loads(oldresponse.content)
@@ -234,7 +243,8 @@ class ProjectsAPITest(AnafTestCase):
     def test_get_milestones_list(self):
         """ Test index page api/milestones """
         oldresponse = self.client.get(path=reverse('api_projects_milestones'), **self.authentication_headers)
-        newresponse = self.client.get(reverse('milestone-list'), **self.authentication_headers)
+        newresponse = self.client.get(reverse('milestone-list', kwargs={'format': 'json'}),
+                                      **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
         data = json.loads(oldresponse.content)
@@ -332,7 +342,7 @@ class ProjectsAPITest(AnafTestCase):
     def test_get_task_list(self):
         """ Test index page api/tasks """
         oldresponse = self.client.get(path=reverse('api_projects_tasks'), **self.authentication_headers)
-        newresponse = self.client.get(reverse('task-list'), **self.authentication_headers)
+        newresponse = self.client.get(reverse('task-list', kwargs={'format': 'json'}), **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
         data = json.loads(oldresponse.content)
@@ -513,10 +523,181 @@ class ProjectsAPITest(AnafTestCase):
         self.assertEqual(data[1], expected[1])
         self.cmpDataApi(oldresponse.content, newresponse.content)
 
+    def test_get_task_owned(self):
+        contact = Contact(name='api_test user contact', contact_type=self.contact_type, related_user=self.profile)
+        # self.contact.set_default_user()
+        contact.save()
+
+        with freeze_time(datetime(year=2016, month=10, day=27, hour=15, minute=53)):
+            task = Task(name='api_test_task', project=self.project, status=self.taskstatus, priority=3, caller=contact)
+        task.set_default_user()
+        with freeze_time(datetime(year=2016, month=10, day=27, hour=15, minute=54)):
+            task.save()
+
+        response = self.client.get(reverse('task-owned', kwargs={'format': 'json'}), **self.authentication_headers)
+        self.assertEquals(response.status_code, 200)
+        data = json.loads(response.content)
+        expected = [{u'last_updated': u'2016-10-27T15:54:00', u'links': [],
+                     u'creator': {
+                         u'last_updated': u'2015-11-09T08:21:00', u'name': u'api_test',
+                         u'url': u'http://testserver/accounts/user/3.json',
+                         u'default_group': {
+                             u'last_updated': u'2015-10-08T07:19:00', u'name': u'api_test_group',
+                             u'parent': None, u'url': u'http://testserver/accounts/group/1.json', u'details': None,
+                             u'id': 1,
+                             u'perspective': {
+                                 u'likes': [], u'last_updated': u'2015-12-10T09:24:00', u'name': u'default',
+                                 u'links': [], u'creator': u'http://testserver/accounts/user/3.json',
+                                 u'url': u'http://testserver/accounts/perspective/114.json', u'dislikes': [],
+                                 u'object_type': u'anaf.core.models.Perspective', u'nuvius_resource': None,
+                                 u'modules': [], u'read_access': [], u'object_name': u'default', u'full_access': [],
+                                 u'details': u'', u'subscribers': [], u'date_created': u'2015-12-10T09:23:00',
+                                 u'trash': False, u'id': 114, u'tags': [], u'comments': []}},
+                         u'disabled': False, u'other_groups': [],
+                         u'perspective': {
+                             u'likes': [], u'last_updated': u'2015-12-10T09:24:00', u'name': u'default',
+                             u'links': [], u'creator': u'http://testserver/accounts/user/3.json', u'url':
+                                 u'http://testserver/accounts/perspective/114.json', u'dislikes': [],
+                             u'object_type': u'anaf.core.models.Perspective', u'nuvius_resource': None,
+                             u'modules': [], u'read_access': [], u'object_name': u'default',
+                             u'full_access': [], u'details': u'', u'subscribers': [],
+                             u'date_created': u'2015-12-10T09:23:00', u'trash': False, u'id': 114, u'tags': [],
+                             u'comments': []},
+                         u'last_access': u'2015-11-09T08:21:00', u'id': 3,
+                         u'user': u'http://testserver/accounts/user/2.json'},
+                     u'estimated_time': None, u'object_type': u'anaf.projects.models.Task', u'nuvius_resource': None,
+                     u'assigned': [], u'depends': None, u'comments': [], u'id': 126, u'parent': None,
+                     u'read_access': [], u'priority': 3, u'object_name': u'api_test_task', u'full_access': [],
+                     u'details': None, u'trash': False, u'start_date': None,
+                     u'status': {
+                         u'likes': [], u'last_updated': u'2016-01-27T17:30:00', u'name': u'api_test_taskstatus',
+                         u'links': [],
+                         u'creator': {
+                             u'last_updated': u'2015-11-09T08:21:00', u'name': u'api_test',
+                             u'url': u'http://testserver/accounts/user/3.json',
+                             u'default_group': {
+                                 u'last_updated': u'2015-10-08T07:19:00', u'name': u'api_test_group',
+                                 u'parent': None, u'url': u'http://testserver/accounts/group/1.json', u'details': None,
+                                 u'id': 1,
+                                 u'perspective': {
+                                     u'likes': [], u'last_updated': u'2015-12-10T09:24:00', u'name': u'default',
+                                     u'links': [], u'creator': u'http://testserver/accounts/user/3.json',
+                                     u'url': u'http://testserver/accounts/perspective/114.json', u'dislikes': [],
+                                     u'object_type': u'anaf.core.models.Perspective', u'nuvius_resource': None,
+                                     u'modules': [], u'read_access': [], u'object_name': u'default', u'full_access': [],
+                                     u'details': u'', u'subscribers': [],
+                                     u'date_created': u'2015-12-10T09:23:00', u'trash': False, u'id': 114,
+                                     u'tags': [], u'comments': []}}, u'disabled': False, u'other_groups': [],
+                             u'perspective': {u'likes': [], u'last_updated': u'2015-12-10T09:24:00',
+                                              u'name': u'default', u'links': [],
+                                              u'creator': u'http://testserver/accounts/user/3.json',
+                                              u'url': u'http://testserver/accounts/perspective/114.json',
+                                              u'dislikes': [], u'object_type': u'anaf.core.models.Perspective',
+                                              u'nuvius_resource': None, u'modules': [], u'read_access': [],
+                                              u'object_name': u'default', u'full_access': [], u'details': u'',
+                                              u'subscribers': [], u'date_created': u'2015-12-10T09:23:00',
+                                              u'trash': False, u'id': 114, u'tags': [], u'comments': []},
+                             u'last_access': u'2015-11-09T08:21:00', u'id': 3,
+                             u'user': u'http://testserver/accounts/user/2.json'},
+                         u'url': u'http://testserver/projects/taskstatus/119.json', u'dislikes': [],
+                         u'object_type': u'anaf.projects.models.TaskStatus', u'nuvius_resource': None,
+                         u'read_access': [], u'object_name': u'api_test_taskstatus', u'full_access': [],
+                         u'details': None, u'subscribers': [], u'active': False,
+                         u'date_created': u'2016-01-27T17:29:00', u'hidden': False, u'trash': False,
+                         u'id': 119, u'tags': [], u'comments': []}, u'end_date': None, u'tags': [],
+                     u'dislikes': [], u'subscribers': [], u'milestone': None, u'name': u'api_test_task',
+                     u'url': u'http://testserver/projects/task/126.json',
+                     u'caller': u'http://testserver/contacts/contact/125.json',
+                     u'project': {
+                         u'last_updated': u'2015-11-09T08:26:00', u'links': [],
+                         u'creator': {
+                             u'last_updated': u'2015-11-09T08:21:00', u'name': u'api_test',
+                             u'url': u'http://testserver/accounts/user/3.json',
+                             u'default_group': {
+                                 u'last_updated': u'2015-10-08T07:19:00', u'name': u'api_test_group',
+                                 u'parent': None, u'url': u'http://testserver/accounts/group/1.json',
+                                 u'details': None, u'id': 1,
+                                 u'perspective': {
+                                     u'likes': [], u'last_updated': u'2015-12-10T09:24:00', u'name': u'default',
+                                     u'links': [], u'creator': u'http://testserver/accounts/user/3.json',
+                                     u'url': u'http://testserver/accounts/perspective/114.json', u'dislikes': [],
+                                     u'object_type': u'anaf.core.models.Perspective', u'nuvius_resource': None,
+                                     u'modules': [], u'read_access': [], u'object_name': u'default', u'full_access': [],
+                                     u'details': u'', u'subscribers': [],
+                                     u'date_created': u'2015-12-10T09:23:00', u'trash': False, u'id': 114,
+                                     u'tags': [], u'comments': []}}, u'disabled': False, u'other_groups': [],
+                             u'perspective': {
+                                 u'likes': [], u'last_updated': u'2015-12-10T09:24:00', u'name': u'default',
+                                 u'links': [], u'creator': u'http://testserver/accounts/user/3.json',
+                                 u'url': u'http://testserver/accounts/perspective/114.json', u'dislikes': [],
+                                 u'object_type': u'anaf.core.models.Perspective', u'nuvius_resource': None,
+                                 u'modules': [], u'read_access': [], u'object_name': u'default', u'full_access': [],
+                                 u'details': u'', u'subscribers': [], u'date_created': u'2015-12-10T09:23:00',
+                                 u'trash': False, u'id': 114, u'tags': [], u'comments': []},
+                             u'last_access': u'2015-11-09T08:21:00', u'id': 3,
+                             u'user': u'http://testserver/accounts/user/2.json'},
+                         u'object_type': u'anaf.projects.models.Project', u'nuvius_resource': None,
+                         u'manager': {
+                             u'last_updated': u'2016-10-27T16:31:00', u'links': [],
+                             u'creator': u'http://testserver/accounts/user/3.json',
+                             u'object_type': u'anaf.identities.models.Contact', u'dislikes': [], u'comments': [],
+                             u'id': 117, u'read_access': [], u'object_name': u'api_test_contact', u'full_access': [],
+                             u'trash': False, u'parent': None, u'tags': [], u'nuvius_resource': None,
+                             u'contactvalue_set': [], u'subscribers': [],
+                             u'date_created': u'2016-10-27T16:30:00', u'name': u'api_test_contact',
+                             u'contact_type': {
+                                 u'likes': [], u'last_updated': u'2016-10-27T16:29:00',
+                                 u'name': u'api_test_contacttype', u'links': [],
+                                 u'creator': u'http://testserver/accounts/user/3.json',
+                                 u'url': u'http://testserver/contacts/contacttype/116.json', u'dislikes': [],
+                                 u'object_type': u'anaf.identities.models.ContactType', u'nuvius_resource': None,
+                                 u'read_access': [], u'slug': u'api_test_contacttype',
+                                 u'object_name': u'api_test_contacttype', u'full_access': [], u'details': None,
+                                 u'subscribers': [], u'fields': [], u'date_created': u'2016-10-27T16:28:00',
+                                 u'trash': False, u'id': 116, u'tags': [], u'comments': []},
+                             u'url': u'http://testserver/contacts/contact/117.json', u'related_user': None,
+                             u'likes': []},
+                         u'likes': [], u'id': 118, u'comments': [], u'read_access': [],
+                         u'object_name': u'api_test_project', u'full_access': [], u'details': None, u'trash': False,
+                         u'parent': None, u'tags': [], u'dislikes': [], u'subscribers': [],
+                         u'name': u'api_test_project', u'url': u'http://testserver/projects/project/118.json',
+                         u'client': {u'last_updated': u'2016-10-27T16:31:00', u'links': [],
+                                     u'creator': u'http://testserver/accounts/user/3.json',
+                                     u'object_type': u'anaf.identities.models.Contact', u'dislikes': [],
+                                     u'comments': [], u'id': 117, u'read_access': [],
+                                     u'object_name': u'api_test_contact', u'full_access': [], u'trash': False,
+                                     u'parent': None, u'tags': [], u'nuvius_resource': None, u'contactvalue_set': [],
+                                     u'subscribers': [], u'date_created': u'2016-10-27T16:30:00',
+                                     u'name': u'api_test_contact',
+                                     u'contact_type': {
+                                         u'likes': [], u'last_updated': u'2016-10-27T16:29:00',
+                                         u'name': u'api_test_contacttype', u'links': [],
+                                         u'creator': u'http://testserver/accounts/user/3.json',
+                                         u'url': u'http://testserver/contacts/contacttype/116.json', u'dislikes': [],
+                                         u'object_type': u'anaf.identities.models.ContactType',
+                                         u'nuvius_resource': None, u'read_access': [], u'slug': u'api_test_contacttype',
+                                         u'object_name': u'api_test_contacttype', u'full_access': [], u'details': None,
+                                         u'subscribers': [], u'fields': [],
+                                         u'date_created': u'2016-10-27T16:28:00', u'trash': False, u'id': 116,
+                                         u'tags': [], u'comments': []},
+                                     u'url': u'http://testserver/contacts/contact/117.json', u'related_user': None,
+                                     u'likes': []},
+                         u'date_created': u'2015-11-09T08:21:00'},
+                     u'date_created': u'2016-10-27T15:53:00', u'likes': []}]
+        self.assertEqual(len(data), 1)
+        self.maxDiff = None
+        # data.sort(key=lambda x: x['id'])
+        # expected.sort(key=lambda x: x['id'])
+        self.assertEqual(data[0], expected[0])
+    # def test_get_task_owned(self):
+    # def test_get_task_assigned(self):
+    # def test_get_task_in_progress(self):
+
     def test_get_tasktimes_list(self):
         """ Test index page api/tasktimes """
         oldresponse = self.client.get(path=reverse('api_projects_tasktimes'), **self.authentication_headers)
-        newresponse = self.client.get(reverse('tasktimeslot-list'), **self.authentication_headers)
+        newresponse = self.client.get(reverse('tasktimeslot-list', kwargs={'format': 'json'}),
+                                      **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
         data = json.loads(oldresponse.content)
@@ -572,7 +753,8 @@ class ProjectsAPITest(AnafTestCase):
                     u'nuvius_resource': None, u'manager': {
                         u'name': u'api_test_contact', u'parent': None,
                         u'contact_type': {
-                            u'fields': [], u'details': None, u'id': self.contact_type.id, u'name': u'api_test_contacttype',
+                            u'fields': [], u'details': None, u'id': self.contact_type.id, u'name':
+                                u'api_test_contacttype',
                             u'resource_uri': u'/api/identities/type/%s' % self.contact_type.id
                         },
                         u'contactvalue_set': [], u'related_user': None, u'id': self.contact.id,
@@ -652,7 +834,7 @@ class ProjectsAPITest(AnafTestCase):
         oldresponse = self.client.get(reverse(
             'api_projects', kwargs={'object_ptr': self.project.id}), **self.authentication_headers)
         newresponse = self.client.get(reverse(
-                'project-detail', kwargs={'pk': self.project.id}), **self.authentication_headers)
+                'project-detail', kwargs={'pk': self.project.id, 'format': 'json'}), **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
 
@@ -707,8 +889,8 @@ class ProjectsAPITest(AnafTestCase):
     def test_get_status(self):
         oldresponse = self.client.get(reverse('api_projects_status',
                                               kwargs={'object_ptr': self.taskstatus.id}), **self.authentication_headers)
-        newresponse = self.client.get(reverse('taskstatus-detail',
-                                              kwargs={'pk': self.taskstatus.id}), **self.authentication_headers)
+        newresponse = self.client.get(reverse('taskstatus-detail', kwargs={'pk': self.taskstatus.id, 'format': 'json'}),
+                                      **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
 
@@ -744,7 +926,8 @@ class ProjectsAPITest(AnafTestCase):
         oldresponse = self.client.get(reverse('api_projects_milestones', kwargs={
                                    'object_ptr': self.milestone.id}), **self.authentication_headers)
         newresponse = self.client.get(reverse('milestone-detail',
-                                              kwargs={'pk': self.milestone.id}), **self.authentication_headers)
+                                              kwargs={'pk': self.milestone.id, 'format': 'json'}),
+                                      **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
         data = json.loads(oldresponse.content)
@@ -838,8 +1021,8 @@ class ProjectsAPITest(AnafTestCase):
     def test_get_task(self):
         oldresponse = self.client.get(reverse('api_projects_tasks',
                                               kwargs={'object_ptr': self.task.id}), **self.authentication_headers)
-        newresponse = self.client.get(reverse('task-detail',
-                                              kwargs={'pk': self.task.id}), **self.authentication_headers)
+        newresponse = self.client.get(reverse('task-detail', kwargs={'pk': self.task.id, 'format': 'json'}),
+                                      **self.authentication_headers)
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
         data = json.loads(oldresponse.content)
@@ -933,8 +1116,9 @@ class ProjectsAPITest(AnafTestCase):
     def test_get_timeslot(self):
         oldresponse = self.client.get(reverse('api_projects_tasktimes',
                                               kwargs={'object_ptr': self.time_slot.id}), **self.authentication_headers)
-        newresponse = self.client.get(reverse('tasktimeslot-detail',
-                                              kwargs={'pk': self.time_slot.id}), **self.authentication_headers)
+        newresponse = self.client.get(reverse('tasktimeslot-detail', kwargs={'pk': self.time_slot.id,
+                                                                             'format': 'json'}),
+                                      **self.authentication_headers)
 
         self.assertEquals(oldresponse.status_code, 200)
         self.assertEquals(newresponse.status_code, 200)
