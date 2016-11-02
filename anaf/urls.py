@@ -1,4 +1,3 @@
-from rest_framework.routers import DefaultRouter
 from django.conf.urls import url, patterns, include
 from django.contrib import admin
 from dajaxice.core import dajaxice_autodiscover, dajaxice_config
@@ -6,12 +5,10 @@ from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 admin.autodiscover()
 dajaxice_autodiscover()
 
-router = DefaultRouter()
 
 urlpatterns = patterns('',
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        url(r'^(\.(?P<response_format>\w+))?$', 'anaf.core.dashboard.views.index', name='home'),
-                       url(r'^api-root', include(router.urls)),
 
                        # modules
                        (r'^user/', include('anaf.core.urls')),
@@ -20,7 +17,7 @@ urlpatterns = patterns('',
                        (r'^search/', include('anaf.core.search.urls')),
                        (r'^dashboard/', include('anaf.core.dashboard.urls')),
                        (r'^admin/', include('anaf.core.administration.urls')),
-                       (r'^trash/', include('anaf.core.trash.urls')),
+                       (r'^trash', include('anaf.core.trash.urls')),
                        (r'^documents/', include('anaf.documents.urls')),
                        (r'^calendar/', include('anaf.events.urls')),
                        (r'^finance/', include('anaf.finance.urls')),
