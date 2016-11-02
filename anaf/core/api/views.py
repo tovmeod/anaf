@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+
+from anaf import API_RENDERERS
 from anaf.core.models import User as Profile, AccessEntity, Group, Perspective, Object, Module
 import serializers
 
@@ -10,6 +12,8 @@ class ProfileView(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
 
+    renderer_classes = API_RENDERERS
+
 
 class GroupView(viewsets.ModelViewSet):
     """
@@ -17,6 +21,8 @@ class GroupView(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = serializers.GroupSerializer
+
+    renderer_classes = API_RENDERERS
 
 
 class PerspectiveView(viewsets.ModelViewSet):
@@ -26,6 +32,8 @@ class PerspectiveView(viewsets.ModelViewSet):
     queryset = Perspective.objects.all()
     serializer_class = serializers.PerspectiveSerializer
 
+    renderer_classes = API_RENDERERS
+
 
 class AccessEntityView(viewsets.ModelViewSet):
     """
@@ -33,6 +41,8 @@ class AccessEntityView(viewsets.ModelViewSet):
     """
     queryset = AccessEntity.objects.all()
     serializer_class = serializers.AccessEntitySerializer
+
+    renderer_classes = API_RENDERERS
 
 
 class ObjectView(viewsets.ModelViewSet):

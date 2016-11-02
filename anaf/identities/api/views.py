@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+
+from anaf import API_RENDERERS
 from anaf.identities import models
 from anaf.identities.api import serializers
 
@@ -10,6 +12,8 @@ class ContactField(viewsets.ModelViewSet):
     queryset = models.ContactField.objects.all()
     serializer_class = serializers.ContactField
 
+    renderer_classes = API_RENDERERS
+
 
 class ContactType(viewsets.ModelViewSet):
     """
@@ -17,6 +21,8 @@ class ContactType(viewsets.ModelViewSet):
     """
     queryset = models.ContactType.objects.all()
     serializer_class = serializers.ContactType
+
+    renderer_classes = API_RENDERERS
 
 
 class Contact(viewsets.ModelViewSet):
@@ -26,6 +32,8 @@ class Contact(viewsets.ModelViewSet):
     queryset = models.Contact.objects.all()
     serializer_class = serializers.Contact
 
+    renderer_classes = API_RENDERERS
+
 
 class ContactValue(viewsets.ModelViewSet):
     """
@@ -33,3 +41,5 @@ class ContactValue(viewsets.ModelViewSet):
     """
     queryset = models.ContactValue.objects.all()
     serializer_class = serializers.ContactValue
+
+    renderer_classes = API_RENDERERS
