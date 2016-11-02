@@ -167,7 +167,7 @@ var anaf = {
                 sidebardisplay = sidebar.css('display');
             }
         }
-        var block = module_id_elem;
+        var block = $("#module-" + module);
         $('.module-block').each(function() {
             if ($(this).attr2('id') != block.attr2('id')) {
                 $(this).css('display', 'none');
@@ -178,7 +178,7 @@ var anaf = {
             }
         });
         anaf.remove_mce($("#module-" + module + " form"));
-        module_id_elem.html(content);
+        $("#module-" + module).html(content);
         if ($("#module-" + module + " form").length) {
             anaf.prepare_forms(block);
             anaf.prepare_comments(block);
@@ -1399,9 +1399,8 @@ $(function() {
       $(this).ajaxForm(options);
   });
     // Prepare modules
-    var module_block = $(".module-block");
-    module_block.data('title', document.title);
-    module_block.each(function() {
+    $(".module-block").data('title', document.title);
+    $(".module-block").each(function() {
         doc = $(this);
         if ($("form").length) {
         // anaf.prepare_forms(doc);
