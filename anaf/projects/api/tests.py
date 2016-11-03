@@ -643,7 +643,7 @@ class ProjectsAPITest(AnafTestCase):
                                  u'object_name': u'default', u'full_access': [], u'details': u'', u'subscribers': [],
                                  u'date_created': u'2015-12-10T09:23:00', u'trash': False, u'id': self.perspective.id,
                                  u'tags': [], u'comments': []},
-                             u'last_access': u'2015-11-09T08:21:00', u'id': self.user.id,
+                             u'last_access': u'2015-11-09T08:21:00', u'id': self.profile.id,
                              u'user': u'http://testserver/accounts/user/%s.json' % self.user.id},
                          u'object_type': u'anaf.projects.models.Project', u'nuvius_resource': None,
                          u'manager': {
