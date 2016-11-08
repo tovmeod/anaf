@@ -9,12 +9,6 @@ from anaf.identities.models import Contact, ContactType
 class FinanceModelsTest(TestCase):
     """Finance models tests"""
 
-    def setUp(self):
-        super(FinanceModelsTest, self).setUp()
-        import importlib
-        my_module = importlib.import_module('anaf.finance.migrations.0002_initial_data')
-        my_module._add_data(Currency)
-
     def test_model_currency(self):
         """Test model Currency save logic"""
         self.assertTrue(Currency.objects.count() > 0, 'Assert the initial data migration is in place and that '

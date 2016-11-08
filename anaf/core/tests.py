@@ -108,13 +108,6 @@ def authentication_headers():
 @pytest.mark.django_db(transaction=True)
 def test_no_args_urls_loggedin(url, client, userpsw, authentication_headers):
     """All URLs without arguments should return 200 if logged in"""
-    # todo this is very ugly but it is a workaround because pytest is not running my data migration,
-    # this is probably a bug in pytest-django, remove once it is fixed
-    if url in ('/finance/liability/add', '/finance/receivable/add', '/sales/order/add', '/sales/opportunity/add'):
-        import importlib
-        my_module = importlib.import_module('anaf.finance.migrations.0002_initial_data')
-        from anaf.finance.models import Currency
-        my_module._add_data(Currency)
     if url.startswith('/api/'):
         # piston can only do http basic auth
         response = client.get(path=url, **authentication_headers)
