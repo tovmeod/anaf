@@ -125,7 +125,7 @@ def _add_data(Currency):
     for c in currencies:
         if c['code'] == 'USD':
             c['is_default'] = True
-        Currency(**c).save()
+        Currency.objects.get_or_create(**c)
 
 
 def add_data(apps, schema_editor):
@@ -136,7 +136,7 @@ def add_data(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('finance', '0001_initial'),
+        ('finance', '0002_longer_symbol_length'),
     ]
 
     operations = [
