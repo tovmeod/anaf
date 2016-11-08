@@ -23,8 +23,14 @@ ADMINS = (
 
 MANAGERS = ADMINS
 DATABASES = {}
-TESTING = 'test' in sys.argv or 'test_coverage' in sys.argv  # Covers regular testing and django-coverage
-
+# TESTING = 'test' in sys.argv or 'test_coverage' in sys.argv  # Covers regular testing and django-coverage
+for arg in sys.argv:
+    if 'test' in arg:
+        TESTING = True
+        break
+else:
+    TESTING = False
+print('TESTING', TESTING)
 if TESTING:
     test_db = os.environ.get('DB', 'sqlite')
     if test_db == 'mysql':
@@ -74,7 +80,7 @@ else:
     DATABASES = {
         'default': dict(CONF.items('db'))
     }
-
+print('DATABASES', DATABASES)
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -357,3 +363,6 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
 }
+
+# todo remove this when using django >= 1.9.x see https://code.djangoproject.com/ticket/23727
+TEST_NON_SERIALIZED_APPS = ['django.contrib.contenttypes']
