@@ -24,7 +24,7 @@ pip install https://github.com/tovmeod/anaf/archive/master.zip
 echo "deb http://apt.postgresql.org/pub/repos/apt/ "$(lsb_release -a | grep Codename | awk -F' ' '{print $2}')"-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo apt-get update
-sudo apt-get install postgresql-9.5 libpq-dev -y
+sudo apt-get install postgresql-9.6 libpq-dev -y
 sudo -u postgres createuser --pwprompt anaf
 # sudo -u postgres psql -c "ALTER USER anaf WITH ENCRYPTED PASSWORD 'anaf_db_password';"
 sudo -u postgres createdb anaf --owner=anaf
