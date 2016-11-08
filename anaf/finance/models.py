@@ -19,7 +19,7 @@ class Currency(Object):
 
     code = models.CharField(_('code'), max_length=3)
     name = models.CharField(_('name'), max_length=255)
-    symbol = models.CharField(_('symbol'), max_length=1, blank=True, null=True,
+    symbol = models.CharField(_('symbol'), max_length=10, blank=True, null=True,
                               help_text=_('If no symbol is entered, the 3 letter code will be used.'))
     factor = models.DecimalField(_('factor'), max_digits=10, decimal_places=4,
                                  help_text=_(
