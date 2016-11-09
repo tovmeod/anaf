@@ -16,12 +16,6 @@ Join our Translation project: https://poeditor.com/join/project/MBZpaTFrAY
 
 My current focus is migrating from piston to DRF
 
-For those coming from Tree.io:
-==============================
-You can drop in this on a current Tree.io installation, for now I use the same models to ease moving, for any change on a model migrations migrations will be provided.
-
-You will need to update your settings in settings.py, Anaf uses similar naming but with its own prefix ('ANAF_')
-
 Current status:
 =============
 - Django 1.7 support
