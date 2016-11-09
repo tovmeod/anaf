@@ -264,6 +264,40 @@ class TaskView(viewsets.ModelViewSet):
         context.update({'form': form, 'task': task})
         return Response(context, template_name='projects/task_edit.html')
 
+    @detail_route(methods=('GET', 'POST'))
+    def delete(self, request, *args, **kwargs):
+        """Task delete"""
+
+        task = self.get_object()
+        has_permission = request.user.profile.has_permission(task, mode='w')
+        message = _("You don't have permission to delete this Task")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(task)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if request.POST:
+            if 'trash' in request.POST:
+                task.trash = True
+                task.save()
+            else:
+                task.delete()
+            return HttpResponseRedirect(reverse('projects_index'))
+
+        subtasks = Object.filter_by_request(request, Task.objects.filter(parent=task))
+        time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(task=task))
+
+        context.update({'task': task, 'subtasks': subtasks, 'time_slots': time_slots})
+        return Response(context, template_name='projects/task_delete.html')
+
 
 class TaskTimeSlotView(viewsets.ModelViewSet):
     """

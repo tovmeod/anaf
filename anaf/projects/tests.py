@@ -302,7 +302,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('task-edit', (1,))
 
     def test_task_delete(self):
-        self.assert_protected('projects_task_delete', (1,))
+        self.assert_protected('task-delete', (1,))
 
     def test_task_set_status(self):
         self.assert_protected('projects_task_set_status', (1, 1))
@@ -534,7 +534,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_task_delete_login(self):
         """Test index page with login at /projects/task/delete/<task_id>"""
-        response = self.client.get(reverse('projects_task_delete', args=[self.task.id]))
+        response = self.client.get(reverse('task-delete', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
     # Task Time Slots
@@ -555,7 +555,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_time_slot_delete_login(self):
         """Test index page with login at /projects/task/delete/time/<time_slot_id>"""
-        response = self.client.get(reverse('projects_task_delete', args=[self.task.id]))
+        response = self.client.get(reverse('task-delete', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
     # Task Statuses

@@ -72,8 +72,8 @@ urlpatterns = patterns('anaf.projects.views',
                            #     oldviews.task_edit, name='projects_task_edit'),
                            url(r'^task/set/(?P<task_id>\d+)/status/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.task_set_status, name='projects_task_set_status'),
-                           url(r'^task/delete/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_delete, name='projects_task_delete'),
+                           # url(r'^task/delete/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
+                           #     oldviews.task_delete, name='projects_task_delete'),
 
                            # Subtask
                            url(r'^task/add/subtask/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
