@@ -2,6 +2,8 @@
 Project management forms
 """
 from django.forms import ModelForm, CharField, TextInput, Form, ModelChoiceField, IntegerField, ChoiceField
+
+from anaf import long_type
 from models import Project, Milestone, Task, TaskTimeSlot, TaskStatus
 from anaf.core.models import Object, ModuleSetting, UpdateRecord
 from anaf.identities.models import Contact
@@ -27,7 +29,7 @@ class SettingsForm(Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.projects', 'default_task_status')[0]
-            default_task_status = TaskStatus.objects.get(pk=long(conf.value))
+            default_task_status = TaskStatus.objects.get(pk=long_type(conf.value))
             self.fields['default_task_status'].initial = default_task_status.id
         except Exception:
             pass
@@ -157,7 +159,7 @@ class MilestoneForm(ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.projects', 'default_task_status')[0]
-            self.fields['status'].initial = long(conf.value)
+            self.fields['status'].initial = long_type(conf.value)
         except Exception:
             pass
 
@@ -208,7 +210,7 @@ class TaskForm(ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.projects', 'default_task_status')[0]
-            self.fields['status'].initial = long(conf.value)
+            self.fields['status'].initial = long_type(conf.value)
         except Exception:
             pass
 
@@ -366,7 +368,7 @@ class TaskTimeSlotForm(ModelForm):
     def save(self, *args, **kwargs):
         "Override to auto-set time_from and time_to"
         if hasattr(self, 'instance') and self.instance.time_to and not self.instance.time_from:
-            minutes = long(self.cleaned_data['minutes'])
+            minutes = long_type(self.cleaned_data['minutes'])
             hours = 0L
             days = 0L
             if minutes >= 1440:
