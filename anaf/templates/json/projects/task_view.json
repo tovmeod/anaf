@@ -4,7 +4,7 @@
 {"task":
 	{	
 	"id": {{ task.id }},
-	"url": "http://{{ site_domain }}{% url projects_task_view task.id %}",
+	"url": "http://{{ site_domain }}{% url task-detail task.id %}",
 	"name": "{{ task }}",
      {% if task.caller -%}
 	 "caller": {
@@ -48,7 +48,7 @@
 				{%- for subtask in subtasks %}
 				{
 				 "id": {{ subtask.id }},
-				 "url": "http://{{ site_domain }}{% url projects_task_view subtask.id %}",
+				 "url": "http://{{ site_domain }}{% url task-detail subtask.id %}",
 				 "name": "{{ subtask }}"
 				{% if loop.last -%}
 				}

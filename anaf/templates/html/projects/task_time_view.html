@@ -35,7 +35,7 @@
 
 <div>
     <span class="content-label">{% trans %}Task{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url projects_task_view task_time_slot.task_id %}">{{ task_time_slot.task }}</a></span>
+    <span class="content-value"><a href="{% url task-detail task_time_slot.task_id %}">{{ task_time_slot.task }}</a></span>
 </div>
 <div>
     <span class="content-label">{% trans %}Author{% endtrans %}:</span>

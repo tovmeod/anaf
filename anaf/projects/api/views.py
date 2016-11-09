@@ -1,4 +1,6 @@
+from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
@@ -8,7 +10,7 @@ from rest_framework import mixins
 
 from anaf.core.models import Object
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
-from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm
+from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
@@ -204,6 +206,8 @@ class TaskView(viewsets.ModelViewSet):
         has_permission = request.user.profile.has_permission(task)
         message = _("You don't have permission to view this Task")
         if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
             if not has_permission:
                 raise PermissionDenied(detail=message)
             serializer = self.get_serializer(task)
@@ -228,6 +232,37 @@ class TaskView(viewsets.ModelViewSet):
             del context['massform'].fields['project']
 
         return Response(context, template_name='projects/task_view.html')
+
+    @detail_route(methods=('GET', 'POST'))
+    def edit(self, request, *args, **kwargs):
+        """Task edit page"""
+
+        task = self.get_object()
+        has_permission = request.user.profile.has_permission(task, mode='w')
+        message = _("You don't have permission to edit this Task")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(task)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if request.POST:
+            form = TaskForm(request.user.profile, None, None, None, request.POST, instance=task)
+            if form.is_valid():
+                task = form.save()
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
+        else:
+            form = TaskForm(request.user.profile, None, None, None, instance=task)
+
+        context.update({'form': form, 'task': task})
+        return Response(context, template_name='projects/task_edit.html')
 
 
 class TaskTimeSlotView(viewsets.ModelViewSet):

@@ -196,7 +196,7 @@ class Task(Object):
         """Returns absolute URL
         :rtype str
         """
-        return reverse('projects_task_view', args=[self.id])
+        return reverse('task-detail', args=[self.id])
 
     def get_total_time(self):
         """Returns total time spent on the task, based on assigned TimeSlots
@@ -274,7 +274,7 @@ class TaskTimeSlot(Object):
         """Returns absolute URL
         :rtype str
         """
-        return reverse('projects_task_view', args=[self.task_id])
+        return reverse('task-detail', args=[self.task_id])
 
     def get_time_secs(self):
         """Return time from epoch

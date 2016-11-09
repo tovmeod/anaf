@@ -8,9 +8,9 @@
 {% block module_subtitle %}{% trans %}Task{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url projects_task_view task.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
+<a href="{% url task-detail task.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(task, mode='w') %}
-<a href="{% url projects_task_edit task.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url task-edit task.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
 <a href="{% url projects_task_delete task.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endif %}
 {% endblock %}
@@ -92,7 +92,7 @@
 {% if task.parent %}
 <div>
     <span class="content-label">{% trans %}Parent{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url projects_task_view task.parent.id %}">{{ task.parent }}</a></span>
+    <span class="content-value"><a href="{% url task-detail task.parent.id %}">{{ task.parent }}</a></span>
 </div>
 {% endif %}
 
@@ -126,7 +126,7 @@
 {% for subtask in subtasks %}
 <div class="content-list-item content-list-item-{{ loop.cycle('odd', 'even') }}" title="{{ subtask.status }}">
     <span class="content-list-item-name">
-        <a href="{% url projects_task_view subtask.id %}">{{ subtask.name|truncate(length=60) }}</a>
+        <a href="{% url task-detail subtask.id %}">{{ subtask.name|truncate(length=60) }}</a>
         {% if subtask.assigned.count() %}
         {% for assignee in subtask.assigned.all() %}
         <a href="{% url identities_user_view assignee.id %}" class="author-link small spaced-h">{{ assignee }}</a>
@@ -140,7 +140,7 @@
     </span>
     <span class="content-list-item-actions">
         {% if user.profile.has_permission(subtask, mode='w') %}
-        <a href="{% url projects_task_edit subtask.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
+        <a href="{% url task-edit subtask.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
         {% endif %}
     </span>
 </div>

@@ -7,7 +7,7 @@
 		{% for task in tasks %}
 			{
 			"id": {{ task.id }},
-			"url": "http://{{ site_domain }}{% url projects_task_view task.id %}",
+			"url": "http://{{ site_domain }}{% url task-detail task.id %}",
 			"name": "{{ task.name }}",
 			"project": "{{ task.project }}",
 			{% if task.parent -%}

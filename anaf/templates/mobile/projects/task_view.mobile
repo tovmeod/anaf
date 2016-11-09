@@ -8,9 +8,9 @@
 
 {% block module_topmenu %}
 <a href="{% url projects_task_add_subtask task.id %}" class="top-menu add-link popup-link">{% trans %}New Sub Task{% endtrans %}</a>
-<a href="{% url projects_task_view task.id %}" class="top-menu view-link-active">{% trans %}View{% endtrans %}</a>
+<a href="{% url task-detail task.id %}" class="top-menu view-link-active">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(task, mode='w') %}
-<a href="{% url projects_task_edit task.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url task-edit task.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
 <a href="{% url projects_task_delete task.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endif %}
 {% endblock %}
@@ -47,7 +47,7 @@
 {% if task.parent %}
 <div>
     <span class="content-label">{% trans %}Parent{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url projects_task_view task.parent.id %}">{{ task.parent }}</a></span>
+    <span class="content-value"><a href="{% url task-detail task.parent.id %}">{{ task.parent }}</a></span>
 </div>
 {% endif %}
 

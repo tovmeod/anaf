@@ -4,11 +4,11 @@
         <span class="projects-task-time"></span>
         <a href="{% url identities_user_view slot.user.id %}" class="popup-link">{{ slot.user }}</a>
         {% if slot.is_open() %}
-        <a class="imp heavy" href="{% url projects_task_view slot.task.id %}">
+        <a class="imp heavy" href="{% url task-detail slot.task.id %}">
         {% trans %}In progress{% endtrans %}...
         <span class="projects-timeslot" diff="{{ slot.get_time_secs() }}">{{ slot.get_time_string() }}</span></a>
         {% else %}
-        <a class="imp small" href="{% url projects_task_view slot.task.id %}">{{ slot.get_time_string() }}</a>
+        <a class="imp small" href="{% url task-detail slot.task.id %}">{{ slot.get_time_string() }}</a>
         {% endif %}
         <span class="content-list-item-group">
             {% if slot.is_open() %}

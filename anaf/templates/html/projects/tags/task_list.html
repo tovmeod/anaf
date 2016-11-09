@@ -51,7 +51,7 @@
             </td>
             {% set hidden = task.status.hidden %}
             <td>
-                <a href="{% url projects_task_view task.id %}" {% if hidden %}class="light"{% endif %}>{{ task.name }}</a>{{ attachments_count(task) }}
+                <a href="{% url task-detail task.id %}" {% if hidden %}class="light"{% endif %}>{{ task.name }}</a>{{ attachments_count(task) }}
                 {% if in_progress %}
                 {% set render_time_slots = time_slots.filter(task=task, time_from__isnull=False, time_to__isnull=True) %}
                 {% if render_time_slots %}
@@ -96,7 +96,7 @@
             <td>
                 {% if user.profile.has_permission(task, mode='w') %}
                 <span class="content-list-item-actions table-link">
-                <a href="{% url projects_task_edit task.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
+                <a href="{% url task-edit task.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
                 </span>
                 {% endif %}
             </td>

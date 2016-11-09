@@ -9,9 +9,9 @@
 
 {% block module_topmenu %}
 <a href="{% url projects_task_add_subtask task.id %}" class="top-menu add-link">{% trans %}New Sub Task{% endtrans %}</a>
-<a href="{% url projects_task_view task.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
+<a href="{% url task-detail task.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(task, mode='w') %}
-<a href="{% url projects_task_edit task.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url task-edit task.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
 <a href="{% url projects_task_delete task.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endif %}
 {% endblock %}
@@ -25,7 +25,7 @@
     </ul>
     <div class="content-form-submit">
         <input type="submit" name="save" value="{% trans %}Save{% endtrans %}" />
-		<input type="submit" name="cancel" value="{% trans %}Cancel{% endtrans %}" class="cancel" />
+        <a class="cancel" href="{% url task-detail task.id %}">{% trans %}Cancel{% endtrans %}</a>
     </div>
 </form>
 {% endblock %}

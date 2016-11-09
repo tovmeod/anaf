@@ -296,10 +296,10 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('projects_task_add_subtask', (1,))
 
     def test_task_view(self):
-        self.assert_protected('projects_task_view', (1,))
+        self.assert_protected('task-detail', (1,))
 
     def test_task_edit(self):
-        self.assert_protected('projects_task_edit', (1,))
+        self.assert_protected('task-edit', (1,))
 
     def test_task_delete(self):
         self.assert_protected('projects_task_delete', (1,))
@@ -524,12 +524,12 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_task_view_login(self):
         """Test index page with login at /projects/task/view/<task_id>"""
-        response = self.client.get(reverse('projects_task_view', args=[self.task.id]))
+        response = self.client.get(reverse('task-detail', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_task_edit_login(self):
         """Test index page with login at /projects/task/edit/<task_id>"""
-        response = self.client.get(reverse('projects_task_edit', args=[self.task.id]))
+        response = self.client.get(reverse('task-edit', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_task_delete_login(self):
@@ -545,12 +545,12 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_time_slot_view_login(self):
         """Test index page with login at /projects/task/view/time/<time_slot_id>"""
-        response = self.client.get(reverse('projects_task_view', args=[self.task.id]))
+        response = self.client.get(reverse('task-detail', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_time_slot_edit_login(self):
         """Test index page with login at /projects/task/edit/time/<time_slot_id>"""
-        response = self.client.get(reverse('projects_task_edit', args=[self.task.id]))
+        response = self.client.get(reverse('task-edit', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_time_slot_delete_login(self):

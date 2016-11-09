@@ -622,7 +622,7 @@ def task_add(request, response_format='html'):
             if form.is_valid():
                 task = form.save()
                 task.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         else:
             return HttpResponseRedirect(reverse('projects'))
     else:
@@ -654,7 +654,7 @@ def task_add_typed(request, project_id=None, response_format='html'):
             if form.is_valid():
                 task = form.save()
                 task.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         else:
             return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
     else:
@@ -690,7 +690,7 @@ def task_add_to_milestone(request, milestone_id=None, response_format='html'):
             if form.is_valid():
                 task = form.save()
                 task.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         else:
             return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
     else:
@@ -725,9 +725,9 @@ def task_add_subtask(request, task_id=None, response_format='html'):
             if form.is_valid():
                 task = form.save()
                 task.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_task_view', args=[parent.id]))
+                return HttpResponseRedirect(reverse('task-detail', args=[parent.id]))
         else:
-            return HttpResponseRedirect(reverse('projects_task_view', args=[parent.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[parent.id]))
     else:
         form = TaskForm(request.user.profile, parent, None, None)
 
@@ -754,7 +754,7 @@ def task_view(request, task_id, response_format='html'):
             if 'add-work' in request.POST:
                 return HttpResponseRedirect(reverse('projects_task_time_slot_add', args=[task.id]))
             elif 'start-work' in request.POST:
-                return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
             record = UpdateRecord()
             record.record_type = 'manual'
             form = TaskRecordForm(
@@ -765,7 +765,7 @@ def task_view(request, task_id, response_format='html'):
                 record.save()
                 record.about.add(task)
                 task.set_last_updated()
-                return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         else:
             form = TaskRecordForm(request.user.profile)
     else:
@@ -804,9 +804,9 @@ def task_edit(request, task_id, response_format='html'):
                 request.user.profile, None, None, None, request.POST, instance=task)
             if form.is_valid():
                 task = form.save()
-                return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         else:
-            return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
     else:
         form = TaskForm(
             request.user.profile, None, None, None, instance=task)
@@ -837,7 +837,7 @@ def task_delete(request, task_id, response_format='html'):
                 task.delete()
             return HttpResponseRedirect(reverse('projects_index'))
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
 
     subtasks = Object.filter_by_request(
         request, Task.objects.filter(parent=task))
@@ -892,7 +892,7 @@ def task_time_slot_start(request, task_id, response_format='html'):
         task_time_slot.save()
         task_time_slot.set_user_from_request(request)
 
-    return HttpResponseRedirect(reverse('projects_task_view', args=[task_id]))
+    return HttpResponseRedirect(reverse('task-detail', args=[task_id]))
 
 
 @handle_response_format
@@ -909,7 +909,7 @@ def task_time_slot_stop(request, slot_id, response_format='html'):
         slot.details = request.POST['details']
         slot.save()
 
-    return HttpResponseRedirect(reverse('projects_task_view', args=[slot.task_id]))
+    return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
 
 
 @handle_response_format
@@ -927,11 +927,11 @@ def task_time_slot_add(request, task_id, response_format='html'):
         form = TaskTimeSlotForm(
             request.user.profile, task_id, request.POST, instance=task_time_slot)
         if 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         elif form.is_valid():
             task_time_slot = form.save()
             task_time_slot.set_user_from_request(request)
-            return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
     else:
         form = TaskTimeSlotForm(request.user.profile, task_id)
 
@@ -986,10 +986,10 @@ def task_time_slot_edit(request, time_slot_id, response_format='html'):
             request.user.profile, None, request.POST, instance=task_time_slot)
         if form.is_valid():
             task_time_slot = form.save()
-            return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
 
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
     else:
         form = TaskTimeSlotForm(
             request.user.profile, None, instance=task_time_slot)
@@ -1022,9 +1022,9 @@ def task_time_slot_delete(request, time_slot_id, response_format='html'):
                 task_time_slot.save()
             else:
                 task_time_slot.delete()
-            return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('projects_task_view', args=[task.id]))
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
 
     context = _get_default_context(request)
     context.update({'task_time_slot': task_time_slot,
@@ -1242,7 +1242,7 @@ def gantt_view(request, project_id, response_format='html'):
             tlabel = (
                 task.name[:30] + '..') if len(task.name) > 30 else task.name
             tn = '<a href="{0!s}" class="popup-link">{1!s}</a>'.format(
-                reverse('projects_task_view', args=[task.id]), tlabel)
+                reverse('task-detail', args=[task.id]), tlabel)
             series.append({'id': task.id,
                            'name': tn,
                            'label': tlabel,
@@ -1269,7 +1269,7 @@ def gantt_view(request, project_id, response_format='html'):
     for task in unclassified:
         tlabel = (task.name[:30] + '..') if len(task.name) > 30 else task.name
         tn = '<a href="{0!s}" class="popup-link">{1!s}</a>'.format(
-            reverse('projects_task_view', args=[task.id]), tlabel)
+            reverse('task-detail', args=[task.id]), tlabel)
         series.append({'id': task.id,
                        'name': tn,
                        'label': tlabel,
