@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
 from rest_framework import mixins
@@ -297,6 +298,35 @@ class TaskView(viewsets.ModelViewSet):
 
         context.update({'task': task, 'subtasks': subtasks, 'time_slots': time_slots})
         return Response(context, template_name='projects/task_delete.html')
+
+    def set_status(self, request, *args, **kwargs):
+        """Task quick set: Status"""
+        # TODO: yes, it is wrong and ugly to change the task status with a GET request :(
+        # buut until I have time to change the frontend this is what the frontend requests and expects to happen
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # discourage bad use on api
+            return Response(status=401)
+        task = self.get_object()
+        has_permission = request.user.profile.has_permission(task, mode='x')
+        context = _get_default_context(request)
+        if not has_permission:
+            message = _("You don't have permission to edit this Task")
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        status_id = kwargs['status_id']
+        status = get_object_or_404(TaskStatus, pk=status_id)
+        if not request.user.profile.has_permission(status):
+            message = _("You don't have access to this Task Status")
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if not task.status == status:
+            task.status = status
+            task.save()
+
+        return self.retrieve(request, *args, **kwargs)
 
 
 class TaskTimeSlotView(viewsets.ModelViewSet):

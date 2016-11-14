@@ -55,9 +55,9 @@ def render_to_string(template_name, context=None, context_instance=None, respons
     if not response_format or 'pdf' in response_format or response_format not in settings.ANAF_RESPONSE_FORMATS:
         response_format = 'html'
 
-    template_name = map(lambda name: name if "." + response_format in name else name + "." + response_format ,
+    template_name = map(lambda name: name if "." + response_format in name else name + "." + response_format,
                         template_name)
-    template_name = map(lambda name: response_format + "/" + name, template_name)
+    template_name += map(lambda name: response_format + "/" + name, template_name)
 
     context['response_format'] = response_format
     if context_instance:

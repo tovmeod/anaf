@@ -23,21 +23,21 @@
     {% for status in statuses %}
     {% if status.hidden %}
     {% if status.active %}
-    <a href="{% url projects_task_set_status task.id, status.id %}" class="projects-action projects-action-failed
+    <a href="{% url task-set-status task.id, status.id %}" class="projects-action projects-action-failed
     {%- if status == task.status -%}-active{%- endif -%}">{{ status }}</a>
     <br />
     {% else %}
-    <a href="{% url projects_task_set_status task.id, status.id %}" class="projects-action projects-action-closed
+    <a href="{% url task-set-status task.id, status.id %}" class="projects-action projects-action-closed
     {%- if status == task.status -%}-active{%- endif -%}">{{ status }}</a>
     <br />
     {% endif %}
     {% else %}
     {% if status.active %}
-    <a href="{% url projects_task_set_status task.id, status.id %}" class="projects-action projects-action-open
+    <a href="{% url task-set-status task.id, status.id %}" class="projects-action projects-action-open
     {%- if status == task.status -%}-active{%- endif -%}">{{ status }}</a>
     <br />
     {% else %}
-    <a href="{% url projects_task_set_status task.id, status.id %}" class="projects-action projects-action-pending
+    <a href="{% url task-set-status task.id, status.id %}" class="projects-action projects-action-pending
     {%- if status == task.status -%}-active{%- endif -%}">{{ status }}</a>
     <br />
     {% endif %}

@@ -305,7 +305,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('task-delete', (1,))
 
     def test_task_set_status(self):
-        self.assert_protected('projects_task_set_status', (1, 1))
+        self.assert_protected('task-set-status', (1, 1))
 
     def test_task_time_slot_start(self):
         self.assert_protected('projects_task_time_slot_start', (1,))
@@ -378,6 +378,10 @@ class ProjectsViewsTest(AnafTestCase):
         self.status = TaskStatus(name='test')
         self.status.set_default_user()
         self.status.save()
+
+        self.status2 = TaskStatus(name='second status')
+        self.status2.set_default_user()
+        self.status2.save()
 
         self.milestone = Milestone(name='test', project=self.project, status=self.status)
         self.milestone.set_default_user()
@@ -518,9 +522,22 @@ class ProjectsViewsTest(AnafTestCase):
         self.assertEquals(response.status_code, 200)
 
     def test_task_set_status(self):
-        """Test index page with login at /projects/task/add/<task_id>/status/<status_id>"""
-        response = self.client.get(reverse('projects_task_set_status', args=[self.task.id, self.status.id]))
+        """Test set status page with login at /projects/task/set/<task_id>/status/<status_id>"""
+        # no format specified
+        response = self.client.get(reverse('task-set-status', args=[self.task.id, self.status2.id]))
         self.assertEquals(response.status_code, 200)
+        # check if status was changed on DB
+        self.assertEqual(Task.objects.get(id=self.task.id).status_id, self.status2.id)
+        # html
+        response = self.client.get(reverse('task-set-status', args=[self.task.id, self.status.id, 'html']))
+        self.assertEquals(response.status_code, 200)
+        # check if status was changed on DB
+        self.assertEqual(Task.objects.get(id=self.task.id).status_id, self.status.id)
+        # json
+        response = self.client.get(reverse('task-set-status', args=[self.task.id, self.status2.id, 'json']))
+        self.assertEquals(response.status_code, 401)
+        # check if status was not changed on DB
+        self.assertEqual(Task.objects.get(id=self.task.id).status_id, self.status.id)
 
     def test_task_view_login(self):
         """Test index page with login at /projects/task/view/<task_id>"""
