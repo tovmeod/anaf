@@ -299,7 +299,7 @@ class TaskView(viewsets.ModelViewSet):
         context.update({'task': task, 'subtasks': subtasks, 'time_slots': time_slots})
         return Response(context, template_name='projects/task_delete.html')
 
-    def set_status(self, request, *args, **kwargs):
+    def set_status(self, request, status_id, *args, **kwargs):
         """Task quick set: Status"""
         # TODO: yes, it is wrong and ugly to change the task status with a GET request :(
         # buut until I have time to change the frontend this is what the frontend requests and expects to happen
@@ -315,7 +315,7 @@ class TaskView(viewsets.ModelViewSet):
             context.update({'message': message})
             return Response(context, template_name='core/user_denied.html', status=403)
 
-        status_id = kwargs['status_id']
+        # status_id = kwargs['status_id']
         status = get_object_or_404(TaskStatus, pk=status_id)
         if not request.user.profile.has_permission(status):
             message = _("You don't have access to this Task Status")
