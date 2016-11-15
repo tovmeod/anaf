@@ -43,7 +43,7 @@ script:
  - if [ -z $SELENIUM ]; then py.test -n 2 --cov --cov-report= ; fi
  - if [ $SELENIUM == '1' ]; then py.test --cov --cov-report= ; fi
 after_success:
-  coveralls
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   slack: anafteam:ftaeRk3d0Rh0MS5xrAUMasAC
