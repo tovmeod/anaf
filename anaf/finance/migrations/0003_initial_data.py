@@ -123,6 +123,7 @@ currencies = [
 
 def _add_data(Currency):
     for c in currencies:
+        c['object_type'] = 'anaf.finance.models.Currency'
         if c['code'] == 'USD':
             c['is_default'] = True
         Currency.objects.get_or_create(**c)

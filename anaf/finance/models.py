@@ -42,12 +42,8 @@ class Currency(Object):
             return "{0!s}  {1!s}".format(self.code, self.name)
 
     def save(self, **kwargs):
-        # if I'm trying to set the current as default
-        # and there's already a default currency
-        # and current currency is not already saved as default
-        # then set the previous default currency to not default
-        if self.is_default and Currency.objects.filter(is_default=True).exists() and \
-                not Currency.objects.filter(is_default=True, id=self.id).exists():
+        # There can be only one default currency
+        if self.is_default:
             Currency.objects.filter(is_default=True).update(is_default=False)
         super(Currency, self).save(**kwargs)
 
