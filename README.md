@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/tovmeod/anaf.svg?branch=master)](https://travis-ci.org/tovmeod/anaf)
-[![Coverage Status](https://coveralls.io/repos/tovmeod/anaf/badge.svg?branch=master&service=github)](https://coveralls.io/github/tovmeod/anaf?branch=master)
+[![codecov](https://codecov.io/gh/tovmeod/anaf/branch/drf/graph/badge.svg)](https://codecov.io/gh/tovmeod/anaf)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tovmeod/anaf/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tovmeod/anaf/?branch=master)
 [![Code Health](https://landscape.io/github/tovmeod/anaf/master/landscape.svg?style=flat)](https://landscape.io/github/tovmeod/anaf/master)
 [![Code Issues](https://www.quantifiedcode.com/api/v1/project/c24b8b56c3014d40aeabcff1c2aa0551/badge.svg)](https://www.quantifiedcode.com/app/project/c24b8b56c3014d40aeabcff1c2aa0551)
