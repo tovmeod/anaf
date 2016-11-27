@@ -28,7 +28,7 @@ matrix:
 # command to install dependencies
 install:
   - pip install -r requirements-test.txt
-  - pip install -U pytest-sugar pytest-cov coveralls
+  - pip install -U pytest-sugar pytest-cov scrutinizer-ocular
   - if [ $MC == '1' ]; then pip install -q pylibmc ; fi
   - if [ $SELENIUM == '1' ]; then pip install -q sauceclient ; fi
 before_install:
@@ -44,6 +44,7 @@ script:
  - if [ $SELENIUM == '1' ]; then py.test --cov --cov-report= ; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - ocular
 
 notifications:
   slack: anafteam:ftaeRk3d0Rh0MS5xrAUMasAC
