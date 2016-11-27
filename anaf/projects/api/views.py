@@ -7,11 +7,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
-from rest_framework import mixins
 
 from anaf.core.models import Object
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
-from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm
+from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
@@ -97,8 +96,26 @@ class MilestoneView(viewsets.ModelViewSet):
     """
     queryset = Milestone.objects.all()
     serializer_class = MilestoneSerializer
+    accepted_formats = ('html', 'ajax')
 
-    renderer_classes = API_RENDERERS
+    @list_route(methods=('GET', 'POST'))
+    def new(self, request, *args, **kwargs):
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(MilestoneView, self).create(request, *args, **kwargs)
+
+        if request.POST:
+            milestone = Milestone()
+            form = MilestoneForm(request.user.profile, None, request.POST, instance=milestone)
+            if form.is_valid():
+                milestone = form.save()
+                milestone.set_user_from_request(request)
+                return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
+        else:
+            form = MilestoneForm(request.user.profile, None)
+
+        context = _get_default_context(request)
+        context.update({'form': form})
+        return Response(context, template_name='projects/milestone_add.html')
 
 
 class TaskView(viewsets.ModelViewSet):
@@ -147,6 +164,26 @@ class TaskView(viewsets.ModelViewSet):
 
         context = preprocess_context(context)
         return Response(context, template_name='projects/index_owned.html')
+
+    @list_route(methods=('GET', 'POST'))
+    def new(self, request, *args, **kwargs):
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(TaskView, self).create(request, *args, **kwargs)
+
+        if request.POST:
+            task = Task()
+            form = TaskForm(request.user.profile, None, None, None, request.POST, instance=task)
+            if form.is_valid():
+                task = form.save()
+                task.set_user_from_request(request)
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
+        else:
+            form = TaskForm(request.user.profile, None, None, None)
+
+        context = _get_default_context(request)
+        context.update({'form': form})
+
+        return Response(context, template_name='projects/task_add.html')
 
     @list_route(methods=('GET', 'POST'))
     @process_mass_form

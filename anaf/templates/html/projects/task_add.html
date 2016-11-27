@@ -3,11 +3,7 @@
 
 {% block title %}{% trans %}New Task{% endtrans %} | {% trans %}Project Management{% endtrans %}{% endblock %}
 
-{% block module_topmenu %}
-<a href="{% url project_add %}" class="top-menu add-link">{% trans %}New Project{% endtrans %}</a>
-<a href="{% url projects_milestone_add %}" class="top-menu add-link">{% trans %}New Milestone{% endtrans %}</a>
-<a href="{% url projects_task_add %}" class="top-menu add-link-active">{% trans %}New Task{% endtrans %}</a>
-{% endblock %}
+{% block task_add_class %}add-link-active{% endblock %}
 
 {% block module_content %}
 
@@ -18,7 +14,7 @@
     </ul>
     <div class="content-form-submit">
         <input type="submit" name="save" value="{% trans %}Create Task{% endtrans %}" />
-		<input type="submit" name="cancel" value="{% trans %}Cancel{% endtrans %}" class="cancel" />
+        <a class="cancel" href="{% url projects_index %}">{% trans %}Cancel{% endtrans %}</a>
     </div>
 </form>
 {% endblock %}

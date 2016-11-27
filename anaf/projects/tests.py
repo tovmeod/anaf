@@ -266,7 +266,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('projects_project_delete', (1, ))
 
     def test_milestone_add(self):
-        self.assert_protected('projects_milestone_add')
+        self.assert_protected('milestone-new')
 
     def test_milestone_add_typed(self):
         self.assert_protected('projects_milestone_add_typed', (1, ))
@@ -284,7 +284,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('projects_milestone_set_status', (1, 1))
 
     def test_task_add(self):
-        self.assert_protected('projects_task_add')
+        self.assert_protected('task-new')
 
     def test_task_add_typed(self):
         self.assert_protected('projects_task_add_typed', (1,))
@@ -476,8 +476,8 @@ class ProjectsViewsTest(AnafTestCase):
 
     # Milestones
     def test_milestone_add(self):
-        """Test index page with login at /projects/milestone/add"""
-        response = self.client.get(reverse('projects_milestone_add'))
+        """Test index page with login at /projects/milestone/new"""
+        response = self.client.get(reverse('milestone-new'))
         self.assertEquals(response.status_code, 200)
 
     def test_milestone_add_typed(self):
@@ -502,8 +502,8 @@ class ProjectsViewsTest(AnafTestCase):
 
     # Tasks
     def test_task_add(self):
-        """Test index page with login at /projects/task/add/"""
-        response = self.client.get(reverse('projects_task_add'))
+        """Test index page with login at /projects/task/new/"""
+        response = self.client.get(reverse('task-new'))
         self.assertEquals(response.status_code, 200)
 
     def test_task_add_typed(self):
