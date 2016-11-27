@@ -69,7 +69,7 @@ class ProjectView(viewsets.ModelViewSet):
             else:
                 query = query & Q(status__hidden=False) & _get_filter_query(request.GET)
         else:
-            query = query & Q(status__hidden=False)
+            query &= Q(status__hidden=False)
 
         milestones = Object.filter_by_request(request, Milestone.objects.filter(status__hidden=False))
         tasks = Object.filter_by_request(request, Task.objects.filter(query))
@@ -96,7 +96,23 @@ class MilestoneView(viewsets.ModelViewSet):
     """
     queryset = Milestone.objects.all()
     serializer_class = MilestoneSerializer
+    template_name = 'projects/milestone_add.html'
     accepted_formats = ('html', 'ajax')
+
+    def list(self, request, *args, **kwargs):
+        """Basically all the milestones"""
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(MilestoneView, self).list(request, *args, **kwargs)
+
+        milestones = self.get_queryset()
+        context = _get_default_context(request)
+        form = MilestoneForm(request.user.profile, None)
+        context.update({'milestones': milestones, 'form': form})
+
+        context = preprocess_context(context)
+        # todo: create html template for milestone list
+        return Response(context, template_name='projects/milestone_add.html')
 
     @list_route(methods=('GET', 'POST'))
     def new(self, request, *args, **kwargs):
