@@ -71,10 +71,8 @@ class Contact(Object):
     """Information about a company, group or user. By design allows custom fields defined in ContactField"""
     contact_type = models.ForeignKey(ContactType)
     name = models.CharField(max_length=256)
-    parent = models.ForeignKey(
-        'self', blank=True, null=True, related_name='child_set')
-    related_user = models.ForeignKey(
-        AccessEntity, blank=True, null=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='child_set')
+    related_user = models.ForeignKey(AccessEntity, blank=True, null=True, on_delete=models.SET_NULL)
 
     access_inherit = ('parent', '*module', '*user')
 

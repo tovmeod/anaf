@@ -108,8 +108,7 @@ class Task(Object):
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     PRIORITY_CHOICES = ((5, _('Highest')), (4, _('High')), (3, _('Normal')), (2, _('Low')), (1, _('Lowest')))
-    priority = models.IntegerField(default=3,
-                                   choices=PRIORITY_CHOICES)
+    priority = models.IntegerField(default=3, choices=PRIORITY_CHOICES)
     estimated_time = models.IntegerField(null=True, blank=True)
 
     access_inherit = ('parent', 'milestone', 'project', '*module', '*user')

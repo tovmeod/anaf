@@ -1,3 +1,4 @@
+import re
 from time import sleep
 from django.core.urlresolvers import reverse
 from django.utils import six
@@ -147,11 +148,75 @@ class ProjectTests(ProjectTestCase):
         sleep(0.1)
         t = Task.objects.get(name=name)
         self.assertEqual(t.name, name)
-    # get owned tasks
-    # get assigned tasks
-    # get in progress tasks
-    # view task
-    # edit task
+
+    def test_get_owned_tasks(self):
+        Task(name='Test Task', project=self.project, status=self.taskstatus1, caller=self.contact).save()
+        owned_tasks = Task.objects.filter(caller__related_user=self.user.profile).values_list('id', flat=True)
+        self.click_wait('a[href="#/projects/task/owned/"]')
+        taskems = self.driver.find_elements_by_css_selector('tbody > .content-list-item')
+        self.assertEqual(len(owned_tasks), len(taskems))
+
+        for em in taskems:
+            # get the link to the task
+            url = em.find_element_by_css_selector('a').get_attribute('href')
+            # extract the fragment from the link
+            # eg: href="http://127.0.0.1:8080/#/projects/task/142/" so the fragment would be '/projects/task/142/'
+            url = six.moves.urllib.parse.urlparse(url).fragment
+            taskid = re.search(r'^/projects/task/(\d+)/$', url).group(1)
+            self.assertTrue(int(taskid) in owned_tasks)
+
+    def test_get_assigned_tasks(self):
+        task = Task(name='Test Task', project=self.project, status=self.taskstatus1)
+        task.save()
+        task.assigned.add(self.user.profile)
+        assigned_tasks = Task.objects.filter(assigned=self.user.profile).values_list('id', flat=True)
+        self.click_wait('a[href="#/projects/task/assigned/"]')
+        taskems = self.driver.find_elements_by_css_selector('tbody > .content-list-item')
+        self.assertEqual(len(assigned_tasks), len(taskems))
+        for em in taskems:
+            # get the link to the task
+            url = em.find_element_by_css_selector('a').get_attribute('href')
+            # extract the fragment from the link
+            # eg: href="http://127.0.0.1:8080/#/projects/task/142/" so the fragment would be '/projects/task/142/'
+            url = six.moves.urllib.parse.urlparse(url).fragment
+            taskid = re.search(r'^/projects/task/(\d+)/$', url).group(1)
+            self.assertTrue(int(taskid) in assigned_tasks)
+
+    def test_get_inprogress_tasks(self):
+        task = Task(name='Test Task', project=self.project, status=self.taskstatus1)
+        task.save()
+        time_from = datetime(year=2015, month=8, day=3)
+        timeslot = TaskTimeSlot(task=task, user=self.user.profile, time_from=time_from)
+        timeslot.save()
+
+        inprogress_tasks = Task.objects.filter(tasktimeslot__time_from__isnull=False,
+                                               tasktimeslot__time_to__isnull=True).values_list('id', flat=True)
+        self.click_wait('a[href="#/projects/task/in_progress/"]')
+        taskems = self.driver.find_elements_by_css_selector('tbody > .content-list-item')
+        self.assertEqual(len(inprogress_tasks), len(taskems))
+        for em in taskems:
+            # get the link to the task
+            url = em.find_element_by_css_selector('a').get_attribute('href')
+            # extract the fragment from the link
+            # eg: href="http://127.0.0.1:8080/#/projects/task/142/" so the fragment would be '/projects/task/142/'
+            url = six.moves.urllib.parse.urlparse(url).fragment
+            taskid = re.search(r'^/projects/task/(\d+)/$', url).group(1)
+            self.assertTrue(int(taskid) in inprogress_tasks)
+
+    def test_task_view(self):
+        self.click_wait('a[href="#/projects/task/%s/"]' % self.task.id)
+
+    def test_task_edit(self):
+        self.click_wait('a[href="#/projects/task/%s/"]' % self.task.id)
+        self.click_wait('a[href="#/projects/task/%s/edit"]' % self.task.id)
+
+        name = 'edited name'
+        em = self.send_keys('#id_name', name, clear=True)
+        em.submit()
+        self.wait_load()
+        t = Task.objects.get(id=self.task.id)
+        self.assertEqual(t.name, name)
+
     # delete task
     # quick set task status
     # add milestone

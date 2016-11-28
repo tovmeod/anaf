@@ -315,7 +315,7 @@ class LiveTestCase(LiveServerTestCase):
         self.contact_type2.set_default_user()
         self.contact_type2.save()
 
-        self.contact = Contact(name='front_test_contact', contact_type=self.contact_type)
+        self.contact = Contact(name='front_test_contact', contact_type=self.contact_type, related_user=self.user.profile)
         self.contact.set_default_user()
         self.contact.save()
 
