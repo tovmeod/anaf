@@ -11,8 +11,10 @@ import pytest
 try:
     from sauceclient import SauceClient
     USE_SAUCE = True
+    WAIT_TIMEOUT = 20
 except ImportError:
     USE_SAUCE = False
+    WAIT_TIMEOUT = 10
 from django.test import TestCase as DjangoTestCase, TransactionTestCase
 from django.test.testcases import LiveServerThread as DjangoLiveServerThread, _MediaFilesHandler
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -430,7 +432,7 @@ class LiveTestCase(LiveServerTestCase):
         ))
         self.wait_page_loaded()
 
-    def wait_until(self, callback, timeout=10):
+    def wait_until(self, callback, timeout=WAIT_TIMEOUT):
         """
         Helper function that blocks the execution of the tests until the
         specified callback returns a value that is not falsy. This function can
@@ -439,20 +441,20 @@ class LiveTestCase(LiveServerTestCase):
         """
         WebDriverWait(self.driver, timeout).until(callback)
 
-    def wait_loaded_tag(self, tag_name, timeout=10):
+    def wait_loaded_tag(self, tag_name, timeout=WAIT_TIMEOUT):
         """
         Helper function that blocks until the element with the given tag name
         is found on the page.
         """
         self.wait_until( lambda driver: driver.find_element_by_tag_name(tag_name), timeout)
 
-    def wait_loaded_id(self, id, timeout=10):
-        self.wait_until(lambda driver: driver.find_element_by_id(id), timeout)
+    def wait_loaded_id(self, elem_id, timeout=WAIT_TIMEOUT):
+        self.wait_until(lambda driver: driver.find_element_by_id(elem_id), timeout)
 
-    def wait_loaded_selector(self, selector, timeout=10):
+    def wait_loaded_selector(self, selector, timeout=WAIT_TIMEOUT):
         self.wait_until(lambda driver: driver.find_element_by_css_selector(selector), timeout)
 
-    def wait_not_selector(self, selector, timeout=10):
+    def wait_not_selector(self, selector, timeout=WAIT_TIMEOUT):
         self.wait_until(lambda driver: not driver.find_element_by_css_selector(selector).is_displayed(), timeout)
 
     def wait_page_loaded(self):
