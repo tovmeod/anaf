@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from freezegun import freeze_time
 from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import Select
 
 
 class ProjectTestCase(LiveTestCase):
@@ -81,8 +82,6 @@ class ProjectTests(ProjectTestCase):
 
     def test_edit_project(self):
         name = 'edited name'
-
-        # self.assertTrue(False)
         self.click_wait('a[href="#/projects/edit/{}"]'.format(self.project.id))
         em = self.send_keys('#id_name', name, clear=True)
         em.submit()
@@ -91,20 +90,21 @@ class ProjectTests(ProjectTestCase):
         self.assertEqual(p.name, name)
 
     def test_trash_project(self):
-        import time
         self.click_wait('a[href="#/projects/delete/{}"]'.format(self.project.id))
         self.assertFalse(self.project.trash)
         self.click_wait('[name="delete"]')
-        # self.driver.find_element_by_css_selector('[name="delete"]').click()
-        # self.wait_load()
+
         p = Project.objects.get(id=self.project.id)
         self.assertTrue(p.trash)
         # after sending to trash confirm it redirects to the projects page
-        # print(self.driver.current_url)
         self.assertEqual(six.moves.urllib.parse.urlparse(self.driver.current_url).fragment, '/projects/index')
         # after sending to the trash it won't be visible anymore
         with self.assertRaises(NoSuchElementException):
             self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id))
+
+    def test_untrash_project(self):
+        self.project.trash = True
+        self.project.save()
 
         # go to trash page and check if project is there
         self.click_wait('a[href="#/trash"]')
@@ -115,7 +115,6 @@ class ProjectTests(ProjectTestCase):
         self.wait_until(lambda driver: untrashbtn.is_displayed())
         untrashbtn.click()
         self.wait_load()
-        # time.sleep(10)
         p = Project.objects.get(id=self.project.id)
         self.assertFalse(p.trash)
         self.get('projects')
@@ -131,8 +130,31 @@ class ProjectTests(ProjectTestCase):
         with self.assertRaises(Project.DoesNotExist):
             Project.objects.get(id=self.project.id)
 
+    def test_task_new(self):
+        """Test creating a minimal task
+        """
+        name = 'task name'
+        self.get('projects')
+        self.click_wait('a[href="#/projects/task/new/"]')
+        # select project from dropdown
+        em = self.driver.find_element_by_css_selector('#id_project')
+        select = Select(em)
+        select.select_by_index(1)
+
+        em = self.send_keys('#id_name', name)
+        em.submit()
+        self.wait_load()
+        sleep(0.1)
+        t = Task.objects.get(name=name)
+        self.assertEqual(t.name, name)
+    # get owned tasks
+    # get assigned tasks
+    # get in progress tasks
+    # view task
+    # edit task
+    # delete task
+    # quick set task status
     # add milestone
-    # add task
     # new status
     # edit status
 

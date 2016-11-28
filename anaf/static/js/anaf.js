@@ -143,8 +143,12 @@ var anaf = {
         } else if (data.redirect_out) {
             window.location = data.redirect_out;
             return;
+        } else if (data.url) {
+            var parser = document.createElement('a');
+            parser.href = data.url;
+            window.location.hash = parser.pathname;
         }
-        if (data.response.url) {
+        if (data.response && data.response.url) {
             var urljs = data.response.url.replace('.ajax', '');
             var urlcurr = window.location.hash.replace('#', '');
             if (urljs != urlcurr) {

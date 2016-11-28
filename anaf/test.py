@@ -192,7 +192,7 @@ class LiveServerTestCase(TransactionTestCase):
 
         # Launch the live server's thread
         specified_address = os.environ.get(
-            'DJANGO_LIVE_TEST_SERVER_ADDRESS', 'localhost:8081')
+            'DJANGO_LIVE_TEST_SERVER_ADDRESS', '127.0.0.1:8080-8090')
 
         # The specified ports may be of the form '8000-8010,8080,9200-9300'
         # i.e. a comma-separated list of ports or ranges of ports, so we break
@@ -290,21 +290,11 @@ class LiveTestCase(LiveServerTestCase):
     def setUpClass(cls):
         super(LiveTestCase, cls).setUpClass()
         cache.clear()
-
-        if not USE_SAUCE:
-            # cls.driver = webdriver.Firefox()
-            cls.driver = webdriver.Chrome()
-            cls.driver.set_window_size(1366, 768)
-            cls.driver.implicitly_wait(5)
         cls.accept_next_alert = True
 
     @classmethod
     def tearDownClass(cls):
         super(LiveTestCase, cls).tearDownClass()
-        if not USE_SAUCE and cls.driver:
-            cls.driver.refresh()
-            cls.driver.quit()
-            sleep(1)
         cls.server_thread.terminate()
         cls.server_thread.join()
 
@@ -333,7 +323,8 @@ class LiveTestCase(LiveServerTestCase):
 
         if USE_SAUCE:
             capabilities = webdriver.DesiredCapabilities.CHROME
-            # capabilities['version'] = '45'  # If this capability is null, an empty string, or omitted altogether, the latest version of the browser will be used automatically.  # noqa
+            # If this capability is null, an empty string, or omitted altogether, the latest version of the browser will be used automatically.  # noqa
+            # capabilities['version'] = '45'
             capabilities['platform'] = 'Windows 7'
             capabilities['screenResolution'] = '1920x1080'
             capabilities['name'] = self.id()
@@ -345,13 +336,21 @@ class LiveTestCase(LiveServerTestCase):
             hub_url = "http://%s:%s@ondemand.saucelabs.com/wd/hub" % (username, access_key)
             self.driver = webdriver.Remote(desired_capabilities=capabilities, command_executor=hub_url)
             self.driver.implicitly_wait(30)
+        else:
+            # self.driver = webdriver.Firefox()
+            self.driver = webdriver.Chrome()
+            self.driver.set_window_size(1366, 768)
+            self.driver.implicitly_wait(5)
 
     def tearDown(self):
         super(LiveTestCase, self).tearDown()
-        if USE_SAUCE and self.driver:
+        if self.driver:
+            self.driver.refresh()
+            if not USE_SAUCE:
+                sleep(1)
             self.driver.quit()
+        if USE_SAUCE:
             self._report_pass_fail()
-        sleep(1)
         cache.clear()
 
     def _report_pass_fail(self):
