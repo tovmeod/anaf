@@ -208,7 +208,7 @@ class ProjectTests(ProjectTestCase):
 
     def test_task_edit(self):
         self.click_wait('a[href="#/projects/task/%s/"]' % self.task.id)
-        self.click_wait('a[href="#/projects/task/%s/edit"]' % self.task.id)
+        self.click_wait('a[href="#/projects/task/%s/edit/"]' % self.task.id)
 
         name = 'edited name'
         em = self.send_keys('#id_name', name, clear=True)
