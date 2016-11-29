@@ -293,7 +293,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('task-new-to-milestone', (1,))
 
     def test_task_add_subtask(self):
-        self.assert_protected('projects_task_add_subtask', (1,))
+        self.assert_protected('task-new-subtask', (1,))
 
     def test_task_view(self):
         self.assert_protected('task-detail', (1,))
@@ -518,7 +518,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_task_add_subtask(self):
         """Test index page with login at /projects/task/add/<task_id>/"""
-        response = self.client.get(reverse('projects_task_add_subtask', args=[self.parent_task.id]))
+        response = self.client.get(reverse('task-new-subtask', args=[self.parent_task.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_task_set_status(self):

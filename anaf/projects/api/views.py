@@ -201,6 +201,32 @@ class TaskView(viewsets.ModelViewSet):
 
         return Response(context, template_name='projects/task_add.html')
 
+    @detail_route(methods=('GET', 'POST'))
+    def new_subtask(self, request, *args, **kwargs):
+        """New SubTask page"""
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(TaskView, self).create(request, *args, **kwargs)
+
+        task = self.get_object()
+        if request.user.profile.has_permission(task, mode='x'):
+            parent = task
+        else:
+            parent = None
+
+        if request.POST:
+            form = TaskForm(request.user.profile, parent, None, None, request.POST)
+            if form.is_valid():
+                subtask = form.save()
+                subtask.set_user(request.user.profile)
+                return HttpResponseRedirect(reverse('task-detail', args=[subtask.id]))
+        else:
+            form = TaskForm(request.user.profile, parent, None, None)
+
+        context = _get_default_context(request)
+        context.update({'form': form, 'task': parent})
+
+        return Response(context, template_name='projects/task_add_subtask.html')
+
     def new_to_milestone(self, request, milestone_id=None, *args, **kwargs):
         """New Task to preselected milestone"""
 

@@ -8,7 +8,7 @@
 {% block module_subtitle %}{% trans %}Task{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url projects_task_add_subtask task.id %}" class="top-menu add-link">{% trans %}New Sub Task{% endtrans %}</a>
+<a href="{% url task-new-subtask task.id %}" class="top-menu add-link">{% trans %}New Sub Task{% endtrans %}</a>
 <a href="{% url task-detail task.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(task, mode='w') %}
 <a href="{% url task-edit task.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>

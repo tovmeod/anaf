@@ -605,44 +605,6 @@ def milestone_set_status(request, milestone_id, status_id, response_format='html
     return milestone_view(request, milestone_id, response_format)
 
 #
-# Tasks
-#
-
-
-@handle_response_format
-@mylogin_required
-def task_add_subtask(request, task_id=None, response_format='html'):
-    """New subtask form"""
-
-    parent = None
-    if task_id:
-        parent = get_object_or_404(Task, pk=task_id)
-        if not request.user.profile.has_permission(parent, mode='x'):
-            parent = None
-
-    if request.POST:
-        if 'cancel' not in request.POST:
-            task = Task()
-            form = TaskForm(
-                request.user.profile, parent, None, None, request.POST, instance=task)
-            if form.is_valid():
-                task = form.save()
-                task.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('task-detail', args=[parent.id]))
-        else:
-            return HttpResponseRedirect(reverse('task-detail', args=[parent.id]))
-    else:
-        form = TaskForm(request.user.profile, parent, None, None)
-
-    context = _get_default_context(request)
-    context.update({'form': form,
-                    'task': parent})
-
-    return render_to_response('projects/task_add_subtask', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-#
 # Task Time Slots
 #
 

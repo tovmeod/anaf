@@ -78,8 +78,8 @@ urlpatterns = patterns('anaf.projects.views',
                                oldviews.milestone_delete, name='projects_milestone_delete'),
 
                            # Subtask
-                           url(r'^task/add/subtask/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_add_subtask, name='projects_task_add_subtask'),
+                           # url(r'^task/add/subtask/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
+                           #     oldviews.task_add_subtask, name='projects_task_add_subtask'),
 
                            # Times Slots
                            url(r'^task/time/(?P<task_id>\w+)/add(\.(?P<response_format>\w+))?/?$',
