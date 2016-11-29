@@ -77,21 +77,6 @@ urlpatterns = patterns('anaf.projects.views',
                            url(r'^milestone/delete/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.milestone_delete, name='projects_milestone_delete'),
 
-                           # Tasks
-                           # url(r'^task/add(\.(?P<response_format>\w+))?/?$', oldviews.task_add, name='projects_task_add'),
-                           # url(r'^task/add/project/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.task_add_typed, name='projects_task_add_typed'),
-                           # url(r'^task/add/milestone/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.task_add_to_milestone, name='task-new-to-milestone'),
-                           # url(r'^task/view/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.task_view, name='projects_task_view'),
-                           # url(r'^task/edit/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.task_edit, name='projects_task_edit'),
-                           # url(r'^task/set/(?P<task_id>\d+)/status/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.task_set_status, name='projects_task_set_status'),
-                           # url(r'^task/delete/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.task_delete, name='projects_task_delete'),
-
                            # Subtask
                            url(r'^task/add/subtask/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.task_add_subtask, name='projects_task_add_subtask'),

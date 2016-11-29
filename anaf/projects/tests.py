@@ -513,7 +513,6 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_task_add_to_milestone(self):
         """Test new task to milestone page with login at /projects/task/new_to_milestone/<milestone_id>/"""
-        url = reverse('task-new-to-milestone', args=[self.milestone.id])
         response = self.client.get(reverse('task-new-to-milestone', args=[self.milestone.id]))
         self.assertEquals(response.status_code, 200)
 
