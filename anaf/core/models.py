@@ -817,7 +817,6 @@ class Object(models.Model):
         """Sets owner of the Object to the given user
         :param anaf.core.User user:
         """
-        # TODO: check every call that it send only anaf.core.User model
         if user is None:
             return self
         if isinstance(user, django_auth.User):
@@ -827,8 +826,7 @@ class Object(models.Model):
 
         # get default permissions from settings
         try:
-            conf = ModuleSetting.get_for_module(
-                'anaf.core', 'default_permissions')[0]
+            conf = ModuleSetting.get_for_module('anaf.core', 'default_permissions')[0]
             default_permissions = conf.value
         except:
             default_permissions = settings.ANAF_DEFAULT_PERMISSIONS
@@ -929,8 +927,7 @@ class Object(models.Model):
 
     def set_user_from_request(self, request, mode=None):
         """Sets the user to the current in request and default mode for the user"""
-        user = request.user.profile
-        self.set_user(user)
+        self.set_user(request.user.profile)
         return self
 
     def copy_permissions(self, object):

@@ -8,7 +8,7 @@
 {% block module_subtitle %}{% trans %}Milestone{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url projects_task_add_to_milestone milestone.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
+<a href="{% url task-new-to-milestone milestone.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
 <a href="{% url projects_milestone_view milestone.id %}" class="top-menu view-link-active">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(milestone, mode='w') %}
 <a href="{% url projects_milestone_edit milestone.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
@@ -127,7 +127,7 @@
 <div>
     <span class="content-label-head">{% trans %}Tasks{% endtrans %}:
         <span class="spaced-h smaller">
-            <a href="{% url projects_task_add_to_milestone milestone.id %}" id="add_task" class="inline-link add-link popup-link">{% trans %}Add{% endtrans %}</a>
+            <a href="{% url task-new-to-milestone milestone.id %}" id="add_task" class="inline-link add-link popup-link">{% trans %}Add{% endtrans %}</a>
         </span>
     </span>
 </div>
@@ -148,7 +148,7 @@
 
 <div class="content-list-item lighter spaced-v spaced-h">
     <em>{% trans %}No Tasks{% endtrans %}.</em>
-    <a href="{% url projects_task_add_to_milestone milestone.id %}" class="popup-link"><strong>{% trans %}Create a Task{% endtrans %}</strong></a>
+    <a href="{% url task-new-to-milestone milestone.id %}" class="popup-link"><strong>{% trans %}Create a Task{% endtrans %}</strong></a>
 </div>
 {% endif %}
 

@@ -183,12 +183,12 @@ class TaskView(viewsets.ModelViewSet):
 
     @list_route(methods=('GET', 'POST'))
     def new(self, request, *args, **kwargs):
+        """New Task page"""
         if request.accepted_renderer.format not in self.accepted_formats:
             return super(TaskView, self).create(request, *args, **kwargs)
 
         if request.POST:
-            task = Task()
-            form = TaskForm(request.user.profile, None, None, None, request.POST, instance=task)
+            form = TaskForm(request.user.profile, None, None, None, request.POST)
             if form.is_valid():
                 task = form.save()
                 task.set_user_from_request(request)
@@ -200,6 +200,65 @@ class TaskView(viewsets.ModelViewSet):
         context.update({'form': form})
 
         return Response(context, template_name='projects/task_add.html')
+
+    def new_to_milestone(self, request, milestone_id=None, *args, **kwargs):
+        """New Task to preselected milestone"""
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(TaskView, self).create(request, *args, **kwargs)
+
+        milestone = None
+        if milestone_id:
+            milestone = get_object_or_404(Milestone, pk=milestone_id)
+            if not request.user.profile.has_permission(milestone, mode='x'):
+                milestone = None
+
+        if milestone is not None:
+            project = milestone.project
+            project_id = milestone.project_id
+        else:
+            project, project_id = None, None
+
+        if request.POST:
+            form = TaskForm(request.user.profile, None, project_id, milestone_id, request.POST)
+            if form.is_valid():
+                task = form.save()
+                task.set_user(request.user.profile)
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
+        else:
+            form = TaskForm(request.user.profile, None, project_id, milestone_id)
+
+        context = _get_default_context(request)
+        context.update({'form': form, 'project': project, 'milestone': milestone})
+
+        return Response(context, template_name='projects/task_add_to_milestone.html')
+
+    def new_to_project(self, request, project_id=None, *args, **kwargs):
+        """New Task to preselected project"""
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(TaskView, self).create(request, *args, **kwargs)
+
+        project = None
+        if project_id:
+            project = get_object_or_404(Project, pk=project_id)
+            if not request.user.profile.has_permission(project, mode='x'):
+                project = None
+
+        if request.POST:
+            task = Task()
+            form = TaskForm(request.user.profile, None, project_id, None, request.POST, instance=task)
+            if form.is_valid():
+                task = form.save()
+                task.set_user_from_request(request)
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
+        else:
+            form = TaskForm(request.user.profile, None, project_id, None)
+
+        context = _get_default_context(request)
+        context.update({'form': form, 'project': project})
+
+        return Response(context, template_name='projects/task_add_typed.html')
 
     @list_route(methods=('GET', 'POST'))
     @process_mass_form

@@ -9,7 +9,7 @@
 {% block module_topmenu %}
 <a href="{% url projects_project_add_typed project.id %}" class="top-menu add-link">{% trans %}New Project{% endtrans %}</a>
 <a href="{% url projects_milestone_add_typed project.id %}" class="top-menu add-link">{% trans %}New Milestone{% endtrans %}</a>
-<a href="{% url projects_task_add_typed project.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
+<a href="{% url task-new-to-project project.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
 <a href="{% url projects_project_view project.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(project, mode='w') %}
 <a href="{% url projects_project_edit project.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>

@@ -10,7 +10,7 @@
 {% block module_topmenu %}
 <a href="{% url projects_project_add_typed project.id %}" class="top-menu add-link">{% trans %}New Project{% endtrans %}</a>
 <a href="{% url projects_milestone_add_typed project.id %}" class="top-menu add-link">{% trans %}New Milestone{% endtrans %}</a>
-<a href="{% url projects_task_add_typed project.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
+<a href="{% url task-new-to-project project.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
 <a href="{% url core_trash %}" class="top-menu trash-link {% if trash %}trash-full-link{% endif %}">{% trans %}Trash{% endtrans %}</a>
 <a href="{% url projects_gantt_view project.id %}" class="top-menu gantt-link">{% trans %}Gantt Chart{% endtrans %}</a>
 <a href="{% url projects_project_view project.id %}" class="top-menu view-link-active">{% trans %}View{% endtrans %}</a>
@@ -140,7 +140,7 @@
         <input type="checkbox" name="mass-milestone-{{ milestone.id }}" value="{{ milestone.id }}" class="group-control" />
         <a href="{% url projects_milestone_view milestone.id %}" class="projects-milestone">{{ milestone.name }}</a>
         <span class="spaced-h smaller">
-            <a href="{% url projects_task_add_to_milestone milestone.id %}" id="add_task" class="inline-link add-link popup-link">{% trans %}Add{% endtrans %}</a>
+            <a href="{% url task-new-to-milestone milestone.id %}" id="add_task" class="inline-link add-link popup-link">{% trans %}Add{% endtrans %}</a>
         </span>
     </span>
     {% set render_tasks = tasks.filter(milestone=milestone) %}
@@ -149,7 +149,7 @@
     {% else %}
     <div class="content-list-item lighter spaced-v spaced-h">
         <em>{% trans %}No Active Tasks{% endtrans %}</em>.
-    <a href="{% url projects_task_add_to_milestone milestone.id %}" class="popup-link"><strong>{% trans %}Create a Task{% endtrans %}</strong></a>
+    <a href="{% url task-new-to-milestone milestone.id %}" class="popup-link"><strong>{% trans %}Create a Task{% endtrans %}</strong></a>
     </div>
     {% endif %}
     <br />
