@@ -66,8 +66,6 @@ urlpatterns = patterns('anaf.projects.views',
                                oldviews.gantt_view, name='projects_gantt_view'),
 
                             # Milestones
-                           url(r'^milestone/edit/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.milestone_edit, name='projects_milestone_edit'),
                            url(r'^milestone/set/(?P<milestone_id>\d+)/status/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.milestone_set_status, name='projects_milestone_set_status'),
                            url(r'^milestone/delete/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',

@@ -324,38 +324,6 @@ def project_delete(request, project_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-def milestone_edit(request, milestone_id, response_format='html'):
-    """Milestone edit page"""
-
-    milestone = get_object_or_404(Milestone, pk=milestone_id)
-    project = milestone.project
-    if not request.user.profile.has_permission(milestone, mode='w'):
-        return user_denied(request, message="You don't have access to this Milestone")
-
-    if request.POST:
-        if 'cancel' not in request.POST:
-            form = MilestoneForm(
-                request.user.profile, None, request.POST, instance=milestone)
-            if form.is_valid():
-                milestone = form.save()
-                return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
-        else:
-            return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
-    else:
-        form = MilestoneForm(
-            request.user.profile, None, instance=milestone)
-
-    context = _get_default_context(request)
-    context.update({'form': form,
-                    'milestone': milestone,
-                    'project': project})
-
-    return render_to_response('projects/milestone_edit', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
 def milestone_delete(request, milestone_id, response_format='html'):
     """Milestone delete"""
 

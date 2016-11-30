@@ -10,7 +10,7 @@
 <a href="{% url task-new-to-milestone milestone.id %}" class="top-menu add-link-active">{% trans %}New Task{% endtrans %}</a>
 <a href="{% url milestone-detail milestone.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(milestone, mode='w') %}
-<a href="{% url projects_milestone_edit milestone.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url milestone-edit milestone.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
 <a href="{% url projects_milestone_delete milestone.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endif %}
 {% endblock %}

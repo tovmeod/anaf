@@ -275,7 +275,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('milestone-detail', (1, ))
 
     def test_milestone_edit(self):
-        self.assert_protected('projects_milestone_edit', (1, ))
+        self.assert_protected('milestone-edit', (1, ))
 
     def test_milestone_delete(self):
         self.assert_protected('projects_milestone_delete', (1, ))
@@ -493,7 +493,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_milestone_edit_login(self):
         """Test index page with login at /projects/milestone/edit/<milestone_id>"""
-        response = self.client.get(reverse('projects_milestone_edit', args=[self.milestone.id]))
+        response = self.client.get(reverse('milestone-edit', args=[self.milestone.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_milestone_delete_login(self):

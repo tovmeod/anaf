@@ -167,6 +167,37 @@ class MilestoneView(viewsets.ModelViewSet):
         # filters.as_ul()
         return Response(context, template_name='projects/milestone_view.html')
 
+    @detail_route(methods=('GET', 'POST'))
+    def edit(self, request, *args, **kwargs):
+        """Milestone edit page"""
+
+        milestone = self.get_object()
+        has_permission = request.user.profile.has_permission(milestone, mode='w')
+        message = _("You don't have permission to edit this Milestone")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(milestone)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if request.POST:
+            form = MilestoneForm(request.user.profile, None, request.POST, instance=milestone)
+            if form.is_valid():
+                task = form.save()
+                return HttpResponseRedirect(reverse('milestone-detail', args=[task.id]))
+        else:
+            form = MilestoneForm(request.user.profile, None, instance=milestone)
+
+        context.update({'form': form, 'milestone': milestone})
+        return Response(context, template_name='projects/milestone_edit.html')
+
     @list_route(methods=('GET', 'POST'))
     def new(self, request, *args, **kwargs):
         if request.accepted_renderer.format not in self.accepted_formats:
