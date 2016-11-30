@@ -106,67 +106,6 @@ def index(request, response_format='html'):
 @handle_response_format
 @mylogin_required
 @_process_mass_form
-def index_owned(request, response_format='html'):
-    """Tasks owned by current user"""
-
-    query = Q(
-        parent__isnull=True, caller__related_user=request.user.profile)
-    if request.GET:
-        if 'status' in request.GET and request.GET['status']:
-            query = query & _get_filter_query(request.GET)
-        else:
-            query = query & Q(
-                status__hidden=False) & _get_filter_query(request.GET)
-    else:
-        query = query & Q(status__hidden=False)
-
-    tasks = Object.filter_by_request(request, Task.objects.filter(query))
-    milestones = Object.filter_by_request(request, Milestone.objects.filter(status__hidden=False))
-    filters = FilterForm(request.user.profile, 'status', request.GET)
-
-    context = _get_default_context(request)
-    context.update({'milestones': milestones,
-                    'tasks': tasks,
-                    'filters': filters})
-
-    return render_to_response('projects/index_owned', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
-@_process_mass_form
-def index_assigned(request, response_format='html'):
-    """Tasks assigned to current user"""
-
-    query = Q(parent__isnull=True, assigned=request.user.profile)
-    if request.GET:
-        if 'status' in request.GET and request.GET['status']:
-            query = query & _get_filter_query(request.GET)
-        else:
-            query = query & Q(
-                status__hidden=False) & _get_filter_query(request.GET)
-    else:
-        query = query & Q(status__hidden=False)
-
-    tasks = Object.filter_by_request(request, Task.objects.filter(query))
-
-    milestones = Object.filter_by_request(
-        request, Milestone.objects.filter(status__hidden=False))
-    filters = FilterForm(request.user.profile, 'assigned', request.GET)
-
-    context = _get_default_context(request)
-    context.update({'milestones': milestones,
-                    'tasks': tasks,
-                    'filters': filters})
-
-    return render_to_response('projects/index_assigned', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
-@_process_mass_form
 def index_by_status(request, status_id, response_format='html'):
     """Sort tasks by status"""
 
@@ -192,38 +131,6 @@ def index_by_status(request, status_id, response_format='html'):
 
     return render_to_response('projects/index_by_status', context,
                               context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
-@_process_mass_form
-def index_in_progress(request, response_format='html'):
-    """A page with a list of tasks in progress"""
-
-    query = Q(parent__isnull=True)
-    if request.GET:
-        query = query & Q(
-            status__hidden=False) & _get_filter_query(request.GET)
-    else:
-        query = query & Q(status__hidden=False)
-
-    tasks = Object.filter_by_request(request, Task.objects.filter(query))
-
-    milestones = Object.filter_by_request(
-        request, Milestone.objects.filter(status__hidden=False))
-    filters = FilterForm(request.user.profile, 'status', request.GET)
-    time_slots = Object.filter_by_request(
-        request, TaskTimeSlot.objects.filter(time_from__isnull=False, time_to__isnull=True))
-
-    context = _get_default_context(request)
-    context.update({'milestones': milestones,
-                    'tasks': tasks,
-                    'filters': filters,
-                    'time_slots': time_slots})
-
-    return render_to_response('projects/index_in_progress', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
 
 #
 # Projects

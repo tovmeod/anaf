@@ -50,12 +50,6 @@ urlpatterns = patterns('anaf.projects.views',
                            # url(r'^dojo$', 'dojo_view', name='dojo_view'),
 
                            url(r'^index(\.(?P<response_format>\w+))?/?$', oldviews.index, name='projects_index'),
-                           # url(r'^task/owned(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.index_owned, name='projects_index_owned'),
-                           #url(r'^task/assigned(\.(?P<response_format>\w+))?/?$',
-                           #    oldviews.index_assigned, name='projects_index_assigned'),
-                           # url(r'^task/in_progress(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.index_in_progress, name='projects_tasks_in_progress'),
 
                            # Projects
                            url(r'^add(\.(?P<response_format>\w+))?/?$', oldviews.project_add, name='project_add'),
@@ -71,8 +65,6 @@ urlpatterns = patterns('anaf.projects.views',
                                oldviews.gantt_view, name='projects_gantt_view'),
 
                             # Milestones
-                           # url(r'^milestone/add/project/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.milestone_add_typed, name='projects_milestone_add_typed'),
                            url(r'^milestone/view/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.milestone_view, name='projects_milestone_view'),
                            url(r'^milestone/edit/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',

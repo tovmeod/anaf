@@ -331,7 +331,8 @@ class TaskView(viewsets.ModelViewSet):
         context = preprocess_context(context)
         return Response(context, template_name='projects/index_owned.html')
 
-    @list_route()
+    @list_route(methods=('GET', 'POST'))
+    @process_mass_form
     def assigned(self, request, *args, **kwargs):
         """Tasks assigned to current user"""
         tasks = self.get_queryset().filter(Q(assigned=request.user.profile))
@@ -348,7 +349,8 @@ class TaskView(viewsets.ModelViewSet):
         context = preprocess_context(context)
         return Response(context, template_name='projects/index_owned.html')
 
-    @list_route()
+    @list_route(methods=('GET', 'POST'))
+    @process_mass_form
     def in_progress(self, request, *args, **kwargs):
         """A page with a list of tasks in progress"""
         tasks = self.get_queryset().filter(Q(tasktimeslot__time_from__isnull=False, tasktimeslot__time_to__isnull=True))
