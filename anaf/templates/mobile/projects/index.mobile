@@ -28,7 +28,7 @@
     {% for milestone in milestones.filter(project=project)[:3] %}
     <span class="large light content-label-head">
         <input type="checkbox" name="mass-milestone-{{ milestone.id }}" value="{{ milestone.id }}" class="group-control" />
-        <a href="{% url projects_milestone_view milestone.id %}" class="projects-milestone"><h3>{% trans %}Milestone{% endtrans %}: {{ milestone.name }}</h3></a>
+        <a href="{% url milestone-detail milestone.id %}" class="projects-milestone"><h3>{% trans %}Milestone{% endtrans %}: {{ milestone.name }}</h3></a>
     </span>
     {% set render_tasks = tasks.filter(milestone__id=milestone.id)[:6] %}
     {% if render_tasks %}

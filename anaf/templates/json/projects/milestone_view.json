@@ -4,7 +4,7 @@
 {"milestone":
 	{	
 	"id": {{ milestone.id }},
-	"url": "http://{{ site_domain }}{% url projects_milestone_view milestone.id %}",
+	"url": "http://{{ site_domain }}{% url milestone-detail milestone.id %}",
 	"name": "{{ milestone }}",
 	"tasks": 
 		[

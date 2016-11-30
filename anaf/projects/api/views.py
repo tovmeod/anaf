@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.translation import ugettext as _
 from rest_framework import viewsets
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, MethodNotAllowed
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
@@ -114,6 +114,59 @@ class MilestoneView(viewsets.ModelViewSet):
         # todo: create html template for milestone list
         return Response(context, template_name='projects/milestone_add.html')
 
+    @process_mass_form
+    def retrieve(self, request, *args, **kwargs):
+        """Milestone view page"""
+
+        milestone = self.get_object()
+        has_permission = request.user.profile.has_permission(milestone)
+        message = _("You don't have permission to view this Milestone")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            # but API access doesn't allow POST here
+            if request.POST:
+                raise MethodNotAllowed(request.method)
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(milestone)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        tasks_query = Q(milestone=milestone, parent__isnull=True)
+        if request.GET:
+            if 'status' in request.GET and request.GET['status']:
+                query = tasks_query & _get_filter_query(request.GET)
+            else:
+                query = tasks_query & Q(status__hidden=False) & _get_filter_query(request.GET)
+            tasks = Object.filter_by_request(request, Task.objects.filter(query))
+        else:
+            tasks = Object.filter_by_request(request, Task.objects.filter(tasks_query & Q(status__hidden=False)))
+
+        filters = FilterForm(request.user.profile, 'milestone', request.GET)
+
+        tasks_progress = float(0)
+        tasks_progress_query = Object.filter_by_request(request, Task.objects.filter(Q(parent__isnull=True,
+                                                                                       milestone=milestone)))
+        if tasks_progress_query:
+            for task in tasks_progress_query:
+                if not task.status.active:
+                    tasks_progress += 1
+            tasks_progress = (tasks_progress / len(tasks_progress_query)) * 100
+            tasks_progress = round(tasks_progress, ndigits=1)
+
+        context = _get_default_context(request)
+        context.update({'milestone': milestone,
+                        'tasks': tasks,
+                        'tasks_progress': tasks_progress,
+                        'filters': filters})
+        # filters.as_ul()
+        return Response(context, template_name='projects/milestone_view.html')
+
     @list_route(methods=('GET', 'POST'))
     def new(self, request, *args, **kwargs):
         if request.accepted_renderer.format not in self.accepted_formats:
@@ -125,7 +178,7 @@ class MilestoneView(viewsets.ModelViewSet):
             if form.is_valid():
                 milestone = form.save()
                 milestone.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
+                return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
         else:
             form = MilestoneForm(request.user.profile, None)
 
@@ -150,7 +203,7 @@ class MilestoneView(viewsets.ModelViewSet):
             if form.is_valid():
                 milestone = form.save()
                 milestone.set_user(request.user.profile)
-                return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
+                return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
         else:
             form = MilestoneForm(request.user.profile, project_id)
 

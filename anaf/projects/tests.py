@@ -272,7 +272,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('milestone-new-to-project', (1, ))
 
     def test_milestone_view(self):
-        self.assert_protected('projects_milestone_view', (1, ))
+        self.assert_protected('milestone-detail', (1, ))
 
     def test_milestone_edit(self):
         self.assert_protected('projects_milestone_edit', (1, ))
@@ -480,14 +480,15 @@ class ProjectsViewsTest(AnafTestCase):
         response = self.client.get(reverse('milestone-new'))
         self.assertEquals(response.status_code, 200)
 
-    def test_milestone_add_typed(self):
-        """Test index page with login at /projects/milestone/add/<project_id>"""
+    def test_milestone_new_to_project(self):
+        """Test newmilestone page with login at /projects/milestone/new_to_project/<project_id>/"""
+        url = reverse('milestone-new-to-project', args=[self.parent.id])
         response = self.client.get(reverse('milestone-new-to-project', args=[self.parent.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_milestone_view_login(self):
         """Test index page with login at /projects/milestone/view/<milestone_id>"""
-        response = self.client.get(reverse('projects_milestone_view', args=[self.milestone.id]))
+        response = self.client.get(reverse('milestone-detail', args=[self.milestone.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_milestone_edit_login(self):

@@ -50,7 +50,7 @@
     {% for milestone in milestones if milestone.project==project %}
     <span class="large light content-label-head">
         <input type="checkbox" name="mass-milestone-{{ milestone.id }}" value="{{ milestone.id }}" class="group-control" />
-        <a href="{% url projects_milestone_view milestone.id %}" class="projects-milestone">{{ milestone.name }}</a>
+        <a href="{% url milestone-detail milestone.id %}" class="projects-milestone">{{ milestone.name }}</a>
         <span class="spaced-h smaller">
             <a href="{% url task-new-to-milestone milestone.id %}" id="add_task" class="inline-link add-link popup-link">{% trans %}Add Task{% endtrans %}</a>
         </span>
@@ -61,7 +61,7 @@
 	{% if render_tasks|length > 10 %}
 	<div class="spaced-v">
        <div class="content-list-tick"></div>
-	   <a href="{% url projects_milestone_view milestone.id %}" class="spaced-h light small">{% trans %}Show More{% endtrans %} &rarr;</a>
+	   <a href="{% url milestone-detail milestone.id %}" class="spaced-h light small">{% trans %}Show More{% endtrans %} &rarr;</a>
 	</div>
 	{% endif %}
     {% else %}

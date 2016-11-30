@@ -324,52 +324,6 @@ def project_delete(request, project_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-@_process_mass_form
-def milestone_view(request, milestone_id, response_format='html'):
-    """Single milestone view page"""
-
-    milestone = get_object_or_404(Milestone, pk=milestone_id)
-    project = milestone.project
-    if not request.user.profile.has_permission(milestone):
-        return user_denied(request, message="You don't have access to this Milestone")
-
-    query = Q(milestone=milestone, parent__isnull=True)
-    if request.GET:
-        if 'status' in request.GET and request.GET['status']:
-            query = query & _get_filter_query(request.GET)
-        else:
-            query = query & Q(
-                status__hidden=False) & _get_filter_query(request.GET)
-        tasks = Object.filter_by_request(request, Task.objects.filter(query))
-    else:
-        tasks = Object.filter_by_request(request,
-                                         Task.objects.filter(query & Q(status__hidden=False)))
-
-    filters = FilterForm(request.user.profile, 'milestone', request.GET)
-
-    tasks_progress = float(0)
-    tasks_progress_query = Object.filter_by_request(
-        request, Task.objects.filter(Q(parent__isnull=True, milestone=milestone)))
-    if tasks_progress_query:
-        for task in tasks_progress_query:
-            if not task.status.active:
-                tasks_progress += 1
-        tasks_progress = (tasks_progress / len(tasks_progress_query)) * 100
-        tasks_progress = round(tasks_progress, ndigits=1)
-
-    context = _get_default_context(request)
-    context.update({'milestone': milestone,
-                    'tasks': tasks,
-                    'tasks_progress': tasks_progress,
-                    'filters': filters,
-                    'project': project})
-
-    return render_to_response('projects/milestone_view', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
 def milestone_edit(request, milestone_id, response_format='html'):
     """Milestone edit page"""
 
@@ -384,9 +338,9 @@ def milestone_edit(request, milestone_id, response_format='html'):
                 request.user.profile, None, request.POST, instance=milestone)
             if form.is_valid():
                 milestone = form.save()
-                return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
+                return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
         else:
-            return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
+            return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
     else:
         form = MilestoneForm(
             request.user.profile, None, instance=milestone)
@@ -424,7 +378,7 @@ def milestone_delete(request, milestone_id, response_format='html'):
                 milestone.delete()
             return HttpResponseRedirect(reverse('projects_index'))
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
+            return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
 
     context = _get_default_context(request)
     context.update({'milestone': milestone,
@@ -833,7 +787,7 @@ def gantt_view(request, project_id, response_format='html'):
         mlabel = (
             milestone.name[:30] + '..') if len(milestone.name) > 30 else milestone.name
         mn = '<a href="{0!s}" class="popup-link projects-milestone">{1!s}</a>'.format(
-            reverse('projects_milestone_view', args=[milestone.id]), mlabel)
+            reverse('milestone-detail', args=[milestone.id]), mlabel)
         a = {'id': milestone.id, 'name': mn, 'label': mlabel}
         if series:
             a['series'] = series

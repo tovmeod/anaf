@@ -75,7 +75,7 @@
             {% if not by_milestone %}
             <td>
                 {% if task.milestone %}
-                <a href="{% url projects_milestone_view task.milestone_id %}" class="group-link">{{ task.milestone.name }}</a>
+                <a href="{% url milestone-detail task.milestone_id %}" class="group-link">{{ task.milestone.name }}</a>
                 {% endif %}
             </td>
             {% endif %}

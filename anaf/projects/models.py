@@ -88,7 +88,7 @@ class Milestone(Object):
     def get_absolute_url(self):
         """Returns absolute URL for the Milestone
         :rtype str"""
-        return reverse('projects_milestone_view', args=[self.id])
+        return reverse('milestone-detail', args=[self.id])
 
 
 # Task model

@@ -428,13 +428,12 @@ class FilterForm(ModelForm):
             self.fields['caller'].widget.attrs.update({'class': 'autocomplete',
                                                        'callback': reverse('identities_ajax_contact_lookup')})
 
-        self.fields['status'].label = _("Status")
         if 'status' in skip:
             del self.fields['status']
         else:
-            self.fields['status'].queryset = Object.filter_permitted(
-                user, TaskStatus.objects, mode='x')
-            self.fields['status'].required = False
+            self.fields['status'].label = _("Status")
+            self.fields['status'].queryset = Object.filter_permitted(user, TaskStatus.objects, mode='x')
+            self.fields['status'].null = True
 
         self.fields['assigned'].label = _("Assigned")
         self.fields['assigned'].widget.attrs.update({'class': 'multicomplete',
@@ -444,13 +443,12 @@ class FilterForm(ModelForm):
         else:
             self.fields['assigned'].help_text = ""
 
-        self.fields['project'].label = _("Project")
         if 'project' in skip:
             del self.fields['project']
         else:
-            self.fields['project'].queryset = Object.filter_permitted(
-                user, Project.objects, mode='x')
-            self.fields['project'].required = False
+            self.fields['project'].label = _("Project")
+            self.fields['project'].queryset = Object.filter_permitted(user, Project.objects, mode='x')
+            self.fields['project'].null = True
 
         self.fields['milestone'].label = _("Milestone")
         if 'milestone' in skip:
