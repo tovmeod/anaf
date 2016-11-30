@@ -9,7 +9,7 @@
 
 {% block module_topmenu %}
 <a href="{% url projects_project_add_typed project.id %}" class="top-menu add-link">{% trans %}New Project{% endtrans %}</a>
-<a href="{% url projects_milestone_add_typed project.id %}" class="top-menu add-link">{% trans %}New Milestone{% endtrans %}</a>
+<a href="{% url milestone-new-to-project project.id %}" class="top-menu add-link">{% trans %}New Milestone{% endtrans %}</a>
 <a href="{% url task-new-to-project project.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
 <a href="{% url projects_gantt_view project.id %}" class="top-menu gantt-link-active">{% trans %}Gantt Chart{% endtrans %}</a>
 <a href="{% url projects_project_view project.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
@@ -36,7 +36,7 @@
 		<img class="left" src="/static/icons/hints/chart.gif"/>
 		<div class="hint_message">
 		<span class="hint_title">{% trans %}A Gantt Chart needs Milestones or Tasks with both Start & End Dates{% endtrans %}.</span>
-		<h3><a href="{% url projects_milestone_add_typed project.id %}" class="popup-link"><strong>{% trans %}Create a new Milestone{% endtrans %}</strong></a></h3>
+		<h3><a href="{% url milestone-new-to-project project.id %}" class="popup-link"><strong>{% trans %}Create a new Milestone{% endtrans %}</strong></a></h3>
 		<h3><a href="{% url task-new-to-project project.id %}" class="popup-link"><strong>{% trans %}Create a new Task{% endtrans %}</strong></a></h3>
 		</div>
 	</div>

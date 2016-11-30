@@ -133,6 +133,32 @@ class MilestoneView(viewsets.ModelViewSet):
         context.update({'form': form})
         return Response(context, template_name='projects/milestone_add.html')
 
+    def new_to_project(self, request, project_id=None, *args, **kwargs):
+        """New milestone to preselected project"""
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(MilestoneView, self).create(request, *args, **kwargs)
+
+        project = None
+        if project_id:
+            project = get_object_or_404(Project, pk=project_id)
+            if not request.user.profile.has_permission(project, mode='x'):
+                project = None
+
+        if request.POST:
+            form = MilestoneForm(request.user.profile, project_id, request.POST)
+            if form.is_valid():
+                milestone = form.save()
+                milestone.set_user(request.user.profile)
+                return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
+        else:
+            form = MilestoneForm(request.user.profile, project_id)
+
+        context = _get_default_context(request)
+        context.update({'form': form, 'project': project})
+
+        return Response(context, template_name='projects/milestone_add_typed.html')
+
 
 class TaskView(viewsets.ModelViewSet):
     """

@@ -39,7 +39,7 @@
                 <span class="spaced-h smaller">
                     <a href="{% url projects_project_view project.id %}" class="inline-link view-link">{% trans %}View{% endtrans %}</a>
                     <a href="{% url projects_project_edit project.id %}" class="inline-link edit-link popup-link">{% trans %}Edit{% endtrans %}</a>
-                    <a href="{% url projects_milestone_add_typed project.id %}" class="inline-link add-link popup-link">{% trans %}Add Milestone{% endtrans %}</a>
+                    <a href="{% url milestone-new-to-project project.id %}" class="inline-link add-link popup-link">{% trans %}Add Milestone{% endtrans %}</a>
                     <a href="{% url task-new-to-project project.id %}" class="inline-link add-link popup-link">{% trans %}Add Task{% endtrans %}</a>
                     {{ attachments_count(project) }} {{ last_updated(project) }}
                 </span>

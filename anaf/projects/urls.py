@@ -39,6 +39,13 @@ urlpatterns = patterns('anaf.projects.views',
                            url(r'^task/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
                                views.TaskView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
                                name='task-new-to-project'),
+
+                           url(r'^milestone/new_to_project/(?P<project_id>[^/.]+)/$',
+                               views.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               name='milestone-new-to-project'),
+                           url(r'^milestone/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
+                               views.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               name='milestone-new-to-project'),
                        # [u'projects/task/(?P<pk>[^/.]+)/status\\.(?P<format>[a-z0-9]+)/?$', u'projects/task/(?P<pk>[^/.]+)/status/$']
                            # url(r'^dojo$', 'dojo_view', name='dojo_view'),
 
@@ -64,10 +71,8 @@ urlpatterns = patterns('anaf.projects.views',
                                oldviews.gantt_view, name='projects_gantt_view'),
 
                             # Milestones
-                           # url(r'^milestone/add(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.milestone_add, name='projects_milestone_add'),
-                           url(r'^milestone/add/project/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.milestone_add_typed, name='projects_milestone_add_typed'),
+                           # url(r'^milestone/add/project/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',
+                           #     oldviews.milestone_add_typed, name='projects_milestone_add_typed'),
                            url(r'^milestone/view/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.milestone_view, name='projects_milestone_view'),
                            url(r'^milestone/edit/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
@@ -76,10 +81,6 @@ urlpatterns = patterns('anaf.projects.views',
                                oldviews.milestone_set_status, name='projects_milestone_set_status'),
                            url(r'^milestone/delete/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.milestone_delete, name='projects_milestone_delete'),
-
-                           # Subtask
-                           # url(r'^task/add/subtask/(?P<task_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.task_add_subtask, name='projects_task_add_subtask'),
 
                            # Times Slots
                            url(r'^task/time/(?P<task_id>\w+)/add(\.(?P<response_format>\w+))?/?$',

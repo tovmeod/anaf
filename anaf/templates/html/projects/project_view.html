@@ -9,7 +9,7 @@
 
 {% block module_topmenu %}
 <a href="{% url projects_project_add_typed project.id %}" class="top-menu add-link">{% trans %}New Project{% endtrans %}</a>
-<a href="{% url projects_milestone_add_typed project.id %}" class="top-menu add-link">{% trans %}New Milestone{% endtrans %}</a>
+<a href="{% url milestone-new-to-project project.id %}" class="top-menu add-link">{% trans %}New Milestone{% endtrans %}</a>
 <a href="{% url task-new-to-project project.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
 <a href="{% url core_trash %}" class="top-menu trash-link {% if trash %}trash-full-link{% endif %}">{% trans %}Trash{% endtrans %}</a>
 <a href="{% url projects_gantt_view project.id %}" class="top-menu gantt-link">{% trans %}Gantt Chart{% endtrans %}</a>
@@ -168,7 +168,7 @@
 {% else %}
 <div class="content-list-item lighter spaced-v spaced-h">
     <em>{% trans %}No Milestones{% endtrans %}.</em>
-    <a href="{% url projects_milestone_add_typed project.id %}" class="popup-link"><strong>{% trans %}Create a Milestone{% endtrans %}</strong></a>
+    <a href="{% url milestone-new-to-project project.id %}" class="popup-link"><strong>{% trans %}Create a Milestone{% endtrans %}</strong></a>
 </div>
 {% endif %}
 

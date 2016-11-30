@@ -414,63 +414,6 @@ def project_delete(request, project_id, response_format='html'):
 # Milestones
 #
 
-@handle_response_format
-@mylogin_required
-def milestone_add(request, response_format='html'):
-    """New milestone form"""
-
-    if request.POST:
-        if 'cancel' not in request.POST:
-            milestone = Milestone()
-            form = MilestoneForm(
-                request.user.profile, None, request.POST, instance=milestone)
-            if form.is_valid():
-                milestone = form.save()
-                milestone.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
-        else:
-            return HttpResponseRedirect(reverse('projects'))
-    else:
-        form = MilestoneForm(request.user.profile, None)
-
-    context = _get_default_context(request)
-    context.update({'form': form})
-
-    return render_to_response('projects/milestone_add', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
-def milestone_add_typed(request, project_id=None, response_format='html'):
-    """Milestone add to preselected project"""
-
-    project = None
-    if project_id:
-        project = get_object_or_404(Project, pk=project_id)
-        if not request.user.profile.has_permission(project, mode='x'):
-            project = None
-
-    if request.POST:
-        if 'cancel' not in request.POST:
-            milestone = Milestone()
-            form = MilestoneForm(
-                request.user.profile, project_id, request.POST, instance=milestone)
-            if form.is_valid():
-                milestone = form.save()
-                milestone.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_milestone_view', args=[milestone.id]))
-        else:
-            return HttpResponseRedirect(reverse('projects'))
-    else:
-        form = MilestoneForm(request.user.profile, project_id)
-
-    context = _get_default_context(request)
-    context.update({'form': form, 'project': project})
-
-    return render_to_response('projects/milestone_add_typed', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
 
 @handle_response_format
 @mylogin_required
@@ -607,6 +550,7 @@ def milestone_set_status(request, milestone_id, status_id, response_format='html
 #
 # Task Time Slots
 #
+
 
 @handle_response_format
 @mylogin_required
