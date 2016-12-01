@@ -14,7 +14,7 @@
     </ul>
     <div class="content-form-submit">
         <input type="submit" name="save" value="{% trans %}Create Milestone{% endtrans %}" />
-		<input type="submit" name="cancel" value="{% trans %}Cancel{% endtrans %}" class="cancel" />
+        <a class="cancel" href="{% url projects_index %}">{% trans %}Cancel{% endtrans %}</a>
     </div>
 </form>
 {% endblock %}
