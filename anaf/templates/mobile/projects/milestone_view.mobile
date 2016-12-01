@@ -11,7 +11,7 @@
 <a href="{% url milestone-detail milestone.id %}" class="top-menu view-link-active">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(milestone, mode='w') %}
 <a href="{% url milestone-edit milestone.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
-<a href="{% url projects_milestone_delete milestone.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
+<a href="{% url milestone-delete milestone.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endif %}
 
 {% endblock %}

@@ -316,47 +316,6 @@ def project_delete(request, project_id, response_format='html'):
     return render_to_response('projects/project_delete', context,
                               context_instance=RequestContext(request), response_format=response_format)
 
-
-#
-# Milestones
-#
-
-
-@handle_response_format
-@mylogin_required
-def milestone_delete(request, milestone_id, response_format='html'):
-    """Milestone delete"""
-
-    milestone = get_object_or_404(Milestone, pk=milestone_id)
-    project = milestone.project
-    if not request.user.profile.has_permission(milestone, mode='w'):
-        return user_denied(request, message="You don't have access to this Milestone")
-
-    query = Q(milestone=milestone, parent__isnull=True)
-    if request.GET:
-        query = query & _get_filter_query(request.GET)
-    tasks = Object.filter_by_request(request, Task.objects.filter(query))
-
-    if request.POST:
-        if 'delete' in request.POST:
-            if 'trash' in request.POST:
-                milestone.trash = True
-                milestone.save()
-            else:
-                milestone.delete()
-            return HttpResponseRedirect(reverse('projects_index'))
-        elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
-
-    context = _get_default_context(request)
-    context.update({'milestone': milestone,
-                    'tasks': tasks,
-                    'project': project})
-
-    return render_to_response('projects/milestone_delete', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
 #
 # Task Time Slots
 #

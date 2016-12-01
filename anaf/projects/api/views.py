@@ -226,6 +226,42 @@ class MilestoneView(viewsets.ModelViewSet):
 
         return self.retrieve(request, *args, **kwargs)
 
+    @detail_route(methods=('GET', 'POST'))
+    def delete(self, request, *args, **kwargs):
+        """Milestone delete"""
+
+        milestone = self.get_object()
+        has_permission = request.user.profile.has_permission(milestone, mode='w')
+        message = _("You don't have permission to delete this Milestone")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(milestone)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if request.POST:
+            if 'trash' in request.POST:
+                milestone.trash = True
+                milestone.save(update_fields=('trash',))
+            else:
+                milestone.delete()
+            return HttpResponseRedirect(reverse('projects_index'))
+
+        task_query = Q(milestone=milestone, parent__isnull=True)
+        if request.GET:
+            task_query = task_query & _get_filter_query(request.GET)
+        tasks = Object.filter_by_request(request, Task.objects.filter(task_query))
+
+        context.update({'milestone': milestone, 'tasks': tasks})
+        return Response(context, template_name='projects/milestone_delete.html')
+
     @list_route(methods=('GET', 'POST'))
     def new(self, request, *args, **kwargs):
         if request.accepted_renderer.format not in self.accepted_formats:

@@ -73,9 +73,6 @@ urlpatterns = patterns('anaf.projects.views',
                                oldviews.gantt_view, name='projects_gantt_view'),
 
                             # Milestones
-                           url(r'^milestone/delete/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.milestone_delete, name='projects_milestone_delete'),
-
                            url(r'^milestone/(?P<pk>[^/.]+)/$',
                                views.MilestoneView.as_view({'get': 'retrieve', 'post': 'retrieve'}),
                                name='milestone-detail'),
