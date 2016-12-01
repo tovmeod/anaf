@@ -184,7 +184,7 @@ class ProjectView(viewsets.ModelViewSet):
     def gantt(self, request, *args, **kwargs):
         """Project gantt view"""
         project = self.get_object()
-        ganttData = []
+        gantt_data = []
 
         # generate json
         milestones = Milestone.objects.filter(project=project).filter(trash=False)
@@ -212,7 +212,7 @@ class ProjectView(viewsets.ModelViewSet):
                 a['end'] = milestone.end_date.date().isoformat()
                 a['color'] = '#E3F3D9'
             if series or (milestone.start_date and milestone.end_date):
-                ganttData.append(a)
+                gantt_data.append(a)
         unclassified = Task.objects.filter(project=project).filter(milestone__isnull=True).filter(
             start_date__isnull=False).filter(end_date__isnull=False).filter(trash=False)
         series = []
@@ -226,9 +226,9 @@ class ProjectView(viewsets.ModelViewSet):
                            'start': task.start_date.date().isoformat(),
                            'end': task.end_date.date().isoformat()})
         if series:
-            ganttData.append({'id': 0, 'name': _('Unclassified Tasks'), 'series': series})
-        if ganttData:
-            jdata = json.dumps(ganttData)
+            gantt_data.append({'id': 0, 'name': _('Unclassified Tasks'), 'series': series})
+        if gantt_data:
+            jdata = json.dumps(gantt_data)
         else:
             jdata = None
 
