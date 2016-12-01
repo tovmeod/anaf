@@ -15,7 +15,7 @@
 <a href="{% url project-detail project.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(project, mode='w') %}
 <a href="{% url project-edit project.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
-<a href="{% url projects_project_delete project.id %}" class="top-menu delete-link-active">{% trans %}Delete{% endtrans %}</a>
+<a href="{% url project-delete project.id %}" class="top-menu delete-link-active">{% trans %}Delete{% endtrans %}</a>
 {% endif %}
 {% endblock %}
 
@@ -43,7 +43,7 @@
             </li>
             <li>
                 <input type="submit" name="delete" value="{% trans %}Yes, Delete{% endtrans %}" />&nbsp;&nbsp;
-                <input type="submit" name="cancel" value="{% trans %}Cancel{% endtrans %}" class="cancel" />
+                <a class="cancel" href="{% url project-detail project.id %}">{% trans %}Cancel{% endtrans %}</a>
             </li>
         </ul>
     </form>

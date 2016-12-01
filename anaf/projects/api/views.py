@@ -208,6 +208,37 @@ class ProjectView(viewsets.ModelViewSet):
         context.update({'form': form, 'project': project})
         return Response(context, template_name='projects/project_edit.html')
 
+    @detail_route(methods=('GET', 'POST'))
+    def delete(self, request, *args, **kwargs):
+        """Project delete"""
+
+        project = self.get_object()
+        has_permission = request.user.profile.has_permission(project, mode='w')
+        message = _("You don't have permission to delete this Project")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(project)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if request.POST:
+            if 'trash' in request.POST:
+                project.trash = True
+                project.save()
+            else:
+                project.delete()
+            return HttpResponseRedirect(reverse('projects_index'))
+
+        context.update({'project': project})
+        return Response(context, template_name='projects/project_delete.html')
+
     def list(self, request, *args, **kwargs):
         if request.accepted_renderer.format not in self.accepted_formats:
             return super(ProjectView, self).list(request, *args, **kwargs)
