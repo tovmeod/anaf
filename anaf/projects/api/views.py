@@ -10,7 +10,7 @@ from rest_framework.decorators import detail_route, list_route
 
 from anaf.core.models import Object
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
-from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm
+from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm, ProjectForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
@@ -58,6 +58,25 @@ class ProjectView(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     template_name = 'projects/index.html'
     accepted_formats = ('html', 'ajax')
+
+    @list_route(methods=('GET', 'POST'))
+    def new(self, request, *args, **kwargs):
+        """New Project page"""
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(ProjectView, self).create(request, *args, **kwargs)
+
+        if request.POST:
+            form = ProjectForm(request.user.profile, None, request.POST)
+            if form.is_valid():
+                project = form.save()
+                project.set_user(request.user.profile)
+                return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
+        else:
+            form = ProjectForm(request.user.profile, None)
+
+        context = _get_default_context(request)
+        context.update({'form': form})
+        return Response(context, template_name='projects/project_add.html')
 
     def list(self, request, *args, **kwargs):
         if request.accepted_renderer.format not in self.accepted_formats:
@@ -272,7 +291,7 @@ class MilestoneView(viewsets.ModelViewSet):
             form = MilestoneForm(request.user.profile, None, request.POST, instance=milestone)
             if form.is_valid():
                 milestone = form.save()
-                milestone.set_user_from_request(request)
+                milestone.set_user(request.user.profile)
                 return HttpResponseRedirect(reverse('milestone-detail', args=[milestone.id]))
         else:
             form = MilestoneForm(request.user.profile, None)
@@ -365,7 +384,7 @@ class TaskView(viewsets.ModelViewSet):
             form = TaskForm(request.user.profile, None, None, None, request.POST)
             if form.is_valid():
                 task = form.save()
-                task.set_user_from_request(request)
+                task.set_user(request.user.profile)
                 return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         else:
             form = TaskForm(request.user.profile, None, None, None)
@@ -450,7 +469,7 @@ class TaskView(viewsets.ModelViewSet):
             form = TaskForm(request.user.profile, None, project_id, None, request.POST, instance=task)
             if form.is_valid():
                 task = form.save()
-                task.set_user_from_request(request)
+                task.set_user(request.user.profile)
                 return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
         else:
             form = TaskForm(request.user.profile, None, project_id, None)

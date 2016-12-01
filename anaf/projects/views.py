@@ -135,30 +135,6 @@ def index_by_status(request, status_id, response_format='html'):
 #
 # Projects
 #
-@handle_response_format
-@mylogin_required
-def project_add(request, response_format='html'):
-    """New project form"""
-
-    if request.POST:
-        if 'cancel' not in request.POST:
-            project = Project()
-            form = ProjectForm(
-                request.user.profile, None, request.POST, instance=project)
-            if form.is_valid():
-                project = form.save()
-                project.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
-        else:
-            return HttpResponseRedirect(reverse('projects'))
-    else:
-        form = ProjectForm(request.user.profile, None)
-
-    context = _get_default_context(request)
-    context.update({'form': form})
-
-    return render_to_response('projects/project_add', context,
-                              context_instance=RequestContext(request), response_format=response_format)
 
 
 @handle_response_format

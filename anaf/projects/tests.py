@@ -251,7 +251,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('task-in-progress')
 
     def test_project_add(self):
-        self.assert_protected('project_add')
+        self.assert_protected('project-new')
 
     def test_project_add_typed(self):
         self.assert_protected('projects_project_add_typed', (1,))
@@ -439,13 +439,13 @@ class ProjectsViewsTest(AnafTestCase):
     # Projects
     def test_project_add(self):
         """Test index page with login at /projects/add/"""
-        response = self.client.get(reverse('project_add'))
+        response = self.client.get(reverse('project-new'))
         self.assertEquals(response.status_code, 200)
         self.assertEqual(type(response.context['form']), ProjectForm)
 
         projects_qty = Project.objects.count()
         form_params = {'name': 'project_name', 'details': 'new project details'}
-        response = self.client.post(reverse('project_add'), data=form_params)
+        response = self.client.post(reverse('project-new'), data=form_params)
         self.assertEquals(response.status_code, 302)
         project_id = response['Location'].split('/')[-1]
         self.assertRedirects(response, reverse('projects_project_view', args=[project_id]))

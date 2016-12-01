@@ -24,6 +24,7 @@ urlpatterns = patterns('anaf.projects.views',
                        url(r'^/', include(patterns('',
                            url(r'^', include(router.urls)),
                             # because of limitation on DRF I need to set some views manually
+                            # TODO: use drf-nested-routers or drf-extensions for nested routes support
                            # Task:
                            url(r'^task/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+)/$',
                                views.TaskView.as_view({'get': 'set_status'}), name='task-set-status'),
@@ -60,7 +61,6 @@ urlpatterns = patterns('anaf.projects.views',
                            url(r'^index(\.(?P<response_format>\w+))?/?$', oldviews.index, name='projects_index'),
 
                            # Projects
-                           url(r'^add(\.(?P<response_format>\w+))?/?$', oldviews.project_add, name='project_add'),
                            url(r'^add/project/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.project_add_typed, name='projects_project_add_typed'),
                            url(r'^view/(?P<project_id>\w+)(\.(?P<response_format>\w+))?/?$',
