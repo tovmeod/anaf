@@ -23,6 +23,8 @@ urlpatterns = patterns('anaf.projects.views',
                        url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
                        url(r'^/', include(patterns('',
                            url(r'^', include(router.urls)),
+                            # because of limitation on DRF I need to set some views manually
+                           # Task:
                            url(r'^task/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+)/$',
                                views.TaskView.as_view({'get': 'set_status'}), name='task-set-status'),
                            url(r'^task/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
@@ -39,12 +41,17 @@ urlpatterns = patterns('anaf.projects.views',
                            url(r'^task/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
                                views.TaskView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
                                name='task-new-to-project'),
+                           # Milestone:
                            url(r'^milestone/new_to_project/(?P<project_id>[^/.]+)/$',
                                views.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
                                name='milestone-new-to-project'),
                            url(r'^milestone/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
                                views.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
                                name='milestone-new-to-project'),
+                           url(r'^milestone/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+)/$',
+                               views.MilestoneView.as_view({'get': 'set_status'}), name='milestone-set-status'),
+                           url(r'^milestone/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
+                               views.MilestoneView.as_view({'get': 'set_status'}), name='milestone-set-status'),
 
 
                        # [u'projects/task/(?P<pk>[^/.]+)/status\\.(?P<format>[a-z0-9]+)/?$', u'projects/task/(?P<pk>[^/.]+)/status/$']
@@ -66,8 +73,6 @@ urlpatterns = patterns('anaf.projects.views',
                                oldviews.gantt_view, name='projects_gantt_view'),
 
                             # Milestones
-                           url(r'^milestone/set/(?P<milestone_id>\d+)/status/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.milestone_set_status, name='projects_milestone_set_status'),
                            url(r'^milestone/delete/(?P<milestone_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.milestone_delete, name='projects_milestone_delete'),
 

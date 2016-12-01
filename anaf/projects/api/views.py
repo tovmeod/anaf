@@ -198,6 +198,34 @@ class MilestoneView(viewsets.ModelViewSet):
         context.update({'form': form, 'milestone': milestone})
         return Response(context, template_name='projects/milestone_edit.html')
 
+    def set_status(self, request, status_id, *args, **kwargs):
+        """Milestone quick set: Status"""
+        # TODO: yes, it is wrong and ugly to change the task status with a GET request :(
+        # buut until I have time to change the frontend this is what the frontend requests and expects to happen
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # discourage bad use on api
+            return Response(status=401)
+        milestone = self.get_object()
+        has_permission = request.user.profile.has_permission(milestone, mode='x')
+        context = _get_default_context(request)
+        if not has_permission:
+            message = _("You don't have permission to edit this Milestone")
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        status = get_object_or_404(TaskStatus, pk=status_id)
+        if not request.user.profile.has_permission(status):
+            message = _("You don't have access to this Milestone Status")
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if not milestone.status == status:
+            milestone.status = status
+            milestone.save(update_fields=('status',))
+
+        return self.retrieve(request, *args, **kwargs)
+
     @list_route(methods=('GET', 'POST'))
     def new(self, request, *args, **kwargs):
         if request.accepted_renderer.format not in self.accepted_formats:
@@ -574,7 +602,7 @@ class TaskView(viewsets.ModelViewSet):
 
         if not task.status == status:
             task.status = status
-            task.save()
+            task.save(update_fields=('status',))
 
         return self.retrieve(request, *args, **kwargs)
 

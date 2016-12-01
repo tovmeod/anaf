@@ -357,25 +357,6 @@ def milestone_delete(request, milestone_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@handle_response_format
-@mylogin_required
-def milestone_set_status(request, milestone_id, status_id, response_format='html'):
-    """Milestone quick set: Status"""
-
-    milestone = get_object_or_404(Milestone, pk=milestone_id)
-    if not request.user.profile.has_permission(milestone, mode='x'):
-        return user_denied(request, message="You don't have access to this Milestone")
-
-    status = get_object_or_404(TaskStatus, pk=status_id)
-    if not request.user.profile.has_permission(status):
-        return user_denied(request, message="You don't have access to this Milestone Status")
-
-    if not milestone.status == status:
-        milestone.status = status
-        milestone.save()
-
-    return milestone_view(request, milestone_id, response_format)
-
 #
 # Task Time Slots
 #
