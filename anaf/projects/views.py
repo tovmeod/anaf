@@ -169,60 +169,6 @@ def project_add_typed(request, project_id, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@handle_response_format
-@mylogin_required
-def project_edit(request, project_id, response_format='html'):
-    """Project edit page"""
-
-    project = get_object_or_404(Project, pk=project_id)
-    if not request.user.profile.has_permission(project, mode='w'):
-        return user_denied(request, message="You don't have access to this Project")
-
-    if request.POST:
-        if 'cancel' not in request.POST:
-            form = ProjectForm(
-                request.user.profile, None, request.POST, instance=project)
-            if form.is_valid():
-                project = form.save()
-                return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
-        else:
-            return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
-    else:
-        form = ProjectForm(request.user.profile, None, instance=project)
-
-    context = _get_default_context(request)
-    context.update({'form': form, 'project': project})
-
-    return render_to_response('projects/project_edit', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
-def project_delete(request, project_id, response_format='html'):
-    """Project delete"""
-
-    project = get_object_or_404(Project, pk=project_id)
-    if not request.user.profile.has_permission(project, mode='w'):
-        return user_denied(request, message="You don't have access to this Project")
-
-    if request.POST:
-        if 'delete' in request.POST:
-            if 'trash' in request.POST:
-                project.trash = True
-                project.save()
-            else:
-                project.delete()
-            return HttpResponseRedirect(reverse('projects_index'))
-        elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
-
-    context = _get_default_context(request)
-    context.update({'project': project})
-
-    return render_to_response('projects/project_delete', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
 #
 # Task Time Slots
 #

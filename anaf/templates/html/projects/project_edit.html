@@ -14,7 +14,7 @@
 <a href="{% url projects_gantt_view project.id %}" class="top-menu gantt-link">{% trans %}Gantt Chart{% endtrans %}</a>
 <a href="{% url project-detail project.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(project, mode='w') %}
-<a href="{% url projects_project_edit project.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url project-edit project.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
 <a href="{% url projects_project_delete project.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endif %}
 {% endblock %}
@@ -28,7 +28,7 @@
     </ul>
     <div class="content-form-submit">
         <input type="submit" name="save" value="{% trans %}Save{% endtrans %}" />
-		<input type="submit" name="cancel" value="{% trans %}Cancel{% endtrans %}" class="cancel" />
+		<a class="cancel" href="{% url project-detail project.id %}">{% trans %}Cancel{% endtrans %}</a>
     </div>
 </form>
 {% endblock %}

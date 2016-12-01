@@ -260,7 +260,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('project-detail', (1, ))
 
     def test_project_edit(self):
-        self.assert_protected('projects_project_edit', (1, ))
+        self.assert_protected('project-edit', (1, ))
 
     def test_project_delete(self):
         self.assert_protected('projects_project_delete', (1, ))
@@ -467,7 +467,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_project_edit_login(self):
         """Test index page with login at /projects/edit//<project_id>"""
-        response = self.client.get(reverse('projects_project_edit', args=[self.project.id]))
+        response = self.client.get(reverse('project-edit', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_project_delete_login(self):
