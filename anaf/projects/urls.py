@@ -23,8 +23,8 @@ urlpatterns = patterns('anaf.projects.views',
                        url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
                        url(r'^/', include(patterns('',
                            url(r'^', include(router.urls)),
-                            # because of limitation on DRF I need to set some views manually
-                            # TODO: use drf-nested-routers or drf-extensions for nested routes support
+                           # because of limitation on DRF I need to set some views manually
+                           # TODO: use drf-nested-routers or drf-extensions for nested routes support
                            # Task:
                            url(r'^task/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+)/$',
                                views.TaskView.as_view({'get': 'set_status'}), name='task-set-status'),
@@ -60,9 +60,14 @@ urlpatterns = patterns('anaf.projects.views',
 
                            url(r'^index(\.(?P<response_format>\w+))?/?$', oldviews.index, name='projects_index'),
 
-                           # Projects
-                           url(r'^add/project/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.project_add_typed, name='projects_project_add_typed'),
+                           # Project:
+                           url(r'^project/new_to_project/(?P<project_id>[^/.]+)/$',
+                               views.ProjectView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               name='project-new-to-project'),
+                           url(r'^project/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
+                               views.ProjectView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               name='project-new-to-project'),
+
                            url(r'^view/(?P<project_id>\w+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.project_view, name='projects_project_view'),
                            url(r'^edit/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',

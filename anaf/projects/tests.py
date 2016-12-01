@@ -254,7 +254,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('project-new')
 
     def test_project_add_typed(self):
-        self.assert_protected('projects_project_add_typed', (1,))
+        self.assert_protected('project-new-to-project', (1,))
 
     def test_project_view(self):
         self.assert_protected('projects_project_view', (1, ))
@@ -456,7 +456,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_project_add_typed(self):
         """Test index page with login at /projects/add/<project_id>/"""
-        response = self.client.get(reverse('projects_project_add_typed', args=[self.parent.id]))
+        response = self.client.get(reverse('project-new-to-project', args=[self.parent.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_project_view_login(self):

@@ -78,6 +78,32 @@ class ProjectView(viewsets.ModelViewSet):
         context.update({'form': form})
         return Response(context, template_name='projects/project_add.html')
 
+    def new_to_project(self, request, project_id=None, *args, **kwargs):
+        """New sub-Project to preselected project"""
+
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return super(ProjectView, self).create(request, *args, **kwargs)
+
+        parent_project = None
+        if project_id:
+            parent_project = get_object_or_404(Project, pk=project_id)
+            if not request.user.profile.has_permission(parent_project, mode='x'):
+                parent_project = None
+
+        if request.POST:
+            form = ProjectForm(request.user.profile, project_id, request.POST)
+            if form.is_valid():
+                subproject = form.save()
+                subproject.set_user(request.user.profile)
+                return HttpResponseRedirect(reverse('projects_project_view', args=[subproject.id]))
+        else:
+            form = ProjectForm(request.user.profile, project_id)
+
+        context = _get_default_context(request)
+        context.update({'form': form, 'project': parent_project})
+
+        return Response(context, template_name='projects/project_add_typed.html')
+
     def list(self, request, *args, **kwargs):
         if request.accepted_renderer.format not in self.accepted_formats:
             return super(ProjectView, self).list(request, *args, **kwargs)
