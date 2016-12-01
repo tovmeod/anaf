@@ -69,7 +69,7 @@
             </td>
             {% if not by_project and not by_milestone %}
             <td>
-                <a href="{% url projects_project_view task.project_id %}" class="group-link">{{ task.project.name }}</a>
+                <a href="{% url project-detail task.project_id %}" class="group-link">{{ task.project.name }}</a>
             </td>
             {% endif %}
             {% if not by_milestone %}

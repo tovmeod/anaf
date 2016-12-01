@@ -156,7 +156,7 @@ def project_add_typed(request, project_id, response_format='html'):
             if form.is_valid():
                 project = form.save()
                 project.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
+                return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
         else:
             return HttpResponseRedirect(reverse('projects'))
     else:
@@ -166,75 +166,6 @@ def project_add_typed(request, project_id, response_format='html'):
     context.update({'form': form, 'project': parent_project})
 
     return render_to_response('projects/project_add_typed', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
-@_process_mass_form
-def project_view(request, project_id, response_format='html'):
-    """Single project view page"""
-
-    project = get_object_or_404(Project, pk=project_id)
-    if not request.user.profile.has_permission(project):
-        return user_denied(request, message="You don't have access to this Project")
-
-    query = Q(parent__isnull=True, project=project)
-    if request.GET:
-        if 'status' in request.GET and request.GET['status']:
-            query = query & _get_filter_query(request.GET)
-        else:
-            query = query & Q(
-                status__hidden=False) & _get_filter_query(request.GET)
-    else:
-        query = query & Q(status__hidden=False)
-
-    if request.user.profile.has_permission(project, mode='r'):
-        if request.POST:
-            record = UpdateRecord()
-            record.record_type = 'manual'
-            form = TaskRecordForm(
-                request.user.profile, request.POST, instance=record)
-            if form.is_valid():
-                record = form.save()
-                record.set_user_from_request(request)
-                record.save()
-                record.about.add(project)
-                project.set_last_updated()
-                return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
-        else:
-            form = TaskRecordForm(request.user.profile)
-    else:
-        form = None
-
-    tasks = Object.filter_by_request(request, Task.objects.filter(query))
-
-    tasks_progress = float(0)
-    tasks_progress_query = Object.filter_by_request(
-        request, Task.objects.filter(Q(parent__isnull=True, project=project)))
-    if tasks_progress_query:
-        for task in tasks_progress_query:
-            if not task.status.active:
-                tasks_progress += 1
-        tasks_progress = (tasks_progress / len(tasks_progress_query)) * 100
-        tasks_progress = round(tasks_progress, ndigits=1)
-
-    filters = FilterForm(request.user.profile, 'project', request.GET)
-
-    milestones = Object.filter_by_request(request,
-                                          Milestone.objects.filter(project=project).filter(status__hidden=False))
-    subprojects = Project.objects.filter(parent=project)
-
-    context = _get_default_context(request)
-    context.update({'project': project,
-                    'milestones': milestones,
-                    'tasks': tasks,
-                    'tasks_progress': tasks_progress,
-                    'record_form': form,
-                    'subprojects': subprojects,
-                    'filters': filters})
-
-    return render_to_response('projects/project_view', context,
                               context_instance=RequestContext(request), response_format=response_format)
 
 
@@ -253,9 +184,9 @@ def project_edit(request, project_id, response_format='html'):
                 request.user.profile, None, request.POST, instance=project)
             if form.is_valid():
                 project = form.save()
-                return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
+                return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
         else:
-            return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
+            return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
     else:
         form = ProjectForm(request.user.profile, None, instance=project)
 
@@ -284,7 +215,7 @@ def project_delete(request, project_id, response_format='html'):
                 project.delete()
             return HttpResponseRedirect(reverse('projects_index'))
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
+            return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
 
     context = _get_default_context(request)
     context.update({'project': project})

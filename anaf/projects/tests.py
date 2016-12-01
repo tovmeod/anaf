@@ -257,7 +257,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('project-new-to-project', (1,))
 
     def test_project_view(self):
-        self.assert_protected('projects_project_view', (1, ))
+        self.assert_protected('project-detail', (1, ))
 
     def test_project_edit(self):
         self.assert_protected('projects_project_edit', (1, ))
@@ -447,8 +447,9 @@ class ProjectsViewsTest(AnafTestCase):
         form_params = {'name': 'project_name', 'details': 'new project details'}
         response = self.client.post(reverse('project-new'), data=form_params)
         self.assertEquals(response.status_code, 302)
-        project_id = response['Location'].split('/')[-1]
-        self.assertRedirects(response, reverse('projects_project_view', args=[project_id]))
+        project_id = response['Location'].split('/')[-2]
+        project_id = int(project_id)  # make sure it got a number for project id
+        self.assertRedirects(response, reverse('project-detail', args=[project_id]))
         self.assertEqual(Project.objects.count(), projects_qty+1)
         project = Project.objects.get(id=project_id)
         self.assertEqual(project.name, form_params['name'])
@@ -461,7 +462,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_project_view_login(self):
         """Test index page with login at /projects/view/<project_id>"""
-        response = self.client.get(reverse('projects_project_view', args=[self.project.id]))
+        response = self.client.get(reverse('project-detail', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_project_edit_login(self):

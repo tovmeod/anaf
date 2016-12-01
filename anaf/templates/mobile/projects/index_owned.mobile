@@ -23,7 +23,7 @@
     <span class="large light content-label-head">
         <input type="checkbox" name="mass-milestone-{{ milestone.id }}" value="{{ milestone.id }}" class="group-control" />
         <a href="{% url milestone-detail milestone.id %}" class="projects-milestone">{{ milestone.name }}</a>
-        <a href="{% url projects_project_view milestone.project_id %}" class="group-link smaller"><em>{{ milestone.project }}</em></a>
+        <a href="{% url project-detail milestone.project_id %}" class="group-link smaller"><em>{{ milestone.project }}</em></a>
         <span class="spaced-h smaller">
             <a href="{% url task-new-to-milestone milestone.id %}" id="add_task" class="inline-link add-link popup-link">{% trans %}Add{% endtrans %}</a>
         </span>

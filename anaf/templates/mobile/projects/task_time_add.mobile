@@ -55,7 +55,7 @@
 
 <div>
     <span class="content-label">{% trans %}Project{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url projects_project_view task.project.id %}">{{ task.project }}</a></span>
+    <span class="content-value"><a href="{% url project-detail task.project.id %}">{{ task.project }}</a></span>
 </div>
 {% if task.milestone %}
 <div>
@@ -91,7 +91,7 @@
         {% endif %}
         <span class="content-list-item-group">
             {%- if subtask.project %}
-            <a href="{% url projects_project_view subtask.project.id %}" class="group-link">{{ subtask.project }}</a>
+            <a href="{% url project-detail subtask.project.id %}" class="group-link">{{ subtask.project }}</a>
             {%- endif %}
         </span>
     </span>

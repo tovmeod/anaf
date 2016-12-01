@@ -4,7 +4,7 @@
 {"project":
 	{	
 	"id": {{ project.id }},
-	"url": "http://{{ site_domain }}{% url projects_project_view project.id %}",
+	"url": "http://{{ site_domain }}{% url project-detail project.id %}",
 	"name": "{{ project }}",
 	"tasks": 
 		[
@@ -70,7 +70,7 @@
 				{%- for project in subprojects %}
 				{
 				"id": {{ project.id }},
-				"url": "http://{{ site_domain }}{% url projects_project_view project.id %}",
+				"url": "http://{{ site_domain }}{% url project-detail project.id %}",
 				"name": "{{ project }}"
 				{% if loop.last -%}
 				}

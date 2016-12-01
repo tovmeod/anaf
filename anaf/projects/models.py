@@ -31,7 +31,7 @@ class Project(Object):
         """Returns absolute URL for the Project
         :rtype str
         """
-        return reverse('projects_project_view', args=[self.id])
+        return reverse('project-detail', args=[self.id])
 
 
 # TaskStatus model

@@ -34,10 +34,10 @@
         {% for project in paginate(projects, 5) %}
             {% if not loop.first %}<br />{% endif %}
             <span class="content-label-head project-header">
-                <a href="{% url projects_project_view project.id %}" class="title">{{ project }}</a>
+                <a href="{% url project-detail project.id %}" class="title">{{ project }}</a>
                 <span class="spaced-h lightest smallest">{% trans %}Project{% endtrans %}</span>
                 <span class="spaced-h smaller">
-                    <a href="{% url projects_project_view project.id %}" class="inline-link view-link">{% trans %}View{% endtrans %}</a>
+                    <a href="{% url project-detail project.id %}" class="inline-link view-link">{% trans %}View{% endtrans %}</a>
                     <a href="{% url projects_project_edit project.id %}" class="inline-link edit-link popup-link">{% trans %}Edit{% endtrans %}</a>
                     <a href="{% url milestone-new-to-project project.id %}" class="inline-link add-link popup-link">{% trans %}Add Milestone{% endtrans %}</a>
                     <a href="{% url task-new-to-project project.id %}" class="inline-link add-link popup-link">{% trans %}Add Task{% endtrans %}</a>
@@ -80,7 +80,7 @@
                     {% if render_tasks|length > 10 %}
                         <div class="spaced-v">
                             <div class="content-list-tick"></div>
-                            <a href="{% url projects_project_view project.id %}" class="spaced-h light small">{% trans %}Show More{% endtrans %} &rarr;</a>
+                            <a href="{% url project-detail project.id %}" class="spaced-h light small">{% trans %}Show More{% endtrans %} &rarr;</a>
                         </div>
                     {% endif %}
                 {% endif %}

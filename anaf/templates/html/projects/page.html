@@ -17,7 +17,7 @@
             <span class="sidebar-header">{% trans %}Projects{% endtrans %}</span>
             {% for iproject in projects %}
                 {% if not iproject.parent %}
-                    <a href="{% url projects_project_view iproject.id %}" class="sidebar-link {% if iproject == project %}sidebar-link-active{% endif %}">{{ iproject }}</a>
+                    <a href="{% url project-detail iproject.id %}" class="sidebar-link {% if iproject == project %}sidebar-link-active{% endif %}">{{ iproject }}</a>
                 {% endif %}
             {% endfor %}
             {% block project_task_statuses %}

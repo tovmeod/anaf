@@ -68,8 +68,6 @@ urlpatterns = patterns('anaf.projects.views',
                                views.ProjectView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
                                name='project-new-to-project'),
 
-                           url(r'^view/(?P<project_id>\w+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.project_view, name='projects_project_view'),
                            url(r'^edit/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.project_edit, name='projects_project_edit'),
                            url(r'^delete/(?P<project_id>\d+)(\.(?P<response_format>\w+))?/?$',

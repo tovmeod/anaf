@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
 
-from anaf.core.models import Object
+from anaf.core.models import Object, UpdateRecord
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
 from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm, ProjectForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
@@ -70,7 +70,7 @@ class ProjectView(viewsets.ModelViewSet):
             if form.is_valid():
                 project = form.save()
                 project.set_user(request.user.profile)
-                return HttpResponseRedirect(reverse('projects_project_view', args=[project.id]))
+                return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
         else:
             form = ProjectForm(request.user.profile, None)
 
@@ -95,7 +95,7 @@ class ProjectView(viewsets.ModelViewSet):
             if form.is_valid():
                 subproject = form.save()
                 subproject.set_user(request.user.profile)
-                return HttpResponseRedirect(reverse('projects_project_view', args=[subproject.id]))
+                return HttpResponseRedirect(reverse('project-detail', args=[subproject.id]))
         else:
             form = ProjectForm(request.user.profile, project_id)
 
@@ -103,6 +103,79 @@ class ProjectView(viewsets.ModelViewSet):
         context.update({'form': form, 'project': parent_project})
 
         return Response(context, template_name='projects/project_add_typed.html')
+
+    @process_mass_form
+    def retrieve(self, request, *args, **kwargs):
+        """Single Project view page"""
+        project = self.get_object()
+        has_permission = request.user.profile.has_permission(project)
+        message = _("You don't have permission to view this Project")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(project)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if request.user.profile.has_permission(project, mode='r'):
+            if request.POST:
+                record = UpdateRecord()
+                record.record_type = 'manual'
+                form = TaskRecordForm(request.user.profile, request.POST, instance=record)
+                if form.is_valid():
+                    record = form.save()
+                    record.set_user_from_request(request)
+                    record.save()
+                    record.about.add(project)
+                    project.set_last_updated()
+                    return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
+            else:
+                form = TaskRecordForm(request.user.profile)
+        else:
+            form = None
+
+        task_query = Q(parent__isnull=True, project=project)
+        if request.GET:
+            if 'status' in request.GET and request.GET['status']:
+                task_query = task_query & _get_filter_query(request.GET)
+            else:
+                task_query = task_query & Q(status__hidden=False) & _get_filter_query(request.GET)
+        else:
+            task_query = task_query & Q(status__hidden=False)
+        tasks = Object.filter_by_request(request, Task.objects.filter(task_query))
+        tasks_progress = float(0)
+
+        tasks_progress_query = Object.filter_by_request(request,
+                                                        Task.objects.filter(Q(parent__isnull=True, project=project)))
+        if tasks_progress_query:
+            for task in tasks_progress_query:
+                if not task.status.active:
+                    tasks_progress += 1
+            tasks_progress = (tasks_progress / len(tasks_progress_query)) * 100
+            tasks_progress = round(tasks_progress, ndigits=1)
+
+        filters = FilterForm(request.user.profile, 'project', request.GET)
+        milestones = Object.filter_by_request(request,
+                                              Milestone.objects.filter(project=project).filter(status__hidden=False))
+        subprojects = Project.objects.filter(parent=project)  # TODO: use Project.objects.child_set
+        context.update({'project': project,
+                        'milestones': milestones,
+                        'tasks': tasks,
+                        'tasks_progress': tasks_progress,
+                        'record_form': form,
+                        'subprojects': subprojects,
+                        'filters': filters})
+
+        if 'massform' in context and 'project' in context['massform'].fields:
+            del context['massform'].fields['project']
+
+        return Response(context, template_name='projects/project_view.html')
 
     def list(self, request, *args, **kwargs):
         if request.accepted_renderer.format not in self.accepted_formats:

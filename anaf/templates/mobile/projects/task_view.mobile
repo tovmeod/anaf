@@ -53,7 +53,7 @@
 
 <div>
     <span class="content-label">{% trans %}Project{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url projects_project_view task.project.id %}">{{ task.project }}</a></span>
+    <span class="content-value"><a href="{% url project-detail task.project.id %}">{{ task.project }}</a></span>
 </div>
 {% if task.milestone %}
 <div>
