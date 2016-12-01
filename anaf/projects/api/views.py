@@ -1,6 +1,9 @@
+import json
+
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied, MethodNotAllowed
@@ -176,6 +179,62 @@ class ProjectView(viewsets.ModelViewSet):
             del context['massform'].fields['project']
 
         return Response(context, template_name='projects/project_view.html')
+
+    @detail_route()
+    def gantt(self, request, *args, **kwargs):
+        """Project gantt view"""
+        project = self.get_object()
+        ganttData = []
+
+        # generate json
+        milestones = Milestone.objects.filter(project=project).filter(trash=False)
+        for milestone in milestones:
+            tasks = Task.objects.filter(milestone=milestone).filter(
+                start_date__isnull=False).filter(end_date__isnull=False).filter(trash=False)
+            series = []
+            for task in tasks:
+                tlabel = (task.name[:30] + '..') if len(task.name) > 30 else task.name
+                tn = '<a href="{0!s}" class="popup-link">{1!s}</a>'.format(reverse('task-detail', args=[task.id]),
+                                                                           tlabel)
+                series.append({'id': task.id, 'name': tn, 'label': tlabel, 'start': task.start_date.date().isoformat(),
+                               'end': task.end_date.date().isoformat()})
+            mlabel = (milestone.name[:30] + '..') if len(milestone.name) > 30 else milestone.name
+            mn = '<a href="{0!s}" class="popup-link projects-milestone">{1!s}</a>'.format(reverse('milestone-detail',
+                                                                                                  args=[milestone.id]),
+                                                                                          mlabel)
+            a = {'id': milestone.id, 'name': mn, 'label': mlabel}
+            if series:
+                a['series'] = series
+            else:
+                a['series'] = []
+            if milestone.start_date and milestone.end_date:
+                a['start'] = milestone.start_date.date().isoformat()
+                a['end'] = milestone.end_date.date().isoformat()
+                a['color'] = '#E3F3D9'
+            if series or (milestone.start_date and milestone.end_date):
+                ganttData.append(a)
+        unclassified = Task.objects.filter(project=project).filter(milestone__isnull=True).filter(
+            start_date__isnull=False).filter(end_date__isnull=False).filter(trash=False)
+        series = []
+        for task in unclassified:
+            tlabel = (task.name[:30] + '..') if len(task.name) > 30 else task.name
+            tn = '<a href="{0!s}" class="popup-link">{1!s}</a>'.format(
+                reverse('task-detail', args=[task.id]), tlabel)
+            series.append({'id': task.id,
+                           'name': tn,
+                           'label': tlabel,
+                           'start': task.start_date.date().isoformat(),
+                           'end': task.end_date.date().isoformat()})
+        if series:
+            ganttData.append({'id': 0, 'name': _('Unclassified Tasks'), 'series': series})
+        if ganttData:
+            jdata = json.dumps(ganttData)
+        else:
+            jdata = None
+
+        context = RequestContext(request)
+        context.update({'jdata': jdata, 'project': project})
+        return Response(context, template_name='projects/gantt_view.html')
 
     @detail_route(methods=('GET', 'POST'))
     def edit(self, request, *args, **kwargs):

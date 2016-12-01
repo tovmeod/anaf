@@ -12,7 +12,7 @@
 <a href="{% url milestone-new-to-project project.id %}" class="top-menu add-link">{% trans %}New Milestone{% endtrans %}</a>
 <a href="{% url task-new-to-project project.id %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
 <a href="{% url core_trash %}" class="top-menu trash-link {% if trash %}trash-full-link{% endif %}">{% trans %}Trash{% endtrans %}</a>
-<a href="{% url projects_gantt_view project.id %}" class="top-menu gantt-link">{% trans %}Gantt Chart{% endtrans %}</a>
+<a href="{% url project-gantt project.id %}" class="top-menu gantt-link">{% trans %}Gantt Chart{% endtrans %}</a>
 <a href="{% url project-detail project.id %}" class="top-menu view-link-active">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(project, mode='w') %}
 <a href="{% url project-edit project.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>

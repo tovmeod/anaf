@@ -344,7 +344,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('projects_ajax_task_lookup')
 
     def test_gantt_view(self):
-        self.assert_protected('projects_gantt_view', (1,))
+        self.assert_protected('project-gantt', (1,))
 
 
 class ProjectsViewsTest(AnafTestCase):
