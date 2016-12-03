@@ -293,7 +293,7 @@ class ProjectView(viewsets.ModelViewSet):
                 project.save(update_fields=('trash',))
             else:
                 project.delete()
-            return HttpResponseRedirect(reverse('project-list', kwargs={'format': kwargs.get('format', None)}))
+            return HttpResponseRedirect(reverse('project-list', kwargs={'format': kwargs.get('format')}))
 
         context.update({'project': project})
         return Response(context, template_name='projects/project_delete.html')
