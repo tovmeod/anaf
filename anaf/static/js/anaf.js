@@ -444,7 +444,7 @@ var anaf = {
             $(this).datepicker(options);
         });
         $('input.datetimepicker', doc).each(function() {
-            var options = {stepMinute: 5, hour: 12, minute: 00, firstDay: 1};
+            var options = {stepMinute: 5, hour: 12, minute: 0, firstDay: 1};
             var initial = $(this).attr2('initial');
             if (initial) {
               initial = parseInt(initial) * 1000;
