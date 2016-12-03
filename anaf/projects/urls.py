@@ -77,11 +77,7 @@ urlpatterns = patterns('anaf.projects.views',
                            # Times Slots
                            url(r'^task/time/(?P<task_id>\w+)/add(\.(?P<response_format>\w+))?/?$',
                                oldviews.task_time_slot_add, name='projects_task_time_slot_add'),
-                           url(r'^task/time/(?P<task_id>\w+)/start(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_time_slot_start, name='projects_task_time_slot_start'),
 
-                           url(r'^task/time/stop/(?P<slot_id>\w+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_time_slot_stop, name='projects_task_time_slot_stop'),
                            url(r'^task/time/view/(?P<time_slot_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.task_time_slot_view, name='projects_task_time_slot_view'),
                            url(r'^task/time/edit/(?P<time_slot_id>\d+)(\.(?P<response_format>\w+))?/?$',

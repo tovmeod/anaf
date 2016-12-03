@@ -210,7 +210,7 @@
 </div>
 {% if user.profile.has_permission(task, mode='x') and not task.is_being_done_by(request.user.profile) %}
 <div class="spaced-h spaced-v">
-    <form action="{% url projects_task_time_slot_start task.id %}" method="get" class="content-form content-form-inline">
+    <form action="{% url task-start task.id %}" method="get" class="content-form content-form-inline">
         <input type="submit" name="stop" value="{% trans %}Start Work{% endtrans %}">
     </form>
     &nbsp;
@@ -251,7 +251,7 @@
             {% endif %}
             {% else %}
             {% if user.profile.has_permission(task, mode='x') or user.profile.has_permission(slot, mode='w') %}
-            <form action="{% url projects_task_time_slot_stop slot.id %}" method="post" class="content-form">
+            <form action="{% url task-stop slot.id %}" method="post" class="content-form">
 {% csrf_token %}
                 <ul class="content-form-fields">
                     <li>

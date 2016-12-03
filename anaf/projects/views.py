@@ -178,41 +178,6 @@ def project_add_typed(request, project_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-def task_time_slot_start(request, task_id, response_format='html'):
-    """Start TaskTimeSlot for preselected Task"""
-
-    task = get_object_or_404(Task, pk=task_id)
-    if not request.user.profile.has_permission(task, mode='x'):
-        return user_denied(request, message="You don't have access to this Task")
-
-    if not task.is_being_done_by(request.user.profile):
-        task_time_slot = TaskTimeSlot(
-            task=task, time_from=datetime.now(), user=request.user.profile)
-        task_time_slot.save()
-        task_time_slot.set_user_from_request(request)
-
-    return HttpResponseRedirect(reverse('task-detail', args=[task_id]))
-
-
-@handle_response_format
-@mylogin_required
-def task_time_slot_stop(request, slot_id, response_format='html'):
-    """Stop TaskTimeSlot for preselected Task"""
-
-    slot = get_object_or_404(TaskTimeSlot, pk=slot_id)
-    if not request.user.profile.has_permission(slot, mode='w'):
-        return user_denied(request, message="You don't have access to this TaskTimeSlot")
-
-    if request.POST and 'stop' in request.POST:
-        slot.time_to = datetime.now()
-        slot.details = request.POST['details']
-        slot.save()
-
-    return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
-
-
-@handle_response_format
-@mylogin_required
 def task_time_slot_add(request, task_id, response_format='html'):
     """Time slot add to preselected task"""
 

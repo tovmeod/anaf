@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -851,6 +852,35 @@ class TaskView(viewsets.ModelViewSet):
 
         context.update({'task': task, 'subtasks': subtasks, 'time_slots': time_slots})
         return Response(context, template_name='projects/task_delete.html')
+
+    @detail_route(methods=('POST',))
+    def start(self, request, *args, **kwargs):
+        """Task start"""
+        task = self.get_object()
+        if not request.user.profile.has_permission(task, mode='x'):
+            raise PermissionDenied(detail=_("You don't have access to this Task"))
+
+        if not task.is_being_done_by(request.user.profile):
+            task_time_slot = TaskTimeSlot(task=task, time_from=datetime.now(), user=request.user.profile)
+            task_time_slot.save()
+            task_time_slot.set_user(request.user.profile)
+
+        return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
+
+    @detail_route(methods=('POST',))
+    def stop(self, request, *args, **kwargs):
+        """Task stop"""
+        slot = get_object_or_404(TaskTimeSlot, pk=kwargs['pk'])
+        if not request.user.profile.has_permission(slot, mode='w'):
+            raise PermissionDenied(detail=_("You don't have access to this TaskTimeSlot"))
+
+        slot.time_to = datetime.now()
+        details = request.POST.get('details')
+        if details is not None:
+            slot.details = details
+        slot.save()
+
+        return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
 
     def set_status(self, request, status_id, *args, **kwargs):
         """Task quick set: Status"""

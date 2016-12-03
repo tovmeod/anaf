@@ -308,10 +308,10 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('task-set-status', (1, 1))
 
     def test_task_time_slot_start(self):
-        self.assert_protected('projects_task_time_slot_start', (1,))
+        self.assert_protected('task-start', (1,))
 
     def test_task_time_slot_stop(self):
-        self.assert_protected('projects_task_time_slot_stop', (1,))
+        self.assert_protected('task-stop', (1,))
 
     def test_task_time_slot_add(self):
         self.assert_protected('projects_task_time_slot_add', (1,))
@@ -403,8 +403,7 @@ class ProjectsViewsTest(AnafTestCase):
         self.parent.set_default_user()
         self.parent.save()
 
-        self.parent_task = Task(
-            name='test', project=self.project, status=self.status, priority=3)
+        self.parent_task = Task(name='test', project=self.project, status=self.status, priority=3)
         self.parent_task.set_default_user()
         self.parent_task.save()
 
@@ -483,7 +482,6 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_milestone_new_to_project(self):
         """Test newmilestone page with login at /projects/milestone/new_to_project/<project_id>/"""
-        url = reverse('milestone-new-to-project', args=[self.parent.id])
         response = self.client.get(reverse('milestone-new-to-project', args=[self.parent.id]))
         self.assertEquals(response.status_code, 200)
 
@@ -547,6 +545,52 @@ class ProjectsViewsTest(AnafTestCase):
         self.assertEquals(response.status_code, 401)
         # check if status was not changed on DB
         self.assertEqual(Task.objects.get(id=self.task.id).status_id, self.status.id)
+
+    def test_task_start(self):
+        # creates empty task and makes sure it creates a time slot for the task
+        task = Task(name='task 2', project=self.project, status=self.status, caller=self.contact)
+        task.set_default_user()
+        task.save()
+        self.assertFalse(task.tasktimeslot_set.all().count())
+        response = self.client.post(reverse('task-start', args=(task.id, )))
+        self.assertRedirects(response, reverse('task-detail', args=[task.id]))
+        self.assertEqual(task.tasktimeslot_set.all().count(), 1)  # assert that only one time slot was created
+        timeslot = task.tasktimeslot_set.all()[0]
+        self.assertTrue(timeslot.is_open())  # assert that timeslot correctly calculates that it is open
+        self.assertTrue(task.is_being_done_by(self.user.profile))
+
+    def test_task_start2(self):
+        # start a task which has already started
+        self.assertTrue(self.task.is_being_done_by(self.user.profile))
+        self.assertEqual(self.task.tasktimeslot_set.all().count(), 1)  # makes sure that the task has only one timeslot
+        timeslot = self.task.tasktimeslot_set.all()[0]
+        self.assertTrue(timeslot.is_open())
+
+        response = self.client.post(reverse('task-start', args=(self.task.id,)))
+        self.assertRedirects(response, reverse('task-detail', args=[self.task.id]))
+        self.assertEqual(self.task.tasktimeslot_set.all().count(), 1)  # assert that it didn't create another timeslot
+
+    def test_task_start_fails_on_get(self):
+        # task start shouldn't allow GET requests
+        task = Task(name='task 2', project=self.project, status=self.status, caller=self.contact)
+        task.set_default_user()
+        task.save()
+        response = self.client.get(reverse('task-start', args=(task.id,)))
+        self.assertEquals(response.status_code, 405)
+        response = self.client.get(reverse('task-start', args=(self.task.id,)))
+        self.assertEquals(response.status_code, 405)
+
+    def test_task_stop(self):
+        self.assertTrue(self.time_slot.is_open())
+        self.assertIsNone(self.time_slot.time_to)
+        response = self.client.post(reverse('task-stop', args=(self.time_slot.id,)))
+        self.assertRedirects(response, reverse('task-detail', args=[self.task.id]))
+        self.time_slot = TaskTimeSlot.objects.get(id=self.time_slot.id)
+        self.assertFalse(self.time_slot.is_open())
+        self.assertIsNotNone(self.time_slot.time_to)
+
+        response = self.client.get(reverse('task-stop', args=(self.time_slot.id,)))
+        self.assertEquals(response.status_code, 405)
 
     def test_task_view_login(self):
         """Test index page with login at /projects/task/view/<task_id>"""
