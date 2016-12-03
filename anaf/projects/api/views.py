@@ -290,10 +290,10 @@ class ProjectView(viewsets.ModelViewSet):
         if request.POST:
             if 'trash' in request.POST:
                 project.trash = True
-                project.save()
+                project.save(update_fields=('trash',))
             else:
                 project.delete()
-            return HttpResponseRedirect(reverse('projects_index'))
+            return HttpResponseRedirect(reverse('project-list', kwargs={'format': kwargs.get('format', None)}))
 
         context.update({'project': project})
         return Response(context, template_name='projects/project_delete.html')
@@ -491,7 +491,7 @@ class MilestoneView(viewsets.ModelViewSet):
                 milestone.save(update_fields=('trash',))
             else:
                 milestone.delete()
-            return HttpResponseRedirect(reverse('projects_index'))
+            return HttpResponseRedirect(reverse('project-list'))
 
         task_query = Q(milestone=milestone, parent__isnull=True)
         if request.GET:
@@ -844,7 +844,7 @@ class TaskView(viewsets.ModelViewSet):
                 task.save()
             else:
                 task.delete()
-            return HttpResponseRedirect(reverse('projects_index'))
+            return HttpResponseRedirect(reverse('project-list'))
 
         subtasks = Object.filter_by_request(request, Task.objects.filter(parent=task))
         time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(task=task))

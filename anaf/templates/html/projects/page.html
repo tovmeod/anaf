@@ -10,7 +10,7 @@
         <td class="module-sidebar">
 		{{ logo_block_container() }}
 		<div>
-            <a href="{% url projects_index %}" class="sidebar-link {% block index_page %}{% endblock %}">{% trans %}All Tasks{% endtrans %}</a>
+            <a href="{% url project-list %}" class="sidebar-link {% block index_page %}{% endblock %}">{% trans %}All Tasks{% endtrans %}</a>
             <a href="{% url task-owned %}" class="sidebar-link {% if sidebar_link == 'owned' %}sidebar-link-active{% endif %}">{% trans %}Called by me{% endtrans %}</a>
             <a href="{% url task-assigned %}" class="sidebar-link {% if sidebar_link == 'assigned' %}sidebar-link-active{% endif %}">{% trans %}Assigned to me{% endtrans %}</a>
             <a href="{% url task-in-progress %}" class="sidebar-link {% if sidebar_link == 'in_progress' %}sidebar-link-active{% endif %}">{% trans %}Tasks in progress{% endtrans %}</a>

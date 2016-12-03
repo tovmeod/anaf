@@ -1,3 +1,5 @@
+import warnings
+
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, Http404
@@ -78,8 +80,8 @@ def _process_mass_form(f):
 @mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
-    """Project Management index page"""
-
+    """Deprecated Project Management index page"""
+    warnings.warn("using old project index page, use project-list instead", DeprecationWarning, stacklevel=2)
     query = Q(parent__isnull=True)
     if request.GET:
         if 'status' in request.GET and request.GET['status']:
@@ -409,7 +411,7 @@ def task_status_delete(request, status_id, response_format='html'):
                 status.save()
             else:
                 status.delete()
-            return HttpResponseRedirect(reverse('projects_index'))
+            return HttpResponseRedirect(reverse('project-list'))
         elif 'cancel' in request.POST:
             return HttpResponseRedirect(reverse('projects_index_by_status', args=[status.id]))
 

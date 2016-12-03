@@ -20,7 +20,7 @@ route_list = (
 )
 
 urlpatterns = patterns('anaf.projects.views',
-                       url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
+                       # url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
                        url(r'^/', include(patterns('',
                            url(r'^', include(router.urls)),
                            # because of limitation on DRF I need to set some views manually
@@ -57,8 +57,6 @@ urlpatterns = patterns('anaf.projects.views',
 
                        # [u'projects/task/(?P<pk>[^/.]+)/status\\.(?P<format>[a-z0-9]+)/?$', u'projects/task/(?P<pk>[^/.]+)/status/$']
                            # url(r'^dojo$', 'dojo_view', name='dojo_view'),
-
-                           url(r'^index(\.(?P<response_format>\w+))?/?$', oldviews.index, name='projects_index'),
 
                            # Project:
                            url(r'^project/new_to_project/(?P<project_id>[^/.]+)/$',

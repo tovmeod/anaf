@@ -9,7 +9,7 @@
 
 <div class="module-sidebar">
 
-    <a href="{% url projects_index %}" class="sidebar-link {% block index_page %}{% endblock %}">{% trans %}All Tasks{% endtrans %}</a>
+    <a href="{% url project-list %}" class="sidebar-link {% block index_page %}{% endblock %}">{% trans %}All Tasks{% endtrans %}</a>
     <a href="{% url task-owned %}" class="sidebar-link {% block class_owned %}{% endblock %}">{% trans %}Owned by me{% endtrans %}</a>
     <a href="{% url task-assigned %}" class="sidebar-link {% block class_assigned %}{% endblock %}">{% trans %}Assigned to me{% endtrans %}</a>
     <a href="{% url projects_tasks_in_progress %}" class="sidebar-link {% block class_in_progress %}{% endblock %}">{% trans %}Tasks in progress{% endtrans %}</a>
