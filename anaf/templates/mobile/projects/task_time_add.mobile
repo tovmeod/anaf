@@ -139,9 +139,9 @@
     <span class="content-list-item-name">
         <a href="{% url identities_user_view slot.user.id %}">{{ slot.user }}</a>
         {% if slot.is_open() %}
-        <a class="imp heavy" href="{% url projects_task_time_slot_view slot.id %}">{{ slot.get_time_string() }}</a>
+        <a class="imp heavy" href="{% url tasktimeslot-detail slot.id %}">{{ slot.get_time_string() }}</a>
         {% else %}
-        <a class="imp small" href="{% url projects_task_time_slot_view slot.id %}">{{ slot.get_time_string() }}</a>
+        <a class="imp small" href="{% url tasktimeslot-detail slot.id %}">{{ slot.get_time_string() }}</a>
         {% endif %}
         <span class="content-list-item-group">
             {% if slot.is_open() %}

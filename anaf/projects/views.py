@@ -216,25 +216,6 @@ def task_time_slot_add(request, task_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-def task_time_slot_view(request, time_slot_id, response_format='html'):
-    """Task time slot view page"""
-
-    task_time_slot = get_object_or_404(TaskTimeSlot, pk=time_slot_id)
-    task = task_time_slot.task
-    if not request.user.profile.has_permission(task_time_slot) \
-            and not request.user.profile.has_permission(task):
-        return user_denied(request, message="You don't have access to this Task Time Slot")
-
-    context = _get_default_context(request)
-    context.update({'task_time_slot': task_time_slot,
-                    'task': task})
-
-    return render_to_response('projects/task_time_view', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
 def task_time_slot_edit(request, time_slot_id, response_format='html'):
     """Task time slot edit page"""
 

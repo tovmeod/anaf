@@ -317,7 +317,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('projects_task_time_slot_add', (1,))
 
     def test_task_time_slot_view(self):
-        self.assert_protected('projects_task_time_slot_view', (1,))
+        self.assert_protected('tasktimeslot-detail', (1,))
 
     def test_task_time_slot_edit(self):
         self.assert_protected('projects_task_time_slot_edit', (1,))

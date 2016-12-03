@@ -156,11 +156,11 @@
     <span class="content-list-item-name">
         <a href="{% url identities_user_view slot.user.id %}" class="popup-link">{{ slot.user }}</a>
         {% if slot.is_open() %}
-        <a class="imp heavy popup-link" href="{% url projects_task_time_slot_view slot.id %}">
+        <a class="imp heavy popup-link" href="{% url tasktimeslot-detail slot.id %}">
         {% trans %}In progress{% endtrans %}...
         <span class="projects-timeslot" diff="{{ slot.get_time_secs() }}">{{ slot.get_time_string() }}</span></a>
         {% else %}
-        <a class="imp small popup-link" href="{% url projects_task_time_slot_view slot.id %}">{{ slot.get_time_string() }}</a>
+        <a class="imp small popup-link" href="{% url tasktimeslot-detail slot.id %}">{{ slot.get_time_string() }}</a>
         {% endif %}
         <span class="content-list-item-group">
             {% if slot.is_open() %}

@@ -907,6 +907,25 @@ class TaskTimeSlotView(viewsets.ModelViewSet):
     template_name = 'projects/task_time_view.html'
     accepted_formats = ('html', 'ajax')
 
+    def retrieve(self, request, *args, **kwargs):
+        """Task time slot view page"""
+
+        slot = self.get_object()
+        has_permission = request.user.profile.has_permission(slot) and request.user.profile.has_permission(slot.task)
+        message = _("You don't have access to this Task Time Slot")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(slot)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        context.update({'task_time_slot': slot})
+
+        return Response(context, template_name='projects/task_time_view.html')
+
     @detail_route(methods=('POST',))
     def stop(self, request, *args, **kwargs):
         """Task stop"""
