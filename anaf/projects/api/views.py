@@ -867,21 +867,6 @@ class TaskView(viewsets.ModelViewSet):
 
         return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
 
-    @detail_route(methods=('POST',))
-    def stop(self, request, *args, **kwargs):
-        """Task stop"""
-        slot = get_object_or_404(TaskTimeSlot, pk=kwargs['pk'])
-        if not request.user.profile.has_permission(slot, mode='w'):
-            raise PermissionDenied(detail=_("You don't have access to this TaskTimeSlot"))
-
-        slot.time_to = datetime.now()
-        details = request.POST.get('details')
-        if details is not None:
-            slot.details = details
-        slot.save()
-
-        return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
-
     def set_status(self, request, status_id, *args, **kwargs):
         """Task quick set: Status"""
         # TODO: yes, it is wrong and ugly to change the task status with a GET request :(
@@ -919,4 +904,20 @@ class TaskTimeSlotView(viewsets.ModelViewSet):
     queryset = TaskTimeSlot.objects.all()
     serializer_class = TaskTimeSlotSerializer
 
-    renderer_classes = API_RENDERERS
+    template_name = 'projects/task_time_view.html'
+    accepted_formats = ('html', 'ajax')
+
+    @detail_route(methods=('POST',))
+    def stop(self, request, *args, **kwargs):
+        """Task stop"""
+        slot = self.get_object()
+        if not request.user.profile.has_permission(slot, mode='w'):
+            raise PermissionDenied(detail=_("You don't have access to this TaskTimeSlot"))
+
+        slot.time_to = datetime.now()
+        details = request.POST.get('details')
+        if details is not None:
+            slot.details = details
+        slot.save()
+
+        return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))

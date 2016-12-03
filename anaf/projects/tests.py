@@ -311,7 +311,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('task-start', (1,))
 
     def test_task_time_slot_stop(self):
-        self.assert_protected('task-stop', (1,))
+        self.assert_protected('tasktimeslot-stop', (1,))
 
     def test_task_time_slot_add(self):
         self.assert_protected('projects_task_time_slot_add', (1,))
@@ -583,13 +583,13 @@ class ProjectsViewsTest(AnafTestCase):
     def test_task_stop(self):
         self.assertTrue(self.time_slot.is_open())
         self.assertIsNone(self.time_slot.time_to)
-        response = self.client.post(reverse('task-stop', args=(self.time_slot.id,)))
+        response = self.client.post(reverse('tasktimeslot-stop', args=(self.time_slot.id,)))
         self.assertRedirects(response, reverse('task-detail', args=[self.task.id]))
         self.time_slot = TaskTimeSlot.objects.get(id=self.time_slot.id)
         self.assertFalse(self.time_slot.is_open())
         self.assertIsNotNone(self.time_slot.time_to)
 
-        response = self.client.get(reverse('task-stop', args=(self.time_slot.id,)))
+        response = self.client.get(reverse('tasktimeslot-stop', args=(self.time_slot.id,)))
         self.assertEquals(response.status_code, 405)
 
     def test_task_view_login(self):

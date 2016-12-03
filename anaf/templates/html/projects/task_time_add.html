@@ -206,7 +206,7 @@
             {% endif %}
             {% else %}
             {% if user.profile.has_permission(task, mode='x') or user.profile.has_permission(slot, mode='w') %}
-            <form action="{% url task-stop slot.id %}" method="post" class="content-form">
+            <form action="{% url tasktimeslot-stop slot.id %}" method="post" class="content-form">
 {% csrf_token %}
                 <ul class="content-form-fields">
                     <li>
