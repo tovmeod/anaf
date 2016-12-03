@@ -51,7 +51,7 @@ class ProjectTestCase(LiveTestCase):
 class ProjectBasicTests(ProjectTestCase):
     def test_project_index(self):
         self._login()
-        url = six.moves.urllib.parse.urljoin(self.live_server_url, reverse('projects'))
+        url = six.moves.urllib.parse.urljoin(self.live_server_url, reverse('project-list'))
         self.driver.get(url)
         self.assertTrue(self.driver.find_element_by_css_selector('#menu-anaf-projects.active'))
 
@@ -59,9 +59,9 @@ class ProjectBasicTests(ProjectTestCase):
         """Test creating a minimal project
         """
         self._login()
-        self.get('projects')
+        self.get('project-list')
         name = 'simple_project_name'
-        btn = self.driver.find_element_by_css_selector('a[href="#/projects/add"]')
+        btn = self.driver.find_element_by_css_selector('a[href="#/projects/project/new/"]')
         btn.click()
         self.wait_loaded_selector('.popup-block')
         self.assertTrue(self.driver.find_element_by_css_selector('.popup-block'))
@@ -77,13 +77,13 @@ class ProjectTests(ProjectTestCase):
     def setUp(self):
         super(ProjectTests, self).setUp()
         self._login()
-        self.get('projects')
-        self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id)).click()
+        self.get('project-list')
+        self.driver.find_element_by_css_selector('a[href="#/projects/project/{}/"]'.format(self.project.id)).click()
         self.wait_load()
 
     def test_edit_project(self):
         name = 'edited name'
-        self.click_wait('a[href="#/projects/edit/{}"]'.format(self.project.id))
+        self.click_wait('a[href="#/projects/project/{}/edit/"]'.format(self.project.id))
         em = self.send_keys('#id_name', name, clear=True)
         em.submit()
         self.wait_load()
@@ -91,17 +91,17 @@ class ProjectTests(ProjectTestCase):
         self.assertEqual(p.name, name)
 
     def test_trash_project(self):
-        self.click_wait('a[href="#/projects/delete/{}"]'.format(self.project.id))
+        self.click_wait('a[href="#/projects/project/{}/delete/"]'.format(self.project.id))
         self.assertFalse(self.project.trash)
         self.click_wait('[name="delete"]')
 
         p = Project.objects.get(id=self.project.id)
         self.assertTrue(p.trash)
         # after sending to trash confirm it redirects to the projects page
-        self.assertEqual(six.moves.urllib.parse.urlparse(self.driver.current_url).fragment, '/projects/index')
+        self.assertEqual(six.moves.urllib.parse.urlparse(self.driver.current_url).fragment, '/projects/project/')
         # after sending to the trash it won't be visible anymore
         with self.assertRaises(NoSuchElementException):
-            self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id))
+            self.driver.find_element_by_css_selector('a[href="#/projects/project/{}"]'.format(self.project.id))
 
     def test_untrash_project(self):
         self.project.trash = True
@@ -118,11 +118,11 @@ class ProjectTests(ProjectTestCase):
         self.wait_load()
         p = Project.objects.get(id=self.project.id)
         self.assertFalse(p.trash)
-        self.get('projects')
-        self.driver.find_element_by_css_selector('a[href="#/projects/view/{}"]'.format(self.project.id))
+        self.get('project-list')
+        self.driver.find_element_by_css_selector('a[href="#/projects/project/{}/"]'.format(self.project.id))
 
     def test_delete_project(self):
-        self.driver.find_element_by_css_selector('a[href="#/projects/delete/{}"]'.format(self.project.id)).click()
+        self.driver.find_element_by_css_selector('a[href="#/projects/project/{}/delete/"]'.format(self.project.id)).click()
         self.wait_load()
         self.driver.find_element_by_css_selector('#trash').click()
         self.driver.find_element_by_css_selector('[name="delete"]').click()
@@ -135,7 +135,7 @@ class ProjectTests(ProjectTestCase):
         """Test creating a minimal task
         """
         name = 'task name'
-        self.get('projects')
+        self.get('project-list')
         self.click_wait('a[href="#/projects/task/new/"]')
         # select project from dropdown
         em = self.driver.find_element_by_css_selector('#id_project')

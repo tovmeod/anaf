@@ -124,8 +124,6 @@ var anaf = {
     },
 
     'process_ajax': function(data, status, xhr) {
-        console.log(status);
-        console.log(data);
         if (!data) {
             return;
         }
@@ -149,12 +147,15 @@ var anaf = {
             window.location.hash = parser.pathname;
         }
         if (data.response && data.response.url) {
-            var urljs = data.response.url.replace('.ajax', '');
+            var urljs = data.response.url.replace('.ajax', '/');
             var urlcurr = window.location.hash.replace('#', '');
             if (urljs != urlcurr) {
                 if (urljs.indexOf(urlcurr) == -1 && urlcurr.indexOf(urljs) == -1) {
                     $("#loading-status").css('display', 'none');
                     return;
+                }
+                else {
+                    window.location.hash = urljs;
                 }
             }
         }

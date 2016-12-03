@@ -236,7 +236,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
             self.assertEqual(response.status_code, 401)
 
     def test_index(self):
-        self.assert_protected('projects')
+        self.assert_protected('project-list')
 
     def test_index_owned(self):
         self.assert_protected('task-owned')
@@ -414,7 +414,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_index(self):
         """Test project index page with login at /projects/"""
-        response = self.client.get(reverse('projects'))
+        response = self.client.get(reverse('project-list'))
         self.assertEquals(response.status_code, 200)
 
     def assertQuerysetEqual(self, qs, values, transform=repr, ordered=True, msg=None):

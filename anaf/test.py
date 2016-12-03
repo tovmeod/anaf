@@ -363,10 +363,10 @@ class LiveTestCase(LiveServerTestCase):
         sauce_client.jobs.update_job(session_id, passed=status)
         print("SauceOnDemandSessionID=%s job-name=%s" % (session_id, job_name))
 
-    def get(self, viewname):
+    def get(self, url_name):
         """Get the page based on the viewname and wait it to load
         """
-        url = six.moves.urllib.parse.urljoin(self.live_server_url, '#'+reverse(viewname))
+        url = six.moves.urllib.parse.urljoin(self.live_server_url, '#'+reverse(url_name))
         self.driver.get(url)
         sleep(0.1)
         self.wait_load()
