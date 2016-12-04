@@ -127,8 +127,10 @@ def _test_no_args_urls_loggedin(url, client, userpsw, authentication_headers):
         assert response.status_code in (302, 400), url
     elif response.status_code == 302:
         print('%s redirects to %s' % (url, response.url))
-    elif url in ('/captcha/refresh/', '/dajaxice/'):
+    elif url in ('/captcha/refresh/', '/dajaxice/', '/projects/milestone/', '/projects/tasktimeslot/'):
         # captcha lib incorrectly returns 404 not found
+        # milestone list and tasktimeslot list returns 404 for format=html,
+        # because it is not implemented on the format because it doesn't makes sense
         assert response.status_code == 404
     else:
         assert response.status_code == 200

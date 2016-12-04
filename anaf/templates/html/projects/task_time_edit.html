@@ -1,7 +1,7 @@
 {% load i18n %}
 {% extends "html/projects/page.html" %}
 
-{% block title %} {{ task_time_slot.get_time_string() }} | {{ task|htsafe }} | {% trans %}Project Management{% endtrans %}{% endblock %}
+{% block title %} {{ task_time_slot.get_time_string() }} | {{ task_time_slot.task|htsafe }} | {% trans %}Project Management{% endtrans %}{% endblock %}
 
 {% block module_title %}{{ task_time_slot.get_time_string() }} by {{ task_time_slot.user }}{% endblock %}
 
@@ -9,35 +9,35 @@
 
 {% block module_topmenu %}
 <a href="{% url tasktimeslot-detail task_time_slot.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
-{% if user.profile.has_permission(task, mode='w') or user.profile.has_permission(slot, mode='w') %}
-<a href="{% url projects_task_time_slot_edit task_time_slot.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
+{% if user.profile.has_permission(task_time_slot.task, mode='w') or user.profile.has_permission(slot, mode='w') %}
+<a href="{% url tasktimeslot-edit task_time_slot.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
 <a href="{% url projects_task_time_slot_delete task_time_slot.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endif %}
 {% endblock %}
 
 {% block sidebar_right %}
 
-{% if user.profile.has_permission(task, mode='w') %}
+{% if user.profile.has_permission(task_time_slot.task, mode='w') %}
 <span class="sidebar-header-first">{% trans %}Quick Status{% endtrans %}</span>
 <div class="sidebar-block">
     {% for status in statuses %}
     {% if status.hidden %}
     {% if status.active %}
-    <a href="{% url task-set-status task.id, status.id %}" class="projects-action projects-action-failed
+    <a href="{% url task-set-status task_time_slot.task.id, status.id %}" class="projects-action projects-action-failed
     {%- if status == task.status -%}-active{%- endif -%}">{{ status }}</a>
     <br />
     {% else %}
-    <a href="{% url task-set-status task.id, status.id %}" class="projects-action projects-action-closed
+    <a href="{% url task-set-status task_time_slot.task.id, status.id %}" class="projects-action projects-action-closed
     {%- if status == task.status -%}-active{%- endif -%}">{{ status }}</a>
     <br />
     {% endif %}
     {% else %}
     {% if status.active %}
-    <a href="{% url task-set-status task.id, status.id %}" class="projects-action projects-action-open
+    <a href="{% url task-set-status task_time_slot.task.id, status.id %}" class="projects-action projects-action-open
     {%- if status == task.status -%}-active{%- endif -%}">{{ status }}</a>
     <br />
     {% else %}
-    <a href="{% url task-set-status task.id, status.id %}" class="projects-action projects-action-pending
+    <a href="{% url task-set-status task_time_slot.task.id, status.id %}" class="projects-action projects-action-pending
     {%- if status == task.status -%}-active{%- endif -%}">{{ status }}</a>
     <br />
     {% endif %}
@@ -48,15 +48,15 @@
 
 <span class="sidebar-header-first">{% trans %}Permissions{% endtrans %}</span>
 <div class="sidebar-block">
-    {{ permission_block(task) }}
+    {{ permission_block(task_time_slot.task) }}
 </div>
 <span class="sidebar-header-right">{% trans %}Links{% endtrans %}</span>
 <div class="sidebar-block">
-    {{ link_block(task) }}
+    {{ link_block(task_time_slot.task) }}
 </div>
 <span class="sidebar-header-right">{% trans %}Subscribers{% endtrans %}</span>
 <div class="sidebar-block">
-    {{ subscription_block(task) }}
+    {{ subscription_block(task_time_slot.task) }}
 </div>
 {% endblock %}
 

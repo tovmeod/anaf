@@ -3,23 +3,34 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied, MethodNotAllowed
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
+from rest_framework.viewsets import GenericViewSet
 
 from anaf.core.models import Object, UpdateRecord
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
-from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm, ProjectForm
+from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm, ProjectForm, \
+    TaskTimeSlotForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
 from anaf.core.ajax.converter import preprocess_context
 from anaf import API_RENDERERS
+
+
+class AnafViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                  mixins.ListModelMixin, GenericViewSet):
+    """Base Viewset
+    This doesn't have list because for some models it doesn't make sense list"""
+    accepted_formats = ('html', 'ajax')
 
 
 def process_mass_form(f):
@@ -54,14 +65,13 @@ def process_mass_form(f):
     return wrap
 
 
-class ProjectView(viewsets.ModelViewSet):
+class ProjectView(AnafViewSet):
     """
     API endpoint that allows projects to be viewed or edited.
     """
     queryset = Project.objects.all().order_by('-date_created')
     serializer_class = ProjectSerializer
     template_name = 'projects/index.html'
-    accepted_formats = ('html', 'ajax')
 
     @list_route(methods=('GET', 'POST'))
     def new(self, request, *args, **kwargs):
@@ -330,29 +340,19 @@ class TaskStatusView(viewsets.ModelViewSet):
     renderer_classes = API_RENDERERS
 
 
-class MilestoneView(viewsets.ModelViewSet):
+class MilestoneView(AnafViewSet):
     """
     API endpoint that allows Milestones to be viewed or edited.
     """
     queryset = Milestone.objects.all()
     serializer_class = MilestoneSerializer
     template_name = 'projects/milestone_add.html'
-    accepted_formats = ('html', 'ajax')
 
     def list(self, request, *args, **kwargs):
-        """Basically all the milestones"""
-
-        if request.accepted_renderer.format not in self.accepted_formats:
+        if request.accepted_renderer.format in self.accepted_formats:
+            raise Http404
+        else:
             return super(MilestoneView, self).list(request, *args, **kwargs)
-
-        milestones = self.get_queryset()
-        context = _get_default_context(request)
-        form = MilestoneForm(request.user.profile, None)
-        context.update({'milestones': milestones, 'form': form})
-
-        context = preprocess_context(context)
-        # todo: create html template for milestone list
-        return Response(context, template_name='projects/milestone_add.html')
 
     @process_mass_form
     def retrieve(self, request, *args, **kwargs):
@@ -548,14 +548,13 @@ class MilestoneView(viewsets.ModelViewSet):
         return Response(context, template_name='projects/milestone_add_typed.html')
 
 
-class TaskView(viewsets.ModelViewSet):
+class TaskView(AnafViewSet):
     """
     API endpoint that allows Tasks to be viewed or edited.
     """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     template_name = 'projects/index_owned.html'
-    accepted_formats = ('html', 'ajax')
 
     def get_queryset(self):
         query = Q(parent__isnull=True)
@@ -897,7 +896,7 @@ class TaskView(viewsets.ModelViewSet):
         return self.retrieve(request, *args, **kwargs)
 
 
-class TaskTimeSlotView(viewsets.ModelViewSet):
+class TaskTimeSlotView(AnafViewSet):
     """
     API endpoint that allows TaskTimeSlots to be viewed or edited.
     """
@@ -905,7 +904,12 @@ class TaskTimeSlotView(viewsets.ModelViewSet):
     serializer_class = TaskTimeSlotSerializer
 
     template_name = 'projects/task_time_view.html'
-    accepted_formats = ('html', 'ajax')
+
+    def list(self, request, *args, **kwargs):
+        if request.accepted_renderer.format in self.accepted_formats:
+            raise Http404
+        else:
+            return super(TaskTimeSlotView, self).list(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         """Task time slot view page"""
@@ -940,3 +944,35 @@ class TaskTimeSlotView(viewsets.ModelViewSet):
         slot.save()
 
         return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
+
+    @detail_route(methods=('GET', 'POST'))
+    def edit(self, request, *args, **kwargs):
+        """Task edit page"""
+
+        slot = self.get_object()
+        has_permission = request.user.profile.has_permission(slot, mode='w') and \
+                         request.user.profile.has_permission(slot.task, mode='w')
+        message = _("You don't have permission to edit this Task Time Slot")
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we just use the serializer to render the response
+            if not has_permission:
+                raise PermissionDenied(detail=message)
+            serializer = self.get_serializer(slot)
+            return Response(serializer.data)
+
+        context = _get_default_context(request)
+        if not has_permission:
+            context.update({'message': message})
+            return Response(context, template_name='core/user_denied.html', status=403)
+
+        if request.POST:
+            form = TaskTimeSlotForm(request.user.profile, None, request.POST, instance=slot)
+            if form.is_valid():
+                slot = form.save()
+                return HttpResponseRedirect(reverse('task-detail', args=[slot.task.id]))
+        else:
+            form = TaskTimeSlotForm(request.user.profile, None, instance=slot)
+
+        context.update({'form': form, 'task_time_slot': slot})
+        return Response(context, template_name='projects/task_time_edit.html')

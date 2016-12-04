@@ -216,40 +216,6 @@ def task_time_slot_add(request, task_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-def task_time_slot_edit(request, time_slot_id, response_format='html'):
-    """Task time slot edit page"""
-
-    task_time_slot = get_object_or_404(TaskTimeSlot, pk=time_slot_id)
-    task = task_time_slot.task
-
-    if not request.user.profile.has_permission(task_time_slot, mode='w') \
-            and not request.user.profile.has_permission(task, mode='w'):
-        return user_denied(request, message="You don't have access to this Task Time Slot")
-
-    if request.POST:
-        form = TaskTimeSlotForm(
-            request.user.profile, None, request.POST, instance=task_time_slot)
-        if form.is_valid():
-            task_time_slot = form.save()
-            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
-
-        elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
-    else:
-        form = TaskTimeSlotForm(
-            request.user.profile, None, instance=task_time_slot)
-
-    context = _get_default_context(request)
-    context.update({'form': form,
-                    'task_time_slot': task_time_slot,
-                    'task': task})
-
-    return render_to_response('projects/task_time_edit', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
 def task_time_slot_delete(request, time_slot_id, response_format='html'):
     """Task time slot delete"""
 

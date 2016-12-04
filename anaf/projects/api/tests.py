@@ -1393,8 +1393,6 @@ class ProjectsAPITest(AnafTestCase):
         data = json.loads(response.content)
         slot_id = data['id']
 
-        sleep(60)
-
         # stop task time
         response = self.client.post(reverse('api_projects_tasktime_stop', kwargs={'slot_id': slot_id}), data=json.dumps({'details': '<p>test details</p>'}),
                                     content_type=self.content_type, **self.authentication_headers)

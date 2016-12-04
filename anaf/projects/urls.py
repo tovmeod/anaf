@@ -11,14 +11,6 @@ router.register(r'milestone', views.MilestoneView)
 router.register(r'task', views.TaskView)
 router.register(r'tasktimeslot', views.TaskTimeSlotView)
 
-route_list = (
-    (r'project', views.ProjectView),
-    (r'taskstatus', views.TaskStatusView),
-    (r'milestone', views.MilestoneView),
-    (r'task', views.TaskView),
-    (r'tasktimeslot', views.TaskTimeSlotView)
-)
-
 urlpatterns = patterns('anaf.projects.views',
                        # url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
                        url(r'^/', include(patterns('',
@@ -78,8 +70,6 @@ urlpatterns = patterns('anaf.projects.views',
                            url(r'^task/time/(?P<task_id>\w+)/add(\.(?P<response_format>\w+))?/?$',
                                oldviews.task_time_slot_add, name='projects_task_time_slot_add'),
 
-                           url(r'^task/time/edit/(?P<time_slot_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_time_slot_edit, name='projects_task_time_slot_edit'),
                            url(r'^task/delete/time/(?P<time_slot_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.task_time_slot_delete, name='projects_task_time_slot_delete'),
 

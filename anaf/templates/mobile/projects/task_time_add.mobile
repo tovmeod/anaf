@@ -184,7 +184,7 @@
     </span>
     <span class="content-list-item-actions">
         {% if user.profile.has_permission(task, mode='w') or user.profile.has_permission(slot, mode='w') %}
-        <a href="{% url projects_task_time_slot_edit slot.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
+        <a href="{% url tasktimeslot-edit slot.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
         {% endif %}
     </span>
 </div>
