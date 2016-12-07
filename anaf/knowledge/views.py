@@ -156,7 +156,7 @@ def folder_add_folder(request, folderPath, response_format='html'):
     parent = None
     if knowledgeType_id:
         parent = get_object_or_404(KnowledgeFolder, pk=knowledgeType_id)
-        if not request.user.profile.has_permission(parent, mode='x'):
+        if not request.user.profile.has_permission(parent, mode='w'):
             parent = None
 
     if request.POST:

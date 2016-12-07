@@ -20,7 +20,7 @@
 
 {% block sidebar_right %}
 
-{% if user.profile.has_permission(milestone, mode='x') %}
+{% if user.profile.has_permission(milestone, mode='w') %}
 <span class="sidebar-header-first">{% trans %}Quick Status{% endtrans %}</span>
 <div class="sidebar-block">
     {% for status in statuses %}

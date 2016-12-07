@@ -153,7 +153,7 @@
     <span class="projects-task-time">{% trans %}Total Work Time{% endtrans %}:</span>
     <span class="imp heavy">{{ task.get_total_time_string() }}</span>
 </div>
-{% if user.profile.has_permission(task, mode='x') and not task.is_being_done_by(request.user.profile) %}
+{% if user.profile.has_permission(task, mode='w') and not task.is_being_done_by(request.user.profile) %}
 <div class="spaced-h spaced-v">
     <form action="{% url task-start task.id %}" method="get" class="content-form content-form-inline">
         <input type="submit" value="Start Work">
@@ -164,7 +164,7 @@
 </div>
 {% endif %}
 
-{% if user.profile.has_permission(task, mode='x') %}
+{% if user.profile.has_permission(task, mode='w') %}
 <form action="{% url projects_task_time_slot_add task.id %}" method="post" class="content-form">
 {% csrf_token %}
     <ul class="content-form-fields">
@@ -205,7 +205,7 @@
             </div>
             {% endif %}
             {% else %}
-            {% if user.profile.has_permission(task, mode='x') or user.profile.has_permission(slot, mode='w') %}
+            {% if user.profile.has_permission(task, mode='w') or user.profile.has_permission(slot, mode='w') %}
             <form action="{% url tasktimeslot-stop slot.id %}" method="post" class="content-form">
 {% csrf_token %}
                 <ul class="content-form-fields">

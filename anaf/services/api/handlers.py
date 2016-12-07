@@ -139,7 +139,7 @@ class TicketRecordHandler(BaseHandler):
         ticket = self.get_ticket(request, kwargs)
         if isinstance(ticket, Ticket):
             profile = request.user.profile
-            if profile.has_permission(ticket, mode='x'):
+            if profile.has_permission(ticket, mode='w'):
                 context = _get_default_context(request)
                 agent = context['agent']
 
@@ -189,7 +189,7 @@ class TicketHandler(ObjectHandler):
                     pk=request.GET['queue_id'])
             except self.model.DoesNotExist:
                 return False
-            if not request.user.profile.has_permission(request.queue, mode='x'):
+            if not request.user.profile.has_permission(request.queue, mode='w'):
                 request.queue = None
         return True
 

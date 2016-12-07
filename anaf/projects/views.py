@@ -182,7 +182,7 @@ def task_time_slot_add(request, task_id, response_format='html'):
     """Time slot add to preselected task"""
 
     task = get_object_or_404(Task, pk=task_id)
-    if not request.user.profile.has_permission(task, mode='x'):
+    if not request.user.profile.has_permission(task, mode='w'):
         return user_denied(request, message="You don't have access to this Task")
 
     if request.POST:

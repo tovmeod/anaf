@@ -30,7 +30,7 @@ class KnowledgeFolderHandler(ObjectHandler):
         parent = request.data.get('parent')
         if parent:
             parent = getOrNone(KnowledgeFolder, pk=parent)
-            if not parent or not request.user.profile.has_permission(parent, mode='x'):
+            if not parent or not request.user.profile.has_permission(parent, mode='w'):
                 request.data['parent'] = None
         return dct
 

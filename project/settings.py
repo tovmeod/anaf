@@ -353,7 +353,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'anaf.permissions.ObjectPermissions',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'anaf.core.rendering.JinjaRenderer',

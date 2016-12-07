@@ -115,7 +115,7 @@ def _process_mass_opportunity_form(f):
 
 def _do_update_record(profile, request, obj):
     """Get the Update Record Form"""
-    if profile.has_permission(obj, mode='x'):
+    if profile.has_permission(obj, mode='w'):
         if request.POST:
             record = UpdateRecord()
             record.object = obj
@@ -264,7 +264,7 @@ def ordered_product_add(request, order_id=None, response_format='html'):
     "Add new Ordered Product"
 
     order = get_object_or_404(SaleOrder, pk=order_id)
-    if not request.user.profile.has_permission(order, mode='x'):
+    if not request.user.profile.has_permission(order, mode='w'):
         return user_denied("Sorry, you don't have access to this Sale Order")
 
     if request.POST:

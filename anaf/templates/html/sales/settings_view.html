@@ -135,21 +135,20 @@
     <span class="content-label-head">{% trans %}Currencies{% endtrans %}:</span>
 </div>
 {% for c in currencies %}
-<div class="content-list-item content-list-item-{{ loop.cycle('odd', 'even') }}">
-    <div class="content-list-tick">
-    </div>
-    <span class="content-list-item-name">
-        <a href="{% url finance_currency_view c.id %}">{{ c.name }}</a>
-        <span class="content-list-item-group">
-            <span class="lighter small">{{ c.code }}{% if c.is_default %}<strong>&nbsp;{% trans %}Base{% endtrans %}</strong>{% endif %}</span>
+    <div class="content-list-item content-list-item-{{ loop.cycle('odd', 'even') }}">
+        <div class="content-list-tick"></div>
+        <span class="content-list-item-name">
+            <a href="{% url finance_currency_view c.id %}">{{ c.name }}</a>
+            <span class="content-list-item-group">
+                <span class="lighter small">{{ c.code }}{% if c.is_default %}<strong>&nbsp;{% trans %}Base{% endtrans %}</strong>{% endif %}</span>
+            </span>
         </span>
-    </span>
-    <span class="content-list-item-actions">
-        {% if user.profile.has_permission(product, mode='w') %}
-        <a href="{% url finance_currency_edit c.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
-        {% endif %}
-    </span>
-</div>
+        <span class="content-list-item-actions">
+            {% if user.profile.has_permission(c, mode='w') %}
+                <a href="{% url finance_currency_edit c.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
+            {% endif %}
+        </span>
+    </div>
 {% endfor %}
 
 {% endif %}

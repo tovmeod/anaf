@@ -26,11 +26,42 @@ from anaf.core.ajax.converter import preprocess_context
 from anaf import API_RENDERERS
 
 
+def noapi(viewfunc):
+    """
+    Used to mark a method on a ViewSet that it only handles the specified accepted formats.
+    """
+    def decorator(self, request, *args, **kwargs):
+        if request.accepted_renderer.format not in self.accepted_formats:
+            # This view only handles some formats (html and ajax),
+            # so if user requested json for example we return Not Acceptable
+            return Response(status=406)
+        return viewfunc(self, request, *args, **kwargs)
+    return decorator
+
+
+def apifirst(viewfunc):
+    """
+    Used to mark a method on a ViewSet to prioritize api formats.
+    So if format is not one of the accepted formats use the parent method to process request
+    """
+    def decorator(self, request, *args, **kwargs):
+        if request.accepted_renderer.format in self.accepted_formats:
+            return viewfunc(self, request, *args, **kwargs)
+        parent_viewfunc = getattr(super(self.__class__, self), viewfunc.__name__)
+        return parent_viewfunc(request, *args, **kwargs)
+    return decorator
+
+
 class AnafViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
                   mixins.ListModelMixin, GenericViewSet):
     """Base Viewset
     This doesn't have list because for some models it doesn't make sense list"""
     accepted_formats = ('html', 'ajax')
+
+    def retrieve(self, request, *args, **kwargs):
+        if request.method != 'GET':
+            raise MethodNotAllowed(request.method)
+        return super(AnafViewSet, self).retrieve(request, *args, **kwargs)
 
 
 def process_mass_form(f):
@@ -74,11 +105,9 @@ class ProjectView(AnafViewSet):
     template_name = 'projects/index.html'
 
     @list_route(methods=('GET', 'POST'))
+    @noapi
     def new(self, request, *args, **kwargs):
         """New Project page"""
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(ProjectView, self).create(request, *args, **kwargs)
-
         if request.POST:
             form = ProjectForm(request.user.profile, None, request.POST)
             if form.is_valid():
@@ -92,6 +121,7 @@ class ProjectView(AnafViewSet):
         context.update({'form': form})
         return Response(context, template_name='projects/project_add.html')
 
+    @noapi
     def new_to_project(self, request, project_id=None, *args, **kwargs):
         """New sub-Project to preselected project"""
 
@@ -101,7 +131,7 @@ class ProjectView(AnafViewSet):
         parent_project = None
         if project_id:
             parent_project = get_object_or_404(Project, pk=project_id)
-            if not request.user.profile.has_permission(parent_project, mode='x'):
+            if not request.user.profile.has_permission(parent_project, mode='w'):
                 parent_project = None
 
         if request.POST:
@@ -119,40 +149,29 @@ class ProjectView(AnafViewSet):
         return Response(context, template_name='projects/project_add_typed.html')
 
     @process_mass_form
+    @apifirst
     def retrieve(self, request, *args, **kwargs):
         """Single Project view page"""
-        project = self.get_object()
-        has_permission = request.user.profile.has_permission(project)
-        message = _("You don't have permission to view this Project")
         if request.accepted_renderer.format not in self.accepted_formats:
             # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(project)
-            return Response(serializer.data)
-
+            # so if user requested json for example we just use parent to render the response
+            return super(ProjectView, self).retrieve(request, *args, **kwargs)
+        project = self.get_object()
         context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
 
-        if request.user.profile.has_permission(project, mode='r'):
-            if request.POST:
-                record = UpdateRecord()
-                record.record_type = 'manual'
-                form = TaskRecordForm(request.user.profile, request.POST, instance=record)
-                if form.is_valid():
-                    record = form.save()
-                    record.set_user_from_request(request)
-                    record.save()
-                    record.about.add(project)
-                    project.set_last_updated()
-                    return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
-            else:
-                form = TaskRecordForm(request.user.profile)
+        if request.POST:
+            record = UpdateRecord()
+            record.record_type = 'manual'
+            form = TaskRecordForm(request.user.profile, request.POST, instance=record)
+            if form.is_valid():
+                record = form.save()
+                record.set_user_from_request(request)
+                record.save()
+                record.about.add(project)
+                project.set_last_updated()
+                return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
         else:
-            form = None
+            form = TaskRecordForm(request.user.profile)
 
         task_query = Q(parent__isnull=True, project=project)
         if request.GET:
@@ -161,7 +180,7 @@ class ProjectView(AnafViewSet):
             else:
                 task_query = task_query & Q(status__hidden=False) & _get_filter_query(request.GET)
         else:
-            task_query = task_query & Q(status__hidden=False)
+            task_query &= Q(status__hidden=False)
         tasks = Object.filter_by_request(request, Task.objects.filter(task_query))
         tasks_progress = float(0)
 
@@ -192,6 +211,7 @@ class ProjectView(AnafViewSet):
         return Response(context, template_name='projects/project_view.html')
 
     @detail_route()
+    @noapi
     def gantt(self, request, *args, **kwargs):
         """Project gantt view"""
         project = self.get_object()
@@ -248,24 +268,11 @@ class ProjectView(AnafViewSet):
         return Response(context, template_name='projects/gantt_view.html')
 
     @detail_route(methods=('GET', 'POST'))
+    @noapi
     def edit(self, request, *args, **kwargs):
         """Project edit page"""
-
         project = self.get_object()
-        has_permission = request.user.profile.has_permission(project, mode='w')
-        message = _("You don't have permission to edit this Project")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(project)
-            return Response(serializer.data)
-
         context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
 
         if request.POST:
             form = ProjectForm(request.user.profile, None, request.POST, instance=project)
@@ -279,24 +286,10 @@ class ProjectView(AnafViewSet):
         return Response(context, template_name='projects/project_edit.html')
 
     @detail_route(methods=('GET', 'POST'))
+    @noapi
     def delete(self, request, *args, **kwargs):
         """Project delete"""
-
         project = self.get_object()
-        has_permission = request.user.profile.has_permission(project, mode='w')
-        message = _("You don't have permission to delete this Project")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(project)
-            return Response(serializer.data)
-
-        context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
 
         if request.POST:
             if 'trash' in request.POST:
@@ -306,12 +299,12 @@ class ProjectView(AnafViewSet):
                 project.delete()
             return HttpResponseRedirect(reverse('project-list', kwargs={'format': kwargs.get('format')}))
 
+        context = _get_default_context(request)
         context.update({'project': project})
         return Response(context, template_name='projects/project_delete.html')
 
+    @apifirst
     def list(self, request, *args, **kwargs):
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(ProjectView, self).list(request, *args, **kwargs)
         query = Q(parent__isnull=True)
         if request.GET:
             if 'status' in request.GET and request.GET['status']:
@@ -355,28 +348,10 @@ class MilestoneView(AnafViewSet):
             return super(MilestoneView, self).list(request, *args, **kwargs)
 
     @process_mass_form
+    @apifirst
     def retrieve(self, request, *args, **kwargs):
         """Milestone view page"""
-
         milestone = self.get_object()
-        has_permission = request.user.profile.has_permission(milestone)
-        message = _("You don't have permission to view this Milestone")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            # but API access doesn't allow POST here
-            if request.POST:
-                raise MethodNotAllowed(request.method)
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(milestone)
-            return Response(serializer.data)
-
-        context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
-
         tasks_query = Q(milestone=milestone, parent__isnull=True)
         if request.GET:
             if 'status' in request.GET and request.GET['status']:
@@ -404,28 +379,14 @@ class MilestoneView(AnafViewSet):
                         'tasks': tasks,
                         'tasks_progress': tasks_progress,
                         'filters': filters})
-        # filters.as_ul()
         return Response(context, template_name='projects/milestone_view.html')
 
     @detail_route(methods=('GET', 'POST'))
+    @noapi
     def edit(self, request, *args, **kwargs):
         """Milestone edit page"""
-
         milestone = self.get_object()
-        has_permission = request.user.profile.has_permission(milestone, mode='w')
-        message = _("You don't have permission to edit this Milestone")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(milestone)
-            return Response(serializer.data)
-
         context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
 
         if request.POST:
             form = MilestoneForm(request.user.profile, None, request.POST, instance=milestone)
@@ -438,27 +399,18 @@ class MilestoneView(AnafViewSet):
         context.update({'form': form, 'milestone': milestone})
         return Response(context, template_name='projects/milestone_edit.html')
 
+    @noapi
     def set_status(self, request, status_id, *args, **kwargs):
         """Milestone quick set: Status"""
         # TODO: yes, it is wrong and ugly to change the task status with a GET request :(
         # buut until I have time to change the frontend this is what the frontend requests and expects to happen
-
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # discourage bad use on api
-            return Response(status=401)
         milestone = self.get_object()
-        has_permission = request.user.profile.has_permission(milestone, mode='x')
-        context = _get_default_context(request)
-        if not has_permission:
-            message = _("You don't have permission to edit this Milestone")
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
+        if not milestone.has_perm_write(request.user.profile):
+            self.permission_denied(request, message=_("You don't have permission to edit this Milestone"))
 
         status = get_object_or_404(TaskStatus, pk=status_id)
-        if not request.user.profile.has_permission(status):
-            message = _("You don't have access to this Milestone Status")
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
+        if not status.has_perm_read(request.user.profile):
+            self.permission_denied(request, message=_("You don't have access to this Milestone Status"))
 
         if not milestone.status == status:
             milestone.status = status
@@ -467,24 +419,10 @@ class MilestoneView(AnafViewSet):
         return self.retrieve(request, *args, **kwargs)
 
     @detail_route(methods=('GET', 'POST'))
+    @noapi
     def delete(self, request, *args, **kwargs):
         """Milestone delete"""
-
         milestone = self.get_object()
-        has_permission = request.user.profile.has_permission(milestone, mode='w')
-        message = _("You don't have permission to delete this Milestone")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(milestone)
-            return Response(serializer.data)
-
-        context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
 
         if request.POST:
             if 'trash' in request.POST:
@@ -497,16 +435,14 @@ class MilestoneView(AnafViewSet):
         task_query = Q(milestone=milestone, parent__isnull=True)
         if request.GET:
             task_query = task_query & _get_filter_query(request.GET)
+        context = _get_default_context(request)
         tasks = Object.filter_by_request(request, Task.objects.filter(task_query))
-
         context.update({'milestone': milestone, 'tasks': tasks})
         return Response(context, template_name='projects/milestone_delete.html')
 
     @list_route(methods=('GET', 'POST'))
+    @noapi
     def new(self, request, *args, **kwargs):
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(MilestoneView, self).create(request, *args, **kwargs)
-
         if request.POST:
             milestone = Milestone()
             form = MilestoneForm(request.user.profile, None, request.POST, instance=milestone)
@@ -521,16 +457,13 @@ class MilestoneView(AnafViewSet):
         context.update({'form': form})
         return Response(context, template_name='projects/milestone_add.html')
 
+    @noapi
     def new_to_project(self, request, project_id=None, *args, **kwargs):
         """New milestone to preselected project"""
-
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(MilestoneView, self).create(request, *args, **kwargs)
-
         project = None
         if project_id:
             project = get_object_or_404(Project, pk=project_id)
-            if not request.user.profile.has_permission(project, mode='x'):
+            if not project.has_perm_write(request.user.profile):
                 project = None
 
         if request.POST:
@@ -577,12 +510,10 @@ class TaskView(AnafViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    @apifirst
     def list(self, request, *args, **kwargs):
         """Basically all tasks current user can read"""
         tasks = self.get_queryset()
-
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return self._list(request, tasks, *args, **kwargs)
 
         filters = FilterForm(request.user.profile, 'assigned', request.GET)
         time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(time_from__isnull=False,
@@ -595,11 +526,9 @@ class TaskView(AnafViewSet):
         return Response(context, template_name='projects/index_owned.html')
 
     @list_route(methods=('GET', 'POST'))
+    @noapi
     def new(self, request, *args, **kwargs):
         """New Task page"""
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(TaskView, self).create(request, *args, **kwargs)
-
         if request.POST:
             form = TaskForm(request.user.profile, None, None, None, request.POST)
             if form.is_valid():
@@ -615,16 +544,11 @@ class TaskView(AnafViewSet):
         return Response(context, template_name='projects/task_add.html')
 
     @detail_route(methods=('GET', 'POST'))
+    @noapi
     def new_subtask(self, request, *args, **kwargs):
         """New SubTask page"""
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(TaskView, self).create(request, *args, **kwargs)
-
         task = self.get_object()
-        if request.user.profile.has_permission(task, mode='x'):
-            parent = task
-        else:
-            parent = None
+        parent = task
 
         if request.POST:
             form = TaskForm(request.user.profile, parent, None, None, request.POST)
@@ -640,16 +564,13 @@ class TaskView(AnafViewSet):
 
         return Response(context, template_name='projects/task_add_subtask.html')
 
+    @noapi
     def new_to_milestone(self, request, milestone_id=None, *args, **kwargs):
         """New Task to preselected milestone"""
-
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(TaskView, self).create(request, *args, **kwargs)
-
         milestone = None
         if milestone_id:
             milestone = get_object_or_404(Milestone, pk=milestone_id)
-            if not request.user.profile.has_permission(milestone, mode='x'):
+            if not milestone.has_perm_write(request.user.profile):
                 milestone = None
 
         if milestone is not None:
@@ -672,16 +593,13 @@ class TaskView(AnafViewSet):
 
         return Response(context, template_name='projects/task_add_to_milestone.html')
 
+    @noapi
     def new_to_project(self, request, project_id=None, *args, **kwargs):
         """New Task to preselected project"""
-
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(TaskView, self).create(request, *args, **kwargs)
-
         project = None
         if project_id:
             project = get_object_or_404(Project, pk=project_id)
-            if not request.user.profile.has_permission(project, mode='x'):
+            if not request.user.profile.has_permission(project, mode='w'):
                 project = None
 
         if request.POST:
@@ -754,25 +672,13 @@ class TaskView(AnafViewSet):
         context = preprocess_context(context)
         return Response(context, template_name='projects/index_owned.html')
 
+    @apifirst
     def retrieve(self, request, *args, **kwargs):
         """Single task view page"""
         task = self.get_object()
-        has_permission = request.user.profile.has_permission(task)
-        message = _("You don't have permission to view this Task")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(task)
-            return Response(serializer.data)
-
         context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
 
-        if request.user.profile.has_permission(task, mode='x'):
+        if task.has_perm_write(request.user.profile):
             form = TaskRecordForm(request.user.profile)
         else:
             form = None
@@ -782,31 +688,13 @@ class TaskView(AnafViewSet):
 
         context.update({'task': task, 'subtasks': subtasks, 'record_form': form, 'time_slots': time_slots})
 
-        if 'massform' in context and 'project' in context['massform'].fields:
-            del context['massform'].fields['project']
-
         return Response(context, template_name='projects/task_view.html')
 
     @detail_route(methods=('GET', 'POST'))
+    @noapi
     def edit(self, request, *args, **kwargs):
         """Task edit page"""
-
         task = self.get_object()
-        has_permission = request.user.profile.has_permission(task, mode='w')
-        message = _("You don't have permission to edit this Task")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(task)
-            return Response(serializer.data)
-
-        context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
-
         if request.POST:
             form = TaskForm(request.user.profile, None, None, None, request.POST, instance=task)
             if form.is_valid():
@@ -815,29 +703,15 @@ class TaskView(AnafViewSet):
         else:
             form = TaskForm(request.user.profile, None, None, None, instance=task)
 
+        context = _get_default_context(request)
         context.update({'form': form, 'task': task})
         return Response(context, template_name='projects/task_edit.html')
 
     @detail_route(methods=('GET', 'POST'))
+    @noapi
     def delete(self, request, *args, **kwargs):
         """Task delete"""
-
         task = self.get_object()
-        has_permission = request.user.profile.has_permission(task, mode='w')
-        message = _("You don't have permission to delete this Task")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(task)
-            return Response(serializer.data)
-
-        context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
-
         if request.POST:
             if 'trash' in request.POST:
                 task.trash = True
@@ -849,6 +723,7 @@ class TaskView(AnafViewSet):
         subtasks = Object.filter_by_request(request, Task.objects.filter(parent=task))
         time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(task=task))
 
+        context = _get_default_context(request)
         context.update({'task': task, 'subtasks': subtasks, 'time_slots': time_slots})
         return Response(context, template_name='projects/task_delete.html')
 
@@ -856,9 +731,6 @@ class TaskView(AnafViewSet):
     def start(self, request, *args, **kwargs):
         """Task start"""
         task = self.get_object()
-        if not request.user.profile.has_permission(task, mode='x'):
-            raise PermissionDenied(detail=_("You don't have access to this Task"))
-
         if not task.is_being_done_by(request.user.profile):
             task_time_slot = TaskTimeSlot(task=task, time_from=datetime.now(), user=request.user.profile)
             task_time_slot.save()
@@ -866,28 +738,18 @@ class TaskView(AnafViewSet):
 
         return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
 
+    @noapi
     def set_status(self, request, status_id, *args, **kwargs):
         """Task quick set: Status"""
         # TODO: yes, it is wrong and ugly to change the task status with a GET request :(
         # buut until I have time to change the frontend this is what the frontend requests and expects to happen
-
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # discourage bad use on api
-            return Response(status=401)
         task = self.get_object()
-        has_permission = request.user.profile.has_permission(task, mode='x')
-        context = _get_default_context(request)
-        if not has_permission:
-            message = _("You don't have permission to edit this Task")
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
+        if not task.has_perm_write(request.user.profile):
+            self.permission_denied(request, message=_("You don't have permission to edit this Task"))
 
-        # status_id = kwargs['status_id']
         status = get_object_or_404(TaskStatus, pk=status_id)
-        if not request.user.profile.has_permission(status):
-            message = _("You don't have access to this Task Status")
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
+        if not status.has_perm_read(request.user.profile):
+            self.permission_denied(request, message=_("You don't have access to this Task Status"))
 
         if not task.status == status:
             task.status = status
@@ -911,32 +773,18 @@ class TaskTimeSlotView(AnafViewSet):
         else:
             return super(TaskTimeSlotView, self).list(request, *args, **kwargs)
 
+    @apifirst
     def retrieve(self, request, *args, **kwargs):
         """Task time slot view page"""
-
         slot = self.get_object()
-        has_permission = request.user.profile.has_permission(slot) and request.user.profile.has_permission(slot.task)
-        message = _("You don't have access to this Task Time Slot")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(slot)
-            return Response(serializer.data)
-
         context = _get_default_context(request)
         context.update({'task_time_slot': slot})
-
         return Response(context, template_name='projects/task_time_view.html')
 
     @detail_route(methods=('POST',))
     def stop(self, request, *args, **kwargs):
         """Task stop"""
         slot = self.get_object()
-        if not request.user.profile.has_permission(slot, mode='w'):
-            raise PermissionDenied(detail=_("You don't have access to this TaskTimeSlot"))
-
         slot.time_to = datetime.now()
         details = request.POST.get('details')
         if details is not None:
@@ -946,26 +794,10 @@ class TaskTimeSlotView(AnafViewSet):
         return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
 
     @detail_route(methods=('GET', 'POST'))
+    @noapi
     def edit(self, request, *args, **kwargs):
         """Task edit page"""
-
         slot = self.get_object()
-        has_permission = request.user.profile.has_permission(slot, mode='w') and \
-                         request.user.profile.has_permission(slot.task, mode='w')
-        message = _("You don't have permission to edit this Task Time Slot")
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use the serializer to render the response
-            if not has_permission:
-                raise PermissionDenied(detail=message)
-            serializer = self.get_serializer(slot)
-            return Response(serializer.data)
-
-        context = _get_default_context(request)
-        if not has_permission:
-            context.update({'message': message})
-            return Response(context, template_name='core/user_denied.html', status=403)
-
         if request.POST:
             form = TaskTimeSlotForm(request.user.profile, None, request.POST, instance=slot)
             if form.is_valid():
@@ -974,5 +806,6 @@ class TaskTimeSlotView(AnafViewSet):
         else:
             form = TaskTimeSlotForm(request.user.profile, None, instance=slot)
 
+        context = _get_default_context(request)
         context.update({'form': form, 'task_time_slot': slot})
         return Response(context, template_name='projects/task_time_edit.html')

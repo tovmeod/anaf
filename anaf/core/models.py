@@ -246,42 +246,19 @@ class User(AccessEntity):
 
     def get_groups(self):
         """Returns the list of all groups the user belongs to
-        :rtype: list of Group"""
-        groups = list(self.other_groups.all())
-        groups.append(self.default_group)
+        :rtype: list"""
+        return list(self.other_groups.all()) + [self.default_group]
 
-        return groups
-
-    def _check_permission(self, obj, mode='r'):
-        """Helper for User.has_permissions(), accepts only one character for mode"""
-
-        query = models.Q(pk=self.id)
-        for group in self.get_groups():
-            if group:
-                query = query | models.Q(pk=group.id)
-
-        if obj.full_access.filter(query).exists():
-            return True
-
-        if mode in ('r', 'x') and obj.read_access.filter(query).exists():
-            return True
-
-        if not obj.full_access.exists():
-            # if no one can have full access, then allow everyone
-            return True
-
-        return False
-
-    def has_permission(self, obj, mode="r"):
-        """Checks permissions on a given object for a given mode"""
-        if self.is_admin() or not obj:
-            return True
-
-        for imode in mode:
-            if not self._check_permission(obj, imode):
-                return False
-
-        return True
+    def has_permission(self, obj, mode='r'):
+        """Checks permissions on a given object for a given mode
+        :type obj: Object
+        :param str mode: Either r for read or w for write
+        """
+        if mode == 'w':
+            return obj.has_perm_write(self)
+        if mode == 'r':
+            return obj.has_perm_read(self)
+        raise ValueError('Permission mode should be either r or w')
 
     def is_admin(self, module_name=''):
         """True if the user has write permissions on the given module"""
@@ -291,7 +268,7 @@ class User(AccessEntity):
 
         try:
             module = Module.objects.get(name=module_name)
-            access = self._check_permission(module, mode='w')
+            access = module.has_perm_write(self)
         except Module.DoesNotExist:
             pass
         if access or module_name == 'anaf.core':
@@ -342,7 +319,8 @@ class User(AccessEntity):
                 module.read_access.add(self)
 
     def get_contact(self):
-        """Returns first available Contact"""
+        """Returns first available Contact
+        :rtype: anaf.identities.models.Contact"""
         try:
             return self.contact_set.all()[0]
         except Exception:
@@ -416,6 +394,7 @@ class Comment(models.Model):
 class Object(models.Model):
     """Generic anaf object"""
     creator = models.ForeignKey(User, blank=True, null=True, related_name='objects_created', on_delete=models.SET_NULL)
+    # each object has two kinds of permissions (read (r) and write (w))
     read_access = models.ManyToManyField(AccessEntity, blank=True, null=True, related_name='objects_read_access')
     full_access = models.ManyToManyField(AccessEntity, blank=True, null=True, related_name='objects_full_access')
 
@@ -461,6 +440,53 @@ class Object(models.Model):
 
         return query
     _get_query_filter_permitted = staticmethod(_get_query_filter_permitted)
+
+    def has_perm_read(self, user_profile):
+        """
+        :rtype: bool
+        :param User user_profile:
+        """
+        if user_profile.user.is_staff:  # staff can read and write to all objects
+            return True
+        base_query = self._perm_base_query(user_profile)
+        if self.has_perm_write(user_profile, base_query):
+            return True
+        return self.read_access.filter(base_query).exists()
+
+    def has_perm_write(self, user_profile, base_query=None):
+        """
+        :rtype: bool
+        :param User user_profile:
+        """
+        if user_profile.user.is_staff:  # staff can read and write to all objects
+            return True
+        if base_query is None:
+            base_query = self._perm_base_query(user_profile)
+        return self.full_access.filter(base_query).exists()
+
+    def give_perm_write(self, user_profile):
+        """
+        This may seem stupid to define a one line function simply passing the same argument to another function,
+        why not simply call the function myself?
+        Well, this way I'm giving the child objects a chance to override this and implement some additional logic
+        if needed
+        """
+        self.full_access.add(user_profile)
+
+    def give_perm_read(self, user_profile):
+        """
+        This may seem stupid to define a one line function simply passing the same argument to another function,
+        why not simply call the function myself?
+        Well, this way I'm giving the child objects a chance to override this and implement some additional logic
+        if needed
+        """
+        self.read_access.add(user_profile)
+
+    def _perm_base_query(self, user_profile):
+        query = models.Q(pk=user_profile.id)  # base query is for current user
+        for group in user_profile.get_groups():
+            query |= models.Q(pk=group.id)  # make an OR query for each group the user belongs
+        return query
 
     def filter_permitted(user, manager, mode="r", filter_trash=True):
         """Returns Objects the given user is allowed to access, depending on mode - read(r), write(w) or execute(x)"""

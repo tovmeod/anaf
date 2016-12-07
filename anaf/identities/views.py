@@ -334,7 +334,7 @@ def contact_add_typed(request, type_id, response_format='html'):
     "Contact add with preselected type"
 
     contact_type = get_object_or_404(ContactType, pk=type_id)
-    if not request.user.profile.has_permission(contact_type, mode='x'):
+    if not request.user.profile.has_permission(contact_type, mode='w'):
         return user_denied(request, message="You don't have access to create " + unicode(contact_type))
 
     if request.POST:
@@ -402,7 +402,7 @@ def contact_me(request, attribute='', response_format='html'):
     "My Contact card"
 
     contact = request.user.profile.get_contact()
-    if not request.user.profile.has_permission(contact):
+    if not contact or not request.user.profile.has_permission(contact):
         return user_denied(request, message="You don't have access to this Contact")
     types = Object.filter_by_request(
         request, ContactType.objects.order_by('name'))

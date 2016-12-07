@@ -83,7 +83,7 @@ class InfrastructureViewsTest(TestCase):
 
     def setUp(self):
         self.group, created = Group.objects.get_or_create(name='test')
-        self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+        self.user, created = DjangoUser.objects.get_or_create(username=self.username, is_staff=True)
         self.user.set_password(self.password)
         self.user.save()
         perspective, created = Perspective.objects.get_or_create(name='default')

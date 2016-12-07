@@ -8,7 +8,7 @@
 {% block module_subtitle %}{% trans %}Folder{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-{% if user.profile.has_permission(folder, mode='x') %}
+{% if user.profile.has_permission(folder, mode='w') %}
 <a href="{% url knowledge_item_add_folder folder.treepath %}" class="top-menu add-link">{% trans %}New Item{% endtrans %}</a>
 <a href="{% url knowledge_folder_add_folder folder.treepath %}" class="top-menu add-link">{% trans %}New Folder{% endtrans %}</a>
 {% endif %}

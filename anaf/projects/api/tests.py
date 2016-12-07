@@ -28,7 +28,9 @@ class ProjectsAPITest(AnafTestCase):
         with freeze_time(datetime(year=2015, month=10, day=8, hour=7, minute=20)):
             DjangoUser.objects.get_or_create(username='api_test_first_user')
         with freeze_time(datetime(year=2015, month=11, day=9, hour=8, minute=21)):
-            self.user, created = DjangoUser.objects.get_or_create(username=self.username)
+            # create the test user as staff so it has permissions for everything
+            #  instead of creating permissions for each thing here
+            self.user, created = DjangoUser.objects.get_or_create(username=self.username, is_staff=True)
         with freeze_time(datetime(year=2015, month=12, day=10, hour=9, minute=22)):
             DjangoUser.objects.get_or_create(username='api_test_third_user')
         self.user.set_password(self.password)
@@ -120,6 +122,67 @@ class ProjectsAPITest(AnafTestCase):
         self.assertEquals(self.client.get(reverse('milestone-list')).status_code, 401)
 
     # Get info about projects, milestones, status, tasks, tasktimes.
+
+    def assert_not_acceptable_format(self, name, **kwargs):
+        """Assert that the url exist but won't accept API format"""
+        kwargs.update({'format': 'json'})
+        response = self.client.get(reverse(name, kwargs=kwargs), **self.authentication_headers)
+        self.assertEqual(response.status_code, 406)
+
+    def test_project_new(self):
+        """Test the project-new endpoint, an API call should return 406 Not Acceptable"""
+        self.assert_not_acceptable_format('project-new')
+
+    def test_project_new_to_project(self):
+        self.assert_not_acceptable_format('project-new-to-project', project_id=self.project.id)
+
+    def test_project_gantt(self):
+        self.assert_not_acceptable_format('project-gantt', pk=self.project.id)
+
+    def test_project_edit(self):
+        self.assert_not_acceptable_format('project-edit', pk=self.project.id)
+
+    def test_project_delete(self):
+        self.assert_not_acceptable_format('project-delete', pk=self.project.id)
+
+    def test_milestone_edit(self):
+        self.assert_not_acceptable_format('milestone-edit', pk=self.milestone.id)
+
+    def test_milestone_set_status(self):
+        self.assert_not_acceptable_format('milestone-set-status', pk=self.milestone.id, status_id=self.taskstatus.id)
+
+    def test_milestone_delete(self):
+        self.assert_not_acceptable_format('milestone-delete', pk=self.milestone.id)
+
+    def test_milestone_new(self):
+        self.assert_not_acceptable_format('milestone-new')
+
+    def test_milestone_new_to_project(self):
+        self.assert_not_acceptable_format('milestone-new-to-project', project_id=self.project.id)
+
+    def test_task_new(self):
+        self.assert_not_acceptable_format('task-new')
+
+    def test_task_new_subtask(self):
+        self.assert_not_acceptable_format('task-new-subtask', pk=self.task.id)
+
+    def test_task_new_to_milestone(self):
+        self.assert_not_acceptable_format('task-new-to-milestone', milestone_id=self.milestone.id)
+
+    def test_task_new_to_project(self):
+        self.assert_not_acceptable_format('task-new-to-project', project_id=self.project.id)
+
+    def test_task_edit(self):
+        self.assert_not_acceptable_format('task-edit', pk=self.task.id)
+
+    def test_task_delete(self):
+        self.assert_not_acceptable_format('task-delete', pk=self.task.id)
+
+    def test_task_set_status(self):
+        self.assert_not_acceptable_format('task-set-status', pk=self.task.id, status_id=self.taskstatus.id)
+
+    def test_tasktimeslot_edit(self):
+        self.assert_not_acceptable_format('tasktimeslot-edit', pk=self.time_slot.id)
 
     def test_get_project_list(self):
         """ Test index page api/projects """

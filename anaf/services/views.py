@@ -438,7 +438,7 @@ def ticket_view(request, ticket_id, response_format='html'):
     if ticket.message:
         ticket.message.read_by.add(profile)
 
-    if profile.has_permission(ticket, mode='x'):
+    if profile.has_permission(ticket, mode='w'):
         if request.POST:
             record = TicketRecord(sender=profile.get_contact())
             record.record_type = 'manual'
@@ -555,7 +555,7 @@ def ticket_add(request, queue_id=None, response_format='html'):
     queue = None
     if queue_id:
         queue = get_object_or_404(TicketQueue, pk=queue_id)
-        if not profile.has_permission(queue, mode='x'):
+        if not profile.has_permission(queue, mode='w'):
             queue = None
 
     if request.POST:

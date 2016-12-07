@@ -41,7 +41,7 @@ class KnowledgeViewsTest(TestCase):
 
     def setUp(self):
         self.group, created = Group.objects.get_or_create(name='test')
-        duser, created = DjangoUser.objects.get_or_create(username=self.username)
+        duser, created = DjangoUser.objects.get_or_create(username=self.username, is_staff=True)
         duser.set_password(self.password)
         duser.save()
         self.user, created = User.objects.get_or_create(user=duser)

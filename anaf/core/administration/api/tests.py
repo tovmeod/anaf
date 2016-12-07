@@ -19,7 +19,7 @@ class CoreAPITest(TestCase):
 
     def setUp(self):
         self.group = Group.objects.get_or_create(name='test')[0]
-        duser = DjangoUser.objects.get_or_create(username=self.username)[0]
+        duser = DjangoUser.objects.get_or_create(username=self.username, is_staff=True)[0]
         duser.set_password(self.password)
         duser.save()
         self.user = duser

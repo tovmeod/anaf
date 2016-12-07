@@ -436,7 +436,7 @@ def document_add_typed(request, folder_id=None, response_format='html'):
     folder = None
     if folder_id:
         folder = get_object_or_404(Folder, pk=folder_id)
-        if not request.user.profile.has_permission(folder, mode='x'):
+        if not request.user.profile.has_permission(folder, mode='w'):
             folder = None
 
     document = Document()
@@ -732,7 +732,7 @@ def weblink_add_typed(request, folder_id=None, response_format='html'):
     folder = None
     if folder_id:
         folder = get_object_or_404(Folder, pk=folder_id)
-        if not request.user.profile.has_permission(folder, mode='x'):
+        if not request.user.profile.has_permission(folder, mode='w'):
             folder = None
 
     if request.POST:

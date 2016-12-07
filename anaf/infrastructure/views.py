@@ -489,7 +489,7 @@ def item_add_typed(request, type_id, response_format='html'):
     "Item add with preselected type"
 
     item_type = get_object_or_404(ItemType, pk=type_id)
-    if not request.user.profile.has_permission(item_type, mode='x'):
+    if not request.user.profile.has_permission(item_type, mode='w'):
         return user_denied(request, message="You don't have access to create " + unicode(item_type),
                            response_format=response_format)
 

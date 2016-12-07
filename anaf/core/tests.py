@@ -97,7 +97,7 @@ def authentication_headers():
     username = "api_test"
     password = "api_password"
     headers = {"CONTENT_TYPE": "application/json", "HTTP_AUTHORIZATION": "Basic YXBpX3Rlc3Q6YXBpX3Bhc3N3b3Jk"}
-    user = DjangoUser.objects.get_or_create(username=username)[0]
+    user = DjangoUser.objects.get_or_create(username=username, is_staff=True)[0]
     user.set_password(password)
     user.save()
     return headers
@@ -182,6 +182,7 @@ class CoreModelsTest(TestCase):
         user = DjangoUser(username=username)
         user.set_password(password)
         user.save()
+        Module.objects.get(name='anaf.core').give_perm_write(user.profile)
         self.assertEquals(user.username, username)
         self.assertIsNotNone(user.id)
         profile = user.profile
@@ -269,7 +270,7 @@ class CoreViewsTestLoggedIn(TestCase):
 
     def setUp(self):
         self.group, created = Group.objects.get_or_create(name='test')
-        duser, created = DjangoUser.objects.get_or_create(username=self.username)
+        duser, created = DjangoUser.objects.get_or_create(username=self.username, is_staff=True)
         duser.set_password(self.password)
         duser.save()
         self.user = duser

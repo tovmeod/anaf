@@ -132,7 +132,7 @@ class StartTaskTimeHandler(BaseHandler):
         except Task.DoesNotExist:
             return rc.NOT_FOUND
 
-        if not request.user.profile.has_permission(task, mode='x'):
+        if not request.user.profile.has_permission(task, mode='w'):
             return rc.FORBIDDEN
 
         if not task.is_being_done_by(request.user.profile):
@@ -163,7 +163,7 @@ class StopTaskTimeHandler(BaseHandler):
         except Task.DoesNotExist:
             return rc.NOT_FOUND
 
-        if not request.user.profile.has_permission(slot, mode='x'):
+        if not request.user.profile.has_permission(slot, mode='w'):
             return rc.FORBIDDEN
 
         slot.time_to = datetime.now()

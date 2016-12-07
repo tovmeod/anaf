@@ -224,7 +224,7 @@ def stream_view(request, stream_id, response_format='html'):
         return user_denied(request, message="You don't have access to this Stream",
                            response_format=response_format)
 
-    if request.user.profile.has_permission(stream, mode='x'):
+    if request.user.profile.has_permission(stream, mode='w'):
         if request.POST:
             message = Message()
             message.author = user.get_contact()

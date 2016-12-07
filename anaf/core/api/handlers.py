@@ -121,7 +121,7 @@ class ObjectHandler(BaseHandler):
         if request.data is None:
             return rc.BAD_REQUEST
 
-        if not self.check_create_permission(request, "x"):
+        if not self.check_create_permission(request, 'w'):
             return rc.FORBIDDEN
 
         attrs = self.flatten_dict(request)

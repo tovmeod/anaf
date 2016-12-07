@@ -69,7 +69,7 @@ class MessageHandler(ObjectHandler):
 
         if 'stream' in request.data:
             stream = getOrNone(MessageStream, request.data['stream'])
-            if stream and not user.has_permission(stream, mode='x'):
+            if stream and not user.has_permission(stream, mode='w'):
                 return rc.FORBIDDEN
 
         message = Message()

@@ -19,7 +19,7 @@ class DocumentsViewsTest(TestCase):
 
     def setUp(self):
         self.group = Group.objects.create(name='test')
-        self.user = DjangoUser.objects.create(username=self.username)
+        self.user = DjangoUser.objects.create(username=self.username, is_staff=True)
         self.user.set_password(self.password)
         self.user.save()
 
