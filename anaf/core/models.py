@@ -524,7 +524,6 @@ class Object(models.Model):
 
     def save(self, *args, **kwargs):
         """Override to auto-detect object type and set default user if unset"""
-
         try:
             name = self.__unicode__()
             if not name == self.object_name:

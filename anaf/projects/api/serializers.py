@@ -1,54 +1,34 @@
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from rest_framework import serializers
-from anaf.identities.api.serializers import Contact as ContactSerializer
-from anaf.core.api.serializers import ProfileSerializer
+
+common_exclude = ('full_access', 'nuvius_resource', 'object_name', 'read_access')
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    creator = ProfileSerializer()
-    client = ContactSerializer()
-    manager = ContactSerializer()
-
     class Meta:
         model = Project
+        exclude = common_exclude
 
 
 class TaskStatusSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    creator = ProfileSerializer()
-
     class Meta:
         model = TaskStatus
+        exclude = common_exclude
 
 
 class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    creator = ProfileSerializer()
-    project = ProjectSerializer()
-    status = TaskStatusSerializer()
-
     class Meta:
         model = Milestone
+        exclude = common_exclude
 
 
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    creator = ProfileSerializer()
-    project = ProjectSerializer()
-    status = TaskStatusSerializer()
-
     class Meta:
         model = Task
+        exclude = common_exclude
 
 
 class TaskTimeSlotSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.ReadOnlyField()
-    creator = ProfileSerializer()
-    task = TaskSerializer()
-    user = ProfileSerializer()
-    # project = ProjectSerializer()
-    # status = TaskStatusSerializer()
-
     class Meta:
         model = TaskTimeSlot
+        exclude = common_exclude
