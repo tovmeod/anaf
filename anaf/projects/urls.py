@@ -67,11 +67,12 @@ urlpatterns = patterns('anaf.projects.views',
                                name='milestone-detail'),
 
                            # Times Slots
-                           url(r'^task/time/(?P<task_id>\w+)/add(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_time_slot_add, name='projects_task_time_slot_add'),
-
-                           url(r'^task/delete/time/(?P<time_slot_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_time_slot_delete, name='projects_task_time_slot_delete'),
+                           url(r'^tasktimeslot/new_to_task/(?P<task_id>[^/.]+)/$',
+                               views.TaskTimeSlotView.as_view({'get': 'new_to_task', 'post': 'new_to_task'}),
+                               name='tasktimeslot-new-to-task'),
+                           url(r'^tasktimeslot/new_to_task/(?P<task_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
+                               views.TaskTimeSlotView.as_view({'get': 'new_to_task', 'post': 'new_to_task'}),
+                               name='tasktimeslot-new-to-task'),
 
                            # Task Statuses
                            url(r'^task/status/add(\.(?P<response_format>\w+))?/?$',

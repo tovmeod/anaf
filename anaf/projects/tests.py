@@ -314,7 +314,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('tasktimeslot-stop', (1,))
 
     def test_task_time_slot_add(self):
-        self.assert_protected('projects_task_time_slot_add', (1,))
+        self.assert_protected('tasktimeslot-new-to-task', (1,))
 
     def test_task_time_slot_view(self):
         self.assert_protected('tasktimeslot-detail', (1,))
@@ -323,7 +323,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('tasktimeslot-edit', (1,))
 
     def test_task_time_slot_delete(self):
-        self.assert_protected('projects_task_time_slot_delete', (1,))
+        self.assert_protected('tasktimeslot-delete', (1,))
 
     def test_task_status_add(self):
         self.assert_protected('projects_task_status_add')
@@ -610,7 +610,7 @@ class ProjectsViewsTest(AnafTestCase):
     # Task Time Slots
     def test_time_slot_add(self):
         """Test index page with login at /projects/task/view/time/<task_id>add/"""
-        response = self.client.get(reverse('projects_task_time_slot_add', args=[self.task.id]))
+        response = self.client.get(reverse('tasktimeslot-new-to-task', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_time_slot_view_login(self):

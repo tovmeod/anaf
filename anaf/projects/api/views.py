@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from rest_framework import mixins
 from rest_framework import viewsets
-from rest_framework.exceptions import MethodNotAllowed
+from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
@@ -54,8 +54,7 @@ def apifirst(viewfunc):
 
 class AnafViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
                   mixins.ListModelMixin, GenericViewSet):
-    """Base Viewset
-    This doesn't have list because for some models it doesn't make sense list"""
+    """Base Viewset"""
     accepted_formats = ('html', 'ajax')
 
     def retrieve(self, request, *args, **kwargs):
@@ -124,10 +123,6 @@ class ProjectView(AnafViewSet):
     @noapi
     def new_to_project(self, request, project_id=None, *args, **kwargs):
         """New sub-Project to preselected project"""
-
-        if request.accepted_renderer.format not in self.accepted_formats:
-            return super(ProjectView, self).create(request, *args, **kwargs)
-
         parent_project = None
         if project_id:
             parent_project = get_object_or_404(Project, pk=project_id)
@@ -152,10 +147,6 @@ class ProjectView(AnafViewSet):
     @apifirst
     def retrieve(self, request, *args, **kwargs):
         """Single Project view page"""
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we just use parent to render the response
-            return super(ProjectView, self).retrieve(request, *args, **kwargs)
         project = self.get_object()
         context = _get_default_context(request)
 
@@ -341,11 +332,9 @@ class MilestoneView(AnafViewSet):
     serializer_class = MilestoneSerializer
     template_name = 'projects/milestone_add.html'
 
+    @apifirst
     def list(self, request, *args, **kwargs):
-        if request.accepted_renderer.format in self.accepted_formats:
-            raise Http404
-        else:
-            return super(MilestoneView, self).list(request, *args, **kwargs)
+        raise Http404
 
     @process_mass_form
     @apifirst
@@ -715,7 +704,7 @@ class TaskView(AnafViewSet):
         if request.POST:
             if 'trash' in request.POST:
                 task.trash = True
-                task.save()
+                task.save(update_fields=('trash',))
             else:
                 task.delete()
             return HttpResponseRedirect(reverse('project-list'))
@@ -783,7 +772,7 @@ class TaskTimeSlotView(AnafViewSet):
 
     @detail_route(methods=('POST',))
     def stop(self, request, *args, **kwargs):
-        """Task stop"""
+        """TaskTimeSlot stop action"""
         slot = self.get_object()
         slot.time_to = datetime.now()
         details = request.POST.get('details')
@@ -796,7 +785,7 @@ class TaskTimeSlotView(AnafViewSet):
     @detail_route(methods=('GET', 'POST'))
     @noapi
     def edit(self, request, *args, **kwargs):
-        """Task edit page"""
+        """TaskTimeSlot edit page"""
         slot = self.get_object()
         if request.POST:
             form = TaskTimeSlotForm(request.user.profile, None, request.POST, instance=slot)
@@ -809,3 +798,44 @@ class TaskTimeSlotView(AnafViewSet):
         context = _get_default_context(request)
         context.update({'form': form, 'task_time_slot': slot})
         return Response(context, template_name='projects/task_time_edit.html')
+
+    @noapi
+    def new_to_task(self, request, task_id=None, *args, **kwargs):
+        """New timeslot to preselected task"""
+        task = get_object_or_404(Task, pk=task_id)
+        if not request.user.profile.has_permission(task, mode='w'):
+            raise PermissionDenied
+
+        if request.POST:
+            task_time_slot = TaskTimeSlot(task=task, time_to=datetime.now(), user=request.user.profile)
+            form = TaskTimeSlotForm(request.user.profile, task_id, request.POST, instance=task_time_slot)
+            if form.is_valid():
+                task_time_slot = form.save()
+                task_time_slot.set_user_from_request(request)
+                return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
+        else:
+            form = TaskTimeSlotForm(request.user.profile, task_id)
+
+        subtasks = Object.filter_by_request(request, Task.objects.filter(parent=task))
+        time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(task=task))
+
+        context = _get_default_context(request)
+        context.update({'form': form, 'task': task, 'subtasks': subtasks, 'time_slots': time_slots})
+        return Response(context, template_name='projects/task_time_add.html')
+
+    @detail_route(methods=('GET', 'POST'))
+    @noapi
+    def delete(self, request, *args, **kwargs):
+        """Task time slot delete"""
+        task_time_slot = self.get_object()
+        if request.POST:
+            if 'trash' in request.POST:
+                task_time_slot.trash = True
+                task_time_slot.save(update_fields=('trash',))
+            else:
+                task_time_slot.delete()
+            return HttpResponseRedirect(reverse('task-list'))
+
+        context = _get_default_context(request)
+        context.update({'task_time_slot': task_time_slot, 'task': task_time_slot.task})
+        return Response(context, template_name='projects/task_time_delete.html')

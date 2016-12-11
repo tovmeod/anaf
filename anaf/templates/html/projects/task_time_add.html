@@ -158,21 +158,21 @@
     <form action="{% url task-start task.id %}" method="get" class="content-form content-form-inline">
         <input type="submit" value="Start Work">
     </form>
-    <form action="{% url projects_task_time_slot_add task.id %}" method="get" class="content-form content-form-inline">
+    <form action="{% url tasktimeslot-new-to-task task.id %}" method="get" class="content-form content-form-inline">
         <input type="submit" value="Add Work">
     </form>
 </div>
 {% endif %}
 
 {% if user.profile.has_permission(task, mode='w') %}
-<form action="{% url projects_task_time_slot_add task.id %}" method="post" class="content-form">
+<form action="{% url tasktimeslot-new-to-task task.id %}" method="post" class="content-form">
 {% csrf_token %}
     <ul class="content-form-fields">
         {{ form.as_ul()|htsafe }}
     </ul>
     <div class="content-form-submit-small">
         <input type="submit" name="add" value="Add">
-        <input type="submit" name="cancel" value="Cancel">
+        <a class="cancel" href="{% url task-detail task.id %}">{% trans %}Cancel{% endtrans %}</a>
     </div>
 </form>
 {% endif %}

@@ -11,7 +11,7 @@
 		<a href="{% url tasktimeslot-detail task_time_slot.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 		{% if user.profile.has_permission(task, mode='w') or user.profile.has_permission(slot, mode='w') %}
 		<a href="{% url tasktimeslot-edit task_time_slot.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
-		<a href="{% url projects_task_time_slot_delete task_time_slot.id %}" class="top-menu delete-link-active">{% trans %}Delete{% endtrans %}</a>
+		<a href="{% url tasktimeslot-delete task_time_slot.id %}" class="top-menu delete-link-active">{% trans %}Delete{% endtrans %}</a>
 		{% endif %}
 {% endblock %}
 
@@ -30,7 +30,7 @@
 				</li>
 				<li>
 					<input type="submit" name="delete" value="{% trans %}Yes, Delete{% endtrans %}" />&nbsp;&nbsp;
-	        		<input type="submit" name="cancel" value="{% trans %}Cancel{% endtrans %}" />
+	        		<a class="cancel" href="{% url task-detail task.id %}">{% trans %}Cancel{% endtrans %}</a>
 				</li>
 			</ul>
 	    </form>
