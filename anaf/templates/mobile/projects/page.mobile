@@ -23,7 +23,7 @@
     {% if statuses %}
     <span class="sidebar-header">{% trans %}By status{% endtrans %}</span>
     {% for status in statuses %}
-    <a href="{% url projects_index_by_status status.id %}" class="sidebar-link">{{ status }}</a>
+    <a href="{% url task-status status.id %}" class="sidebar-link">{{ status }}</a>
     {% endfor %}
     {% endif %}
     {% endblock %}

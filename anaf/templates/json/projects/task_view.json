@@ -26,7 +26,7 @@
 	 ],
 	 "status": {
 	            "id": {{ task.status_id }},
-	            "url": "http://{{ site_domain }}{% url projects_index_by_status task.status_id %}",
+	            "url": "http://{{ site_domain }}{% url task-status task.status_id %}",
 	            "name": "{{ task.status }}"
 	           },
 	 "project": "{{ task.project}}",

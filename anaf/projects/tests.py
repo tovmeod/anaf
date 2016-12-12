@@ -245,7 +245,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('task-assigned')
 
     def test_index_by_status(self):
-        self.assert_protected('projects_index_by_status', (1,))
+        self.assert_protected('task-status', (1,))
 
     def test_index_in_progress(self):
         self.assert_protected('task-in-progress')
@@ -636,7 +636,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_task_status_view_login(self):
         """Test index page with login at /projects/task/status/view/<status_id>/"""
-        response = self.client.get(reverse('projects_index_by_status', args=[self.status.id]))
+        response = self.client.get(reverse('task-status', args=[self.status.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_task_status_edit_login(self):

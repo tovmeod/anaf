@@ -675,6 +675,28 @@ class TaskView(AnafViewSet):
         context = preprocess_context(context)
         return Response(context, template_name='projects/index_owned.html')
 
+    @process_mass_form
+    def status(self, request, status_id, *args, **kwargs):
+        """List tasks by status"""
+        status = get_object_or_404(TaskStatus, pk=status_id)
+        if not status.has_perm_read(request.user.profile):
+            self.permission_denied(request, message="You don't have access to this Task Status")
+
+        query = Q(parent__isnull=True, status=status)
+        if request.GET:
+            query = query & _get_filter_query(request.GET)
+        tasks = Object.filter_by_request(request, Task.objects.filter(query))
+        if request.accepted_renderer.format not in self.accepted_formats:
+            return self._list(request, tasks, *args, **kwargs)
+
+        milestones = Object.filter_by_request(request, Milestone.objects.filter(task__status=status).distinct())
+        filters = FilterForm(request.user.profile, 'status', request.GET)
+
+        context = _get_default_context(request)
+        context.update({'milestones': milestones, 'tasks': tasks, 'status': status, 'filters': filters})
+
+        return Response(context, template_name='projects/index_by_status.html')
+
     @apifirst
     def retrieve(self, request, *args, **kwargs):
         """Single task view page"""

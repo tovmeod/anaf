@@ -10,7 +10,7 @@
 {% if statuses %}
 <span class="sidebar-header">{% trans %}By status{% endtrans %}</span>
 {% for istatus in statuses %}
-<a href="{% url projects_index_by_status istatus.id %}" class="sidebar-link {% if istatus == status %}sidebar-link-active{% endif %}">{{ istatus.name }}</a>
+<a href="{% url task-status istatus.id %}" class="sidebar-link {% if istatus == status %}sidebar-link-active{% endif %}">{{ istatus.name }}</a>
 {% endfor %}
 {% endif %}
 {% endblock %}
@@ -42,7 +42,7 @@
 
 {% block module_topmenu %}
 <a href="{% url task-new %}" class="top-menu add-link">{% trans %}New Task{% endtrans %}</a>
-<a href="{% url projects_index_by_status status.id %}" class="top-menu view-link-active">{% trans %}View{% endtrans %}</a>
+<a href="{% url task-status status.id %}" class="top-menu view-link-active">{% trans %}View{% endtrans %}</a>
 {% if user.profile.has_permission(status, mode='w') %}
 <a href="{% url projects_task_status_edit status.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
 <a href="{% url projects_task_status_delete status.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>

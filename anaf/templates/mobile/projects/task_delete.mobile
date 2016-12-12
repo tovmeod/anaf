@@ -101,7 +101,7 @@
 
 <div>
     <span class="content-label">{% trans %}Status{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url projects_index_by_status task.status.id %}">{{ task.status }}</a></span>
+    <span class="content-value"><a href="{% url task-status task.status.id %}">{{ task.status }}</a></span>
 </div>
 {% if task.details %}
 <div>

@@ -18,7 +18,7 @@
     <span class="content-label">{% trans %}Default Task Status{% endtrans %}:</span>
     <span class="content-value">
         {% if default_task_status %}
-        <a href="{% url projects_index_by_status default_task_status.id %}">{{ default_task_status }}</a>
+        <a href="{% url task-status default_task_status.id %}">{{ default_task_status }}</a>
         {% endif %}
     </span>
 </div>
@@ -31,7 +31,7 @@
 <div class="content-list-item content-list-item-{{ loop.cycle('odd', 'even') }}">
     <div class="content-list-tick"></div>
     <span class="content-list-item-name">
-        <a href="{% url projects_index_by_status status.id %}">{{ status }}</a>
+        <a href="{% url task-status status.id %}">{{ status }}</a>
         <span class="content-list-item-group">
             {% if status.active %}<span class="lighter small">{% trans %}Active{% endtrans %}</span>{% endif %}
             {% if status.hidden %}<span class="lighter small">{% trans %}Hidden{% endtrans %}</span>{% endif %}

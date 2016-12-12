@@ -52,7 +52,7 @@ class TaskStatus(Object):
     def get_absolute_url(self):
         """Returns absolute URL for the Task Status
         :rtype str"""
-        return reverse('projects_index_by_status', args=[self.id])
+        return reverse('task-status', args=[self.id])
 
 
 class Milestone(Object):

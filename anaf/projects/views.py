@@ -105,35 +105,6 @@ def index(request, response_format='html'):
                               context_instance=RequestContext(request), response_format=response_format)
 
 
-@handle_response_format
-@mylogin_required
-@_process_mass_form
-def index_by_status(request, status_id, response_format='html'):
-    """Sort tasks by status"""
-
-    status = get_object_or_404(TaskStatus, pk=status_id)
-
-    if not request.user.profile.has_permission(status):
-        return user_denied(request, message="You don't have access to this Task Status")
-
-    query = Q(parent__isnull=True, status=status)
-    if request.GET:
-        query = query & _get_filter_query(request.GET)
-    tasks = Object.filter_by_request(request, Task.objects.filter(query))
-
-    milestones = Object.filter_by_request(
-        request, Milestone.objects.filter(task__status=status).distinct())
-    filters = FilterForm(request.user.profile, 'status', request.GET)
-
-    context = _get_default_context(request)
-    context.update({'milestones': milestones,
-                    'tasks': tasks,
-                    'status': status,
-                    'filters': filters})
-
-    return render_to_response('projects/index_by_status', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
 #
 # Task Statuses
 #
@@ -154,9 +125,9 @@ def task_status_edit(request, status_id, response_format='html'):
                 request.user.profile, request.POST, instance=status)
             if form.is_valid():
                 status = form.save()
-                return HttpResponseRedirect(reverse('projects_index_by_status', args=[status.id]))
+                return HttpResponseRedirect(reverse('task-status', args=[status.id]))
         else:
-            return HttpResponseRedirect(reverse('projects_index_by_status', args=[status.id]))
+            return HttpResponseRedirect(reverse('task-status', args=[status.id]))
     else:
         form = TaskStatusForm(request.user.profile, instance=status)
 
@@ -186,7 +157,7 @@ def task_status_delete(request, status_id, response_format='html'):
                 status.delete()
             return HttpResponseRedirect(reverse('project-list'))
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('projects_index_by_status', args=[status.id]))
+            return HttpResponseRedirect(reverse('task-status', args=[status.id]))
 
     milestones = Object.filter_by_request(request, Milestone.objects)
 

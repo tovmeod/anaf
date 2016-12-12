@@ -34,6 +34,11 @@ urlpatterns = patterns('anaf.projects.views',
                            url(r'^task/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
                                views.TaskView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
                                name='task-new-to-project'),
+                           url(r'^task/status/(?P<status_id>[^/.]+)/$',
+                               views.TaskView.as_view({'get': 'status', 'post': 'status'}), name='task-status'),
+                           url(r'^task/status/(?P<status_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
+                               views.TaskView.as_view({'get': 'status', 'post': 'status'}), name='task-status'),
+
                            # Milestone:
                            url(r'^milestone/new_to_project/(?P<project_id>[^/.]+)/$',
                                views.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
@@ -75,8 +80,6 @@ urlpatterns = patterns('anaf.projects.views',
                                name='tasktimeslot-new-to-task'),
 
                            # Task Statuses
-                           url(r'^task/status/view/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.index_by_status, name='projects_index_by_status'),
                            url(r'^task/status/edit/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.task_status_edit, name='projects_task_status_edit'),
                            url(r'^task/status/delete/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
