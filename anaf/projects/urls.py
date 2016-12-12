@@ -75,8 +75,6 @@ urlpatterns = patterns('anaf.projects.views',
                                name='tasktimeslot-new-to-task'),
 
                            # Task Statuses
-                           url(r'^task/status/add(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_status_add, name='projects_task_status_add'),
                            url(r'^task/status/view/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
                                oldviews.index_by_status, name='projects_index_by_status'),
                            url(r'^task/status/edit/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',

@@ -141,35 +141,6 @@ def index_by_status(request, status_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-def task_status_add(request, response_format='html'):
-    """TaskStatus add"""
-
-    if not request.user.profile.is_admin('anaf.projects'):
-        return user_denied(request, message="You don't have administrator access to the Projects module")
-
-    if request.POST:
-        if 'cancel' not in request.POST:
-            status = TaskStatus()
-            form = TaskStatusForm(
-                request.user.profile, request.POST, instance=status)
-            if form.is_valid():
-                status = form.save()
-                status.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('projects_index_by_status', args=[status.id]))
-        else:
-            return HttpResponseRedirect(reverse('projects_settings_view'))
-    else:
-        form = TaskStatusForm(request.user.profile)
-
-    context = _get_default_context(request)
-    context.update({'form': form})
-
-    return render_to_response('projects/status_add', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
 def task_status_edit(request, status_id, response_format='html'):
     """TaskStatus edit"""
 

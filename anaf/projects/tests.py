@@ -326,7 +326,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('tasktimeslot-delete', (1,))
 
     def test_task_status_add(self):
-        self.assert_protected('projects_task_status_add')
+        self.assert_protected('taskstatus-new')
 
     def test_task_status_edit(self):
         self.assert_protected('projects_task_status_edit', (1,))
@@ -631,7 +631,7 @@ class ProjectsViewsTest(AnafTestCase):
     # Task Statuses
     def test_task_status_add(self):
         """Test index page with login at /projects/task/status/add/"""
-        response = self.client.get(reverse('projects_task_status_add'))
+        response = self.client.get(reverse('taskstatus-new'))
         self.assertEquals(response.status_code, 200)
 
     def test_task_status_view_login(self):

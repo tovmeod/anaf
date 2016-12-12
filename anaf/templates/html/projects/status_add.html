@@ -6,7 +6,7 @@
 {% block module_title %}{% trans %}Settings{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url projects_task_status_add %}" class="top-menu add-link-active">{% trans %}New Status{% endtrans %}</a>
+<a href="{% url taskstatus-new %}" class="top-menu add-link-active">{% trans %}New Status{% endtrans %}</a>
 <a href="{% url projects_settings_view %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 <a href="{% url projects_settings_edit %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
 {% endblock %}
