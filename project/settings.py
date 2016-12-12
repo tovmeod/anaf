@@ -360,7 +360,8 @@ REST_FRAMEWORK = {
         'anaf.core.rendering.JinjaAjaxRenderer',
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    )
+    ),
+    'DEFAULT_CONTENT_NEGOTIATION_CLASS': 'anaf.negotiation.ContentNegotiation',
 }
 
 # todo remove this when using django >= 1.9.x see https://code.djangoproject.com/ticket/23727
