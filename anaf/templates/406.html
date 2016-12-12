@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>{% block title %}Anaf{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %} {% endblock %}" />
+  <meta name="keywords" content="{% block meta_keywords %} {% endblock %}" />
+	<link rel="stylesheet" href="/static/3.min.css" media="all" />
+	<link rel="stylesheet" href="/static/print.css" media="print" />
+  <!--[if lt IE 8]>
+  <link rel="stylesheet" href="/static/ie.css" media="all" />
+  <![endif]-->
+</head>
+<body>
+	<div id="page-container">
+		<div id="page">
+			<div id="header" class="clear">
+		    <div id="logo-block">
+		      <a href="{% url 'home' %}" class="logo"><img src="/static/logo.png" alt="Anaf" /></a>
+				  <hr class="space"/>
+				</div>
+			</div>
+			<div id="container">
+	      <div id="content" class="outside-content">
+		      <h1 class="title">Page Not Found</h1>
+					<p class="large ">Sorry, but this address is not available as html, it is meant to be used as an API endpoint only.</p>
+					<p>Maybe, try another</p>
+		    </div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
