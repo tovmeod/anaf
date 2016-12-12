@@ -15,6 +15,12 @@ urlpatterns = patterns('anaf.projects.views',
                        # url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
                        url(r'^/', include(patterns('',
                            url(r'^', include(router.urls)),
+
+                           # Task Statuses
+                           url(r'^task/status/edit/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
+                               oldviews.task_status_edit, name='projects_task_status_edit'),
+                           url(r'^task/status/delete/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
+                               oldviews.task_status_delete, name='projects_task_status_delete'),
                            # because of limitation on DRF I need to set some views manually
                            # TODO: use drf-nested-routers or drf-extensions for nested routes support
                            # Task:
@@ -79,11 +85,7 @@ urlpatterns = patterns('anaf.projects.views',
                                views.TaskTimeSlotView.as_view({'get': 'new_to_task', 'post': 'new_to_task'}),
                                name='tasktimeslot-new-to-task'),
 
-                           # Task Statuses
-                           url(r'^task/status/edit/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_status_edit, name='projects_task_status_edit'),
-                           url(r'^task/status/delete/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_status_delete, name='projects_task_status_delete'),
+
 
                             # Settings
                            url(r'^settings/view(\.(?P<response_format>\w+))?/?$',
