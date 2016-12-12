@@ -43,7 +43,7 @@ before_install:
 before_script: ci/before_script_${DB}.sh
 # command to run tests
 script:
- - if [ -z $SELENIUM ]; then py.test --cov --cov-report= ; fi
+ - if [ -z $SELENIUM ]; then py.test -n 2 --cov --cov-report= ; fi
  - if [ $SELENIUM == '1' ]; then py.test --cov --cov-report= ; fi
 after_success:
   - bash <(curl -s https://codecov.io/bash)
