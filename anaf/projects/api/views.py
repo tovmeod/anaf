@@ -18,7 +18,7 @@ from rest_framework.viewsets import GenericViewSet
 from anaf.core.models import Object, UpdateRecord
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
 from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm, ProjectForm, \
-    TaskTimeSlotForm
+    TaskTimeSlotForm, TaskStatusForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
@@ -314,14 +314,28 @@ class ProjectView(AnafViewSet):
         return Response(context, template_name='projects/index.html')
 
 
-class TaskStatusView(viewsets.ModelViewSet):
+class TaskStatusView(AnafViewSet):
     """
     API endpoint that allows Task Status to be viewed or edited.
     """
     queryset = TaskStatus.objects.all()
     serializer_class = TaskStatusSerializer
 
-    renderer_classes = API_RENDERERS
+    @list_route(methods=('GET', 'POST'))
+    @noapi
+    def new(self, request, *args, **kwargs):
+        if request.POST:
+            form = TaskStatusForm(request.user.profile, request.POST)
+            if form.is_valid():
+                status = form.save()
+                status.set_user(request.user.profile)
+                return HttpResponseRedirect(reverse('taskstatus-detail', args=[status.id]))
+        else:
+            form = TaskStatusForm(request.user.profile)
+
+        context = _get_default_context(request)
+        context.update({'form': form})
+        return Response(context, template_name='projects/status_add.html')
 
 
 class MilestoneView(AnafViewSet):
@@ -479,7 +493,7 @@ class TaskView(AnafViewSet):
     template_name = 'projects/index_owned.html'
 
     def get_queryset(self):
-        query = Q(parent__isnull=True)
+        query = _get_filter_query(self.request.GET)
         if 'status' in self.request.GET and self.request.GET['status']:
             query = query & _get_filter_query(self.request.GET)
         else:
@@ -502,7 +516,7 @@ class TaskView(AnafViewSet):
     @apifirst
     def list(self, request, *args, **kwargs):
         """Basically all tasks current user can read"""
-        tasks = self.get_queryset()
+        tasks = self.get_queryset().filter(parent__isnull=True)  # filter subtasks, here we list main tasks
 
         filters = FilterForm(request.user.profile, 'assigned', request.GET)
         time_slots = Object.filter_by_request(request, TaskTimeSlot.objects.filter(time_from__isnull=False,
@@ -724,8 +738,16 @@ class TaskView(AnafViewSet):
             task_time_slot = TaskTimeSlot(task=task, time_from=datetime.now(), user=request.user.profile)
             task_time_slot.save()
             task_time_slot.set_user(request.user.profile)
+        else:
+            task_time_slot = None
 
-        return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
+        if request.accepted_renderer.format in self.accepted_formats:
+            return HttpResponseRedirect(reverse('task-detail', args=[task.id]))
+
+        if task_time_slot is None:
+            return Response('Task already in progress by user', status=400)
+        return Response(TaskTimeSlotView.serializer_class(task_time_slot, context={'request': request}).data,
+                        status=201)
 
     @noapi
     def set_status(self, request, status_id, *args, **kwargs):
@@ -775,12 +797,14 @@ class TaskTimeSlotView(AnafViewSet):
         """TaskTimeSlot stop action"""
         slot = self.get_object()
         slot.time_to = datetime.now()
-        details = request.POST.get('details')
+        details = request.data.get('details')
         if details is not None:
             slot.details = details
         slot.save()
 
-        return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
+        if request.accepted_renderer.format in self.accepted_formats:
+            return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
+        return Response(self.get_serializer(slot).data)
 
     @detail_route(methods=('GET', 'POST'))
     @noapi
