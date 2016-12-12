@@ -132,6 +132,8 @@ def _test_no_args_urls_loggedin(url, client, userpsw, authentication_headers):
         # milestone list and tasktimeslot list returns 404 for format=html,
         # because it is not implemented on the format because it doesn't makes sense
         assert response.status_code == 404
+    elif url in ('/projects/taskstatus/',):
+        assert response.status_code == 406
     else:
         assert response.status_code == 200
 
