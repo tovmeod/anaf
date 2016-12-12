@@ -1,8 +1,8 @@
 """
 Rendering routines
 """
-
-from django.utils.six import text_type as unicode
+from django.core.exceptions import ImproperlyConfigured
+from django.utils.six import text_type as unicode, string_types
 from django.http import HttpResponse
 from django.contrib.sites.models import RequestSite
 from django.utils.translation import ugettext as _
@@ -48,7 +48,6 @@ def render_to_string(template_name, context=None, context_instance=None, respons
     """Picks up the appropriate template to render to string"""
     if context is None:
         context = {}
-    from django.utils.six import string_types
     if isinstance(template_name, string_types):
         template_name = (template_name,)
 
@@ -268,7 +267,13 @@ class JinjaRenderer(TemplateHTMLRenderer):
             else:
                 template_names = [name % {'status_code': response.status_code} for name in self.exception_template_names]
         else:
-            template_names = self.get_template_names(response, view)
+            try:
+                template_names = self.get_template_names(response, view)
+            except ImproperlyConfigured:
+                response.status_code = 406
+                template_names = [name % {'status_code': response.status_code} for name in
+                                  self.exception_template_names]
+                data = {}  # discard query data because I'm actually showing an error page
 
         context = self.resolve_context(data, request, response)
         return self._render(template_names, context, RequestContext(request), 'html')
