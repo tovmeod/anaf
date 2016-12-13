@@ -328,6 +328,24 @@ class TaskStatusView(ProjectsBaseViewSet):
         context.update({'form': form})
         return Response(context, template_name='projects/status_add.html')
 
+    @detail_route(methods=('GET', 'POST'))
+    @noapi
+    def edit(self, request, *args, **kwargs):
+        """TaskStatus edit page"""
+        status = self.get_object()
+        context = _get_default_context(request)
+
+        if request.POST:
+            form = TaskStatusForm(request.user.profile, request.POST, instance=status)
+            if form.is_valid():
+                status = form.save()
+                return HttpResponseRedirect(reverse('task-status', args=[status.id]))
+        else:
+            form = TaskStatusForm(request.user.profile, instance=status)
+
+        context.update({'form': form, 'status': status})
+        return Response(context, template_name='projects/status_edit.html')
+
 
 class MilestoneView(ProjectsBaseViewSet):
     """

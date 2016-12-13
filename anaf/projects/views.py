@@ -112,35 +112,6 @@ def index(request, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-def task_status_edit(request, status_id, response_format='html'):
-    """TaskStatus edit"""
-
-    status = get_object_or_404(TaskStatus, pk=status_id)
-    if not request.user.profile.has_permission(status, mode='w'):
-        return user_denied(request, message="You don't have access to this Task Status")
-
-    if request.POST:
-        if 'cancel' not in request.POST:
-            form = TaskStatusForm(
-                request.user.profile, request.POST, instance=status)
-            if form.is_valid():
-                status = form.save()
-                return HttpResponseRedirect(reverse('task-status', args=[status.id]))
-        else:
-            return HttpResponseRedirect(reverse('task-status', args=[status.id]))
-    else:
-        form = TaskStatusForm(request.user.profile, instance=status)
-
-    context = _get_default_context(request)
-    context.update({'form': form,
-                    'status': status})
-
-    return render_to_response('projects/status_edit', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
 def task_status_delete(request, status_id, response_format='html'):
     """TaskStatus delete"""
 
