@@ -5,7 +5,6 @@ from django.db import models
 from django import forms
 from django.forms import ModelChoiceField
 from django.utils.six import text_type as unicode
-from anaf import long_type
 from anaf.core.conf import settings
 from django.db.models import Q
 from django.core.files.storage import default_storage
@@ -64,7 +63,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.core', 'default_perspective')[0]
-            default_perspective = Perspective.objects.get(pk=long_type(conf.value))
+            default_perspective = Perspective.objects.get(pk=int(conf.value))
             self.fields['default_perspective'].initial = default_perspective.id
         except:
             pass

@@ -6,7 +6,6 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.six import text_type as unicode
 
-from anaf import long_type
 from anaf.core.models import Object, User, ModuleSetting
 from anaf.identities.models import Contact
 from anaf.finance.models import Transaction, Currency, Tax
@@ -222,7 +221,7 @@ class SaleOrder(Object):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'order_fulfil_status')[0]
-            fulfil_status = long_type(conf.value)
+            fulfil_status = int(conf.value)
             if self.status.id == fulfil_status:
                 self.fulfil()
         except Exception:
@@ -393,7 +392,7 @@ class Subscription(Object):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_status')[0]
-            new_invoice.status = long_type(conf.value)
+            new_invoice.status = int(conf.value)
         except Exception:
             ss = SaleStatus.objects.all()[0]
             new_invoice.status = ss
@@ -450,7 +449,7 @@ class Subscription(Object):
                 conf = ModuleSetting.get_for_module(
                     'anaf.sales', 'order_fulfil_status')[0]
                 order_fulfil_status = SaleStatus.objects.get(
-                    pk=long_type(conf.value))
+                    pk=int(conf.value))
             except Exception:
                 order_fulfil_status = None
 

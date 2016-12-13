@@ -4,7 +4,6 @@ Finance module forms
 from django.shortcuts import get_object_or_404
 from django import forms
 
-from anaf import long_type
 from anaf.identities.models import Contact
 from models import Transaction, Liability, Category, Account, Asset, Equity, Currency, Tax
 from anaf.sales.models import SaleOrder
@@ -246,7 +245,7 @@ class EquityForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.finance', 'my_company')[0]
-            self.fields['issuer'].initial = long_type(conf.value)
+            self.fields['issuer'].initial = int(conf.value)
         except Exception:
             pass
 
@@ -356,7 +355,7 @@ class ReceivableForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.finance', 'default_account')[0]
-            self.fields['account'].initial = long_type(conf.value)
+            self.fields['account'].initial = int(conf.value)
         except Exception:
             pass
 
@@ -416,7 +415,7 @@ class TransactionForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.finance', 'default_account')[0]
-            self.fields['account'].initial = long_type(conf.value)
+            self.fields['account'].initial = int(conf.value)
         except Exception:
             pass
 
@@ -435,7 +434,7 @@ class TransactionForm(forms.ModelForm):
                 conf = ModuleSetting.get_for_module(
                     'anaf.finance', 'my_company')[0]
                 self.fields['target'].initial = Contact.objects.get(
-                    pk=long_type(conf.value))
+                    pk=int(conf.value))
 
             except Exception:
                 pass
@@ -559,7 +558,7 @@ class LiabilityForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.finance', 'default_account')[0]
-            self.fields['account'].initial = long_type(conf.value)
+            self.fields['account'].initial = int(conf.value)
         except Exception:
             pass
 
@@ -683,7 +682,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.finance', 'my_company')[0]
-            my_company = Contact.objects.get(pk=long_type(conf.value))
+            my_company = Contact.objects.get(pk=int(conf.value))
             self.fields['my_company'].initial = my_company.id
         except Exception:
             pass
@@ -691,7 +690,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.finance', 'default_account')[0]
-            default_account = Account.objects.get(pk=long_type(conf.value))
+            default_account = Account.objects.get(pk=int(conf.value))
             self.fields['default_account'].initial = default_account.id
         except Exception:
             pass

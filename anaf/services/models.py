@@ -11,7 +11,6 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from django.utils.html import strip_tags
 
-from anaf import long_type
 from anaf.core.conf import settings
 from anaf.identities.models import Contact
 from anaf.core.models import User, Object, ModuleSetting, UpdateRecord
@@ -317,7 +316,7 @@ def create_ticket_from_message(sender, instance, created, **kwargs):
                     conf = ModuleSetting.get_for_module(
                         'anaf.services', 'default_ticket_status')[0]
                     ticket.status = TicketStatus.objects.get(
-                        pk=long_type(conf.value))
+                        pk=int(conf.value))
                 except:
                     statuses = TicketStatus.objects.all()
                     ticket.status = statuses[0]

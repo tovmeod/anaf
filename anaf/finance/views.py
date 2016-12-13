@@ -7,7 +7,6 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Sum
 
-from anaf import long_type
 from anaf.core.rendering import render_to_response
 from anaf.core.models import Object, ModuleSetting
 from anaf.core.decorators import mylogin_required, handle_response_format
@@ -32,7 +31,7 @@ def _get_filter_query(model, args):
 
     for arg in args:
         if args[arg] and hasattr(model, arg):
-            kwargs = {str(arg + '__id'): long_type(args[arg])}
+            kwargs = {str(arg + '__id'): int(args[arg])}
             query = query & Q(**kwargs)
 
     if 'datefrom' in args and args['datefrom']:
@@ -920,7 +919,7 @@ def income_view(request, response_format='html'):
 
     try:
         conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
-        my_company = Contact.objects.get(pk=long_type(conf.value), trash=False)
+        my_company = Contact.objects.get(pk=int(conf.value), trash=False)
 
     except Exception:
         my_company = None
@@ -1004,7 +1003,7 @@ def balance_sheet(request, response_format='html'):
 
     try:
         conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
-        my_company = Contact.objects.get(pk=long_type(conf.value), trash=False)
+        my_company = Contact.objects.get(pk=int(conf.value), trash=False)
     except:
         my_company = None
 
@@ -1149,7 +1148,7 @@ def settings_view(request, response_format='html'):
     # default company
     try:
         conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
-        my_company = Contact.objects.get(pk=long_type(conf.value))
+        my_company = Contact.objects.get(pk=int(conf.value))
 
     except Exception:
         my_company = None
@@ -1158,7 +1157,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.finance', 'default_account')[0]
-        default_account = Account.objects.get(pk=long_type(conf.value))
+        default_account = Account.objects.get(pk=int(conf.value))
     except Exception:
         default_account = None
 

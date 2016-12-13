@@ -5,7 +5,6 @@ from django import forms
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
-from anaf import long_type
 from anaf.core.conf import settings
 from anaf.identities.models import Contact
 from anaf.core.decorators import preprocess_form
@@ -52,7 +51,7 @@ class SettingsForm(forms.Form):
             conf = ModuleSetting.get_for_module(
                 'anaf.services', 'default_ticket_status')[0]
             default_ticket_status = TicketStatus.objects.get(
-                pk=long_type(conf.value))
+                pk=int(conf.value))
             self.fields[
                 'default_ticket_status'].initial = default_ticket_status.id
         except Exception:
@@ -61,7 +60,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.services', 'default_ticket_queue')[0]
-            default_ticket_queue = TicketQueue.objects.get(pk=long_type(conf.value))
+            default_ticket_queue = TicketQueue.objects.get(pk=int(conf.value))
             self.fields[
                 'default_ticket_queue'].initial = default_ticket_queue.id
         except Exception:
@@ -220,7 +219,7 @@ class TicketForm(forms.ModelForm):
                     try:
                         conf = ModuleSetting.get_for_module(
                             'anaf.services', 'default_ticket_status')[0]
-                        self.fields['status'].initial = long_type(conf.value)
+                        self.fields['status'].initial = int(conf.value)
                     except:
                         pass
 
@@ -240,13 +239,13 @@ class TicketForm(forms.ModelForm):
                 try:
                     conf = ModuleSetting.get_for_module(
                         'anaf.services', 'default_ticket_status')[0]
-                    self.fields['status'].initial = long_type(conf.value)
+                    self.fields['status'].initial = int(conf.value)
                 except:
                     pass
                 try:
                     conf = ModuleSetting.get_for_module(
                         'anaf.services', 'default_ticket_queue')[0]
-                    self.fields['queue'].initial = long_type(conf.value)
+                    self.fields['queue'].initial = int(conf.value)
                 except:
                     pass
 

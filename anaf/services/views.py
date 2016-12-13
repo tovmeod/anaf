@@ -6,7 +6,6 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from anaf import long_type
 from anaf.core.conf import settings
 from anaf.core.rendering import render_to_response, render_string_template, render_to_string
 from anaf.core.decorators import mylogin_required, handle_response_format, require_response_format
@@ -26,7 +25,7 @@ def _get_filter_query(args, model=Ticket):
 
     for arg in args:
         if hasattr(model, arg) and args[arg]:
-            kwargs = {str(arg + '__id'): long_type(args[arg])}
+            kwargs = {str(arg + '__id'): int(args[arg])}
             query = query & Q(**kwargs)
 
     return query

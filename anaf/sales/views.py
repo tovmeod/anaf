@@ -6,7 +6,6 @@ from django.template import RequestContext
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from anaf import long_type
 from anaf.sales.models import Product, SaleOrder, SaleSource, Lead, Opportunity, SaleStatus, Subscription, \
     OrderedProduct
 from anaf.sales.forms import SettingsForm, OrderForm, ProductForm, SaleStatusForm, UpdateRecordForm, \
@@ -30,7 +29,7 @@ def _get_filter_query(args, model=SaleOrder):
 
     for arg in args:
         if args[arg] and hasattr(model, arg) or arg == 'products_interested':
-            kwargs = {str(arg + '__id'): long_type(args[arg])}
+            kwargs = {str(arg + '__id'): int(args[arg])}
             query = query & Q(**kwargs)
 
     return query
@@ -233,7 +232,7 @@ def index_open(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'order_fulfil_status')[0]
-        fulfil_status = long_type(conf.value)
+        fulfil_status = int(conf.value)
         query = Q(status__hidden=False) & ~Q(status=fulfil_status)
     except Exception:
         query = Q(status__hidden=False)
@@ -1150,7 +1149,7 @@ def order_invoice_view(request, order_id, response_format='html'):
     # default company
     try:
         conf = ModuleSetting.get_for_module('anaf.finance', 'my_company')[0]
-        my_company = Contact.objects.get(pk=long_type(conf.value))
+        my_company = Contact.objects.get(pk=int(conf.value))
 
     except:
         my_company = None
@@ -1223,7 +1222,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_lead_status')[0]
-        default_lead_status = SaleStatus.objects.get(pk=long_type(conf.value))
+        default_lead_status = SaleStatus.objects.get(pk=int(conf.value))
     except:
         default_lead_status = None
 
@@ -1232,7 +1231,7 @@ def settings_view(request, response_format='html'):
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_opportunity_status')[0]
         default_opportunity_status = SaleStatus.objects.get(
-            pk=long_type(conf.value))
+            pk=int(conf.value))
     except:
         default_opportunity_status = None
 
@@ -1240,7 +1239,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_order_status')[0]
-        default_order_status = SaleStatus.objects.get(pk=long_type(conf.value))
+        default_order_status = SaleStatus.objects.get(pk=int(conf.value))
     except:
         default_order_status = None
 
@@ -1248,7 +1247,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_order_source')[0]
-        default_order_source = SaleSource.objects.get(pk=long_type(conf.value))
+        default_order_source = SaleSource.objects.get(pk=int(conf.value))
     except:
         default_order_source = None
 
@@ -1256,7 +1255,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'order_fulfil_status')[0]
-        order_fulfil_status = SaleStatus.objects.get(pk=long_type(conf.value))
+        order_fulfil_status = SaleStatus.objects.get(pk=int(conf.value))
     except:
         order_fulfil_status = None
 
@@ -1264,7 +1263,7 @@ def settings_view(request, response_format='html'):
     try:
         conf = ModuleSetting.get_for_module(
             'anaf.sales', 'default_order_product')[0]
-        default_order_product = Product.objects.get(pk=long_type(conf.value))
+        default_order_product = Product.objects.get(pk=int(conf.value))
     except:
         default_order_product = None
 

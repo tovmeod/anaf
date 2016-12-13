@@ -18,7 +18,6 @@ from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import date as djangodate
 import django.contrib.auth.models as django_auth
 
-from anaf import long_type
 from conf import settings
 from mail import SystemEmail
 
@@ -139,14 +138,14 @@ class Group(AccessEntity):
         ids = []
         try:
             for setting in ModuleSetting.get_for_module('anaf.core', name='default_perspective', group=self):
-                ids.append(long_type(setting.value))
+                ids.append(int(setting.value))
             _id = ids[0]
             perspective = get_object_or_404(Perspective, pk=_id)
         except:
             try:
                 conf = ModuleSetting.get_for_module(
                     'anaf.core', 'default_perspective')[0]
-                perspective = Perspective.objects.get(pk=long_type(conf.value))
+                perspective = Perspective.objects.get(pk=int(conf.value))
             except:
                 try:
                     perspective = Perspective.objects.all()[0]
@@ -286,7 +285,7 @@ class User(AccessEntity):
         ids = []
         try:
             for setting in ModuleSetting.get_for_module('anaf.core', name='default_perspective', user=self):
-                ids.append(long_type(setting.value))
+                ids.append(int(setting.value))
             perspective_id = ids[0]
             perspective = get_object_or_404(Perspective, pk=perspective_id)
         except:
@@ -296,7 +295,7 @@ class User(AccessEntity):
                 try:
                     conf = ModuleSetting.get_for_module(
                         'anaf.core', 'default_perspective')[0]
-                    perspective = Perspective.objects.get(pk=long_type(conf.value))
+                    perspective = Perspective.objects.get(pk=int(conf.value))
                 except Exception:
                     try:
                         perspective = Perspective.objects.all()[0]

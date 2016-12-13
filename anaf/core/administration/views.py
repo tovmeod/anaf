@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
 from django.utils.translation import ugettext as _
 
-from anaf import long_type
 from anaf.core.conf import settings
 from django.db.models import Q
 from anaf.core.rendering import render_to_response
@@ -29,7 +28,7 @@ def _get_filter_query(args):
 
     for arg in args:
         if hasattr(Perspective, arg) and args[arg]:
-            kwargs = {unicode(arg + '__id'): long_type(args[arg])}
+            kwargs = {unicode(arg + '__id'): int(args[arg])}
             query = query & Q(**kwargs)
 
     return query

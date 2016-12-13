@@ -7,7 +7,6 @@ from django import forms
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
-from anaf import long_type
 from anaf.sales.models import Product, SaleOrder, SaleSource, Lead, Opportunity, SaleStatus, OrderedProduct, \
     Subscription, Currency
 from anaf.identities.models import Contact
@@ -249,7 +248,7 @@ class SettingsForm(forms.Form):
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_opportunity_status')[0]
             default_opportunity_status = SaleStatus.objects.get(
-                pk=long_type(conf.value))
+                pk=int(conf.value))
             self.fields[
                 'default_opportunity_status'].initial = default_opportunity_status.id
         except:
@@ -258,7 +257,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_lead_status')[0]
-            default_lead_status = SaleStatus.objects.get(pk=long_type(conf.value))
+            default_lead_status = SaleStatus.objects.get(pk=int(conf.value))
             self.fields['default_lead_status'].initial = default_lead_status.id
         except:
             pass
@@ -266,7 +265,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_status')[0]
-            default_order_status = SaleStatus.objects.get(pk=long_type(conf.value))
+            default_order_status = SaleStatus.objects.get(pk=int(conf.value))
             self.fields[
                 'default_order_status'].initial = default_order_status.id
         except:
@@ -275,7 +274,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_source')[0]
-            default_order_source = SaleSource.objects.get(pk=long_type(conf.value))
+            default_order_source = SaleSource.objects.get(pk=int(conf.value))
             self.fields[
                 'default_order_source'].initial = default_order_source.id
         except:
@@ -284,7 +283,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_product')[0]
-            default_order_product = Product.objects.get(pk=long_type(conf.value))
+            default_order_product = Product.objects.get(pk=int(conf.value))
             self.fields[
                 'default_order_product'].initial = default_order_product.id
         except:
@@ -293,7 +292,7 @@ class SettingsForm(forms.Form):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'order_fulfil_status')[0]
-            order_fulfil_status = SaleStatus.objects.get(pk=long_type(conf.value))
+            order_fulfil_status = SaleStatus.objects.get(pk=int(conf.value))
             self.fields['order_fulfil_status'].initial = order_fulfil_status.id
         except:
             pass
@@ -646,7 +645,7 @@ class OrderedProductForm(forms.ModelForm):
                 'anaf.sales', 'default_order_product')[0]
             # AJAX to set the initial rate as the currency converted value of
             # product sell price
-            self.fields['product'].initial = long_type(conf.value)
+            self.fields['product'].initial = int(conf.value)
         except:
             pass
 
@@ -764,7 +763,7 @@ class OrderForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_source')[0]
-            self.fields['source'].initial = long_type(conf.value)
+            self.fields['source'].initial = int(conf.value)
         except:
             pass
 
@@ -775,7 +774,7 @@ class OrderForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_status')[0]
-            self.fields['status'].initial = long_type(conf.value)
+            self.fields['status'].initial = int(conf.value)
         except:
             pass
 
@@ -897,7 +896,7 @@ class LeadForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_product')[0]
-            self.fields['products_interested'].initial = [long_type(conf.value)]
+            self.fields['products_interested'].initial = [int(conf.value)]
         except:
             pass
 
@@ -908,7 +907,7 @@ class LeadForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_lead_status')[0]
-            self.fields['status'].initial = long_type(conf.value)
+            self.fields['status'].initial = int(conf.value)
         except:
             pass
 
@@ -988,7 +987,7 @@ class OpportunityForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_order_product')[0]
-            self.fields['products_interested'].initial = [long_type(conf.value)]
+            self.fields['products_interested'].initial = [int(conf.value)]
         except:
             pass
         self.fields['source'].queryset = Object.filter_permitted(user,
@@ -1001,7 +1000,7 @@ class OpportunityForm(forms.ModelForm):
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.sales', 'default_opportunity_status')[0]
-            self.fields['status'].initial = long_type(conf.value)
+            self.fields['status'].initial = int(conf.value)
         except:
             pass
 
