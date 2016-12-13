@@ -48,13 +48,9 @@ def mylogin_required(f):
             user = request.user.profile
             active = get_active_module(request.path)
             if active:
-                if active in user.get_perspective().get_modules():
-                    if user.has_permission(active):
-                        return f(request, *args, **kwargs)
-                    else:
-                        if request.path[:3] == '/m/':
-                            return HttpResponseRedirect('/m/user/denied')
-                        return HttpResponseRedirect('/user/denied')
+                if user.get_perspective().get_modules().filter(name=active.name).exists() and \
+                        user.has_permission(active):
+                    return f(request, *args, **kwargs)
                 else:
                     if request.path[:3] == '/m/':
                         return HttpResponseRedirect('/m/user/denied')
