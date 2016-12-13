@@ -7,13 +7,10 @@ from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-from rest_framework import mixins
-from rest_framework import viewsets
-from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
-from rest_framework.viewsets import GenericViewSet
 
 from anaf.core.models import Object, UpdateRecord
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
@@ -24,6 +21,7 @@ from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerialize
 from anaf.projects.views import _get_default_context, _get_filter_query
 from anaf.core.ajax.converter import preprocess_context
 from anaf import API_RENDERERS
+from anaf.viewsets import AnafViewSet
 
 
 def noapi(viewfunc):
@@ -52,15 +50,8 @@ def apifirst(viewfunc):
     return decorator
 
 
-class AnafViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
-                  mixins.ListModelMixin, GenericViewSet):
-    """Base Viewset"""
-    accepted_formats = ('html', 'ajax')
-
-    def retrieve(self, request, *args, **kwargs):
-        if request.method != 'GET':
-            raise MethodNotAllowed(request.method)
-        return super(AnafViewSet, self).retrieve(request, *args, **kwargs)
+class ProjectsBaseViewSet(AnafViewSet):
+    module = 'anaf.projects'
 
 
 def process_mass_form(f):
@@ -95,7 +86,7 @@ def process_mass_form(f):
     return wrap
 
 
-class ProjectView(AnafViewSet):
+class ProjectView(ProjectsBaseViewSet):
     """
     API endpoint that allows projects to be viewed or edited.
     """
@@ -314,7 +305,7 @@ class ProjectView(AnafViewSet):
         return Response(context, template_name='projects/index.html')
 
 
-class TaskStatusView(AnafViewSet):
+class TaskStatusView(ProjectsBaseViewSet):
     """
     API endpoint that allows Task Status to be viewed or edited.
     """
@@ -338,7 +329,7 @@ class TaskStatusView(AnafViewSet):
         return Response(context, template_name='projects/status_add.html')
 
 
-class MilestoneView(AnafViewSet):
+class MilestoneView(ProjectsBaseViewSet):
     """
     API endpoint that allows Milestones to be viewed or edited.
     """
@@ -484,7 +475,7 @@ class MilestoneView(AnafViewSet):
         return Response(context, template_name='projects/milestone_add_typed.html')
 
 
-class TaskView(AnafViewSet):
+class TaskView(ProjectsBaseViewSet):
     """
     API endpoint that allows Tasks to be viewed or edited.
     """
@@ -791,7 +782,7 @@ class TaskView(AnafViewSet):
         return self.retrieve(request, *args, **kwargs)
 
 
-class TaskTimeSlotView(AnafViewSet):
+class TaskTimeSlotView(ProjectsBaseViewSet):
     """
     API endpoint that allows TaskTimeSlots to be viewed or edited.
     """

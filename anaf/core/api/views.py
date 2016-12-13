@@ -3,9 +3,14 @@ from rest_framework import viewsets
 from anaf import API_RENDERERS
 from anaf.core.models import User as Profile, AccessEntity, Group, Perspective, Object, Module
 import serializers
+from anaf.viewsets import AnafViewSet
 
 
-class ProfileView(viewsets.ModelViewSet):
+class CoreBaseViewSet(AnafViewSet):
+    module = 'anaf.core'
+
+
+class ProfileView(CoreBaseViewSet):
     """
     API endpoint that allows user profiles to be viewed or edited.
     """
@@ -15,7 +20,7 @@ class ProfileView(viewsets.ModelViewSet):
     renderer_classes = API_RENDERERS
 
 
-class GroupView(viewsets.ModelViewSet):
+class GroupView(CoreBaseViewSet):
     """
     API endpoint that allows Groups to be viewed or edited.
     """
@@ -25,7 +30,7 @@ class GroupView(viewsets.ModelViewSet):
     renderer_classes = API_RENDERERS
 
 
-class PerspectiveView(viewsets.ModelViewSet):
+class PerspectiveView(CoreBaseViewSet):
     """
     API endpoint that allows Groups to be viewed or edited.
     """
@@ -35,7 +40,7 @@ class PerspectiveView(viewsets.ModelViewSet):
     renderer_classes = API_RENDERERS
 
 
-class AccessEntityView(viewsets.ModelViewSet):
+class AccessEntityView(CoreBaseViewSet):
     """
     API endpoint that allows Access Entities to be viewed or edited.
     """

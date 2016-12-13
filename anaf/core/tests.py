@@ -81,7 +81,7 @@ def userpsw():
     username = 'test_username'
     password = 'password'
     Group.objects.get_or_create(name='test')
-    duser = DjangoUser.objects.get_or_create(username=username)[0]
+    duser = DjangoUser.objects.get_or_create(username=username, is_staff=True)[0]
     duser.set_password(password)
     duser.save()
 

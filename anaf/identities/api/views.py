@@ -3,9 +3,14 @@ from rest_framework import viewsets
 from anaf import API_RENDERERS
 from anaf.identities import models
 from anaf.identities.api import serializers
+from anaf.viewsets import AnafViewSet
 
 
-class ContactField(viewsets.ModelViewSet):
+class IdentitiesBaseViewSet(AnafViewSet):
+    module = 'anaf.identities'
+
+
+class ContactField(IdentitiesBaseViewSet):
     """
     API endpoint that allows Contact Fields to be viewed or edited.
     """
@@ -15,7 +20,7 @@ class ContactField(viewsets.ModelViewSet):
     renderer_classes = API_RENDERERS
 
 
-class ContactType(viewsets.ModelViewSet):
+class ContactType(IdentitiesBaseViewSet):
     """
     API endpoint that allows contact types to be viewed or edited.
     """
@@ -25,7 +30,7 @@ class ContactType(viewsets.ModelViewSet):
     renderer_classes = API_RENDERERS
 
 
-class Contact(viewsets.ModelViewSet):
+class Contact(IdentitiesBaseViewSet):
     """
     API endpoint that allows contacts to be viewed or edited.
     """
@@ -35,7 +40,7 @@ class Contact(viewsets.ModelViewSet):
     renderer_classes = API_RENDERERS
 
 
-class ContactValue(viewsets.ModelViewSet):
+class ContactValue(IdentitiesBaseViewSet):
     """
     API endpoint that allows contact values to be viewed or edited.
     """

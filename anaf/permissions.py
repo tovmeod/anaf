@@ -1,6 +1,6 @@
 import warnings
 from rest_framework.permissions import BasePermission
-from anaf.core.models import Object as AnafObject
+from anaf.core.models import Object as AnafObject, Module
 
 
 class ObjectPermissions(BasePermission):
@@ -16,7 +16,17 @@ class ObjectPermissions(BasePermission):
         """
         Allows access only to authenticated users.
         """
-        return request.user and request.user.is_authenticated()
+        if not request.user or not request.user.is_authenticated():
+            return False
+        if not hasattr(view, 'module'):
+            warnings.warn('View {} does not have module defined, can not determine permissions'.format(view),
+                          stacklevel=2)
+            return True
+        module = Module.objects.get(name=view.module)
+        can_write = module.has_perm_write(request.user.profile)
+        if request.method in ('GET', 'OPTIONS', 'HEAD'):
+            return can_write or module.has_perm_read(request.user.profile)
+        return can_write
 
     def has_object_permission(self, request, view, obj):
         """
