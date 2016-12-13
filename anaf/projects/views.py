@@ -106,41 +106,6 @@ def index(request, response_format='html'):
 
 
 #
-# Task Statuses
-#
-
-
-@handle_response_format
-@mylogin_required
-def task_status_delete(request, status_id, response_format='html'):
-    """TaskStatus delete"""
-
-    status = get_object_or_404(TaskStatus, pk=status_id)
-    if not request.user.profile.has_permission(status, mode='w'):
-        return user_denied(request, message="You don't have access to this Task Status")
-
-    if request.POST:
-        if 'delete' in request.POST:
-            if 'trash' in request.POST:
-                status.trash = True
-                status.save()
-            else:
-                status.delete()
-            return HttpResponseRedirect(reverse('project-list'))
-        elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('task-status', args=[status.id]))
-
-    milestones = Object.filter_by_request(request, Milestone.objects)
-
-    context = _get_default_context(request)
-    context.update({'status': status,
-                    'milestones': milestones})
-
-    return render_to_response('projects/status_delete', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-#
 # Settings
 #
 

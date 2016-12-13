@@ -346,6 +346,25 @@ class TaskStatusView(ProjectsBaseViewSet):
         context.update({'form': form, 'status': status})
         return Response(context, template_name='projects/status_edit.html')
 
+    @detail_route(methods=('GET', 'POST'))
+    @noapi
+    def delete(self, request, *args, **kwargs):
+        """TaskStatus delete"""
+        status = self.get_object()
+
+        if request.POST:
+            if 'trash' in request.POST:
+                status.trash = True
+                status.save(update_fields=('trash',))
+            else:
+                status.delete()
+            return HttpResponseRedirect(reverse('project-list'))
+
+        context = _get_default_context(request)
+        milestones = Object.filter_by_request(request, Milestone.objects)
+        context.update({'status': status, 'milestones': milestones})
+        return Response(context, template_name='projects/status_delete.html')
+
 
 class MilestoneView(ProjectsBaseViewSet):
     """

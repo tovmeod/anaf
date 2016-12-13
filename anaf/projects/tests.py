@@ -332,7 +332,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('taskstatus-edit', (1,))
 
     def test_task_status_delete(self):
-        self.assert_protected('projects_task_status_delete', (1,))
+        self.assert_protected('taskstatus-delete', (1,))
 
     def test_settings_view(self):
         self.assert_protected('projects_settings_view')
@@ -646,7 +646,7 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_task_status_delete_login(self):
         """Test index page with login at /projects/task/status/delete/<status_id>/"""
-        response = self.client.get(reverse('projects_task_status_delete', args=[self.status.id]))
+        response = self.client.get(reverse('taskstatus-delete', args=[self.status.id]))
         self.assertEquals(response.status_code, 200)
 
     # Settings

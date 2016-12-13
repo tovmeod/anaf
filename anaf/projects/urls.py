@@ -17,8 +17,6 @@ urlpatterns = patterns('anaf.projects.views',
                            url(r'^', include(router.urls)),
 
                            # Task Statuses
-                           url(r'^task/status/delete/(?P<status_id>\d+)(\.(?P<response_format>\w+))?/?$',
-                               oldviews.task_status_delete, name='projects_task_status_delete'),
                            # because of limitation on DRF I need to set some views manually
                            # TODO: use drf-nested-routers or drf-extensions for nested routes support
                            # Task:
