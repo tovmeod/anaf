@@ -2,8 +2,9 @@
 Core decorators for views
 """
 
-import json
 import re
+import json
+from threading import local
 from functools import wraps
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse, NoReverseMatch
@@ -16,31 +17,36 @@ from models import Module
 from rss import verify_secret_key
 
 
+def load_modules_regexp():
+    modules_regexp = getattr(local, 'modules_regexp', None)
+    if not modules_regexp:
+        modules_regexp = {}  # should be a dict with module name for key and regexp list
+        for name in Module.objects.all().values_list('name', flat=True):
+            try:
+                import_name = name + "." + settings.ANAF_MODULE_IDENTIFIER
+                hmodule = __import__(import_name, fromlist=[str(name)])
+                modules_regexp[name] = hmodule.URL_PATTERNS
+            except ImportError:
+                pass
+            except AttributeError:
+                pass
+    return modules_regexp
+
+
+def get_active_module(path):
+    for name, urls in load_modules_regexp().items():
+        for regexp in urls:
+            if re.match(regexp, path):
+                return Module.objects.get(name=name)
+
+
 def mylogin_required(f):
     """ Check that the user has write access to the anaf.core module """
 
     def wrap(request, *args, **kwargs):
         if request.user.is_authenticated():
             user = request.user.profile
-            all_modules = Module.objects.all()
-            active = None
-            for module in all_modules:
-                try:
-                    import_name = module.name + "." + \
-                                  settings.ANAF_MODULE_IDENTIFIER
-                    hmodule = __import__(
-                        import_name, fromlist=[str(module.name)])
-                    urls = hmodule.URL_PATTERNS
-                    for regexp in urls:
-                        if re.match(regexp, request.path):
-                            active = module
-                            break
-                    if active:
-                        break
-                except ImportError:
-                    pass
-                except AttributeError:
-                    pass
+            active = get_active_module(request.path)
             if active:
                 if active in user.get_perspective().get_modules():
                     if user.has_permission(active):
