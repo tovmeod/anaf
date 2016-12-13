@@ -1,21 +1,16 @@
 import warnings
 
-from django.shortcuts import get_object_or_404
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from anaf import long_type
-from anaf.core.models import Object, ModuleSetting, UpdateRecord
+from anaf.core.models import Object, ModuleSetting
 from anaf.core.views import user_denied
 from anaf.core.rendering import render_to_response
 from anaf.core.decorators import mylogin_required, handle_response_format, require_response_format
-from anaf.projects.models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
-from anaf.projects.forms import ProjectForm, MilestoneForm, TaskForm, FilterForm, TaskRecordForm, \
-    MassActionForm, TaskTimeSlotForm, TaskStatusForm, SettingsForm
-from django.utils.translation import ugettext as _
-from datetime import datetime
-import json
+from anaf.projects.models import Project, Milestone, Task, TaskStatus
+from anaf.projects.forms import FilterForm, MassActionForm, SettingsForm
 
 
 def _get_filter_query(args):
