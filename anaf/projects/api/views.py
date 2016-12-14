@@ -22,7 +22,7 @@ from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeS
 from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
 from anaf.core.ajax.converter import preprocess_context
-from anaf import NOAPI_RENDERERS
+from anaf.core.rendering import NOAPI_RENDERERS
 from anaf.viewsets import AnafViewSet
 
 logger = logging.getLogger('anaf.projects')

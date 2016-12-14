@@ -1,6 +1,4 @@
-from rest_framework import viewsets
-
-from anaf import API_RENDERERS
+from anaf.core.rendering import API_RENDERERS
 from anaf.identities import models
 from anaf.identities.api import serializers
 from anaf.viewsets import AnafViewSet
