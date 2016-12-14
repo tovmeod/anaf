@@ -1,4 +1,3 @@
-from time import sleep
 import json
 from datetime import datetime
 from anaf.test import AnafTestCase
