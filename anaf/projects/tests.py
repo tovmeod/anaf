@@ -1,4 +1,8 @@
-from anaf.test import AnafTestCase
+import json
+import urllib
+from datetime import datetime, timedelta
+from freezegun import freeze_time
+from django.utils import six
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User as DjangoUser
@@ -6,8 +10,7 @@ from anaf.core.models import Group, Perspective, ModuleSetting
 from forms import FilterForm, ProjectForm
 from models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 from anaf.identities.models import Contact, ContactType
-from datetime import datetime, timedelta
-from freezegun import freeze_time
+from anaf.test import AnafTestCase
 
 
 class ProjectsModelsTest(AnafTestCase):
@@ -341,7 +344,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('projectssettings-edit')
 
     def test_ajax_task_lookup(self):
-        self.assert_protected('projects_ajax_task_lookup')
+        self.assert_protected('task-lookup')
 
     def test_gantt_view(self):
         self.assert_protected('project-gantt', (1,))
@@ -387,11 +390,11 @@ class ProjectsViewsTest(AnafTestCase):
         self.milestone.set_default_user()
         self.milestone.save()
 
-        self.task = Task(name='test', project=self.project, status=self.status, caller=self.contact)
+        self.task = Task(name='test task', project=self.project, status=self.status, caller=self.contact)
         self.task.set_default_user()
         self.task.save()
 
-        self.task_assigned = Task(name='test', project=self.project, status=self.status)
+        self.task_assigned = Task(name='Task2', project=self.project, status=self.status)
         self.task_assigned.save()
         self.task_assigned.assigned.add(self.user.profile)
 
@@ -403,7 +406,7 @@ class ProjectsViewsTest(AnafTestCase):
         self.parent.set_default_user()
         self.parent.save()
 
-        self.parent_task = Task(name='test', project=self.project, status=self.status, priority=3)
+        self.parent_task = Task(name='task3', project=self.project, status=self.status, priority=3)
         self.parent_task.set_default_user()
         self.parent_task.save()
 
@@ -660,3 +663,27 @@ class ProjectsViewsTest(AnafTestCase):
         """Test index page with login at /projects/settings/edit/"""
         response = self.client.get(reverse('projectssettings-edit'))
         self.assertEquals(response.status_code, 200)
+
+    def _test_ajax_task_lookup(self, search_value, expected):
+        url = six.moves.urllib.parse.urlparse(reverse('task-lookup', kwargs={'format': 'json'})). \
+            _replace(query=urllib.urlencode({'term': search_value})).geturl()
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+        data = json.loads(response.content)
+        data.sort(key=lambda x: x['value'])
+        expected.sort(key=lambda x: x['value'])
+        self.assertEqual(data, expected)
+
+    def test_ajax_task_lookup(self):
+        expected = [{u'value': self.task_assigned.id, u'label': u'Task2'},
+                    {u'value': self.parent_task.id, u'label': u'task3'},
+                    {u'value': self.task.id, u'label': u'test task'}]
+        self._test_ajax_task_lookup('a', expected)
+        self._test_ajax_task_lookup('task', expected)  # ensures search is case insensitive
+        self._test_ajax_task_lookup('xpto', [])
+        self._test_ajax_task_lookup('te', [{u'label': u'test task', u'value': self.task.id}])
+
+        # asserts the endpoint won't take html
+        for fmt in ('html', 'ajax'):
+            response = self.client.get(reverse('task-lookup', kwargs={'format': fmt}))
+            self.assertEquals(response.status_code, 406)

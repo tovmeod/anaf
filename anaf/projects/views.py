@@ -100,27 +100,6 @@ def index(request, response_format='html'):
 
 
 #
-# AJAX lookups
-#
-
-
-@require_response_format(['json'])
-@mylogin_required
-def ajax_task_lookup(request, response_format='json'):
-    """Returns a list of matching tasks"""
-
-    if request.GET and 'term' in request.GET:
-        tasks = Task.objects.filter(name__icontains=request.GET['term'])[:10]
-    else:
-        tasks = []
-
-    return render_to_response('projects/ajax_task_lookup',
-                              {'tasks': tasks},
-                              context_instance=RequestContext(request),
-                              response_format=response_format)
-
-
-#
 # Widgets
 #
 

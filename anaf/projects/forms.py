@@ -201,7 +201,7 @@ class TaskForm(ModelForm):
 
         self.fields['name'].label = _("Name")
         self.fields['name'].widget.attrs.update({'class': 'duplicates',
-                                                 'callback': reverse('projects_ajax_task_lookup')})
+                                                 'callback': reverse('task-lookup')})
 
         self.fields['status'].label = _("Status")
         self.fields['status'].queryset = Object.filter_permitted(
@@ -249,11 +249,11 @@ class TaskForm(ModelForm):
 
         self.fields['parent'].label = _("Parent")
         self.fields['parent'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('projects_ajax_task_lookup')})
+                                                   'callback': reverse('task-lookup')})
 
         self.fields['depends'].label = _("Depends on")
         self.fields['depends'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('projects_ajax_task_lookup')})
+                                                   'callback': reverse('task-lookup')})
 
         self.fields['milestone'].queryset = Object.filter_permitted(
             user, Milestone.objects, mode='x')

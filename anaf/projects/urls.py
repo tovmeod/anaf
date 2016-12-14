@@ -94,7 +94,7 @@ urlpatterns = patterns('anaf.projects.views',
                                views.ProjectsSettingsView.as_view({'get': 'view'}), name='projectssettings-view'),
 
                            # AJAX lookups
-                           url(r'^ajax/tasks(\.(?P<response_format>\w+))?/?$',
-                               oldviews.ajax_task_lookup, name='projects_ajax_task_lookup'),
+                           # url(r'^ajax/tasks(\.(?P<response_format>\w+))?/?$',
+                           #     oldviews.ajax_task_lookup, name='projects_ajax_task_lookup'),
                        )))
                        )

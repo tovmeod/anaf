@@ -522,7 +522,6 @@ class TaskView(ProjectsBaseViewSet):
     """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    template_name = 'projects/index_owned.html'
 
     def get_queryset(self):
         query = _get_filter_query(self.request.GET)
@@ -821,6 +820,26 @@ class TaskView(ProjectsBaseViewSet):
             task.save(update_fields=('status',))
 
         return self.retrieve(request, *args, **kwargs)
+
+    @list_route(methods=('GET',))
+    def lookup(self, request, *args, **kwargs):
+        """task lookup used in autocomplete
+        Returns a list of matching tasks
+        supports only json
+        """
+        # TODO: task list should support filters in GET parameters
+        if request.accepted_renderer.format in self.accepted_formats:
+            return Response(status=406)
+        if request.GET and 'term' in request.GET:
+            # todo: it seems I can use annotate here if using django>=1.8
+            # Task.objects.filter(name__icontains=request.GET['term']).annotate(value=F('id'),
+            # label=F('name')).values('value', 'name')[:10]
+            tasks = Task.objects.filter(name__icontains=request.GET['term']).values('id', 'name')[:10]
+            # I need to change the field names because this is what the frontend expects
+            tasks = [{'label': t['name'], 'value': t['id']} for t in tasks]
+        else:
+            tasks = []
+        return Response(tasks)
 
 
 class TaskTimeSlotView(ProjectsBaseViewSet):
