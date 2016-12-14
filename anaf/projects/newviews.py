@@ -15,11 +15,11 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.viewsets import ViewSet
 
 from anaf.core.models import Object, UpdateRecord, ModuleSetting
-from anaf.projects.api.serializers import TaskTimeSlotSerializer
+from anaf.projects.serializers import TaskTimeSlotSerializer
 from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm, ProjectForm, \
     TaskTimeSlotForm, TaskStatusForm, SettingsForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
-from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
+from anaf.projects.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
 from anaf.core.ajax.converter import preprocess_context
 from anaf.core.rendering import NOAPI_RENDERERS
