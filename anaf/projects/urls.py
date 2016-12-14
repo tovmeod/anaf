@@ -1,7 +1,6 @@
 from django.conf.urls import url, patterns, include
 from rest_framework.routers import DefaultRouter
 from anaf.projects.api import views
-from anaf.projects import views as oldviews
 
 router = DefaultRouter()
 router.include_root_view = False
@@ -10,7 +9,6 @@ router.register(r'taskstatus', views.TaskStatusView)
 router.register(r'milestone', views.MilestoneView)
 router.register(r'task', views.TaskView)
 router.register(r'tasktimeslot', views.TaskTimeSlotView)
-# router.register(r'settings', views.ProjectsSettingsView)
 
 urlpatterns = patterns('anaf.projects.views',
                        # url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
@@ -92,9 +90,5 @@ urlpatterns = patterns('anaf.projects.views',
                                views.ProjectsSettingsView.as_view({'get': 'view'}), name='projectssettings-view'),
                            url(r'^settings.(?P<format>[a-z0-9]+)/?$',
                                views.ProjectsSettingsView.as_view({'get': 'view'}), name='projectssettings-view'),
-
-                           # AJAX lookups
-                           # url(r'^ajax/tasks(\.(?P<response_format>\w+))?/?$',
-                           #     oldviews.ajax_task_lookup, name='projects_ajax_task_lookup'),
                        )))
                        )
