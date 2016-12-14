@@ -1,15 +1,12 @@
 import warnings
 
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.db.models import Q
-from anaf.core.models import Object, ModuleSetting
-from anaf.core.views import user_denied
+from anaf.core.models import Object
 from anaf.core.rendering import render_to_response
-from anaf.core.decorators import mylogin_required, handle_response_format, require_response_format
+from anaf.core.decorators import mylogin_required, handle_response_format
 from anaf.projects.models import Project, Milestone, Task, TaskStatus
-from anaf.projects.forms import FilterForm, MassActionForm, SettingsForm
+from anaf.projects.forms import FilterForm, MassActionForm
 
 
 def _get_filter_query(args):
