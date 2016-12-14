@@ -100,36 +100,6 @@ def index(request, response_format='html'):
 
 
 #
-# Settings
-#
-
-@handle_response_format
-@mylogin_required
-def settings_edit(request, response_format='html'):
-    """Settings"""
-
-    if not request.user.profile.is_admin('anaf.projects'):
-        return user_denied(request, message="You don't have administrator access to the Projects module")
-
-    form = None
-    if request.POST:
-        if 'cancel' not in request.POST:
-            form = SettingsForm(request.user.profile, request.POST)
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(reverse('projectssettings-view'))
-        else:
-            return HttpResponseRedirect(reverse('projectssettings-view'))
-    else:
-        form = SettingsForm(request.user.profile)
-
-    context = _get_default_context(request)
-    context.update({'form': form})
-
-    return render_to_response('projects/settings_edit', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-#
 # AJAX lookups
 #
 
