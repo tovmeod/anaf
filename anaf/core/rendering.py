@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.template import RequestContext
 from jinja2 import Template
 from coffin.template import loader
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer, BrowsableAPIRenderer
 
 from conf import settings
 from models import UpdateRecord
@@ -289,3 +289,6 @@ class JinjaAjaxRenderer(JinjaRenderer):
 
     def _render(self, template_name, context, context_instance, response_format):
         return render_to_ajax(template_name, context, context_instance)
+
+API_RENDERERS = (JSONRenderer, BrowsableAPIRenderer)
+NOAPI_RENDERERS = (JinjaRenderer, JinjaAjaxRenderer)
