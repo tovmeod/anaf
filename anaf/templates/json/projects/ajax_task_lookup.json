@@ -1,5 +1,0 @@
-[
-{% for task in tasks -%}
-{"label": "{{ task.__unicode__().replace('\"', '\\\"')|htsafe }}", "value": "{{ task.id }}"}{% if not loop.last %},{% endif %}
-{% endfor -%}
-]
