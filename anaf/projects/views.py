@@ -4,7 +4,6 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from anaf import long_type
 from anaf.core.models import Object, ModuleSetting
 from anaf.core.views import user_denied
 from anaf.core.rendering import render_to_response
@@ -19,7 +18,7 @@ def _get_filter_query(args):
 
     for arg in args:
         if hasattr(Task, arg) and args[arg]:
-            kwargs = {str(arg + '__id'): long_type(args[arg])}
+            kwargs = {str(arg + '__id'): int(args[arg])}
             query = query & Q(**kwargs)
 
     return query
@@ -106,32 +105,6 @@ def index(request, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-def settings_view(request, response_format='html'):
-    """Settings"""
-
-    if not request.user.profile.is_admin('anaf.projects'):
-        return user_denied(request, message="You don't have administrator access to the Projects module")
-
-    # default task status
-    try:
-        conf = ModuleSetting.get_for_module(
-            'anaf.projects', 'default_task_status')[0]
-        default_task_status = TaskStatus.objects.get(
-            pk=long(conf.value), trash=False)
-    except Exception:
-        default_task_status = None
-
-    statuses = TaskStatus.objects.filter(trash=False)
-    context = _get_default_context(request)
-    context.update({'default_task_status': default_task_status,
-                    'statuses': statuses})
-
-    return render_to_response('projects/settings_view', context,
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
 def settings_edit(request, response_format='html'):
     """Settings"""
 
@@ -144,9 +117,9 @@ def settings_edit(request, response_format='html'):
             form = SettingsForm(request.user.profile, request.POST)
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect(reverse('projects_settings_view'))
+                return HttpResponseRedirect(reverse('projectssettings-view'))
         else:
-            return HttpResponseRedirect(reverse('projects_settings_view'))
+            return HttpResponseRedirect(reverse('projectssettings-view'))
     else:
         form = SettingsForm(request.user.profile)
 

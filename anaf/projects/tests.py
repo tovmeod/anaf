@@ -335,10 +335,10 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('taskstatus-delete', (1,))
 
     def test_settings_view(self):
-        self.assert_protected('projects_settings_view')
+        self.assert_protected('projectssettings-view')
 
     def test_settings_edit(self):
-        self.assert_protected('projects_settings_edit')
+        self.assert_protected('projectssettings-edit')
 
     def test_ajax_task_lookup(self):
         self.assert_protected('projects_ajax_task_lookup')
@@ -653,10 +653,10 @@ class ProjectsViewsTest(AnafTestCase):
 
     def test_project_settings_view(self):
         """Test index page with login at /projects/settings/view/"""
-        response = self.client.get(reverse('projects_settings_view'))
+        response = self.client.get(reverse('projectssettings-view'))
         self.assertEquals(response.status_code, 200)
 
     def test_project_settings_edit(self):
         """Test index page with login at /projects/settings/edit/"""
-        response = self.client.get(reverse('projects_settings_edit'))
+        response = self.client.get(reverse('projectssettings-edit'))
         self.assertEquals(response.status_code, 200)

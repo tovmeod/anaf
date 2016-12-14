@@ -31,7 +31,7 @@
 
             {% if request.user.profile.is_admin('anaf.projects') %}
                 <span class="sidebar-header">{% trans %}Administration{% endtrans %}</span>
-                <a href="{% url projects_settings_view %}" class="sidebar-link {% block class_admin_settings %}{% endblock %}">{% trans %}Settings{% endtrans %}</a>
+                <a href="{% url projectssettings-view %}" class="sidebar-link {% block class_admin_settings %}{% endblock %}">{% trans %}Settings{% endtrans %}</a>
             {% endif %}
 		</div>
         </td>

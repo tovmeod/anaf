@@ -9,8 +9,8 @@
 
 {% block module_topmenu %}
 <a href="{% url taskstatus-new %}" class="top-menu add-link">{% trans %}New Status{% endtrans %}</a>
-<a href="{% url projects_settings_view %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
-<a href="{% url projects_settings_edit %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url projectssettings-view %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
+<a href="{% url projectssettings-edit %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
 {% endblock %}
 
 {% block module_content %}
@@ -22,7 +22,7 @@
     </ul>
     <div class="content-form-submit">
         <input type="submit" name="save" value="{% trans %}Save{% endtrans %}" />
-		<input type="submit" name="cancel" value="{% trans %}Cancel{% endtrans %}" class="cancel" />
+        <a class="cancel" href="{% url projectssettings-view %}">{% trans %}Cancel{% endtrans %}</a>
     </div>
 </form>
 {% endblock %}

@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -11,17 +12,20 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
+from rest_framework.viewsets import ViewSet
 
-from anaf.core.models import Object, UpdateRecord
+from anaf.core.models import Object, UpdateRecord, ModuleSetting
 from anaf.projects.api.serializers import TaskTimeSlotSerializer
 from anaf.projects.forms import FilterForm, MassActionForm, TaskRecordForm, TaskForm, MilestoneForm, ProjectForm, \
-    TaskTimeSlotForm, TaskStatusForm
+    TaskTimeSlotForm, TaskStatusForm, SettingsForm
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
 from anaf.projects.api.serializers import ProjectSerializer, TaskStatusSerializer, MilestoneSerializer, TaskSerializer
 from anaf.projects.views import _get_default_context, _get_filter_query
 from anaf.core.ajax.converter import preprocess_context
-from anaf import API_RENDERERS
+from anaf import NOAPI_RENDERERS
 from anaf.viewsets import AnafViewSet
+
+logger = logging.getLogger('anaf.projects')
 
 
 def noapi(viewfunc):
@@ -913,3 +917,48 @@ class TaskTimeSlotView(ProjectsBaseViewSet):
         context = _get_default_context(request)
         context.update({'task_time_slot': task_time_slot, 'task': task_time_slot.task})
         return Response(context, template_name='projects/task_time_delete.html')
+
+
+class ProjectsSettingsView(ViewSet):
+    module = 'anaf.projects'
+    renderer_classes = NOAPI_RENDERERS
+
+    @list_route(methods=('GET',))
+    def view(self, request, *args, **kwargs):
+        """Projects Settings view page"""
+        if not request.user.profile.is_admin('anaf.projects'):
+            # Even to view the settings page the user needs write access to the module
+            self.permission_denied(request, message=_("You don't have administrator access to the Projects module"))
+        # default task status
+        default_task_status = None
+        try:
+            conf = ModuleSetting.get_for_module('anaf.projects', 'default_task_status')
+            if conf and len(conf):
+                conf = conf[0]
+                default_task_status = TaskStatus.objects.get(pk=int(conf.value), trash=False)
+        except ValueError:
+            logger.warn('Could not convert default_task_status to int %s', conf.value)
+
+        statuses = TaskStatus.objects.filter(trash=False)
+        context = _get_default_context(request)
+        context.update({'default_task_status': default_task_status, 'statuses': statuses})
+
+        return Response(context, template_name='projects/settings_view.html')
+
+    @list_route(methods=('GET', 'POST'))
+    def edit(self, request, *args, **kwargs):
+        """Projects settings edit page"""
+        if not request.user.profile.is_admin('anaf.projects'):
+            self.permission_denied(request, message=_("You don't have administrator access to the Projects module"))
+
+        if request.POST:
+            form = SettingsForm(request.user.profile, request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('projectssettings-view'))
+        else:
+            form = SettingsForm(request.user.profile)
+
+        context = _get_default_context(request)
+        context.update({'form': form})
+        return Response(context, template_name='projects/settings_edit.html')

@@ -10,6 +10,7 @@ router.register(r'taskstatus', views.TaskStatusView)
 router.register(r'milestone', views.MilestoneView)
 router.register(r'task', views.TaskView)
 router.register(r'tasktimeslot', views.TaskTimeSlotView)
+# router.register(r'settings', views.ProjectsSettingsView)
 
 urlpatterns = patterns('anaf.projects.views',
                        # url(r'^/?(\.(?P<response_format>\w+))?$', oldviews.index, name='projects'),
@@ -81,13 +82,16 @@ urlpatterns = patterns('anaf.projects.views',
                                views.TaskTimeSlotView.as_view({'get': 'new_to_task', 'post': 'new_to_task'}),
                                name='tasktimeslot-new-to-task'),
 
+                           # Settings
 
-
-                            # Settings
-                           url(r'^settings/view(\.(?P<response_format>\w+))?/?$',
-                               oldviews.settings_view, name='projects_settings_view'),
-                           url(r'^settings/edit(\.(?P<response_format>\w+))?/?$',
-                               oldviews.settings_edit, name='projects_settings_edit'),
+                           url(r'^settings/edit/$',
+                               views.ProjectsSettingsView.as_view({'get': 'edit'}), name='projectssettings-edit'),
+                           url(r'^settings/edit.(?P<format>[a-z0-9]+)/?$',
+                               views.ProjectsSettingsView.as_view({'get': 'edit'}), name='projectssettings-edit'),
+                           url(r'^settings/$',
+                               views.ProjectsSettingsView.as_view({'get': 'view'}), name='projectssettings-view'),
+                           url(r'^settings.(?P<format>[a-z0-9]+)/?$',
+                               views.ProjectsSettingsView.as_view({'get': 'view'}), name='projectssettings-view'),
 
                            # AJAX lookups
                            url(r'^ajax/tasks(\.(?P<response_format>\w+))?/?$',
