@@ -9,8 +9,6 @@ from django.utils.translation import ugettext as _
 from anaf.core.models import Object, User
 from anaf.identities.models import Contact
 
-# Project Model
-
 
 class Project(Object):
     """ Project model """
@@ -34,7 +32,6 @@ class Project(Object):
         return reverse('project-detail', args=[self.id])
 
 
-# TaskStatus model
 class TaskStatus(Object):
     """ Tasks and milestones have task statuses """
     name = models.CharField(max_length=255)
@@ -91,9 +88,7 @@ class Milestone(Object):
         return reverse('milestone-detail', args=[self.id])
 
 
-# Task model
 class Task(Object):
-
     """ Single task """
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child_set')
     project = models.ForeignKey(Project)
@@ -107,7 +102,7 @@ class Task(Object):
     caller = models.ForeignKey(Contact, blank=True, null=True, on_delete=models.SET_NULL)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
-    PRIORITY_CHOICES = ((5, _('Highest')), (4, _('High')), (3, _('Normal')), (2, _('Low')), (1, _('Lowest')))
+    PRIORITY_CHOICES = ((1, _('Lowest')), (2, _('Low')), (3, _('Normal')), (4, _('High')), (5, _('Highest')))
     priority = models.IntegerField(default=3, choices=PRIORITY_CHOICES)
     estimated_time = models.IntegerField(null=True, blank=True)
 
@@ -124,9 +119,7 @@ class Task(Object):
         """Returns a Human-friendly priority name
         :rtype str
         """
-        for choice in Task.PRIORITY_CHOICES:
-            if choice[0] == self.priority:
-                return choice[1]
+        return Task.PRIORITY_CHOICES[self.priority-1][1]
 
     def get_estimated_time(self):
         """Converts minutes to Human-friendly time format
@@ -157,6 +150,7 @@ class Task(Object):
 
         if self.id:
             # Existing task
+            # TODO: consider saving the original values in __init__ see: http://stackoverflow.com/a/1793323/247556
             original = Task.objects.get(pk=self.id)
             if self.project_id != original.project_id:
                 # Project changed, check milestone is within selected Project

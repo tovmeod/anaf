@@ -16,13 +16,20 @@ from anaf.test import AnafTestCase
 class ProjectsModelsTest(AnafTestCase):
     """ Documents models tests"""
     def setUp(self):
-        self.project = Project(name='test')
-        self.project.save()
-
         self.taskstatus = TaskStatus(name='test')
         self.taskstatus.save()
 
-        self.task = Task(name='test', project=self.project, status=self.taskstatus)
+        self.project = Project(name='test')
+        self.project.save()
+        self.project2 = Project(name='project 2')
+        self.project2.save()
+
+        self.milestone = Milestone(name='milestone name', project=self.project, status=self.taskstatus)
+        self.milestone.save()
+        self.milestone2 = Milestone(name='milestone 2', project=self.project2, status=self.taskstatus)
+        self.milestone2.save()
+
+        self.task = Task(name='test', project=self.project, milestone=self.milestone, status=self.taskstatus)
         self.task.save()
 
     def test_task_priority_human(self):
@@ -55,18 +62,65 @@ class ProjectsModelsTest(AnafTestCase):
     def test_model_task_get_absolute_url(self):
         self.task.get_absolute_url()
 
-    # def test_save TODO: save is overridden and has some extra logic
+    def test_save_milestone_proj_diff_proj(self):
+        """If a new task being saved has a self.milestone.project!=self.project
+        then task is saved using the milestone project
+        """
+        newtask = Task(name='new task', project=self.project2, status=self.taskstatus, milestone=self.milestone)
+        newtask.save()
+        self.assertEqual(newtask.project_id, self.project.id)
+
+    def test_save_inherits(self):
+        """Subtask inherits project and milestone from parent task"""
+        newtask = Task(name='new task', parent=self.task, project=self.project2, status=self.taskstatus,
+                       milestone=self.milestone2)
+        newtask.save()
+        self.assertEqual(newtask.project_id, self.project.id)
+        self.assertEqual(newtask.milestone_id, self.milestone.id)
+
+    def test_save_changed_project(self):
+        self.task.project = self.project2
+        self.task.save()
+        self.assertIsNone(self.task.milestone_id)
+
+    def test_save_changed_milestone(self):
+        """changing to a milestone that belongs to another project also change the task.project"""
+        self.task.milestone = self.milestone2
+        self.task.save()
+        self.assertEqual(self.task.project_id, self.project2.id)
+
+    def test_save_status_hidden(self):
+        """Changing a task.status to a hidden will also change the subtasks, and also closes timeslots"""
+        slot = self.add_time_slot()
+        self.assertTrue(slot.is_open())
+        status2 = TaskStatus(name='status2', hidden=True)
+        status2.save()
+        subtask1 = Task(name='sb1', parent=self.task, status=self.taskstatus)
+        subtask1.save()
+        subtask2 = Task(name='sb2', parent=self.task, status=self.taskstatus)
+        subtask2.save()
+        self.task.status = status2
+        self.task.save()
+        subtask1, subtask2 = Task.objects.get(id=subtask1.id), Task.objects.get(id=subtask2.id)
+        self.assertEqual(subtask1.status_id, status2.id)
+        self.assertEqual(subtask2.status_id, status2.id)
+        slot = TaskTimeSlot.objects.get(id=slot.id)
+        self.assertFalse(slot.is_open())
 
     def test_get_absolute_url(self):
         """Test if get_absolute_url works without raising any exception"""
         self.project.get_absolute_url()
 
-    def add_time_slot(self, total_time):
+    def add_time_slot(self, total_time=None):
         duser, created = DjangoUser.objects.get_or_create(username='testuser')
         time_from = datetime(year=2015, month=8, day=3)
-        time_to = time_from + total_time
+        if total_time is not None:
+            time_to = time_from + total_time
+        else:
+            time_to = None
         timeslot = TaskTimeSlot(task=self.task, user=duser.profile, time_from=time_from, time_to=time_to)
         timeslot.save()
+        return timeslot
 
     def test_get_total_time_default(self):
         self.assertEqual(self.task.get_total_time(), timedelta())
@@ -133,12 +187,15 @@ class ProjectsModelsTest(AnafTestCase):
         obj.get_absolute_url()
         obj.delete()
 
-    def test_model_milestone(self):
-        tstatus = TaskStatus(name='test')
-        tstatus.save()
-        mstone = Milestone(project=self.project, status=tstatus)
-        mstone.save()
-        mstone.get_absolute_url()
+    def test_milestone_model(self):
+        """Changing a milestone.project will also change the project for all tasks associated"""
+        self.milestone.project = self.project2
+        self.milestone.save()
+        task = Task.objects.get(id=self.task.id)
+        self.assertEqual(task.project_id, self.project2.id)
+        # makes sure the method doesn't raise any exceptions
+        self.milestone.get_absolute_url()
+
 
 
 class TestModelTaskTimeSlot(AnafTestCase):
