@@ -55,6 +55,8 @@ def apifirst(viewfunc):
 
 
 class ProjectsBaseViewSet(AnafViewSet):
+    """Base class for project modules views, this exist only to define the module name the ViewSet belongs
+     this is used for permissions"""
     module = 'anaf.projects'
 
 
@@ -323,7 +325,7 @@ class TaskStatusView(ProjectsBaseViewSet):
             if form.is_valid():
                 status = form.save()
                 status.set_user(request.user.profile)
-                return HttpResponseRedirect(reverse('taskstatus-detail', args=[status.id]))
+                return HttpResponseRedirect(reverse('projectssettings-view'))
         else:
             form = TaskStatusForm(request.user.profile)
 

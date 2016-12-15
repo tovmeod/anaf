@@ -729,10 +729,19 @@ class ProjectsViewsTest(AnafTestCase):
         self.assertEquals(response.status_code, 200)
 
     # Task Statuses
-    def test_task_status_add(self):
-        """Test index page with login at /projects/task/status/add/"""
+    def test_task_status_new(self):
+        """Test new taskstatus page"""
+        status_qty = TaskStatus.objects.count()
         response = self.client.get(reverse('taskstatus-new'))
         self.assertEquals(response.status_code, 200)
+        form_data = form_to_dict(response.data['form'])
+        form_data['name'] = 'new status'
+        response = self.client.post(reverse('taskstatus-new'), data=form_data)
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response, reverse('projectssettings-view'))
+        self.assertEqual(TaskStatus.objects.count(), status_qty + 1)
+        status = TaskStatus.objects.get(name=form_data['name'])
+        self.assertEqual(status.name, form_data['name'])
 
     def test_task_status_view_login(self):
         """Test index page with login at /projects/task/status/view/<status_id>/"""
