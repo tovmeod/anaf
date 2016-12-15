@@ -56,6 +56,14 @@ import sys
 import errno
 
 
+def form_to_dict(form):
+    """Helper function useful for tests, receives a django form and returns a dict so it can be used in client.post
+    :type form: django.forms.ModelForm
+    :rtype dict
+    """
+    return {f: form.fields[f].initial if form.fields[f].initial else '' for f in form.fields}
+
+
 @pytest.mark.skipif(os.environ.get('SELENIUM', False), reason='Selenium env is set to 1')
 class AnafTestCase(DjangoTestCase):
     """

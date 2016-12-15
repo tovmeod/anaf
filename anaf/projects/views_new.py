@@ -103,7 +103,7 @@ class ProjectView(ProjectsBaseViewSet):
     @noapi
     def new(self, request, *args, **kwargs):
         """New Project page"""
-        if request.POST:
+        if request.method == 'POST':
             form = ProjectForm(request.user.profile, None, request.POST)
             if form.is_valid():
                 project = form.save()
@@ -125,7 +125,7 @@ class ProjectView(ProjectsBaseViewSet):
             if not request.user.profile.has_permission(parent_project, mode='w'):
                 parent_project = None
 
-        if request.POST:
+        if request.method == 'POST':
             form = ProjectForm(request.user.profile, project_id, request.POST)
             if form.is_valid():
                 subproject = form.save()
@@ -146,7 +146,7 @@ class ProjectView(ProjectsBaseViewSet):
         project = self.get_object()
         context = _get_default_context(request)
 
-        if request.POST:
+        if request.method == 'POST':
             record = UpdateRecord()
             record.record_type = 'manual'
             form = TaskRecordForm(request.user.profile, request.POST, instance=record)
@@ -250,8 +250,7 @@ class ProjectView(ProjectsBaseViewSet):
         else:
             jdata = None
 
-        context = RequestContext(request)
-        context.update({'jdata': jdata, 'project': project})
+        context = {'jdata': jdata, 'project': project}
         return Response(context, template_name='projects/gantt_view.html')
 
     @detail_route(methods=('GET', 'POST'))
@@ -261,7 +260,7 @@ class ProjectView(ProjectsBaseViewSet):
         project = self.get_object()
         context = _get_default_context(request)
 
-        if request.POST:
+        if request.method == 'POST':
             form = ProjectForm(request.user.profile, None, request.POST, instance=project)
             if form.is_valid():
                 project = form.save()
@@ -278,13 +277,13 @@ class ProjectView(ProjectsBaseViewSet):
         """Project delete"""
         project = self.get_object()
 
-        if request.POST:
+        if request.method == 'POST':
             if 'trash' in request.POST:
                 project.trash = True
                 project.save(update_fields=('trash',))
             else:
                 project.delete()
-            return HttpResponseRedirect(reverse('project-list', kwargs={'format': kwargs.get('format')}))
+            return HttpResponseRedirect(reverse('project-list'))
 
         context = _get_default_context(request)
         context.update({'project': project})
@@ -320,7 +319,7 @@ class TaskStatusView(ProjectsBaseViewSet):
     @list_route(methods=('GET', 'POST'))
     @noapi
     def new(self, request, *args, **kwargs):
-        if request.POST:
+        if request.method == 'POST':
             form = TaskStatusForm(request.user.profile, request.POST)
             if form.is_valid():
                 status = form.save()
@@ -340,7 +339,7 @@ class TaskStatusView(ProjectsBaseViewSet):
         status = self.get_object()
         context = _get_default_context(request)
 
-        if request.POST:
+        if request.method == 'POST':
             form = TaskStatusForm(request.user.profile, request.POST, instance=status)
             if form.is_valid():
                 status = form.save()
@@ -357,7 +356,7 @@ class TaskStatusView(ProjectsBaseViewSet):
         """TaskStatus delete"""
         status = self.get_object()
 
-        if request.POST:
+        if request.method == 'POST':
             if 'trash' in request.POST:
                 status.trash = True
                 status.save(update_fields=('trash',))
@@ -424,7 +423,7 @@ class MilestoneView(ProjectsBaseViewSet):
         milestone = self.get_object()
         context = _get_default_context(request)
 
-        if request.POST:
+        if request.method == 'POST':
             form = MilestoneForm(request.user.profile, None, request.POST, instance=milestone)
             if form.is_valid():
                 task = form.save()
@@ -460,7 +459,7 @@ class MilestoneView(ProjectsBaseViewSet):
         """Milestone delete"""
         milestone = self.get_object()
 
-        if request.POST:
+        if request.method == 'POST':
             if 'trash' in request.POST:
                 milestone.trash = True
                 milestone.save(update_fields=('trash',))
@@ -479,7 +478,7 @@ class MilestoneView(ProjectsBaseViewSet):
     @list_route(methods=('GET', 'POST'))
     @noapi
     def new(self, request, *args, **kwargs):
-        if request.POST:
+        if request.method == 'POST':
             milestone = Milestone()
             form = MilestoneForm(request.user.profile, None, request.POST, instance=milestone)
             if form.is_valid():
@@ -502,7 +501,7 @@ class MilestoneView(ProjectsBaseViewSet):
             if not project.has_perm_write(request.user.profile):
                 project = None
 
-        if request.POST:
+        if request.method == 'POST':
             form = MilestoneForm(request.user.profile, project_id, request.POST)
             if form.is_valid():
                 milestone = form.save()
@@ -564,7 +563,7 @@ class TaskView(ProjectsBaseViewSet):
     @noapi
     def new(self, request, *args, **kwargs):
         """New Task page"""
-        if request.POST:
+        if request.method == 'POST':
             form = TaskForm(request.user.profile, None, None, None, request.POST)
             if form.is_valid():
                 task = form.save()
@@ -585,7 +584,7 @@ class TaskView(ProjectsBaseViewSet):
         task = self.get_object()
         parent = task
 
-        if request.POST:
+        if request.method == 'POST':
             form = TaskForm(request.user.profile, parent, None, None, request.POST)
             if form.is_valid():
                 subtask = form.save()
@@ -614,7 +613,7 @@ class TaskView(ProjectsBaseViewSet):
         else:
             project, project_id = None, None
 
-        if request.POST:
+        if request.method == 'POST':
             form = TaskForm(request.user.profile, None, project_id, milestone_id, request.POST)
             if form.is_valid():
                 task = form.save()
@@ -637,7 +636,7 @@ class TaskView(ProjectsBaseViewSet):
             if not request.user.profile.has_permission(project, mode='w'):
                 project = None
 
-        if request.POST:
+        if request.method == 'POST':
             task = Task()
             form = TaskForm(request.user.profile, None, project_id, None, request.POST, instance=task)
             if form.is_valid():
@@ -752,7 +751,7 @@ class TaskView(ProjectsBaseViewSet):
     def edit(self, request, *args, **kwargs):
         """Task edit page"""
         task = self.get_object()
-        if request.POST:
+        if request.method == 'POST':
             form = TaskForm(request.user.profile, None, None, None, request.POST, instance=task)
             if form.is_valid():
                 task = form.save()
@@ -769,7 +768,7 @@ class TaskView(ProjectsBaseViewSet):
     def delete(self, request, *args, **kwargs):
         """Task delete"""
         task = self.get_object()
-        if request.POST:
+        if request.method == 'POST':
             if 'trash' in request.POST:
                 task.trash = True
                 task.save(update_fields=('trash',))
@@ -885,7 +884,7 @@ class TaskTimeSlotView(ProjectsBaseViewSet):
     def edit(self, request, *args, **kwargs):
         """TaskTimeSlot edit page"""
         slot = self.get_object()
-        if request.POST:
+        if request.method == 'POST':
             form = TaskTimeSlotForm(request.user.profile, None, request.POST, instance=slot)
             if form.is_valid():
                 slot = form.save()
@@ -904,7 +903,7 @@ class TaskTimeSlotView(ProjectsBaseViewSet):
         if not request.user.profile.has_permission(task, mode='w'):
             raise PermissionDenied
 
-        if request.POST:
+        if request.method == 'POST':
             task_time_slot = TaskTimeSlot(task=task, time_to=datetime.now(), user=request.user.profile)
             form = TaskTimeSlotForm(request.user.profile, task_id, request.POST, instance=task_time_slot)
             if form.is_valid():
@@ -926,7 +925,7 @@ class TaskTimeSlotView(ProjectsBaseViewSet):
     def delete(self, request, *args, **kwargs):
         """Task time slot delete"""
         task_time_slot = self.get_object()
-        if request.POST:
+        if request.method == 'POST':
             if 'trash' in request.POST:
                 task_time_slot.trash = True
                 task_time_slot.save(update_fields=('trash',))
@@ -971,7 +970,7 @@ class ProjectsSettingsView(ViewSet):
         if not request.user.profile.is_admin('anaf.projects'):
             self.permission_denied(request, message=_("You don't have administrator access to the Projects module"))
 
-        if request.POST:
+        if request.method == 'POST':
             form = SettingsForm(request.user.profile, request.POST)
             if form.is_valid():
                 form.save()

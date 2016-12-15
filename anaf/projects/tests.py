@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import json
 import urllib
 from datetime import datetime, timedelta
+
 from freezegun import freeze_time
 from django.utils import six
 from django.test.client import Client
@@ -11,7 +12,7 @@ from anaf.core.models import Group, Perspective, ModuleSetting
 from forms import FilterForm, ProjectForm
 from models import Project, Milestone, Task, TaskStatus, TaskTimeSlot
 from anaf.identities.models import Contact, ContactType
-from anaf.test import AnafTestCase
+from anaf.test import AnafTestCase, form_to_dict
 
 
 class ProjectsModelsTest(AnafTestCase):
@@ -497,7 +498,7 @@ class ProjectsViewsTest(AnafTestCase):
         self.assertEqual(type(response.context['filters']), FilterForm)
 
     # Projects
-    def test_project_add(self):
+    def test_project_new(self):
         """Test index page with login at /projects/add/"""
         response = self.client.get(reverse('project-new'))
         self.assertEquals(response.status_code, 200)
@@ -515,25 +516,63 @@ class ProjectsViewsTest(AnafTestCase):
         self.assertEqual(project.name, form_params['name'])
         self.assertEqual(project.details, form_params['details'])
 
-    def test_project_add_typed(self):
-        """Test index page with login at /projects/add/<project_id>/"""
+    def test_project_new_to_project(self):
+        projects_qty = Project.objects.count()
         response = self.client.get(reverse('project-new-to-project', args=[self.parent.id]))
         self.assertEquals(response.status_code, 200)
+        form_data = form_to_dict(response.data['form'])
+        form_data['name'] = 'new subproject'
+        response = self.client.post(reverse('project-new-to-project', args=[self.parent.id]), data=form_data)
+        self.assertEquals(response.status_code, 302)
+        project_id = response['Location'].split('/')[-2]
+        project_id = int(project_id)  # make sure it got a number for project id
+        self.assertRedirects(response, reverse('project-detail', args=[project_id]))
+        self.assertEqual(Project.objects.count(), projects_qty + 1)
+        project = Project.objects.get(id=project_id)
+        self.assertEqual(project.name, form_data['name'])
+        self.assertEqual(project.parent_id, int(form_data['parent']))
 
-    def test_project_view_login(self):
+    def test_project_detail(self):
         """Test index page with login at /projects/view/<project_id>"""
         response = self.client.get(reverse('project-detail', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
 
-    def test_project_edit_login(self):
-        """Test index page with login at /projects/edit//<project_id>"""
-        response = self.client.get(reverse('project-edit', args=[self.project.id]))
+    def test_project_gantt(self):
+        """Test gant view page for project, just makes sure it doesn't generates exceptions"""
+        # todo, create more data to improve coverage of gantt view
+        response = self.client.get(reverse('project-gantt', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
 
-    def test_project_delete_login(self):
-        """Test index page with login at /projects/delete//<project_id>"""
+    def test_project_edit(self):
+        """Test project edit page"""
+        response = self.client.get(reverse('project-edit', args=[self.project.id]))
+        self.assertEquals(response.status_code, 200)
+        form_data = form_to_dict(response.data['form'])
+        form_data['name'] = 'changed the project name'
+        response = self.client.post(reverse('project-edit', args=[self.project.id]), data=form_data)
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response, reverse('project-detail', args=[self.project.id]))
+        project = Project.objects.get(id=self.project.id)
+        self.assertEqual(project.name, form_data['name'])
+
+    def test_project_delete(self):
+        """Test project delete page"""
         response = self.client.get(reverse('project-delete', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
+        self.assertFalse(self.project.trash)  # makes sure object is not already in trash
+        response = self.client.post(reverse('project-delete', args=[self.project.id]), data={'trash': ''})
+        self.assertRedirects(response, reverse('project-list'))
+        self.assertTrue(Project.objects.get(id=self.project.id).trash)
+        # user should still be able to see project details even if project is in trash
+        response = self.client.get(reverse('project-delete', args=[self.project.id]))
+        self.assertEquals(response.status_code, 200)
+        # now actually delete
+        response = self.client.post(reverse('project-delete', args=[self.project.id]))
+        self.assertRedirects(response, reverse('project-list'))
+        response = self.client.get(reverse('project-delete', args=[self.project.id]))
+        self.assertEquals(response.status_code, 404)
+        with self.assertRaises(Project.DoesNotExist):
+            Project.objects.get(id=self.project.id)
 
     # Milestones
     def test_milestone_add(self):
