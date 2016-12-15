@@ -287,7 +287,7 @@ class TaskTimeSlot(Object):
 
     def get_time_tuple(self, time=None):
         """Returns time as a tuple with number of full hours and minutes
-        :rtype tuple or None
+        :rtype tuple(int, int, int) or None
         """
         if not time:
             time = self.get_time()
