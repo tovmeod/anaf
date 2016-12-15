@@ -1149,8 +1149,7 @@ class UpdateRecord(models.Model):
             # E-mail contents for e-mail notifications
             full_message = self.get_full_message()
             html = '{0!s}:<br /><br />\n\n<a href="{1!s}">{2!s}</a> ({3!s}):<br /><br />\n\n{4!s}<br /><br />\n\n'.\
-                format(str(author), obj.get_absolute_url(), str(obj),
-                 obj.get_human_type(), full_message)
+                format(str(author), obj.get_absolute_url(), str(obj), obj.get_human_type(), full_message)
             grittertext = '{0!s}:<br />\n\n<a href="#{1!s}">{2!s}</a> ({3!s}):<br />\n\n{4!s}<br />\n\n'.\
                 format(str(author), obj.get_absolute_url(), str(obj),
                  obj.get_human_type(), full_message)
