@@ -1,9 +1,8 @@
 """
 Identities module objects
 """
-
+from __future__ import unicode_literals
 from unidecode import unidecode
-from django.utils.six import text_type as unicode
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
@@ -62,7 +61,7 @@ class ContactType(Object):
 
     def save(self, *args, **kwargs):
         """Override to auto-set slug"""
-        self.slug = unicode(self.name).replace(" ", "-")
+        self.slug = self.name.replace(" ", "-")
         self.slug = defaultfilters.slugify(unidecode(self.slug))
         super(ContactType, self).save(*args, **kwargs)
 

@@ -1,6 +1,7 @@
 """
 Project Management: module definition
 """
+from __future__ import unicode_literals
 
 PROPERTIES = {
     'title': 'Projects',

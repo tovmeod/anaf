@@ -3,8 +3,7 @@ ServiceSupport module objects.
 
 Depends on: anaf.core, anaf.identities
 """
-
-from django.utils.six import text_type as unicode
+from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.db.models import signals
 from django.db import models
@@ -109,7 +108,7 @@ class ServiceAgent(Object):
         ordering = ('related_user', '-active', 'occupied')
 
     def __unicode__(self):
-        return unicode(self.related_user)
+        return str(self.related_user)
 
     def get_absolute_url(self):
         """Returns absolute URL of the object"""

@@ -1,7 +1,7 @@
 """
 Core Ajax views
 """
-
+from __future__ import unicode_literals
 from django.template import RequestContext
 import re
 from anaf.core.mail import EmailInvitation
@@ -14,7 +14,6 @@ from anaf.core.forms import TagsForm
 from anaf.core.ajax import converter
 from dajaxice.core import dajaxice_functions
 from dajax.core import Dajax
-from django.utils.six import text_type as unicode
 
 
 def comments_likes(request, target, form, expand=True):
@@ -32,31 +31,31 @@ def comments_likes(request, target, form, expand=True):
     profile = request.user.profile
 
     if obj:
-        if form.get('like', 0) == unicode(obj.id):
+        if form.get('like', 0) == str(obj.id):
             obj.likes.add(profile)
             if hasattr(obj, 'score'):
                 obj.score += 1
                 obj.save()
 
-        elif form.get('unlike', 0) == unicode(obj.id):
+        elif form.get('unlike', 0) == str(obj.id):
             obj.likes.remove(profile)
             if hasattr(obj, 'score'):
                 obj.score -= 1
                 obj.save()
 
-        elif form.get('dislike', 0) == unicode(obj.id):
+        elif form.get('dislike', 0) == str(obj.id):
             obj.dislikes.add(profile)
             if hasattr(obj, 'score'):
                 obj.score += 1
                 obj.save()
 
-        elif form.get('undislike', 0) == unicode(obj.id):
+        elif form.get('undislike', 0) == str(obj.id):
             obj.dislikes.remove(profile)
             if hasattr(obj, 'score'):
                 obj.score -= 1
                 obj.save()
 
-        elif form.get('commentobject', 0) == unicode(obj.id) and 'comment' in form:
+        elif form.get('commentobject', 0) == str(obj.id) and 'comment' in form:
             comment = Comment(author=profile,
                               body=form.get('comment'))
             comment.save()
@@ -109,7 +108,7 @@ def tags(request, target, object_id, edit=False, formdata=None):
         formdata['tags'] = [formdata['tags']]
 
     if edit or formdata:
-        if formdata.get('tags_object', 0) == unicode(obj.id):
+        if formdata.get('tags_object', 0) == str(obj.id):
             form = TagsForm(tag_lst, formdata)
             if form.is_valid():
                 if 'multicomplete_tags' in formdata:

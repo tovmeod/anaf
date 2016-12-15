@@ -1,6 +1,7 @@
 """
 Reports module views
 """
+from __future__ import unicode_literals
 from itertools import groupby
 from datetime import datetime
 import json
@@ -11,7 +12,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.utils.six import text_type as unicode
 from anaf.core.conf import settings
 from anaf.core.views import user_denied
 from anaf.core.models import Object, Module
@@ -178,7 +178,7 @@ def _get_report_content(report, request=None):
         xtype = xfield.get_internal_type()
         if xtype == 'ManyToManyField':
             set = sorted(set, key=lambda item: (
-                ", ".join([unicode(i) for i in getattr(item, groupname).all()])), reverse=True)
+                ", ".join([str(i) for i in getattr(item, groupname).all()])), reverse=True)
             groups, groupnames = [], []
             for obj in set:
                 for n in getattr(obj, groupname).all():
@@ -189,7 +189,7 @@ def _get_report_content(report, request=None):
                 for obj in set:
                     if n in getattr(obj, groupname).all():
                         l.append(obj)
-                groups.append((unicode(n), l))
+                groups.append((str(n), l))
 
         elif xtype == ('DateTimeField' or 'DateField'):
             set = set.order_by(groupname)
@@ -215,7 +215,7 @@ def _get_report_content(report, request=None):
                         if dt(obj) == n:
                             l.append(obj)
                         else:
-                            groups.append((unicode(n), l))
+                            groups.append((str(n), l))
                             l = []
                             n = dt(obj)
                             l.append(obj)
@@ -225,9 +225,9 @@ def _get_report_content(report, request=None):
                     groups.append(('None', ng))
 
         else:
-            set = sorted(set, key=lambda item: unicode(item.get_field_value(groupname)), reverse=True)
+            set = sorted(set, key=lambda item: str(item.get_field_value(groupname)), reverse=True)
             groups = []
-            for g, ks in groupby(set, key=lambda item: unicode(item.get_field_value(groupname))):
+            for g, ks in groupby(set, key=lambda item: str(item.get_field_value(groupname))):
                 groups.append((g, list(ks)))
             xfield = set[0]._meta.get_field_by_name(groupname)[0]
 

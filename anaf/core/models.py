@@ -1,8 +1,7 @@
 """
 Core system objects
 """
-
-from django.utils.six import text_type as unicode
+from __future__ import unicode_literals
 from django.contrib import messages
 from django.http import HttpRequest
 from django.contrib.messages.storage import default_storage
@@ -11,7 +10,7 @@ from django.utils import timezone
 from django.db import models
 from django.core.exceptions import MultipleObjectsReturned
 from django.contrib.sites.models import RequestSite
-from django.core.urlresolvers import reverse, NoReverseMatch
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 from django.utils.html import strip_tags
 from django.shortcuts import get_object_or_404
@@ -53,7 +52,7 @@ class AccessEntity(models.Model):
         try:
             return self.get_entity().__unicode__()
         except AttributeError:
-            return unicode(self.id)
+            return str(self.id)
 
     def get_absolute_url(self):
         try:
@@ -195,8 +194,8 @@ class User(AccessEntity):
         """Returns Contact name if available, username otherwise"""
         contact = self.get_contact()
         if contact:
-            return unicode(contact)
-        return unicode(self.name)
+            return contact.__unicode__()
+        return self.name
 
     def save(self, *args, **kwargs):
         """Override to automatically set User.name from attached Django User"""
@@ -517,9 +516,9 @@ class Object(models.Model):
     def __unicode__(self):
         """String representation"""
         try:
-            return unicode(self.get_related_object())
+            return str(self.get_related_object())
         except Exception:
-            return unicode(self.object_type) + " [" + unicode(self.id) + "]"
+            return '%s [%s]' % (self.object_type, self.id)
 
     def save(self, *args, **kwargs):
         """Override to auto-detect object type and set default user if unset"""
@@ -550,7 +549,7 @@ class Object(models.Model):
         """
         resources = []
         if self.nuvius_resource:
-            text = unicode(self.nuvius_resource)
+            text = self.nuvius_resource
             splits = text.split(',')
             for bit in splits:
                 res = bit.strip('#').split('.', 1)
@@ -560,10 +559,10 @@ class Object(models.Model):
     def add_nuvius_resource(self, resource_id, key=None):
         """Add a Nuvius resource to self.nuvius_resource"""
         existing = [res[0] for res in self.get_nuvius_resources()]
-        if not unicode(resource_id) in existing:
-            new = "#" + unicode(resource_id)
+        if not str(resource_id) in existing:
+            new = "#" + str(resource_id)
             if key:
-                new += "." + unicode(key)
+                new += "." + str(key)
             new += "#"
             if self.nuvius_resource:
                 self.nuvius_resource += "," + new
@@ -653,36 +652,36 @@ class Object(models.Model):
         item = {
             'id': u'',
             'name': u'',
-            'type': unicode(obj.get_human_type()),
+            'type': obj.get_human_type(),
             'content': u'',
-            'url': unicode(obj.get_absolute_url())
+            'url': obj.get_absolute_url()
         }
 
         if obj.id:
-            item['id'] = unicode(obj.id)
+            item['id'] = str(obj.id)
 
         if hasattr(obj, 'title'):
-            item['name'] = unicode(obj.title)
+            item['name'] = obj.title
         elif hasattr(obj, 'name'):
-            item['name'] = unicode(obj.name)
+            item['name'] = obj.name
         else:
-            item['name'] = unicode(obj)
+            item['name'] = obj.__unicode__()
 
         if hasattr(self, 'body'):
-            item['content'] = unicode(self.body)
+            item['content'] = self.body
         elif hasattr(self, 'details'):
-            item['content'] = unicode(self.details)
+            item['content'] = self.details
         else:
             for field in self.get_fields():
                 try:
                     value = self.get_field_value(field.name)
-                    item['content'] += ' ' + unicode(value)
+                    item['content'] += ' ' + value
                 except:
                     pass
 
         if hasattr(self, 'tags'):
             for tag in self.tags.all():
-                item['content'] += ' ' + unicode(tag)
+                item['content'] += ' ' + tag.name
 
         return item
 
@@ -698,7 +697,7 @@ class Object(models.Model):
         if action == 'delete':
             notification.format_message = "%s \"%s\" deleted."
             notification.set_format_strings(
-                [unicode(self.get_human_type(translate=False)), unicode(self)])
+                [self.get_human_type(translate=False), self.__unicode__()])
             notification.record_type = 'delete'
             updated = True
 
@@ -709,13 +708,13 @@ class Object(models.Model):
                     updated_text = ""
                     for obj in kwargs['updated']:
                         updated_text += '<a href="{0!s}" class="popup-link">{1!s}</a>'.format(
-                            obj.get_absolute_url(), unicode(obj))
+                            obj.get_absolute_url(), str(obj))
                         if kwargs['updated'].index(obj) < len(kwargs['updated']) - 1:
                             updated_text += ', '
                 else:
                     updated_text = "None"
 
-                field = unicode(kwargs['field'])
+                field = str(kwargs['field'])
 
                 if field == 'assigned':
                     notification.format_message = "%s assigned to %s.<br />"
@@ -752,7 +751,7 @@ class Object(models.Model):
         elif action == 'create':
             notification.format_message = "%s created."
             notification.set_format_strings(
-                [unicode(self.get_human_type(translate=False))])
+                [self.get_human_type(translate=False)])
             notification.record_type = 'create'
             updated = True
 
@@ -788,20 +787,19 @@ class Object(models.Model):
                     if isinstance(self._meta.get_field(field), models.TextField):
                         notification.format_message += "%s changed.<br />"
                         strings.extend(
-                            [unicode(field).replace('_', ' ').capitalize()])
+                            [str(field).replace('_', ' ').capitalize()])
                     elif isinstance(self._meta.get_field(field), models.DateTimeField):
                         notification.format_message += "%s changed from \"%s\" to \"%s\".<br />"
                         # this needs to be done properly, via getting current
                         # locale's format
                         localeformat = "j F Y, H:i"
-                        strings.extend([unicode(field).replace('_', ' ').capitalize(),
-                                        unicode(
-                                            djangodate(before, localeformat)),
-                                        unicode(djangodate(current, localeformat))])
+                        strings.extend([str(field).replace('_', ' ').capitalize(),
+                                        str(djangodate(before, localeformat)),
+                                        str(djangodate(current, localeformat))])
                     else:
                         notification.format_message += "%s changed from \"%s\" to \"%s\".<br />"
-                        strings.extend([unicode(field).replace('_', ' ').capitalize(),
-                                        unicode(before), unicode(current)])
+                        strings.extend([str(field).replace('_', ' ').capitalize(),
+                                        str(before), str(current)])
                     updated = True
 
             notification.set_format_strings(strings)
@@ -812,7 +810,7 @@ class Object(models.Model):
                 if not old_object.trash:
                     notification.format_message += " %s moved to <a href=\"%s\">%s</a>"
                     strings = notification.get_format_strings()
-                    strings.extend([unicode(self.get_human_type(translate=False)),
+                    strings.extend([self.get_human_type(translate=False),
                                     reverse('core_trash'), "Trash"])
                     notification.set_format_strings(strings)
                     notification.record_type = 'delete'
@@ -1150,17 +1148,19 @@ class UpdateRecord(models.Model):
         if author:
             # E-mail contents for e-mail notifications
             full_message = self.get_full_message()
-            html = '{0!s}:<br /><br />\n\n<a href="{1!s}">{2!s}</a> ({3!s}):<br /><br />\n\n{4!s}<br /><br />\n\n'.format(unicode(author), obj.get_absolute_url(), unicode(obj),
-                 unicode(obj.get_human_type()), full_message)
-            grittertext = '{0!s}:<br />\n\n<a href="#{1!s}">{2!s}</a> ({3!s}):<br />\n\n{4!s}<br />\n\n'.format(unicode(author), obj.get_absolute_url(), unicode(obj),
-                 unicode(obj.get_human_type()), full_message)
+            html = '{0!s}:<br /><br />\n\n<a href="{1!s}">{2!s}</a> ({3!s}):<br /><br />\n\n{4!s}<br /><br />\n\n'.\
+                format(str(author), obj.get_absolute_url(), str(obj),
+                 obj.get_human_type(), full_message)
+            grittertext = '{0!s}:<br />\n\n<a href="#{1!s}">{2!s}</a> ({3!s}):<br />\n\n{4!s}<br />\n\n'.\
+                format(str(author), obj.get_absolute_url(), str(obj),
+                 obj.get_human_type(), full_message)
             if 'request' in kwargs:
                 domain = RequestSite(kwargs['request']).domain
                 html = html.replace('href="', 'href="http://' + domain)
             body = strip_tags(html)
             signature = "This is an automated message from the Anaf. Please do not reply to this e-mail."
-            subject = "[Anaf{0!s}] {1!s}: {2!s} - {3!s}".format(' #{0:d}'.format(obj.id) if self.record_type != 'delete' else '', unicode(author),
-                                                   unicode(obj.get_human_type()), unicode(strip_tags(full_message)[:100]))
+            subject = "[Anaf{0!s}] {1!s}: {2!s} - {3!s}".format(' #{0:d}'.format(obj.id) if self.record_type != 'delete' else '', str(author),
+                                                   obj.get_human_type(), str(strip_tags(full_message)[:100]))
 
             for recipient in self.recipients.all():
                 if author and author.id == recipient.id:
@@ -1331,7 +1331,7 @@ class ModuleSetting(models.Model):
     add_for_module = staticmethod(add_for_module)
 
     def __unicode__(self):
-        return unicode(self.name) + ": " + unicode(self.value)
+        return '%s: %s' % (self.name, self.value)
 
     def save(self, *args, **kwargs):
         """Override to set label from name if undefined"""
@@ -1347,7 +1347,7 @@ class ConfigSetting(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return unicode(self.loads())
+        return str(self.loads())
 
     def loads(self):
         """Unpickle a ModuleSetting value"""
@@ -1480,13 +1480,13 @@ class Attachment(models.Model):
         ordering = ['-id']
 
     def __unicode__(self):
-        return unicode(self.filename)
+        return self.filename
 
     def get_file_type(self):
         match = re.match(
-            '.*\.(?P<extension>[a-zA-Z0-9]+)$', unicode(self.filename))
+            '.*\.(?P<extension>[a-zA-Z0-9]+)$', self.filename)
         if match:
-            return unicode(match.group('extension')).upper()
+            return str(match.group('extension')).upper()
         else:
             return ''
 

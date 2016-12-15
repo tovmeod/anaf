@@ -1,10 +1,10 @@
 """
 Administration module forms
 """
+from __future__ import unicode_literals
 from django.db import models
 from django import forms
 from django.forms import ModelChoiceField
-from django.utils.six import text_type as unicode
 from anaf.core.conf import settings
 from django.db.models import Q
 from django.core.files.storage import default_storage
@@ -109,7 +109,7 @@ class SettingsForm(forms.Form):
                     logopath = match.group('filename')
                 form_field = forms.ChoiceField(
                     label=_("Logo"), widget=forms.RadioSelect())
-                form_field.choices = ((logopath, _("Keep existing: ") + unicode(logopath)),
+                form_field.choices = ((logopath, _("Keep existing: ") + str(logopath)),
                                       ('delete', "Delete "))
                 form_field.initial = logopath
                 form_field.required = False

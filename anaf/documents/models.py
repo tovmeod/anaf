@@ -1,7 +1,7 @@
 """
 Documents module objects
 """
-from django.utils.six import text_type as unicode
+from __future__ import unicode_literals
 from django.db import models
 from django.core.urlresolvers import reverse
 from anaf.core.models import Object
@@ -53,9 +53,9 @@ class File(Object):
         return self.name
 
     def get_file_type(self):
-        match = re.match('.*\.(?P<extension>[a-z]+)', unicode(self.content))
+        match = re.match('.*\.(?P<extension>[a-z]+)', str(self.content))
         if match:
-            return unicode(match.group('extension')).upper()
+            return str(match.group('extension')).upper()
         else:
             return ''
 
@@ -63,7 +63,7 @@ class File(Object):
         return self.get_file_type() in ('PNG', 'JPG', 'JPEG', 'BMP', 'GIF', 'SVG')
 
     def get_preview_url(self):
-        return getattr(settings, 'MEDIA_URL', '/static/media/') + unicode(self.content)
+        return getattr(settings, 'MEDIA_URL', '/static/media/') + str(self.content)
 
     class Meta:
 

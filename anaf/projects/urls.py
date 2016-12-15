@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.conf.urls import url, patterns, include
 from rest_framework.routers import DefaultRouter
 from anaf.projects import newviews

@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import re
 from time import sleep
 from django.core.urlresolvers import reverse

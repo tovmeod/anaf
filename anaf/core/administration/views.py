@@ -1,7 +1,7 @@
 """
 Core module views
 """
-
+from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -19,7 +19,6 @@ from anaf.core.mail import EmailInvitation
 from anaf.core.decorators import module_admin_required, mylogin_required, handle_response_format
 
 import re
-from django.utils.six import text_type as unicode
 
 
 def _get_filter_query(args):
@@ -28,7 +27,7 @@ def _get_filter_query(args):
 
     for arg in args:
         if hasattr(Perspective, arg) and args[arg]:
-            kwargs = {unicode(arg + '__id'): int(args[arg])}
+            kwargs = {str(arg + '__id'): int(args[arg])}
             query = query & Q(**kwargs)
 
     return query

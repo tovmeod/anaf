@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import json
 from datetime import datetime
 from anaf.test import AnafTestCase

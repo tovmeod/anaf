@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from datetime import datetime
 from dajaxice.core import dajaxice_functions
 from dajax.core import Dajax

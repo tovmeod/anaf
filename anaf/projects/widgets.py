@@ -1,4 +1,5 @@
 """Projects module widgets."""
+from __future__ import unicode_literals
 
 WIDGETS = {'widget_tasks_assigned_to_me': {'title': 'Tasks Assigned To Me',
                                            'size': "95%"}}

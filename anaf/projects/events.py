@@ -3,7 +3,7 @@ Projects integration with Events module
 
 Provides Tasks and Milestones as EventRenderer instances
 """
-
+from __future__ import unicode_literals
 from models import Task, Milestone
 from anaf.core.models import Object
 from anaf.events.rendering import EventRenderer

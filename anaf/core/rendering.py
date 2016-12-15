@@ -1,8 +1,9 @@
 """
 Rendering routines
 """
+from __future__ import unicode_literals
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.six import text_type as unicode, string_types
+from django.utils.six import string_types
 from django.http import HttpResponse
 from django.contrib.sites.models import RequestSite
 from django.utils.translation import ugettext as _
@@ -88,7 +89,7 @@ def render_to_ajax(template_name, context=None, context_instance=None):
         maxmsgs = 5
         try:
             for message in list(messages.get_messages(request))[:maxmsgs]:
-                msgtext = unicode(message)
+                msgtext = str(message)
                 if 'updaterecord:' in msgtext[:13]:
                     try:
                         update_id = int(msgtext.split(':', 1)[1])
@@ -102,15 +103,15 @@ def render_to_ajax(template_name, context=None, context_instance=None):
                                         'image'] = update.author.get_contact().get_picture()
                                 except:
                                     pass
-                            message['title'] = unicode(update.author)
+                            message['title'] = str(update.author)
                         for obj in update.about.all():
                             message['message'] = "({0!s}) {1!s}:<br />{2!s}".format(
-                                obj.get_human_type(), unicode(obj), message['message'])
+                                obj.get_human_type(), str(obj), message['message'])
                         notifications.append(message)
                     except:
                         pass
                 else:
-                    notifications.append({'message': unicode(message),
+                    notifications.append({'message': str(message),
                                           'tags': message.tags})
         except:
             pass
@@ -157,7 +158,7 @@ def render_to_response(template_name, context=None, context_instance=None, respo
             template_name, context, context_instance, response_format)
 
         with codecs.open(source, encoding='utf-8', mode='w') as f:
-            pdf_string = unicode(rendered_string)
+            pdf_string = str(rendered_string)
 
             if context_instance and context_instance['request']:
                 pdf_string = pdf_string.replace(

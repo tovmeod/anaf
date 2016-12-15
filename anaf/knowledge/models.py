@@ -1,8 +1,8 @@
 """
 Knowledge base module objects
 """
+from __future__ import unicode_literals
 from unidecode import unidecode
-from django.utils.six import text_type as unicode
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.template import defaultfilters
@@ -39,7 +39,7 @@ class KnowledgeFolder(Object):
         treepath = ''
 
         for folder in self.get_tree_path():
-            slug = unicode(folder.name).replace(" ", "-")
+            slug = str(folder.name).replace(" ", "-")
             slug = defaultfilters.slugify(unidecode(slug))
             treepath += slug + "/"
         self.treepath = treepath
@@ -50,7 +50,7 @@ class KnowledgeFolder(Object):
 
     def by_path(treePath):
         """Returns a KnowledgeFolder instance matching the given treepath"""
-        folder = KnowledgeFolder.objects.filter(treepath=unicode(treePath))
+        folder = KnowledgeFolder.objects.filter(treepath=str(treePath))
         if folder:
             folder = folder[0]
         else:
@@ -87,7 +87,7 @@ class KnowledgeCategory(Object):
 
     def treewalk(self, save=True):
         """Walks up the tree to construct Category"""
-        slug = unicode(self.name).replace(" ", "-")
+        slug = self.name.replace(" ", "-")
         slug = defaultfilters.slugify(unidecode(slug))
         treepath = slug + "/"
 
@@ -143,7 +143,7 @@ class KnowledgeItem(Object):
 
     def treewalk(self, save=True):
         "Walks up the tree to construct both Item treepath and item.name from database"
-        slug = unicode(self.name).replace(" ", "-")
+        slug = self.name.replace(" ", "-")
         slug = defaultfilters.slugify(unidecode(slug))
         treepath = slug + "/"
 

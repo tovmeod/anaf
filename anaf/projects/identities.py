@@ -1,6 +1,7 @@
 """
 Handle objects from this module relevant to a Contact or a User
 """
+from __future__ import unicode_literals
 from anaf.core.models import Object
 from templatetags.projects import projects_task_list
 

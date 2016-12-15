@@ -2,9 +2,9 @@
 Sales module objects.
 
 """
+from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.six import text_type as unicode
 
 from anaf.core.models import Object, User, ModuleSetting
 from anaf.identities.models import Contact
@@ -29,7 +29,7 @@ class SaleStatus(Object):
     searchable = False
 
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -77,7 +77,7 @@ class Product(Object):
     access_inherit = ('parent', '*module', '*user')
 
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -98,7 +98,7 @@ class SaleSource(Object):
     searchable = False
 
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -131,7 +131,7 @@ class Lead(Object):
     access_inherit = ('contact', '*module', '*user')
 
     def __unicode__(self):
-        return unicode(self.contact.name)
+        return self.contact.name
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -162,7 +162,7 @@ class Opportunity(Object):
     access_inherit = ('lead', 'contact', '*module', '*user')
 
     def __unicode__(self):
-        return unicode(self.contact)
+        return self.contact.__unicode__()
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -228,7 +228,7 @@ class SaleOrder(Object):
             pass
 
     def __unicode__(self):
-        return unicode(self.reference)
+        return self.reference
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -465,7 +465,7 @@ class Subscription(Object):
             return 'Active'
 
     def __unicode__(self):
-        return unicode(self.product)
+        return 'Subscription for %s' % self.product
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -494,7 +494,7 @@ class OrderedProduct(Object):
     access_inherit = ('order', '*module', '*user')
 
     def __unicode__(self):
-        return unicode(self.product)
+        return self.product.__unicode__()
 
     def get_absolute_url(self):
         """Returns absolute URL"""

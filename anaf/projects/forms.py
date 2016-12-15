@@ -1,6 +1,7 @@
 """
 Project management forms
 """
+from __future__ import unicode_literals
 from django.forms import ModelForm, CharField, TextInput, Form, ModelChoiceField, IntegerField, ChoiceField
 
 from models import Project, Milestone, Task, TaskTimeSlot, TaskStatus

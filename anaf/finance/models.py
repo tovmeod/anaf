@@ -2,7 +2,6 @@
 Finance module objects
 """
 from __future__ import unicode_literals
-from django.utils.six import text_type as unicode
 from django.db import models
 from anaf.core.models import Object
 from anaf.identities.models import Contact
@@ -57,7 +56,7 @@ class Tax(Object):
 
     def __unicode__(self):
         # return self in unicode
-        return unicode(self.name)
+        return self.name
 
 
 class Category(Object):
@@ -70,7 +69,7 @@ class Category(Object):
     expense = 0
 
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
 
 
 class Asset(Object):
@@ -176,7 +175,7 @@ class Asset(Object):
         return self.current_value
 
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -208,7 +207,7 @@ class Account(Object):
         return bal
 
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -236,7 +235,7 @@ class Equity(Object):
         ordering = ['-purchase_date']
 
     def __unicode__(self):
-        return unicode(unicode(self.issuer) + " (" + unicode(self.equity_type) + ")")
+        return '%s (%s)' % (self.issuer, self.equity_type)
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -267,7 +266,7 @@ class Liability(Object):
         ordering = ['-due_date']
 
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
 
     def get_absolute_url(self):
         """Returns absolute URL"""
@@ -304,7 +303,7 @@ class Transaction(Object):
         ordering = ['-datetime']
 
     def __unicode__(self):
-        return unicode(self.name)
+        return self.name
 
     def get_relative_value(self):
         """Get Relative Value"""

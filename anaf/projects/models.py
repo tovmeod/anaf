@@ -1,8 +1,8 @@
 """
 Project management models
 """
+from __future__ import unicode_literals
 from datetime import datetime, timedelta
-from django.utils.six import text_type as unicode
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
@@ -261,7 +261,7 @@ class TaskTimeSlot(Object):
         ordering = ['-date_created']
 
     def __unicode__(self):
-        return unicode(self.task)
+        return 'Timeslot for %s' % self.task.__unicode__()
 
     def get_absolute_url(self):
         """Returns absolute URL

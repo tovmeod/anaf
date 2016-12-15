@@ -1,6 +1,7 @@
 """
 Project management: admin page
 """
+from __future__ import unicode_literals
 from models import Project, Milestone, Task, TaskTimeSlot, TaskStatus
 from django.contrib import admin
 

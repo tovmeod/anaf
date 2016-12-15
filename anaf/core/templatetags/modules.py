@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from coffin import template
 from django.contrib.staticfiles import finders
 from jinja2 import contextfunction, contextfilter, Markup
@@ -5,7 +6,6 @@ from anaf.core.conf import settings
 from django.utils.translation import ugettext as _
 from django.utils.encoding import smart_unicode
 from django.utils import translation
-from django.utils.six import text_type as unicode
 from django.template.defaultfilters import date as djangodate, time as djangotime
 from django.db import models
 from anaf.core.rendering import render_to_string
@@ -192,7 +192,7 @@ def pager(context, items, plength=None):
             if arg != 'page_skip':
                 values = request.GET.getlist(arg)
                 for value in values:
-                    url += unicode(arg) + "=" + value + "&"
+                    url += '%s=%s&' % (arg, value)
 
     return Markup(render_to_string('core/tags/pager',
                                    {'url': url, 'pages': pages, 'skip': skip},
@@ -253,7 +253,7 @@ def htsortlink(context, field_name):
                     if value[0] != '-':
                         sort_value = u'-{0!s}'.format(sort_value)
                 else:
-                    url += unicode(arg) + "=" + value + "&"
+                    url += '%s=%s&' % (arg, value)
     url += "sorting={0!s}".format(sort_value)
 
     return url
@@ -705,10 +705,10 @@ def currency_format(context, value, currency=None):
         try:
             currency = Currency.objects.get(is_default=True)
         except Currency.DoesNotExist:
-            return unicode(value)
+            return str(value)
     if not currency.symbol:
-        return unicode(value) + " " + currency.code
-    return currency.symbol + unicode(value)
+        return '%s %s' % (value, currency.code)
+    return '%s%s' % (currency.symbol, value)
 
 register.filter('currency_format', currency_format)
 
@@ -721,9 +721,9 @@ def currency_print(context, currency=None):
     if not currency:
         currency = Currency.objects.get(is_default=True)
     # if currency.symbol:
-    #    return unicode(currency.symbol)
+    #    return str(currency.symbol)
     # else:
-    return unicode(currency.code)
+    return str(currency.code)
 
 register.object(currency_print)
 

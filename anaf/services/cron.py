@@ -1,8 +1,8 @@
 """
 Services Cron jobs
 """
+from __future__ import unicode_literals
 import datetime
-from django.utils.six import text_type as unicode
 from django.core.urlresolvers import reverse
 from anaf.services.models import TicketQueue, TicketRecord
 
@@ -36,10 +36,10 @@ def tickets_escalate():
                     record = TicketRecord(record_type='update')
                     record.format_message = 'Ticket automatically escalated from <a href="' + \
                         reverse('services_queue_view', args=[queue.id]) + \
-                        '">' + unicode(queue) + '</a> to <a href="' + \
+                        '">' + str(queue) + '</a> to <a href="' + \
                         reverse('services_queue_view', args=[queue.next_queue.id]) + \
                         '">' + \
-                        unicode(queue.next_queue) + '</a>.'
+                        str(queue.next_queue) + '</a>.'
                     record.author = ticket.creator
                     record.save()
                     record.about.add(ticket)
