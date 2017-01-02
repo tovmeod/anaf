@@ -199,7 +199,6 @@ class ProjectsModelsTest(AnafTestCase):
         self.milestone.get_absolute_url()
 
 
-
 class TestModelTaskTimeSlot(AnafTestCase):
     username = "testuser"
     password = "password"
@@ -409,7 +408,7 @@ class ProjectsViewsNotLoggedIn(AnafTestCase):
         self.assert_protected('project-gantt', (1,))
 
 
-class ProjectsViewsTest(AnafTestCase):
+class ProjectViewsTestBase(AnafTestCase):
     username = "test"
     password = "password"
 
@@ -445,9 +444,13 @@ class ProjectsViewsTest(AnafTestCase):
         self.status2.set_default_user()
         self.status2.save()
 
-        self.milestone = Milestone(name='test', project=self.project, status=self.status)
+        self.milestone = Milestone(name='milestone test', project=self.project, status=self.status)
         self.milestone.set_default_user()
         self.milestone.save()
+
+        self.milestone2 = Milestone(name='mstone t', project=self.project, status=self.status)
+        self.milestone2.set_default_user()
+        self.milestone2.save()
 
         self.task = Task(name='test task', project=self.project, status=self.status, caller=self.contact)
         self.task.set_default_user()
@@ -473,32 +476,17 @@ class ProjectsViewsTest(AnafTestCase):
 
         self.client.login(username=self.username, password=self.password)
 
+    def assertQuerysetEqual(self, qs, values, transform=repr, ordered=True, msg=None):
+        return super(ProjectViewsTestBase, self).assertQuerysetEqual(qs, map(repr, values), transform, ordered, msg)
+
+
+class ProjectViewsTest(ProjectViewsTestBase):
     def test_index(self):
         """Test project index page with login at /projects/"""
         response = self.client.get(reverse('project-list'))
         self.assertEquals(response.status_code, 200)
 
-    def assertQuerysetEqual(self, qs, values, transform=repr, ordered=True, msg=None):
-        return super(ProjectsViewsTest, self).assertQuerysetEqual(qs, map(repr, values), transform, ordered, msg)
-
-    def test_index_owned(self):
-        """Test owned tasks page at /task/owned/"""
-        response = self.client.get(reverse('task-owned'))
-        self.assertEquals(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['tasks'], [self.task])
-        self.assertEqual(type(response.context['filters']), FilterForm)
-        # todo: actually test the form generated, if it has the right fields and querysets
-        # self.assertEqual(str(response.context['filters']), str(filterform))
-
-    def test_index_assigned(self):
-        """Test assigned tasks page at /task/assigned/"""
-        response = self.client.get(reverse('task-assigned'))
-        self.assertEquals(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['tasks'], [self.task_assigned])
-        self.assertEqual(type(response.context['filters']), FilterForm)
-
-    # Projects
-    def test_project_new(self):
+    def test_new(self):
         """Test index page with login at /projects/add/"""
         response = self.client.get(reverse('project-new'))
         self.assertEquals(response.status_code, 200)
@@ -516,7 +504,7 @@ class ProjectsViewsTest(AnafTestCase):
         self.assertEqual(project.name, form_params['name'])
         self.assertEqual(project.details, form_params['details'])
 
-    def test_project_new_to_project(self):
+    def test_new_to_project(self):
         projects_qty = Project.objects.count()
         response = self.client.get(reverse('project-new-to-project', args=[self.parent.id]))
         self.assertEquals(response.status_code, 200)
@@ -532,18 +520,98 @@ class ProjectsViewsTest(AnafTestCase):
         self.assertEqual(project.name, form_data['name'])
         self.assertEqual(project.parent_id, int(form_data['parent']))
 
-    def test_project_detail(self):
-        """Test index page with login at /projects/view/<project_id>"""
+    def test_new_to_project_invalid_project_id(self):
+        """New to project with an unexisting project will return 404
+         passing a project which the user doesn't have writing permission will
+         just render a new page with a blank parent project"""
+        projects_qty = Project.objects.count()
+        response = self.client.get(reverse('project-new-to-project', args=[5555]))
+        self.assertEquals(response.status_code, 404)
+        # todo expand to test using a parent project without writing permissions
+
+    def test_detail(self):
+        """Test project detail page"""
         response = self.client.get(reverse('project-detail', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
 
-    def test_project_gantt(self):
-        """Test gant view page for project, just makes sure it doesn't generates exceptions"""
+    def test_detail_post(self):
+        """Test a post request to project detail page"""
+        content = '<p>details update</p>'
+        self.assertEqual(self.project.updates.all().count(), 0)
+        response = self.client.post(reverse('project-detail', args=[self.project.id]),
+                                    data={'body': content})
+        self.assertRedirects(response, reverse('project-detail', args=[self.project.id]))
+        self.assertEqual(self.project.updates.all().count(), 1)
+        self.assertEqual(self.project.updates.all()[0].body, content)
+
+    def test_detail_massform_change_status(self):
+        """Test a massform post on a project detail page
+        A massform enables to change task or milestone status, move to milestone, move to trash and delete"""
+
+        # confirms that we have no tasks or milestones on the second status
+        self.assertFalse(Task.objects.filter(status=self.status2).exists())
+        self.assertFalse(Milestone.objects.filter(status=self.status2).exists())
+        data = {
+            'status': [self.status2.id], 'mass-task-%s' % self.task.id: [self.task.id],
+            'mass-milestone-%s' % self.milestone.id: [self.milestone.id],
+            'mass-task-%s' % self.task_assigned.id: [self.task_assigned.id],
+            'milestone': [], 'massform': ['massform'], 'delete': ['']
+        }
+        response = self.client.post(reverse('project-detail', args=[self.project.id]), data=data)
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(Task.objects.filter(status=self.status2).count(), 2)
+        self.assertEqual(Milestone.objects.get(id=self.milestone.id).status.id, self.status2.id)
+
+    def test_detail_massform_move_milestone(self):
+        # asserts the milestone has no tasks before we make the request
+        # note that setting a milestone to milestone should have no consequence
+        self.assertFalse(self.milestone.task_set.count())
+        data = {
+            'status': [], 'mass-task-%s' % self.task.id: [self.task.id],
+            'mass-milestone-%s' % self.milestone2.id: [self.milestone2.id],
+            'mass-task-%s' % self.task_assigned.id: [self.task_assigned.id],
+            'milestone': [self.milestone.id], 'massform': ['massform'], 'delete': ['']
+        }
+        response = self.client.post(reverse('project-detail', args=[self.project.id]), data=data)
+        self.assertEquals(response.status_code, 200)
+        self.assertEqual(self.milestone.task_set.count(), 2)
+
+    def test_detail_massform_trash(self):
+        self.assertFalse(self.task.trash)
+        self.assertFalse(self.milestone.trash)
+        data = {
+            'status': [], 'mass-task-%s' % self.task.id: [self.task.id],
+            'mass-milestone-%s' % self.milestone.id: [self.milestone.id],
+            'mass-task-%s' % self.task_assigned.id: [self.task_assigned.id],
+            'milestone': [], 'massform': ['massform'], 'delete': ['trash']
+        }
+        response = self.client.post(reverse('project-detail', args=[self.project.id]), data=data)
+        self.assertEquals(response.status_code, 200)
+        self.assertTrue(Task.objects.get(id=self.task.id).trash)
+        self.assertTrue(Milestone.objects.get(id=self.milestone.id).trash)
+
+    def test_detail_massform_delete(self):
+        data = {
+            'status': [], 'mass-task-%s' % self.task.id: [self.task.id],
+            'mass-milestone-%s' % self.milestone.id: [self.milestone.id],
+            'mass-task-%s' % self.task_assigned.id: [self.task_assigned.id],
+            'milestone': [], 'massform': ['massform'], 'delete': ['delete']
+        }
+        response = self.client.post(reverse('project-detail', args=[self.project.id]), data=data)
+        self.assertEquals(response.status_code, 200)
+        with self.assertRaises(Task.DoesNotExist):
+            Task.objects.get(id=self.task.id)
+        with self.assertRaises(Milestone.DoesNotExist):
+            Milestone.objects.get(id=self.milestone.id)
+
+    def test_gantt(self):
+        """Test gantt view page for project, just makes sure it doesn't generates exceptions"""
         # todo, create more data to improve coverage of gantt view
+        url = reverse('project-gantt', args=[self.project.id])
         response = self.client.get(reverse('project-gantt', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
 
-    def test_project_edit(self):
+    def test_edit(self):
         """Test project edit page"""
         response = self.client.get(reverse('project-edit', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
@@ -555,7 +623,7 @@ class ProjectsViewsTest(AnafTestCase):
         project = Project.objects.get(id=self.project.id)
         self.assertEqual(project.name, form_data['name'])
 
-    def test_project_delete(self):
+    def test_delete(self):
         """Test project delete page"""
         response = self.client.get(reverse('project-delete', args=[self.project.id]))
         self.assertEquals(response.status_code, 200)
@@ -574,7 +642,10 @@ class ProjectsViewsTest(AnafTestCase):
         with self.assertRaises(Project.DoesNotExist):
             Project.objects.get(id=self.project.id)
 
-    # Milestones
+    # def test_list(self):
+
+
+class MilestoneViewsTest(ProjectViewsTestBase):
     def test_milestone_add(self):
         """Test index page with login at /projects/milestone/new"""
         response = self.client.get(reverse('milestone-new'))
@@ -607,7 +678,24 @@ class ProjectsViewsTest(AnafTestCase):
         milestone = Milestone.objects.get(id=self.milestone.id)
         self.assertEqual(milestone.status_id, self.status2.id)
 
-    # Tasks
+
+class TaskViewsTest(ProjectViewsTestBase):
+    def test_index_owned(self):
+        """Test owned tasks page at /task/owned/"""
+        response = self.client.get(reverse('task-owned'))
+        self.assertEquals(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['tasks'], [self.task])
+        self.assertEqual(type(response.context['filters']), FilterForm)
+        # todo: actually test the form generated, if it has the right fields and querysets
+        # self.assertEqual(str(response.context['filters']), str(filterform))
+
+    def test_index_assigned(self):
+        """Test assigned tasks page at /task/assigned/"""
+        response = self.client.get(reverse('task-assigned'))
+        self.assertEquals(response.status_code, 200)
+        self.assertQuerysetEqual(response.context['tasks'], [self.task_assigned])
+        self.assertEqual(type(response.context['filters']), FilterForm)
+
     def test_task_add(self):
         """Test index page with login at /projects/task/new/"""
         response = self.client.get(reverse('task-new'))
@@ -659,7 +747,7 @@ class ProjectsViewsTest(AnafTestCase):
         self.assertTrue(timeslot.is_open())  # assert that timeslot correctly calculates that it is open
         self.assertTrue(task.is_being_done_by(self.user.profile))
 
-    def test_task_start2(self):
+    def test_task_start_running(self):
         # start a task which has already started
         self.assertTrue(self.task.is_being_done_by(self.user.profile))
         self.assertEqual(self.task.tasktimeslot_set.all().count(), 1)  # makes sure that the task has only one timeslot
@@ -680,18 +768,6 @@ class ProjectsViewsTest(AnafTestCase):
         response = self.client.get(reverse('task-start', args=(self.task.id,)))
         self.assertEquals(response.status_code, 405)
 
-    def test_task_stop(self):
-        self.assertTrue(self.time_slot.is_open())
-        self.assertIsNone(self.time_slot.time_to)
-        response = self.client.post(reverse('tasktimeslot-stop', args=(self.time_slot.id,)))
-        self.assertRedirects(response, reverse('task-detail', args=[self.task.id]))
-        self.time_slot = TaskTimeSlot.objects.get(id=self.time_slot.id)
-        self.assertFalse(self.time_slot.is_open())
-        self.assertIsNotNone(self.time_slot.time_to)
-
-        response = self.client.get(reverse('tasktimeslot-stop', args=(self.time_slot.id,)))
-        self.assertEquals(response.status_code, 405)
-
     def test_task_view_login(self):
         """Test index page with login at /projects/task/view/<task_id>"""
         response = self.client.get(reverse('task-detail', args=[self.task.id]))
@@ -707,18 +783,12 @@ class ProjectsViewsTest(AnafTestCase):
         response = self.client.get(reverse('task-delete', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
-    # Task Time Slots
-    def test_time_slot_add(self):
-        """Test index page with login at /projects/task/view/time/<task_id>add/"""
-        response = self.client.get(reverse('tasktimeslot-new-to-task', args=[self.task.id]))
-        self.assertEquals(response.status_code, 200)
-
-    def test_time_slot_view_login(self):
+    def test_detail(self):
         """Test index page with login at /projects/task/view/time/<time_slot_id>"""
         response = self.client.get(reverse('task-detail', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
-    def test_time_slot_edit_login(self):
+    def test_edit(self):
         """Test index page with login at /projects/task/edit/time/<time_slot_id>"""
         response = self.client.get(reverse('task-edit', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
@@ -728,46 +798,9 @@ class ProjectsViewsTest(AnafTestCase):
         response = self.client.get(reverse('task-delete', args=[self.task.id]))
         self.assertEquals(response.status_code, 200)
 
-    # Task Statuses
-    def test_task_status_new(self):
-        """Test new taskstatus page"""
-        status_qty = TaskStatus.objects.count()
-        response = self.client.get(reverse('taskstatus-new'))
-        self.assertEquals(response.status_code, 200)
-        form_data = form_to_dict(response.data['form'])
-        form_data['name'] = 'new status'
-        response = self.client.post(reverse('taskstatus-new'), data=form_data)
-        self.assertEquals(response.status_code, 302)
-        self.assertRedirects(response, reverse('projectssettings-view'))
-        self.assertEqual(TaskStatus.objects.count(), status_qty + 1)
-        status = TaskStatus.objects.get(name=form_data['name'])
-        self.assertEqual(status.name, form_data['name'])
-
     def test_task_status_view_login(self):
         """Test index page with login at /projects/task/status/view/<status_id>/"""
         response = self.client.get(reverse('task-status', args=[self.status.id]))
-        self.assertEquals(response.status_code, 200)
-
-    def test_task_status_edit_login(self):
-        """Test index page with login at /projects/task/status/edit/<status_id>/"""
-        response = self.client.get(reverse('taskstatus-edit', args=[self.status.id]))
-        self.assertEquals(response.status_code, 200)
-
-    def test_task_status_delete_login(self):
-        """Test index page with login at /projects/task/status/delete/<status_id>/"""
-        response = self.client.get(reverse('taskstatus-delete', args=[self.status.id]))
-        self.assertEquals(response.status_code, 200)
-
-    # Settings
-
-    def test_project_settings_view(self):
-        """Test index page with login at /projects/settings/view/"""
-        response = self.client.get(reverse('projectssettings-view'))
-        self.assertEquals(response.status_code, 200)
-
-    def test_project_settings_edit(self):
-        """Test index page with login at /projects/settings/edit/"""
-        response = self.client.get(reverse('projectssettings-edit'))
         self.assertEquals(response.status_code, 200)
 
     def _test_ajax_task_lookup(self, search_value, expected):
@@ -793,3 +826,60 @@ class ProjectsViewsTest(AnafTestCase):
         for fmt in ('html', 'ajax'):
             response = self.client.get(reverse('task-lookup', kwargs={'format': fmt}))
             self.assertEquals(response.status_code, 406)
+
+
+class TaskTimeSlotViewsTest(ProjectViewsTestBase):
+    def test_stop(self):
+        self.assertTrue(self.time_slot.is_open())
+        self.assertIsNone(self.time_slot.time_to)
+        response = self.client.post(reverse('tasktimeslot-stop', args=(self.time_slot.id,)))
+        self.assertRedirects(response, reverse('task-detail', args=[self.task.id]))
+        self.time_slot = TaskTimeSlot.objects.get(id=self.time_slot.id)
+        self.assertFalse(self.time_slot.is_open())
+        self.assertIsNotNone(self.time_slot.time_to)
+
+        response = self.client.get(reverse('tasktimeslot-stop', args=(self.time_slot.id,)))
+        self.assertEquals(response.status_code, 405)
+
+    def test_new_to_task(self):
+        """Test index page with login at /projects/task/view/time/<task_id>add/"""
+        response = self.client.get(reverse('tasktimeslot-new-to-task', args=[self.task.id]))
+        self.assertEquals(response.status_code, 200)
+
+
+class TaskStatusViewsTest(ProjectViewsTestBase):
+    def test_task_status_new(self):
+        """Test new taskstatus page"""
+        status_qty = TaskStatus.objects.count()
+        response = self.client.get(reverse('taskstatus-new'))
+        self.assertEquals(response.status_code, 200)
+        form_data = form_to_dict(response.data['form'])
+        form_data['name'] = 'new status'
+        response = self.client.post(reverse('taskstatus-new'), data=form_data)
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response, reverse('projectssettings-view'))
+        self.assertEqual(TaskStatus.objects.count(), status_qty + 1)
+        status = TaskStatus.objects.get(name=form_data['name'])
+        self.assertEqual(status.name, form_data['name'])
+
+    def test_task_status_edit_login(self):
+        """Test task status edit page"""
+        response = self.client.get(reverse('taskstatus-edit', args=[self.status.id]))
+        self.assertEquals(response.status_code, 200)
+
+    def test_task_status_delete_login(self):
+        """Test index page with login at /projects/task/status/delete/<status_id>/"""
+        response = self.client.get(reverse('taskstatus-delete', args=[self.status.id]))
+        self.assertEquals(response.status_code, 200)
+
+
+class ProjectsSettingsViewsTest(ProjectViewsTestBase):
+    def test_project_settings_view(self):
+        """Test index page with login at /projects/settings/view/"""
+        response = self.client.get(reverse('projectssettings-view'))
+        self.assertEquals(response.status_code, 200)
+
+    def test_project_settings_edit(self):
+        """Test index page with login at /projects/settings/edit/"""
+        response = self.client.get(reverse('projectssettings-edit'))
+        self.assertEquals(response.status_code, 200)
