@@ -230,7 +230,6 @@ class ProjectsAPITest(AnafTestCase):
                 u'user': u'http://testserver/accounts/user/%s.json' % self.user.profile.id,
             }
         }
-        self.maxDiff = None
 
     def test_unauthenticated_access_project(self):
         """Test index page at /projects"""
@@ -390,7 +389,6 @@ class ProjectsAPITest(AnafTestCase):
             u'date_created': u'2016-10-27T15:53:00', u'likes': []
         }]
         self.assertEqual(len(data), 1)
-        self.maxDiff = None
         self.assertEqual(data[0], expected[0])
     # def test_get_task_owned(self):
     # def test_get_task_assigned(self):
