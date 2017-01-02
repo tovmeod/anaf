@@ -14,38 +14,6 @@ from anaf.core.decorators import preprocess_form
 preprocess_form()
 
 
-class SettingsForm(Form):
-    """ Administration settings form """
-
-    default_task_status = ModelChoiceField(
-        label='Default Task Status', queryset=[])
-
-    def __init__(self, user, *args, **kwargs):
-        """Sets choices and initial value"""
-        super(SettingsForm, self).__init__(*args, **kwargs)
-        self.fields['default_task_status'].queryset = Object.filter_permitted(user,
-                                                                              TaskStatus.objects, mode='x')
-
-        try:
-            conf = ModuleSetting.get_for_module(
-                'anaf.projects', 'default_task_status')[0]
-            default_task_status = TaskStatus.objects.get(pk=int(conf.value))
-            self.fields['default_task_status'].initial = default_task_status.id
-        except Exception:
-            pass
-
-    def save(self):
-        "Form processor"
-        try:
-            ModuleSetting.set_for_module('default_task_status',
-                                         self.cleaned_data[
-                                             'default_task_status'].id,
-                                         'anaf.projects')
-
-        except Exception:
-            return False
-
-
 class MassActionForm(Form):
 
     """ Mass action form for Tasks and Milestones """
@@ -79,8 +47,9 @@ class MassActionForm(Form):
                                                                         ('trash', _('Move to Trash'))), required=False)
 
     def save(self, *args, **kwargs):
-        "Save override to omit empty fields"
+        """Save override to omit empty fields"""
         if self.instance and self.is_valid():
+            # todo: do not call save if no data is changed, also don't set milestone attribute if instance is milestone
             if self.cleaned_data['project']:
                 self.instance.project = self.cleaned_data['project']
             if self.cleaned_data['status']:
@@ -325,6 +294,26 @@ class TaskForm(ModelForm):
                   'priority', 'status', 'start_date', 'end_date', 'estimated_time', 'details')
 
 
+class TaskStatusForm(ModelForm):
+
+    """ TaskStatus form """
+    name = CharField(widget=TextInput(attrs={'size': '30'}))
+
+    def __init__(self, user, *args, **kwargs):
+        super(TaskStatusForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].label = _("Name")
+        self.fields['active'].label = _("Active")
+        self.fields['hidden'].label = _("Hidden")
+        self.fields['details'].label = _("Details")
+
+    class Meta:
+
+        "TaskStatus"
+        model = TaskStatus
+        fields = ('name', 'active', 'hidden', 'details')
+
+
 class TaskTimeSlotForm(ModelForm):
 
     """ Task time slot form """
@@ -389,24 +378,36 @@ class TaskTimeSlotForm(ModelForm):
         fields = ('time_from', 'time_to', 'minutes', 'details')
 
 
-class TaskStatusForm(ModelForm):
+class SettingsForm(Form):
+    """ Administration settings form """
 
-    """ TaskStatus form """
-    name = CharField(widget=TextInput(attrs={'size': '30'}))
+    default_task_status = ModelChoiceField(
+        label='Default Task Status', queryset=[])
 
     def __init__(self, user, *args, **kwargs):
-        super(TaskStatusForm, self).__init__(*args, **kwargs)
+        """Sets choices and initial value"""
+        super(SettingsForm, self).__init__(*args, **kwargs)
+        self.fields['default_task_status'].queryset = Object.filter_permitted(user,
+                                                                              TaskStatus.objects, mode='x')
 
-        self.fields['name'].label = _("Name")
-        self.fields['active'].label = _("Active")
-        self.fields['hidden'].label = _("Hidden")
-        self.fields['details'].label = _("Details")
+        try:
+            conf = ModuleSetting.get_for_module(
+                'anaf.projects', 'default_task_status')[0]
+            default_task_status = TaskStatus.objects.get(pk=int(conf.value))
+            self.fields['default_task_status'].initial = default_task_status.id
+        except Exception:
+            pass
 
-    class Meta:
+    def save(self):
+        "Form processor"
+        try:
+            ModuleSetting.set_for_module('default_task_status',
+                                         self.cleaned_data[
+                                             'default_task_status'].id,
+                                         'anaf.projects')
 
-        "TaskStatus"
-        model = TaskStatus
-        fields = ('name', 'active', 'hidden', 'details')
+        except Exception:
+            return False
 
 
 class FilterForm(ModelForm):

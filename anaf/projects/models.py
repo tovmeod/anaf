@@ -32,31 +32,11 @@ class Project(Object):
         return reverse('project-detail', args=[self.id])
 
 
-class TaskStatus(Object):
-    """ Tasks and milestones have task statuses """
-    name = models.CharField(max_length=255)
-    details = models.TextField(max_length=255, null=True, blank=True)
-    active = models.BooleanField(default=False)
-    hidden = models.BooleanField(default=False)
-
-    class Meta:
-        """TaskStatus"""
-        ordering = ('hidden', '-active', 'name')
-
-    def __unicode__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        """Returns absolute URL for the Task Status
-        :rtype str"""
-        return reverse('task-status', args=[self.id])
-
-
 class Milestone(Object):
     """ Tasks may have milestones """
     project = models.ForeignKey(Project)
     name = models.CharField(max_length=255)
-    status = models.ForeignKey(TaskStatus)
+    status = models.ForeignKey('TaskStatus')
     details = models.TextField(max_length=255, null=True, blank=True)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
@@ -93,7 +73,7 @@ class Task(Object):
     parent = models.ForeignKey('self', blank=True, null=True, related_name='child_set')
     project = models.ForeignKey(Project)
     milestone = models.ForeignKey(Milestone, null=True, blank=True)
-    status = models.ForeignKey(TaskStatus, default=26)
+    status = models.ForeignKey('TaskStatus', default=26)  # todo: use a callable to get the default
     name = models.CharField(max_length=255)
     details = models.TextField(max_length=255, null=True, blank=True)
     assigned = models.ManyToManyField(User, blank=True, null=True)
@@ -240,6 +220,26 @@ class Task(Object):
         :rtype bool
         """
         return self.tasktimeslot_set.filter(user=user, time_to__isnull=True).exists()
+
+
+class TaskStatus(Object):
+    """ Tasks and milestones have task statuses """
+    name = models.CharField(max_length=255)
+    details = models.TextField(max_length=255, null=True, blank=True)
+    active = models.BooleanField(default=False)
+    hidden = models.BooleanField(default=False)
+
+    class Meta:
+        """TaskStatus"""
+        ordering = ('hidden', '-active', 'name')
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        """Returns absolute URL for the Task Status
+        :rtype str"""
+        return reverse('task-status', args=[self.id])
 
 
 class TaskTimeSlot(Object):

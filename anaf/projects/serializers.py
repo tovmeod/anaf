@@ -11,12 +11,6 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         exclude = common_exclude
 
 
-class TaskStatusSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = TaskStatus
-        exclude = common_exclude
-
-
 class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Milestone
@@ -26,6 +20,12 @@ class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
+        exclude = common_exclude
+
+
+class TaskStatusSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TaskStatus
         exclude = common_exclude
 
 
