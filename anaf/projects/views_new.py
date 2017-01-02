@@ -76,6 +76,8 @@ def process_mass_form(f):
                     except Exception:
                         pass
                 elif 'mass-task' in key:
+                    # todo:html forms can send multiple values for each key
+                    # so I can have one mass-task key with a list of keys instead of having a prefix
                     try:
                         task = Task.objects.get(pk=request.POST[key])
                         form = MassActionForm(request.user.profile, request.POST, instance=task)
@@ -141,25 +143,30 @@ class ProjectView(ProjectsBaseViewSet):
         return Response(context, template_name='projects/project_add_typed.html')
 
     @process_mass_form
+    def detail_post(self, request, *args, **kwargs):
+        """Single Project view page with POST method
+        It will get on this view if a manual update on the project history is made or a request on a massform"""
+        project = self.get_object()
+
+        record = UpdateRecord()
+        record.record_type = 'manual'
+        form = TaskRecordForm(request.user.profile, request.POST, instance=record)
+        if form.is_valid():  # on mass action the form will not be valid
+            record = form.save()
+            record.set_user_from_request(request)
+            record.save()
+            record.about.add(project)
+            project.set_last_updated()
+            return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
+        return self.retrieve(request, *args, **kwargs)
+
     @apifirst
     def retrieve(self, request, *args, **kwargs):
         """Single Project view page"""
         project = self.get_object()
         context = _get_default_context(request)
 
-        if request.method == 'POST':
-            record = UpdateRecord()
-            record.record_type = 'manual'
-            form = TaskRecordForm(request.user.profile, request.POST, instance=record)
-            if form.is_valid():
-                record = form.save()
-                record.set_user_from_request(request)
-                record.save()
-                record.about.add(project)
-                project.set_last_updated()
-                return HttpResponseRedirect(reverse('project-detail', args=[project.id]))
-        else:
-            form = TaskRecordForm(request.user.profile)
+        form = TaskRecordForm(request.user.profile)
 
         task_query = Q(parent__isnull=True, project=project)
         if request.GET:
@@ -308,67 +315,6 @@ class ProjectView(ProjectsBaseViewSet):
         context.update({'milestones': milestones, 'tasks': tasks, 'filters': filters})
         context = preprocess_context(context)
         return Response(context, template_name='projects/index.html')
-
-
-class TaskStatusView(ProjectsBaseViewSet):
-    """
-    API endpoint that allows Task Status to be viewed or edited.
-    """
-    queryset = TaskStatus.objects.all()
-    serializer_class = TaskStatusSerializer
-
-    @list_route(methods=('GET', 'POST'))
-    @noapi
-    def new(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            form = TaskStatusForm(request.user.profile, request.POST)
-            if form.is_valid():
-                status = form.save()
-                status.set_user(request.user.profile)
-                return HttpResponseRedirect(reverse('projectssettings-view'))
-        else:
-            form = TaskStatusForm(request.user.profile)
-
-        context = _get_default_context(request)
-        context.update({'form': form})
-        return Response(context, template_name='projects/status_add.html')
-
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
-    def edit(self, request, *args, **kwargs):
-        """TaskStatus edit page"""
-        status = self.get_object()
-        context = _get_default_context(request)
-
-        if request.method == 'POST':
-            form = TaskStatusForm(request.user.profile, request.POST, instance=status)
-            if form.is_valid():
-                status = form.save()
-                return HttpResponseRedirect(reverse('task-status', args=[status.id]))
-        else:
-            form = TaskStatusForm(request.user.profile, instance=status)
-
-        context.update({'form': form, 'status': status})
-        return Response(context, template_name='projects/status_edit.html')
-
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
-    def delete(self, request, *args, **kwargs):
-        """TaskStatus delete"""
-        status = self.get_object()
-
-        if request.method == 'POST':
-            if 'trash' in request.POST:
-                status.trash = True
-                status.save(update_fields=('trash',))
-            else:
-                status.delete()
-            return HttpResponseRedirect(reverse('project-list'))
-
-        context = _get_default_context(request)
-        milestones = Object.filter_by_request(request, Milestone.objects)
-        context.update({'status': status, 'milestones': milestones})
-        return Response(context, template_name='projects/status_delete.html')
 
 
 class MilestoneView(ProjectsBaseViewSet):
@@ -841,6 +787,67 @@ class TaskView(ProjectsBaseViewSet):
         else:
             tasks = []
         return Response(tasks)
+
+
+class TaskStatusView(ProjectsBaseViewSet):
+    """
+    API endpoint that allows Task Status to be viewed or edited.
+    """
+    queryset = TaskStatus.objects.all()
+    serializer_class = TaskStatusSerializer
+
+    @list_route(methods=('GET', 'POST'))
+    @noapi
+    def new(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            form = TaskStatusForm(request.user.profile, request.POST)
+            if form.is_valid():
+                status = form.save()
+                status.set_user(request.user.profile)
+                return HttpResponseRedirect(reverse('projectssettings-view'))
+        else:
+            form = TaskStatusForm(request.user.profile)
+
+        context = _get_default_context(request)
+        context.update({'form': form})
+        return Response(context, template_name='projects/status_add.html')
+
+    @detail_route(methods=('GET', 'POST'))
+    @noapi
+    def edit(self, request, *args, **kwargs):
+        """TaskStatus edit page"""
+        status = self.get_object()
+        context = _get_default_context(request)
+
+        if request.method == 'POST':
+            form = TaskStatusForm(request.user.profile, request.POST, instance=status)
+            if form.is_valid():
+                status = form.save()
+                return HttpResponseRedirect(reverse('task-status', args=[status.id]))
+        else:
+            form = TaskStatusForm(request.user.profile, instance=status)
+
+        context.update({'form': form, 'status': status})
+        return Response(context, template_name='projects/status_edit.html')
+
+    @detail_route(methods=('GET', 'POST'))
+    @noapi
+    def delete(self, request, *args, **kwargs):
+        """TaskStatus delete"""
+        status = self.get_object()
+
+        if request.method == 'POST':
+            if 'trash' in request.POST:
+                status.trash = True
+                status.save(update_fields=('trash',))
+            else:
+                status.delete()
+            return HttpResponseRedirect(reverse('project-list'))
+
+        context = _get_default_context(request)
+        milestones = Object.filter_by_request(request, Milestone.objects)
+        context.update({'status': status, 'milestones': milestones})
+        return Response(context, template_name='projects/status_delete.html')
 
 
 class TaskTimeSlotView(ProjectsBaseViewSet):
