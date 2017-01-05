@@ -1,8 +1,6 @@
-from __future__ import unicode_literals
 from rest_framework import serializers
 from anaf.projects.models import Project, TaskStatus, Milestone, Task, TaskTimeSlot
-
-common_exclude = ('full_access', 'nuvius_resource', 'object_name', 'read_access')
+from anaf.serializers import common_exclude
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
