@@ -3,17 +3,17 @@ Sales module objects.
 
 """
 from __future__ import unicode_literals
+from datetime import datetime, timedelta, time
+from dateutil.relativedelta import relativedelta
+from decimal import Decimal, ROUND_UP
+from time import time as ttime
+
 from django.core.urlresolvers import reverse
 from django.db import models
 
 from anaf.core.models import Object, User, ModuleSetting
 from anaf.identities.models import Contact
 from anaf.finance.models import Transaction, Currency, Tax
-
-from datetime import datetime, timedelta, time
-from dateutil.relativedelta import relativedelta
-from decimal import Decimal, ROUND_UP
-from time import time as ttime
 
 
 class SaleStatus(Object):
@@ -36,7 +36,6 @@ class SaleStatus(Object):
         return reverse('sales_status_view', args=[self.id])
 
     class Meta:
-
         """SalesStatus"""
         ordering = ('hidden', '-active', 'name')
 
@@ -57,21 +56,16 @@ class Product(Object):
     )
 
     name = models.CharField(max_length=512)
-    product_type = models.CharField(max_length=32, default='good',
-                                    choices=PRODUCT_TYPES)
-    parent = models.ForeignKey('self', blank=True, null=True,
-                               related_name='child_set')
+    product_type = models.CharField(max_length=32, default='good', choices=PRODUCT_TYPES)
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='child_set')
     code = models.CharField(max_length=512, blank=True, null=True)
-    supplier = models.ForeignKey(Contact, blank=True, null=True,
-                                 on_delete=models.SET_NULL)
+    supplier = models.ForeignKey(Contact, blank=True, null=True, on_delete=models.SET_NULL)
     supplier_code = models.IntegerField(blank=True, null=True)
     buy_price = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    sell_price = models.DecimalField(
-        max_digits=20, decimal_places=2, default=0)
+    sell_price = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     stock_quantity = models.IntegerField(blank=True, null=True)
     active = models.BooleanField(default=False)
-    runout_action = models.CharField(max_length=32, blank=True, null=True,
-                                     choices=ACTION_CHOICES)
+    runout_action = models.CharField(max_length=32, blank=True, null=True, choices=ACTION_CHOICES)
     details = models.TextField(blank=True, null=True)
 
     access_inherit = ('parent', '*module', '*user')
@@ -84,7 +78,6 @@ class Product(Object):
         return reverse('sales_product_view', args=[self.id])
 
     class Meta:
-
         """Product"""
         ordering = ['code']
 
@@ -118,13 +111,10 @@ class Lead(Object):
     )
 
     contact = models.ForeignKey(Contact)
-    source = models.ForeignKey(
-        SaleSource, blank=True, null=True, on_delete=models.SET_NULL)
-    products_interested = models.ManyToManyField(
-        Product, blank=True, null=True)
+    source = models.ForeignKey(SaleSource, blank=True, null=True, on_delete=models.SET_NULL)
+    products_interested = models.ManyToManyField(Product, blank=True, null=True)
     contact_method = models.CharField(max_length=32, choices=CONTACT_METHODS)
-    assigned = models.ManyToManyField(User, related_name='sales_lead_assigned',
-                                      blank=True, null=True)
+    assigned = models.ManyToManyField(User, related_name='sales_lead_assigned', blank=True, null=True)
     status = models.ForeignKey(SaleStatus)
     details = models.TextField(blank=True, null=True)
 
@@ -138,7 +128,6 @@ class Lead(Object):
         return reverse('sales_lead_view', args=[self.id])
 
     class Meta:
-
         """Lead"""
         ordering = ['contact']
 
@@ -182,8 +171,7 @@ class SaleOrder(Object):
     opportunity = models.ForeignKey(Opportunity, blank=True, null=True, on_delete=models.SET_NULL)
     payment = models.ManyToManyField(Transaction, blank=True, null=True)
     source = models.ForeignKey(SaleSource)
-    assigned = models.ManyToManyField(
-        User, related_name='sales_saleorder_assigned', blank=True, null=True)
+    assigned = models.ManyToManyField(User, related_name='sales_saleorder_assigned', blank=True, null=True)
     status = models.ForeignKey(SaleStatus)
     currency = models.ForeignKey(Currency)
     total = models.DecimalField(max_digits=20, decimal_places=2, default=0)
@@ -216,7 +204,7 @@ class SaleOrder(Object):
         return full_ref
 
     def save(self, *args, **kwargs):
-        "Automatically set order reference"
+        """Automatically set order reference"""
         super(SaleOrder, self).save(*args, **kwargs)
         try:
             conf = ModuleSetting.get_for_module(
@@ -303,7 +291,6 @@ class SaleOrder(Object):
         return self.get_total() - self.get_total_paid()
 
     class Meta:
-
         """SaleOrder"""
         ordering = ['-datetime']
 
@@ -482,11 +469,9 @@ class OrderedProduct(Object):
     product = models.ForeignKey(Product)
     quantity = models.DecimalField(max_digits=30, decimal_places=2, default=1)
     discount = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    tax = models.ForeignKey(
-        Tax, blank=True, null=True, on_delete=models.SET_NULL)
+    tax = models.ForeignKey(Tax, blank=True, null=True, on_delete=models.SET_NULL)
     rate = models.DecimalField(max_digits=20, decimal_places=2)
-    rate_display = models.DecimalField(
-        max_digits=20, decimal_places=2, default=0)
+    rate_display = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     order = models.ForeignKey(SaleOrder)
     description = models.TextField(blank=True, null=True)
     fulfilled = models.BooleanField(default=False)
