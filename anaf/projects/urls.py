@@ -1,6 +1,6 @@
 """URLs for the Projects module
 For most part I just use the DefaultRouter for DRF, for some views I need to set manually
-This may seem verbose, and I considered to make a function ito generate the regexes,
+This may seem verbose, and I considered to make a function to generate the regexes,
 but I felt that this would hide the regex for someone searching for it, so I chose to make them explicit
 """
 from __future__ import unicode_literals
