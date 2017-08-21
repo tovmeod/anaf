@@ -240,9 +240,8 @@ def get_template_source(template_name, response_format='html'):
     template_name = response_format + "/" + template_name
 
     t = loader.get_template(template_name)
-    f = open(t.filename, 'r')
-
-    return f.read()
+    with open(t.filename, 'r') as f:
+        return f.read()
 
 
 class JinjaRenderer(TemplateHTMLRenderer):
