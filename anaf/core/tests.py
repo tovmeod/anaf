@@ -51,29 +51,30 @@ def _get_withargs_urls():
 
 
 @pytest.mark.skipif(os.environ.get('SELENIUM', False), reason='Selenium env is set to 1')
-@pytest.mark.parametrize('url', chain(_get_noargs_urls(), _get_withargs_urls()))
+# @pytest.mark.parametrize('url', chain(_get_noargs_urls(), _get_withargs_urls()))
 @pytest.mark.django_db(transaction=True)
-def test_urls_protected(url, client):
+def test_urls_protected(client):
     """All URLs should redirect to the login page or 401 Unauthorized with a few exceptions"""
-    response = client.get(url)
-    unprotected = ('/accounts/login', '/accounts/password_reset/', '/accounts/password_reset/done/',
-                   '/accounts/logo/image/ie/', '/accounts/logo/image/', '/iframe', '/accounts/denied',
-                   '/accounts/setup', '/reports/chart/0/options/1')
-    if url.endswith('/doc') or url in unprotected:
-        assert response.status_code == 200
-    elif url in ('/captcha/refresh/', '/captcha/audio/key/', '/accounts/invitation/', '/dajaxice/'):
-        # captcha lib incorrectly returns 404 not found
-        assert response.status_code == 404
-    elif url in ('/captcha/image/key@2/', '/captcha/image/key/'):
-        assert response.status_code == 410
-    elif url == '/accounts/ajax/upload/0/':
-        assert response.status_code == 405
-    else:
-        assert response.status_code in (302, 401)
-        if response.status_code == 302:
-            assert response.url in ('http://testserver/accounts/login',
-                                    'http://testserver/m/accounts/login',
-                                    'http://testserver/accounts/login/?next=/api/auth/authorize_request_token')
+    for url in chain(_get_noargs_urls(), _get_withargs_urls()):
+        response = client.get(url)
+        unprotected = ('/accounts/login', '/accounts/password_reset/', '/accounts/password_reset/done/',
+                       '/accounts/logo/image/ie/', '/accounts/logo/image/', '/iframe', '/accounts/denied',
+                       '/accounts/setup', '/reports/chart/0/options/1')
+        if url.endswith('/doc') or url in unprotected:
+            assert response.status_code == 200
+        elif url in ('/captcha/refresh/', '/captcha/audio/key/', '/accounts/invitation/', '/dajaxice/'):
+            # captcha lib incorrectly returns 404 not found
+            assert response.status_code == 404
+        elif url in ('/captcha/image/key@2/', '/captcha/image/key/'):
+            assert response.status_code == 410
+        elif url == '/accounts/ajax/upload/0/':
+            assert response.status_code == 405
+        else:
+            assert response.status_code in (302, 401)
+            if response.status_code == 302:
+                assert response.url in ('http://testserver/accounts/login',
+                                        'http://testserver/m/accounts/login',
+                                        'http://testserver/accounts/login/?next=/api/auth/authorize_request_token')
 
 
 @pytest.fixture
