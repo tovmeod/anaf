@@ -10,6 +10,8 @@ from django.template import defaultfilters
 from anaf.core.conf import settings
 from anaf.core.models import AccessEntity, User, Object
 
+namespace = 'contacts'
+
 
 class ContactField(Object):
     """Represents a field within a ContentType"""
