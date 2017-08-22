@@ -23,35 +23,10 @@ from anaf.projects.serializers import ProjectSerializer, TaskStatusSerializer, M
 from anaf.projects.views import _get_default_context, _get_filter_query
 from anaf.core.ajax.converter import preprocess_context
 from anaf.core.rendering import NOAPI_RENDERERS
+from anaf.core.decorators import apifirst
 from anaf.viewsets import AnafViewSet
 
 logger = logging.getLogger('anaf.projects')
-
-
-def noapi(viewfunc):
-    """
-    Used to mark a method on a ViewSet that it only handles the specified accepted formats.
-    """
-    def decorator(self, request, *args, **kwargs):
-        if request.accepted_renderer.format not in self.accepted_formats:
-            # This view only handles some formats (html and ajax),
-            # so if user requested json for example we return Not Acceptable
-            return Response(status=406)
-        return viewfunc(self, request, *args, **kwargs)
-    return decorator
-
-
-def apifirst(viewfunc):
-    """
-    Used to mark a method on a ViewSet to prioritize api formats.
-    So if format is not one of the accepted formats use the parent method to process request
-    """
-    def decorator(self, request, *args, **kwargs):
-        if request.accepted_renderer.format in self.accepted_formats:
-            return viewfunc(self, request, *args, **kwargs)
-        parent_viewfunc = getattr(super(self.__class__, self), viewfunc.__name__)
-        return parent_viewfunc(request, *args, **kwargs)
-    return decorator
 
 
 class ProjectsBaseViewSet(AnafViewSet):
@@ -102,8 +77,7 @@ class ProjectView(ProjectsBaseViewSet):
     serializer_class = ProjectSerializer
     template_name = 'projects/index.html'
 
-    @list_route(methods=('GET', 'POST'))
-    @noapi
+    @list_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def new(self, request, *args, **kwargs):
         """New Project page"""
         if request.method == 'POST':
@@ -119,7 +93,6 @@ class ProjectView(ProjectsBaseViewSet):
         context.update({'form': form})
         return Response(context, template_name='projects/project_add.html')
 
-    @noapi
     def new_to_project(self, request, project_id=None, *args, **kwargs):
         """New sub-Project to preselected project"""
         parent_project = None
@@ -205,8 +178,7 @@ class ProjectView(ProjectsBaseViewSet):
 
         return Response(context, template_name='projects/project_view.html')
 
-    @detail_route()
-    @noapi
+    @detail_route(renderer_classes=NOAPI_RENDERERS)
     def gantt(self, request, *args, **kwargs):
         """Project gantt view"""
         project = self.get_object()
@@ -261,8 +233,7 @@ class ProjectView(ProjectsBaseViewSet):
         context = {'jdata': jdata, 'project': project}
         return Response(context, template_name='projects/gantt_view.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def edit(self, request, *args, **kwargs):
         """Project edit page"""
         project = self.get_object()
@@ -279,8 +250,7 @@ class ProjectView(ProjectsBaseViewSet):
         context.update({'form': form, 'project': project})
         return Response(context, template_name='projects/project_edit.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def delete(self, request, *args, **kwargs):
         """Project delete"""
         project = self.get_object()
@@ -363,8 +333,7 @@ class MilestoneView(ProjectsBaseViewSet):
                         'filters': filters})
         return Response(context, template_name='projects/milestone_view.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def edit(self, request, *args, **kwargs):
         """Milestone edit page"""
         milestone = self.get_object()
@@ -381,7 +350,6 @@ class MilestoneView(ProjectsBaseViewSet):
         context.update({'form': form, 'milestone': milestone})
         return Response(context, template_name='projects/milestone_edit.html')
 
-    @noapi
     def set_status(self, request, status_id, *args, **kwargs):
         """Milestone quick set: Status"""
         # TODO: yes, it is wrong and ugly to change the task status with a GET request :(
@@ -400,8 +368,7 @@ class MilestoneView(ProjectsBaseViewSet):
 
         return self.retrieve(request, *args, **kwargs)
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def delete(self, request, *args, **kwargs):
         """Milestone delete"""
         milestone = self.get_object()
@@ -422,8 +389,7 @@ class MilestoneView(ProjectsBaseViewSet):
         context.update({'milestone': milestone, 'tasks': tasks})
         return Response(context, template_name='projects/milestone_delete.html')
 
-    @list_route(methods=('GET', 'POST'))
-    @noapi
+    @list_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def new(self, request, *args, **kwargs):
         if request.method == 'POST':
             milestone = Milestone()
@@ -439,7 +405,6 @@ class MilestoneView(ProjectsBaseViewSet):
         context.update({'form': form})
         return Response(context, template_name='projects/milestone_add.html')
 
-    @noapi
     def new_to_project(self, request, project_id=None, *args, **kwargs):
         """New milestone to preselected project"""
         project = None
@@ -506,8 +471,7 @@ class TaskView(ProjectsBaseViewSet):
         context = preprocess_context(context)
         return Response(context, template_name='projects/index_owned.html')
 
-    @list_route(methods=('GET', 'POST'))
-    @noapi
+    @list_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def new(self, request, *args, **kwargs):
         """New Task page"""
         if request.method == 'POST':
@@ -524,8 +488,7 @@ class TaskView(ProjectsBaseViewSet):
 
         return Response(context, template_name='projects/task_add.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def new_subtask(self, request, *args, **kwargs):
         """New SubTask page"""
         task = self.get_object()
@@ -545,7 +508,6 @@ class TaskView(ProjectsBaseViewSet):
 
         return Response(context, template_name='projects/task_add_subtask.html')
 
-    @noapi
     def new_to_milestone(self, request, milestone_id=None, *args, **kwargs):
         """New Task to preselected milestone"""
         milestone = None
@@ -574,7 +536,6 @@ class TaskView(ProjectsBaseViewSet):
 
         return Response(context, template_name='projects/task_add_to_milestone.html')
 
-    @noapi
     def new_to_project(self, request, project_id=None, *args, **kwargs):
         """New Task to preselected project"""
         project = None
@@ -693,8 +654,7 @@ class TaskView(ProjectsBaseViewSet):
 
         return Response(context, template_name='projects/task_view.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def edit(self, request, *args, **kwargs):
         """Task edit page"""
         task = self.get_object()
@@ -710,8 +670,7 @@ class TaskView(ProjectsBaseViewSet):
         context.update({'form': form, 'task': task})
         return Response(context, template_name='projects/task_edit.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def delete(self, request, *args, **kwargs):
         """Task delete"""
         task = self.get_object()
@@ -749,7 +708,6 @@ class TaskView(ProjectsBaseViewSet):
         return Response(TaskTimeSlotView.serializer_class(task_time_slot, context={'request': request}).data,
                         status=201)
 
-    @noapi
     def set_status(self, request, status_id, *args, **kwargs):
         """Task quick set: Status"""
         # TODO: yes, it is wrong and ugly to change the task status with a GET request :(
@@ -796,8 +754,7 @@ class TaskStatusView(ProjectsBaseViewSet):
     queryset = TaskStatus.objects.all()
     serializer_class = TaskStatusSerializer
 
-    @list_route(methods=('GET', 'POST'))
-    @noapi
+    @list_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def new(self, request, *args, **kwargs):
         if request.method == 'POST':
             form = TaskStatusForm(request.user.profile, request.POST)
@@ -812,8 +769,7 @@ class TaskStatusView(ProjectsBaseViewSet):
         context.update({'form': form})
         return Response(context, template_name='projects/status_add.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def edit(self, request, *args, **kwargs):
         """TaskStatus edit page"""
         status = self.get_object()
@@ -830,8 +786,7 @@ class TaskStatusView(ProjectsBaseViewSet):
         context.update({'form': form, 'status': status})
         return Response(context, template_name='projects/status_edit.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def delete(self, request, *args, **kwargs):
         """TaskStatus delete"""
         status = self.get_object()
@@ -887,8 +842,7 @@ class TaskTimeSlotView(ProjectsBaseViewSet):
             return HttpResponseRedirect(reverse('task-detail', args=[slot.task_id]))
         return Response(self.get_serializer(slot).data)
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def edit(self, request, *args, **kwargs):
         """TaskTimeSlot edit page"""
         slot = self.get_object()
@@ -904,7 +858,6 @@ class TaskTimeSlotView(ProjectsBaseViewSet):
         context.update({'form': form, 'task_time_slot': slot})
         return Response(context, template_name='projects/task_time_edit.html')
 
-    @noapi
     def new_to_task(self, request, task_id=None, *args, **kwargs):
         """New timeslot to preselected task"""
         task = get_object_or_404(Task, pk=task_id)
@@ -928,8 +881,7 @@ class TaskTimeSlotView(ProjectsBaseViewSet):
         context.update({'form': form, 'task': task, 'subtasks': subtasks, 'time_slots': time_slots})
         return Response(context, template_name='projects/task_time_add.html')
 
-    @detail_route(methods=('GET', 'POST'))
-    @noapi
+    @detail_route(methods=('GET', 'POST'), renderer_classes=NOAPI_RENDERERS)
     def delete(self, request, *args, **kwargs):
         """Task time slot delete"""
         task_time_slot = self.get_object()

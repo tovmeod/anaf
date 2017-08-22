@@ -17,6 +17,19 @@ from models import Module
 from rss import verify_secret_key
 
 
+def apifirst(viewfunc):
+    """
+    Used to mark a method on a ViewSet to prioritize api formats.
+    So if format is not one of the accepted formats use the parent method to process request
+    """
+    def decorator(self, request, *args, **kwargs):
+        if request.accepted_renderer.format in self.accepted_formats:
+            return viewfunc(self, request, *args, **kwargs)
+        parent_viewfunc = getattr(super(self.__class__, self), viewfunc.__name__)
+        return parent_viewfunc(request, *args, **kwargs)
+    return decorator
+
+
 def load_modules_regexp():
     modules_regexp = getattr(local, 'modules_regexp', None)
     if not modules_regexp:
