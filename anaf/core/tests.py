@@ -20,7 +20,7 @@ def _get_url_patterns():
     """Returns list of (pattern-name, pattern) tuples"""
     resolver = get_resolver(None)
     for key, value in sorted(resolver.reverse_dict.items()):
-        # sorted because xdist get's crazy if fixtures re returned in a different order
+        # sorted because xdist get's crazy if fixtures are returned in a different order
         if isinstance(key, six.string_types):
             yield key, value[0][0][1]
 
