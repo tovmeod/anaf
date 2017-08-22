@@ -352,7 +352,7 @@ class MassActionForm(forms.Form):
         self.fields['assignedto'].queryset = User.objects
         self.fields['assignedto'].label = _("Assign To:")
         # self.fields['assignedto'].widget.attrs.update({'class': 'autocomplete',
-        #                                               'callback': reverse('identities_ajax_user_lookup')})
+        #                                               'callback': reverse('contacts:ajax_user_lookup ')})
 
     def save(self, *args, **kwargs):
         """Process form"""
@@ -394,7 +394,7 @@ class LeadMassActionForm(forms.Form):
         self.fields['assignedto'].queryset = User.objects
         self.fields['assignedto'].label = _("Assign To:")
         # self.fields['assignedto'].widget.attrs.update({'class': 'autocomplete',
-        #                                                'callback': reverse('identities_ajax_user_lookup')})
+        #                                                'callback': reverse('contacts:ajax_user_lookup ')})
 
     def save(self, *args, **kwargs):
         """Process form"""
@@ -432,7 +432,7 @@ class OpportunityMassActionForm(forms.Form):
         self.fields['assignedto'].queryset = User.objects
         self.fields['assignedto'].label = _("Assign To:")
     #   self.fields['assignedto'].widget.attrs.update({'class': 'autocomplete',
-    #                                                  'callback': reverse('identities_ajax_user_lookup')})
+    #                                                  'callback': reverse('contacts:ajax_user_lookup ')})
 
     def save(self, *args, **kwargs):
         "Process form"
@@ -532,7 +532,7 @@ class ProductForm(forms.ModelForm):
         self.fields['supplier'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['supplier'].widget.attrs.update({'class': 'autocomplete',
-                                                     'callback': reverse('identities_ajax_contact_lookup')})
+                                                     'callback': reverse('contacts:location_add')})
         self.fields['supplier'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['supplier'].label = _("Supplier")
@@ -586,7 +586,7 @@ class ProductFilterForm(forms.ModelForm):
             user, Contact.objects)
         self.fields['supplier'].required = False
         self.fields['supplier'].widget.attrs.update({'class': 'autocomplete',
-                                                     'callback': reverse('identities_ajax_contact_lookup')})
+                                                     'callback': reverse('contacts:location_add')})
         self.fields['supplier'].label = _("Supplier")
 
         self.fields['active'].required = False
@@ -695,7 +695,7 @@ class SubscriptionForm(forms.ModelForm):
         self.fields['client'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['client'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['client'].label = _("Client")
@@ -740,7 +740,7 @@ class OrderForm(forms.ModelForm):
         self.fields['client'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['client'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['client'].label = _("Client")
@@ -799,7 +799,7 @@ class OrderForm(forms.ModelForm):
         self.fields['assigned'].help_text = ""
         self.fields['assigned'].label = _("Assigned to")
         self.fields['assigned'].widget.attrs.update({'class': 'multicomplete',
-                                                     'callback': reverse('identities_ajax_user_lookup')})
+                                                     'callback': reverse('contacts:ajax_user_lookup')})
 
         self.fields['datetime'].label = _("Date")
         self.fields['datetime'].widget.attrs.update(
@@ -839,7 +839,7 @@ class OrderFilterForm(forms.ModelForm):
         self.fields['client'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['client'].required = False
         self.fields['client'].label = _("Client")
 
@@ -850,7 +850,7 @@ class OrderFilterForm(forms.ModelForm):
 
         self.fields['assigned'].label = _("Assigned")
         self.fields['assigned'].widget.attrs.update({'class': 'multicomplete',
-                                                     'callback': reverse('identities_ajax_user_lookup')})
+                                                     'callback': reverse('contacts:ajax_user_lookup')})
         if 'assigned' in skip:
             del self.fields['assigned']
         else:
@@ -873,7 +873,7 @@ class LeadForm(forms.ModelForm):
         self.fields['contact'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['contact'].widget.attrs.update({'class': 'autocomplete',
-                                                    'callback': reverse('identities_ajax_contact_lookup')})
+                                                    'callback': reverse('contacts:location_add')})
         self.fields['contact'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['contact'].label = _("Contact")
@@ -891,7 +891,7 @@ class LeadForm(forms.ModelForm):
         self.fields['assigned'].help_text = ""
         self.fields['assigned'].label = _("Assigned to")
         self.fields['assigned'].widget.attrs.update({'class': 'multicomplete',
-                                                     'callback': reverse('identities_ajax_user_lookup')})
+                                                     'callback': reverse('contacts:ajax_user_lookup')})
 
         try:
             conf = ModuleSetting.get_for_module(
@@ -934,7 +934,7 @@ class LeadFilterForm(forms.ModelForm):
         self.fields['contact'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['contact'].widget.attrs.update({'class': 'autocomplete',
-                                                    'callback': reverse('identities_ajax_contact_lookup')})
+                                                    'callback': reverse('contacts:location_add')})
         self.fields['contact'].required = False
         self.fields['contact'].label = _("Contact")
 
@@ -979,7 +979,7 @@ class OpportunityForm(forms.ModelForm):
         self.fields['contact'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['contact'].widget.attrs.update({'class': 'autocomplete',
-                                                    'callback': reverse('identities_ajax_contact_lookup')})
+                                                    'callback': reverse('contacts:location_add')})
         self.fields['products_interested'].queryset = Object.filter_permitted(
             user, Product.objects)
         self.fields['products_interested'].widget.attrs.update(
@@ -995,7 +995,7 @@ class OpportunityForm(forms.ModelForm):
         self.fields['status'].queryset = Object.filter_permitted(user,
                                                                  SaleStatus.objects.filter(use_opportunities=True))
         self.fields['assigned'].widget.attrs.update({'class': 'multicomplete',
-                                                     'callback': reverse('identities_ajax_user_lookup')})
+                                                     'callback': reverse('contacts:ajax_user_lookup')})
 
         try:
             conf = ModuleSetting.get_for_module(
@@ -1059,7 +1059,7 @@ class OpportunityFilterForm(forms.ModelForm):
         self.fields['contact'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['contact'].widget.attrs.update({'class': 'autocomplete',
-                                                    'callback': reverse('identities_ajax_contact_lookup')})
+                                                    'callback': reverse('contacts:location_add')})
         self.fields['contact'].required = False
         self.fields['contact'].label = _("Contact")
 

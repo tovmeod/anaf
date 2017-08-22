@@ -4,7 +4,7 @@
 {% block title %}{% trans %}New Location{% endtrans %} | {% trans %}identities{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url identities_location_add %}" class="top-menu add-link add-link-active">{% trans %}New Location{% endtrans %}</a>
+<a href="{% url contacts:location_add  %}" class="top-menu add-link add-link-active">{% trans %}New Location{% endtrans %}</a>
 {% endblock %}
 
 {% block module_content %}

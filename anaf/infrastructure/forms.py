@@ -165,15 +165,15 @@ class ItemForm(forms.Form):
             user, Asset.objects, mode='x')
 
         self.fields['manufacturer'].widget.attrs.update({'class': 'autocomplete',
-                                                         'callback': reverse('identities_ajax_contact_lookup')})
+                                                         'callback': reverse('contacts:location_add')})
         self.fields['manufacturer'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['supplier'].widget.attrs.update({'class': 'autocomplete',
-                                                     'callback': reverse('identities_ajax_contact_lookup')})
+                                                     'callback': reverse('contacts:location_add')})
         self.fields['supplier'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
-                                                  'callback': reverse('identities_ajax_contact_lookup')})
+                                                  'callback': reverse('contacts:location_add')})
         self.fields['owner'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         #self.fields['asset'].widget.attrs.update({'class': 'autocomplete', 'callback': reverse('finance_ajax_asset_lookup')})
@@ -181,7 +181,7 @@ class ItemForm(forms.Form):
         self.fields['location'].widget.attrs.update(
             {'popuplink': reverse('infrastructure_location_add')})
         self.fields['location'].widget.attrs.update({'class': 'autocomplete',
-                                                     'callback': reverse('identities_ajax_location_lookup')})
+                                                     'callback': reverse('contacts:ajax_location_lookup')})
         self.fields['asset'].widget.attrs.update(
             {'popuplink': reverse('finance_asset_add')})
 
@@ -395,15 +395,15 @@ class FilterForm(forms.ModelForm):
             del self.fields['owner']
         else:
             self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
-                                                      'callback': reverse('identities_ajax_contact_lookup')})
+                                                      'callback': reverse('contacts:location_add')})
             self.fields['owner'].label = _("Owner")
 
         self.fields['manufacturer'].widget.attrs.update({'class': 'autocomplete',
-                                                         'callback': reverse('identities_ajax_contact_lookup')})
+                                                         'callback': reverse('contacts:location_add')})
         self.fields['manufacturer'].label = _("Manufacturer")
 
         self.fields['supplier'].widget.attrs.update({'class': 'autocomplete',
-                                                     'callback': reverse('identities_ajax_contact_lookup')})
+                                                     'callback': reverse('contacts:location_add')})
         self.fields['supplier'].label = _("Supplier")
 
         self.fields['location'].label = _("Location")

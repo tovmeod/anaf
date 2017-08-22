@@ -24,7 +24,7 @@ class UpdateRecordForm(forms.ModelForm):
         self.fields['recipients'].help_text = ""
         self.fields['recipients'].required = False
         self.fields['recipients'].widget.attrs.update({'class': 'multicomplete',
-                                                       'callback': reverse('identities_ajax_access_lookup')})
+                                                       'callback': reverse('contacts:ajax_access_lookup')})
 
         # get default permissions from settings
         try:
@@ -61,7 +61,7 @@ class UpdateRecordFilterForm(forms.ModelForm):
 
         self.fields['author'].required = False
         self.fields['author'].widget.attrs.update({'class': 'autocomplete',
-                                                  'callback': reverse('identities_ajax_user_lookup')})
+                                                  'callback': reverse('contacts:ajax_user_lookup')})
 
         self.fields['about'].queryset = Object.filter_permitted(
             user, Object.objects, mode='x')

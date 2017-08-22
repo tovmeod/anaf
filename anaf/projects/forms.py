@@ -85,7 +85,7 @@ class ProjectForm(ModelForm):
             user, Contact.objects, mode='x')
         self.fields['manager'].label = _("Manager")
         self.fields['manager'].widget.attrs.update({'class': 'autocomplete',
-                                                    'callback': reverse('identities_ajax_contact_lookup')})
+                                                    'callback': reverse('contacts:location_add')})
         self.fields['manager'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
 
@@ -93,7 +93,7 @@ class ProjectForm(ModelForm):
         self.fields['client'].queryset = Object.filter_permitted(
             user, Contact.objects, mode='x')
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['client'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
 
@@ -188,7 +188,7 @@ class TaskForm(ModelForm):
         self.fields['assigned'].label = _("Assigned")
         self.fields['assigned'].help_text = ""
         self.fields['assigned'].widget.attrs.update({'class': 'multicomplete',
-                                                     'callback': reverse('identities_ajax_user_lookup')})
+                                                     'callback': reverse('contacts:ajax_user_lookup')})
 
         self.fields['caller'].label = _("Caller")
         self.fields['caller'].queryset = Object.filter_permitted(
@@ -201,7 +201,7 @@ class TaskForm(ModelForm):
                 self.instance.caller = contact
 
         self.fields['caller'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['caller'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
 
@@ -427,7 +427,7 @@ class FilterForm(ModelForm):
                 user, Contact.objects, mode='x')
             self.fields['caller'].required = False
             self.fields['caller'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
         if 'status' in skip:
             del self.fields['status']
@@ -438,7 +438,7 @@ class FilterForm(ModelForm):
 
         self.fields['assigned'].label = _("Assigned")
         self.fields['assigned'].widget.attrs.update({'class': 'multicomplete',
-                                                     'callback': reverse('identities_ajax_user_lookup')})
+                                                     'callback': reverse('contacts:ajax_user_lookup')})
         if 'assigned' in skip:
             del self.fields['assigned']
         else:

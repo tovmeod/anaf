@@ -169,7 +169,7 @@ class MessageForm(forms.ModelForm):
         self.fields['recipients'].label = _("To")
         self.fields['recipients'].help_text = ""
         self.fields['recipients'].widget.attrs.update({'class': 'multicomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
         if stream_id:
             self.fields['stream'].initial = stream_id
@@ -212,7 +212,7 @@ class MessageReplyForm(forms.ModelForm):
         except:
             pass
         self.fields['recipients'].widget.attrs.update({'class': 'multicomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
         self.fields['stream'].widget = forms.HiddenInput()
         if stream_id:
@@ -285,7 +285,7 @@ class MailingListForm(forms.ModelForm):
         self.fields['description'].label = _("Description")
         self.fields['from_contact'].label = _("Sender Contact Details")
         self.fields['members'].widget.attrs.update({'class': 'multicomplete',
-                                                    'callback': reverse('identities_ajax_contact_lookup')})
+                                                    'callback': reverse('contacts:location_add')})
         self.fields['members'].label = _("Members")
         self.fields['members'].help_text = None
         self.fields['opt_in'].label = _("Opt-In Template")
@@ -326,7 +326,7 @@ class FilterForm(forms.ModelForm):
             self.fields['author'].queryset = Object.filter_permitted(
                 user, Contact.objects, mode='x')
             self.fields['author'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
     class Meta:
 

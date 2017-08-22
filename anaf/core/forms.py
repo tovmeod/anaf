@@ -60,7 +60,7 @@ class SubscribeForm(forms.Form):
         self.fields['subscriber'].queryset = User.objects.exclude(
             pk__in=subscriptions)
         self.fields['subscriber'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_user_lookup')})
+                                                       'callback': reverse('contacts:ajax_user_lookup ')})
 
     def save(self):
         """Subscribe"""

@@ -52,9 +52,9 @@ class EventForm(forms.ModelForm):
         self.fields['location'].queryset = Object.filter_permitted(
             user, Location.objects, mode='x')
         self.fields['location'].widget.attrs.update(
-            {'popuplink': reverse('identities_location_add')})
+            {'popuplink': reverse('contacts:location_add')})
         self.fields['location'].widget.attrs.update({'class': 'autocomplete',
-                                                     'callback': reverse('identities_ajax_location_lookup')})
+                                                     'callback': reverse('contacts:ajax_location_lookup')})
 
         self.fields['location'].label = _("Location")
         self.fields['start'].label = _("Start")

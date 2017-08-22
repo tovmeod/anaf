@@ -174,7 +174,7 @@ class TicketForm(forms.ModelForm):
         self.fields['caller'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['caller'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['caller'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['caller'].label = _("Caller")
@@ -443,7 +443,7 @@ class ServiceLevelAgreementForm(forms.ModelForm):
         self.fields['client'].queryset = Object.filter_permitted(
             user, Contact.objects, mode='x')
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['client'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['client'].label = _("Client")
@@ -451,7 +451,7 @@ class ServiceLevelAgreementForm(forms.ModelForm):
         self.fields['provider'].queryset = Object.filter_permitted(
             user, Contact.objects, mode='x')
         self.fields['provider'].widget.attrs.update({'class': 'autocomplete',
-                                                     'callback': reverse('identities_ajax_contact_lookup')})
+                                                     'callback': reverse('contacts:location_add')})
         self.fields['provider'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['provider'].label = _("Provider")
@@ -483,7 +483,7 @@ class AgentForm(forms.ModelForm):
 
         self.fields['related_user'].label = _("Related user")
         self.fields['related_user'].widget.attrs.update({'class': 'autocomplete',
-                                                         'callback': reverse('identities_ajax_user_lookup')})
+                                                         'callback': reverse('contacts:ajax_user_lookup')})
         self.fields['active'].label = _("Active")
         self.fields['occupied'].label = _("Occupied")
         self.fields['available_from'].label = _("Available from")
@@ -511,7 +511,7 @@ class FilterForm(forms.ModelForm):
             self.fields['caller'].queryset = Object.filter_permitted(
                 user, Contact.objects, mode='x')
             self.fields['caller'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
             self.fields['caller'].label = _("Caller")
 
         if 'status' in skip:
@@ -566,14 +566,14 @@ class SLAFilterForm(forms.ModelForm):
             user, Contact.objects, mode='x')
         self.fields['client'].required = False
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['client'].label = _("Client")
 
         self.fields['provider'].queryset = Object.filter_permitted(
             user, Contact.objects, mode='x')
         self.fields['provider'].required = False
         self.fields['provider'].widget.attrs.update({'class': 'autocomplete',
-                                                     'callback': reverse('identities_ajax_contact_lookup')})
+                                                     'callback': reverse('contacts:location_add')})
         self.fields['provider'].label = _("Provider")
 
         self.fields['service'].queryset = Object.filter_permitted(

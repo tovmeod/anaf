@@ -84,7 +84,7 @@ class AccountForm(forms.ModelForm):
         self.fields['owner'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
-                                                  'callback': reverse('identities_ajax_contact_lookup')})
+                                                  'callback': reverse('contacts:location_add')})
         self.fields['owner'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
 
@@ -125,7 +125,7 @@ class AccountFilterForm(forms.ModelForm):
             self.fields['owner'].label = _("Owner")
             self.fields['owner'].help_text = ""
             self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
-                                                      'callback': reverse('identities_ajax_contact_lookup')})
+                                                      'callback': reverse('contacts:location_add')})
 
     class Meta:
 
@@ -153,7 +153,7 @@ class AssetForm(forms.ModelForm):
         self.fields['owner'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
-                                                  'callback': reverse('identities_ajax_contact_lookup')})
+                                                  'callback': reverse('contacts:location_add')})
         self.fields['owner'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
 
@@ -206,7 +206,7 @@ class AssetFilterForm(forms.ModelForm):
             self.fields['owner'].label = _("Owner")
             self.fields['owner'].help_text = ""
             self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
-                                                      'callback': reverse('identities_ajax_contact_lookup')})
+                                                      'callback': reverse('contacts:location_add')})
 
     class Meta:
 
@@ -233,13 +233,13 @@ class EquityForm(forms.ModelForm):
         self.fields['owner'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
-                                                  'callback': reverse('identities_ajax_contact_lookup')})
+                                                  'callback': reverse('contacts:location_add')})
         self.fields['owner'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['issuer'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['issuer'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['issuer'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         try:
@@ -302,7 +302,7 @@ class EquityFilterForm(forms.ModelForm):
             self.fields['issuer'].help_text = ""
             self.fields['issuer'].required = False
             self.fields['issuer'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
         if 'owner' in skip:
             del self.fields['owner']
@@ -313,7 +313,7 @@ class EquityFilterForm(forms.ModelForm):
             self.fields['owner'].label = _("Owner")
             self.fields['owner'].help_text = ""
             self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
-                                                      'callback': reverse('identities_ajax_contact_lookup')})
+                                                      'callback': reverse('contacts:location_add')})
 
     class Meta:
 
@@ -345,7 +345,7 @@ class ReceivableForm(forms.ModelForm):
         self.fields['source'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['source'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['source'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
 
@@ -397,9 +397,9 @@ class TransactionForm(forms.ModelForm):
             user, Contact.objects)
 
         self.fields['source'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['target'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
 
         self.fields['source'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
@@ -505,7 +505,7 @@ class TransactionFilterForm(forms.ModelForm):
             self.fields['source'].help_text = ""
             self.fields['source'].required = False
             self.fields['source'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
         if 'target' in skip:
             del self.fields['target']
@@ -516,7 +516,7 @@ class TransactionFilterForm(forms.ModelForm):
             self.fields['target'].label = _("Target")
             self.fields['target'].help_text = ""
             self.fields['target'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
     class Meta:
 
@@ -548,7 +548,7 @@ class LiabilityForm(forms.ModelForm):
         self.fields['target'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['target'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['target'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
 
@@ -616,7 +616,7 @@ class LiabilityFilterForm(forms.ModelForm):
             self.fields['source'].help_text = ""
             self.fields['source'].required = False
             self.fields['source'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
         if 'target' in skip:
             del self.fields['target']
@@ -627,7 +627,7 @@ class LiabilityFilterForm(forms.ModelForm):
             self.fields['target'].label = _("Target")
             self.fields['target'].help_text = ""
             self.fields['target'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
 
         if 'account' in skip:
             del self.fields['account']
@@ -661,7 +661,7 @@ class SettingsForm(forms.Form):
         self.fields['my_company'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['my_company'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_contact_lookup')})
+                                                       'callback': reverse('contacts:location_add')})
         self.fields['default_account'].queryset = Object.filter_permitted(
             user, Account.objects)
 

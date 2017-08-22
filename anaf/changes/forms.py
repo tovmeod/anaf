@@ -149,7 +149,7 @@ class FilterForm(forms.ModelForm):
         else:
             self.fields['author'].required = False
             self.fields['author'].widget.attrs.update({'class': 'autocomplete',
-                                                       'callback': reverse('identities_ajax_user_lookup')})
+                                                       'callback': reverse('contacts:ajax_user_lookup ')})
             self.fields['author'].label = _("Author")
 
         if 'object' in skip:
@@ -168,7 +168,7 @@ class FilterForm(forms.ModelForm):
         else:
             self.fields['resolved_by'].required = False
             self.fields['resolved_by'].widget.attrs.update({'class': 'autocomplete',
-                                                            'callback': reverse('identities_ajax_user_lookup')})
+                                                            'callback': reverse('contacts:ajax_user_lookup ')})
             self.fields['resolved_by'].label = _("Resolved by")
 
         if 'status' in skip:

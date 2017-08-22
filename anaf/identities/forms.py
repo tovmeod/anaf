@@ -241,7 +241,7 @@ class ContactForm(forms.Form):
         self.fields['parent'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['parent'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('contacts:identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:location_add')})
         self.fields['parent'].widget.attrs.update(
             {'popuplink': reverse('contacts:contact-add')})
         self.fields['parent'].label = _('Parent')

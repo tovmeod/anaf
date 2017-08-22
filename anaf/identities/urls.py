@@ -81,17 +81,15 @@ urlpatterns = patterns('anaf.identities.views',
                        url(r'^/location/delete/(?P<location_id>\d+)(\.(?P<response_format>\w+))?/?$',
                            oldviews.location_delete, name='identities_location_delete'),
                        url(r'^/location/add(\.(?P<response_format>\w+))?/?$', oldviews.location_add,
-                           name='identities_location_add'),
+                           name='location_add'),
 
                        # AJAX callbacks
                        url(r'^/ajax/users(\.(?P<response_format>\w+))?/?$', oldviews.ajax_user_lookup,
-                           name='identities_ajax_user_lookup'),
+                           name='ajax_user_lookup'),
                        url(r'^/ajax/access(\.(?P<response_format>\w+))?/?$', oldviews.ajax_access_lookup,
                            name='ajax_access_lookup'),
                        url(r'^/ajax/contacts(\.(?P<response_format>\w+))?/?$', oldviews.ajax_contact_lookup,
-                           name='identities_ajax_contact_lookup'),
+                           name='ajax_contact_lookup'),
                        url(r'^/ajax/locations(\.(?P<response_format>\w+))?/?$', oldviews.ajax_location_lookup,
-                           name='identities_ajax_location_lookup'),
-
-                       # url(r'^/', include(router.urls)),
+                           name='ajax_location_lookup'),
                        )
