@@ -730,7 +730,7 @@ class TaskViewsTest(ProjectViewsTestBase):
         self.assertEqual(Task.objects.get(id=self.task.id).status_id, self.status.id)
         # json
         response = self.client.get(reverse('task-set-status', args=[self.task.id, self.status2.id, 'json']))
-        self.assertEquals(response.status_code, 406)
+        self.assertEquals(response.status_code, 404)
         # check if status was not changed on DB
         self.assertEqual(Task.objects.get(id=self.task.id).status_id, self.status.id)
 

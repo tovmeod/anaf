@@ -5,6 +5,8 @@ but I felt that this would hide the regex for someone searching for it, so I cho
 """
 from __future__ import unicode_literals
 from django.conf.urls import url, patterns, include
+
+from anaf.core.rendering import NOAPI_RENDERERS
 from anaf.projects import views_new
 from anaf.routers import BetterRouter
 
@@ -26,23 +28,29 @@ urlpatterns = patterns('anaf.projects.views',
 
                            # Project:
                            url(r'^project/new_to_project/(?P<project_id>[^/.]+)/$',
-                               views_new.ProjectView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               views_new.ProjectView.as_view({'get': 'new_to_project', 'post': 'new_to_project'},
+                                                             renderer_classes=NOAPI_RENDERERS),
                                name='project-new-to-project'),
                            url(r'^project/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
-                               views_new.ProjectView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               views_new.ProjectView.as_view({'get': 'new_to_project', 'post': 'new_to_project'},
+                                                             renderer_classes=NOAPI_RENDERERS),
                                name='project-new-to-project'),
 
                            # Milestone:
                            url(r'^milestone/new_to_project/(?P<project_id>[^/.]+)/$',
-                               views_new.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               views_new.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'},
+                                                               renderer_classes=NOAPI_RENDERERS),
                                name='milestone-new-to-project'),
                            url(r'^milestone/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
-                               views_new.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               views_new.MilestoneView.as_view({'get': 'new_to_project', 'post': 'new_to_project'},
+                                                               renderer_classes=NOAPI_RENDERERS),
                                name='milestone-new-to-project'),
                            url(r'^milestone/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+)/$',
-                               views_new.MilestoneView.as_view({'get': 'set_status'}), name='milestone-set-status'),
+                               views_new.MilestoneView.as_view({'get': 'set_status'}, renderer_classes=NOAPI_RENDERERS),
+                               name='milestone-set-status'),
                            url(r'^milestone/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
-                               views_new.MilestoneView.as_view({'get': 'set_status'}), name='milestone-set-status'),
+                               views_new.MilestoneView.as_view({'get': 'set_status'}, renderer_classes=NOAPI_RENDERERS),
+                               name='milestone-set-status'),
                            url(r'^milestone/(?P<pk>[^/.]+)/$',
                                views_new.MilestoneView.as_view({'get': 'retrieve', 'post': 'retrieve'}),
                                name='milestone-detail'),
@@ -52,20 +60,26 @@ urlpatterns = patterns('anaf.projects.views',
 
                            # Task:
                            url(r'^task/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+)/$',
-                               views_new.TaskView.as_view({'get': 'set_status'}), name='task-set-status'),
+                               views_new.TaskView.as_view({'get': 'set_status'}, renderer_classes=NOAPI_RENDERERS),
+                               name='task-set-status'),
                            url(r'^task/(?P<pk>[^/.]+)/setstatus/(?P<status_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
-                               views_new.TaskView.as_view({'get': 'set_status'}), name='task-set-status'),
+                               views_new.TaskView.as_view({'get': 'set_status'}, renderer_classes=NOAPI_RENDERERS),
+                               name='task-set-status'),
                            url(r'^task/new_to_milestone/(?P<milestone_id>[^/.]+)/$',
-                               views_new.TaskView.as_view({'get': 'new_to_milestone', 'post': 'new_to_milestone'}),
+                               views_new.TaskView.as_view({'get': 'new_to_milestone', 'post': 'new_to_milestone'},
+                                                          renderer_classes=NOAPI_RENDERERS),
                                name='task-new-to-milestone'),
                            url(r'^task/new_to_milestone/(?P<milestone_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
-                               views_new.TaskView.as_view({'get': 'new_to_milestone', 'post': 'new_to_milestone'}),
+                               views_new.TaskView.as_view({'get': 'new_to_milestone', 'post': 'new_to_milestone'},
+                                                          renderer_classes=NOAPI_RENDERERS),
                                name='task-new-to-milestone'),
                            url(r'^task/new_to_project/(?P<project_id>[^/.]+)/$',
-                               views_new.TaskView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               views_new.TaskView.as_view({'get': 'new_to_project', 'post': 'new_to_project'},
+                                                          renderer_classes=NOAPI_RENDERERS),
                                name='task-new-to-project'),
                            url(r'^task/new_to_project/(?P<project_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
-                               views_new.TaskView.as_view({'get': 'new_to_project', 'post': 'new_to_project'}),
+                               views_new.TaskView.as_view({'get': 'new_to_project', 'post': 'new_to_project'},
+                                                          renderer_classes=NOAPI_RENDERERS),
                                name='task-new-to-project'),
                            url(r'^task/status/(?P<status_id>[^/.]+)/$',
                                views_new.TaskView.as_view({'get': 'status', 'post': 'status'}), name='task-status'),
@@ -74,10 +88,12 @@ urlpatterns = patterns('anaf.projects.views',
 
                            # Times Slots
                            url(r'^tasktimeslot/new_to_task/(?P<task_id>[^/.]+)/$',
-                               views_new.TaskTimeSlotView.as_view({'get': 'new_to_task', 'post': 'new_to_task'}),
+                               views_new.TaskTimeSlotView.as_view({'get': 'new_to_task', 'post': 'new_to_task'},
+                                                                  renderer_classes=NOAPI_RENDERERS),
                                name='tasktimeslot-new-to-task'),
                            url(r'^tasktimeslot/new_to_task/(?P<task_id>[^/.]+).(?P<format>[a-z0-9]+)/?$',
-                               views_new.TaskTimeSlotView.as_view({'get': 'new_to_task', 'post': 'new_to_task'}),
+                               views_new.TaskTimeSlotView.as_view({'get': 'new_to_task', 'post': 'new_to_task'},
+                                                                  renderer_classes=NOAPI_RENDERERS),
                                name='tasktimeslot-new-to-task'),
 
                            # Settings
