@@ -28,7 +28,7 @@ def _get_url_patterns():
 def _get_noargs_urls():
     for name, args in _get_url_patterns():
         if not args:
-            match = (resolve(reverse(name)))
+            # match = resolve(reverse(name))
             # if match.args:
             #     print(match)
             yield reverse(name)
