@@ -248,7 +248,7 @@ class ProjectsAPITest(AnafTestCase):
         """Assert that the url exist but won't accept API format"""
         kwargs.update({'format': 'json'})
         response = self.client.get(reverse(name, kwargs=kwargs), **self.authentication_headers)
-        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.status_code, 404)
 
     def test_project_new(self):
         """Test the project-new endpoint, an API call should return 406 Not Acceptable"""
@@ -301,9 +301,6 @@ class ProjectsAPITest(AnafTestCase):
 
     def test_task_set_status(self):
         self.assert_not_acceptable_format('task-set-status', pk=self.task.id, status_id=self.taskstatus.id)
-
-    def test_tasktimeslot_edit(self):
-        self.assert_not_acceptable_format('tasktimeslot-edit', pk=self.time_slot.id)
 
     def test_get_project_list(self):
         """ Test index page api/projects """
@@ -412,6 +409,15 @@ class ProjectsAPITest(AnafTestCase):
         data = json.loads(response.content)
         self.assertDictEqual(data, self.serialized['project'])
 
+    def test_taskstatus_new(self):
+        self.assert_not_acceptable_format('taskstatus-new')
+
+    def test_taskstatus_edit(self):
+        self.assert_not_acceptable_format('taskstatus-edit', pk=self.task.id)
+
+    def test_taskstatus_delete(self):
+        self.assert_not_acceptable_format('taskstatus-delete', pk=self.task.id)
+
     def test_get_status(self):
         response = self.client.get(reverse('taskstatus-detail', kwargs={'pk': self.taskstatus.id, 'format': 'json'}),
                                    **self.authentication_headers)
@@ -439,6 +445,15 @@ class ProjectsAPITest(AnafTestCase):
         self.assertEquals(response.status_code, 200)
         data = json.loads(response.content)
         self.assertDictEqual(data, self.serialized['timeslot'])
+
+    def test_tasktimeslot_edit(self):
+        self.assert_not_acceptable_format('tasktimeslot-edit', pk=self.time_slot.id)
+
+    def test_timeslot_new_to_task(self):
+        self.assert_not_acceptable_format('tasktimeslot-new-to-task', task_id=self.task.id)
+
+    def test_timeslot_delete(self):
+        self.assert_not_acceptable_format('tasktimeslot-delete', pk=self.task.id)
 
     # Common test
     def test_common_project(self):
