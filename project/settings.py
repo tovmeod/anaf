@@ -306,11 +306,10 @@ if not TESTING:
                 }
         }
     except ImportError:
-        import tempfile
         CACHES = {
             'default': {
-                'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-                'LOCATION': tempfile.mkdtemp('django_cache'),
+                'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+                'LOCATION': 'unique-snowflake',
                 }
         }
 
