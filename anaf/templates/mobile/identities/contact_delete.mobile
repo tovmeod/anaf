@@ -6,9 +6,9 @@
 {% block module_subtitle %}{{ contact.contact_type }}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url identities_contact_view contact.id %}" class="top-menu view-link view-link">{% trans %}View{% endtrans %}</a>
-<a href="{% url identities_contact_edit contact.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
-<a href="{% url identities_contact_delete contact.id %}" class="top-menu delete-link-active">{% trans %}Delete{% endtrans %}</a>
+<a href="{% url contacts:contact_view contact.id %}" class="top-menu view-link view-link">{% trans %}View{% endtrans %}</a>
+<a href="{% url contacts:contact_edit  contact.id %}" class="top-menu edit-link">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url contacts:contact_delete contact.id %}" class="top-menu delete-link-active">{% trans %}Delete{% endtrans %}</a>
 {% endblock %}
 
 {% block sidebar_right %}
@@ -47,10 +47,10 @@
 <div>
 {% if contact.related_user.is_user() %}
     <span class="content-label">{% trans %}User{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_user_view contact.related_user_id %}"><img src="/static/icons/identities/user.gif"/> {{ contact.related_user.user.name }}</a></span>
+    <span class="content-value"><a href="{% url contacts:user_view contact.related_user_id %}"><img src="/static/icons/identities/user.gif"/> {{ contact.related_user.user.name }}</a></span>
 {% else %}
     <span class="content-label">{% trans %}Group{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_group_view contact.related_user_id %}">{{ contact.related_user.group.name }}</a></span>
+    <span class="content-value"><a href="{% url contacts:group_view contact.related_user_id %}">{{ contact.related_user.group.name }}</a></span>
 {% endif %}
 </div>
 {% endif %}

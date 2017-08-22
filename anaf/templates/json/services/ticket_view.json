@@ -8,7 +8,7 @@
          {% if ticket.caller -%}
          "caller": {
                     "id": {{ ticket.caller_id }},
-                    "url": "http://{{ site_domain }}{% url identities_contact_view ticket.caller_id %}",
+                    "url": "http://{{ site_domain }}{% url contacts:contact_view ticket.caller_id %}",
                     "name": "{{ ticket.caller }}"
                    },
          {% else -%}

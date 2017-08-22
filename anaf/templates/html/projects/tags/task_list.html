@@ -82,7 +82,7 @@
             {% if not by_assigned %}
             <td>
                 {% for assignee in task.assigned.all() %}
-                    <a href="{% url identities_user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
+                    <a href="{% url contacts:user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
                     {%- if not loop.last %},{% endif %}
                 {% endfor %}
             </td>

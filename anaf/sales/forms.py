@@ -534,7 +534,7 @@ class ProductForm(forms.ModelForm):
         self.fields['supplier'].widget.attrs.update({'class': 'autocomplete',
                                                      'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['supplier'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['supplier'].label = _("Supplier")
         self.fields['active'].initial = True
         self.fields['active'].label = _("Active")
@@ -697,7 +697,7 @@ class SubscriptionForm(forms.ModelForm):
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['client'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['client'].label = _("Client")
 
         self.fields['start'].widget.attrs.update({'class': 'datepicker'})
@@ -742,7 +742,7 @@ class OrderForm(forms.ModelForm):
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['client'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['client'].label = _("Client")
 
         self.fields['source'].queryset = Object.filter_permitted(
@@ -875,7 +875,7 @@ class LeadForm(forms.ModelForm):
         self.fields['contact'].widget.attrs.update({'class': 'autocomplete',
                                                     'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['contact'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['contact'].label = _("Contact")
 
         self.fields['source'].queryset = Object.filter_permitted(
@@ -977,7 +977,7 @@ class OpportunityForm(forms.ModelForm):
         self.fields['contact'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['contact'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['contact'].widget.attrs.update({'class': 'autocomplete',
                                                     'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['products_interested'].queryset = Object.filter_permitted(

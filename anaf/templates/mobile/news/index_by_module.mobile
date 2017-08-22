@@ -17,7 +17,7 @@
 <div class="news-record-post">
     {% set contact = profile.get_contact() %}
     <div class="news-record-label">
-        <a href="{% url identities_user_view profile.id %}" class="popup-link"><strong>{{ profile }}</strong></a>
+        <a href="{% url contacts:user_view profile.id %}" class="popup-link"><strong>{{ profile }}</strong></a>
     </div>
     <div class="news-record-body">
       <form action="" method="post" class="content-form">

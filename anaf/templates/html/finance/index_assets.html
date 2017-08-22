@@ -54,7 +54,7 @@
             <td><a href="{% url finance_asset_view asset.id %}">{{ asset.name|truncate(length=60) }}</a></td>
             <td>{{ asset.purchase_date|htdate }}</td>
             <td>{{ asset.asset_type|title() }}</td>
-            <td><a href="{% url identities_contact_view asset.owner_id %}" class="popup-link">{{ asset.owner }}</a></td>
+            <td><a href="{% url contacts:contact_view asset.owner_id %}" class="popup-link">{{ asset.owner }}</a></td>
             <td>{{ asset.current_value|number_format }}</td>
             <td>{% if asset.get_depreciation() %}{{ asset.get_depreciation()|currency_format }}{% else %}None{% endif %}</td>
         </tr>

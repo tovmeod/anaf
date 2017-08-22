@@ -5,9 +5,9 @@
 {% block module_title %}{% trans %}Settings{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url identities_type_add %}" class="top-menu add-link-active">{% trans %}New Type{% endtrans %}</a>
-<a href="{% url identities_field_add %}" class="top-menu add-link">{% trans %}New Field{% endtrans %}</a>
-<a href="{% url identities_settings_view %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
+<a href="{% url contacts:type_add %}" class="top-menu add-link-active">{% trans %}New Type{% endtrans %}</a>
+<a href="{% url contacts:field_add %}" class="top-menu add-link">{% trans %}New Field{% endtrans %}</a>
+<a href="{% url contacts:settings_view %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% endblock %}
 
 {% block module_content %}

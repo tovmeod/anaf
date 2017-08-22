@@ -57,7 +57,7 @@ class ContactType(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL of the object"""
-        return reverse('identities_index_by_type', args=[self.slug])
+        return reverse('contacts:index_by_type', args=[self.slug])
 
     def save(self, *args, **kwargs):
         """Override to auto-set slug"""
@@ -84,7 +84,7 @@ class Contact(Object):
 
     def get_absolute_url(self):
         """Returns absolute URL of the object"""
-        return reverse('identities_contact_view', args=[self.id])
+        return reverse('contacts:contact_view', args=[self.id])
 
     def get_email(self):
         """Returns the first available e-mail"""
@@ -95,12 +95,11 @@ class Contact(Object):
         return ''
 
     def get_picture(self):
-        values = self.contactvalue_set.filter(
-            field__field_type='picture', value__isnull=False)
+        values = self.contactvalue_set.filter(field__field_type='picture', value__isnull=False)
         if values and values[0].value:
             return values[0].value
 
-        return reverse('identities_contact_view_picture', args=[self.id])
+        return reverse('contacts:contact_view_picture', args=[self.id])
 
     def get_or_create_by_email(email, name=None, contact_type=None):
         """

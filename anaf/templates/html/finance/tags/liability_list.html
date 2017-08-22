@@ -31,8 +31,8 @@
             {% else %}
             <td><a href="{% url finance_liability_view liability.id %}">{{ liability.name|truncate(length=60) }}</a></td>
             {% endif %}
-            <td><a href="{% url identities_contact_view liability.source_id %}" class="popup-link">{{ liability.source }}</a></td>
-            <td><a href="{% url identities_contact_view liability.target_id %}" class="popup-link">{{ liability.target }}</a></td>
+            <td><a href="{% url contacts:contact_view liability.source_id %}" class="popup-link">{{ liability.source }}</a></td>
+            <td><a href="{% url contacts:contact_view liability.target_id %}" class="popup-link">{{ liability.target }}</a></td>
             <td><a href="{% url finance_account_view liability.account_id %}" class="popup-link">{{ liability.account }}</a></td>
             <td>{{ liability.value|number_format }}</td>
         </tr>

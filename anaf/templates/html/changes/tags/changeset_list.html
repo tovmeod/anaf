@@ -7,7 +7,7 @@
     <span class="content-list-item-name">
         <a href="{% url changes_set_view changeset.id %}">{{ changeset }}</a>
         {% if changeset.author %}
-        <a href="{% url identities_user_view changeset.author.id %}" class="author-link small popup-link">{{ changeset.author }}</a>
+        <a href="{% url contacts:user_view changeset.author.id %}" class="author-link small popup-link">{{ changeset.author }}</a>
         {% endif %}
         <span class="content-list-item-group">
             {% set url = changeset.object.get_absolute_url() %}

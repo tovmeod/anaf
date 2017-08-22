@@ -101,13 +101,13 @@
         <div class="contact-picture-frame">
         {% if contact %}
           {% set picture = contact.get_picture() %}
-          <a href="{% url identities_user_view comment.author.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
+          <a href="{% url contacts:user_view comment.author.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
         {% else %}
-          <a href="{% url identities_user_view comment.author.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
+          <a href="{% url contacts:user_view comment.author.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
         {% endif %}
         </div>
         <div class="comment-body">
-          <a href="{% url identities_user_view comment.author.id %}" class="popup-link"><strong>{{ comment.author }}</strong></a>&nbsp;&nbsp;
+          <a href="{% url contacts:user_view comment.author.id %}" class="popup-link"><strong>{{ comment.author }}</strong></a>&nbsp;&nbsp;
           {{ comment.body }}
         </div>
         <div class="comment-details">
@@ -126,9 +126,9 @@
           <div class="contact-picture-frame">
           {% if contact %}
             {% set picture = contact.get_picture() %}
-            <a href="{% url identities_user_view profile.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
+            <a href="{% url contacts:user_view profile.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
           {% else %}
-            <a href="{% url identities_user_view profile.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
+            <a href="{% url contacts:user_view profile.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
           {% endif %}
           </div>
           <div class="comment-form-box">

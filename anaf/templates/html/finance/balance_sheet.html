@@ -19,7 +19,7 @@
 {% if company %}
 
 <span class="spaced-h spaced-v">
-    {% trans %}Balance Sheet for{% endtrans %} <a href="{% url identities_contact_view company.id %}" class="popup-link">{{ company }}</a> {% trans %}as of{% endtrans %} {{ today|htdate }}
+    {% trans %}Balance Sheet for{% endtrans %} <a href="{% url contacts:contact_view company.id %}" class="popup-link">{{ company }}</a> {% trans %}as of{% endtrans %} {{ today|htdate }}
     <br />
 </span>
 <div>

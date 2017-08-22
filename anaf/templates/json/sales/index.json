@@ -11,7 +11,7 @@
          {% if order.client -%}
          "client": {
                     "id": {{ order.client_id }},
-                    "url": "{% url identities_contact_view order.client_id %}",
+                    "url": "{% url contacts:contact_view order.client_id %}",
                     "name": "{{ order.client }}"
                    },
          {% else -%}
@@ -21,7 +21,7 @@
             {%- for assignee in order.assigned.all() %}
                {
                 "id": {{ assignee.id }},
-                "url": "{% url identities_user_view assignee.id %}",
+                "url": "{% url contacts:user_view assignee.id %}",
                 "name": "{{ assignee }}"
                {% if loop.last %}}{% else %}},{% endif %}
             {%- endfor -%}

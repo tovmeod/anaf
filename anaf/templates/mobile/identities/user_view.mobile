@@ -6,7 +6,7 @@
 {% block module_subtitle %}{% trans %}User{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url identities_user_view profile.id %}" class="top-menu view-link view-link-active">{% trans %}View{% endtrans %}</a>
+<a href="{% url contacts:user_view profile.id %}" class="top-menu view-link view-link-active">{% trans %}View{% endtrans %}</a>
 {% endblock %}
 
 {% block sidebar_right %}
@@ -29,7 +29,7 @@
     <span class="content-label">{% trans %}Other Groups{% endtrans %}:</span>
     <span class="content-value">
         {% for group in profile.other_groups.all() %}
-        <a href="{% url identities_group_view group.id %}">{{ group }}</a>
+        <a href="{% url contacts:group_view group.id %}">{{ group }}</a>
         <br />
         {% endfor %}
     </span>
@@ -40,7 +40,7 @@
 {% for contact in contacts %}
 <div>
     <span class="content-label">
-        <a href="{% url identities_contact_view contact.id %}"><strong>{% trans %}Contact{% endtrans %}:</strong></a>
+        <a href="{% url contacts:contact_view contact.id %}"><strong>{% trans %}Contact{% endtrans %}:</strong></a>
     </span>
     <span class="content-details"></span>
 </div>
@@ -61,9 +61,9 @@
 {% endif %}
 {% if contact.related_user %}
 {% if contact.related_user.is_user() %}
-    <span class="large">{% trans %}User{% endtrans %}: <img src="/static/icons/identities/user.gif"/> <a href="{% url identities_user_view contact.related_user_id %}">{{ contact.related_user.user.name }}</a></span>
+    <span class="large">{% trans %}User{% endtrans %}: <img src="/static/icons/identities/user.gif"/> <a href="{% url contacts:user_view contact.related_user_id %}">{{ contact.related_user.user.name }}</a></span>
 {% else %}
-    <span class="large">{% trans %}Group{% endtrans %}: <a href="{% url identities_group_view contact.related_user_id %}">{{ contact.related_user.group.name }}</a></span>
+    <span class="large">{% trans %}Group{% endtrans %}: <a href="{% url contacts:group_view contact.related_user_id %}">{{ contact.related_user.group.name }}</a></span>
 {% endif %}
 {% endif %}
 

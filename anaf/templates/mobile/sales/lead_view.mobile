@@ -26,7 +26,7 @@
     {% if lead.assigned.count() %}
 	<span class="content-value">
         {% for assignee in lead.assigned.all() %}
-        <a href="{% url identities_user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
+        <a href="{% url contacts:user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
         <br />
         {% endfor %}
 	{% else %}
@@ -37,7 +37,7 @@
 {% if lead.contact %}
 <div>
     <span class="content-label">{% trans %}Contact{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view lead.contact.id %}" class="popup-link">{{ lead.contact }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view lead.contact.id %}" class="popup-link">{{ lead.contact }}</a></span>
 </div>
 {% endif %}
 
@@ -89,16 +89,16 @@
         <div class="contact-picture-frame">
         {% if contact %}
           {% set picture = contact.get_picture() %}
-          <a href="{% url identities_user_view record.author.id %}"><img class="contact-picture" src="{{ picture|htsafe }}" alt="" align="left" /></a>
+          <a href="{% url contacts:user_view record.author.id %}"><img class="contact-picture" src="{{ picture|htsafe }}" alt="" align="left" /></a>
         {% else %}
-          <a href="{% url identities_user_view record.author.id %}"><img class="contact-picture" src="/static/messaging/pic.png" alt="" align="left" /></a>
+          <a href="{% url contacts:user_view record.author.id %}"><img class="contact-picture" src="/static/messaging/pic.png" alt="" align="left" /></a>
         {% endif %}
         </div>
         {% if record.record_type == 'manual' %}
-        <a href="{% url identities_user_view record.author.id %}" class="popup-link"><strong>{{ record.author }}</strong></a>
+        <a href="{% url contacts:user_view record.author.id %}" class="popup-link"><strong>{{ record.author }}</strong></a>
         <span class="spaced-h small light">{{ record.date_created|htdatetime }}</span>
         {% else %}
-        <a href="{% url identities_user_view record.author.id %}" class="popup-link">{{ record.author }}</a> <span class="small"><em>[{% trans %}Auto{% endtrans %}]</em></span>
+        <a href="{% url contacts:user_view record.author.id %}" class="popup-link">{{ record.author }}</a> <span class="small"><em>[{% trans %}Auto{% endtrans %}]</em></span>
         <span class="spaced-h small light">{{ record.date_created|htdatetime }}</span>
         {% endif %}
     </div>

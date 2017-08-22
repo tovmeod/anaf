@@ -24,7 +24,7 @@
 {% if subscription.client_id %}
 <div>
     <span class="content-label">{% trans %}Client{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view subscription.client_id %}" class="popup-link">{{ subscription.client }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view subscription.client_id %}" class="popup-link">{{ subscription.client }}</a></span>
 </div>
 {% endif %}
 

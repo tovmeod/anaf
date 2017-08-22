@@ -36,8 +36,8 @@
 {% if product.source %}
 <div>
     <span class="content-label">{% trans %}Supplier{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view product.supplier.id %}" class="popup-link">{{ product.supplier_code }}</a></span>
-    <span class="content-value"><a href="{% url identities_contact_view product.supplier.id %}" class="popup-link">{{ product.supplier.name }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view product.supplier.id %}" class="popup-link">{{ product.supplier_code }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view product.supplier.id %}" class="popup-link">{{ product.supplier.name }}</a></span>
 </div>
 {% endif %}
 

@@ -53,8 +53,8 @@
         <tr class="content-list-item-{{ loop.cycle('odd', 'even') }}">
             <td><a href = "{% url finance_equity_view equity.id %}">{{ equity.equity_type|title() }}</a></td>
             <td>{{ equity.purchase_date|htdate }}</a></td>
-            <td><a href = "{% url identities_contact_view equity.owner_id %}" class="popup-link">{{ equity.owner }}</a></td>
-            <td><a href = "{% url identities_contact_view equity.issuer_id %}" class="popup-link">{{ equity.issuer }}</a></td>
+            <td><a href = "{% url contacts:contact_view equity.owner_id %}" class="popup-link">{{ equity.owner }}</a></td>
+            <td><a href = "{% url contacts:contact_view equity.issuer_id %}" class="popup-link">{{ equity.issuer }}</a></td>
             <td>{{ equity.amount }}</td>
             <td>{{ equity.sell_price|number_format }}</td>
         </tr>

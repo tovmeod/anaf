@@ -20,7 +20,7 @@
 {% if profile.default_group %}
 <div>
     <span class="content-label">{% trans %}Default Group{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_group_view profile.default_group.id %}">{{ profile.default_group }}</a></span>
+    <span class="content-value"><a href="{% url contacts:group_view profile.default_group.id %}">{{ profile.default_group }}</a></span>
 </div>
 {% endif %}
 <div>
@@ -28,7 +28,7 @@
     <span class="content-label">{% trans %}Other Groups{% endtrans %}:</span>
     <span class="content-value">
         {% for group in profile.other_groups.all() %}
-        <a href="{% url identities_group_view group.id %}">{{ group }}</a>
+        <a href="{% url contacts:group_view group.id %}">{{ group }}</a>
         <br />
         {% endfor %}
     </span>
@@ -39,13 +39,13 @@
 {% for contact in contacts %}
 <div>
     <span class="content-label">
-        <a href="{% url identities_contact_view contact.id %}"><strong>{% trans %}Contact{% endtrans %}:</strong></a>
+        <a href="{% url contacts:contact_view contact.id %}"><strong>{% trans %}Contact{% endtrans %}:</strong></a>
     </span>
     <span class="content-details"></span>
 </div>
 <div>
     <span class="content-label">{% trans %}Name{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view contact.id %}">{{ contact.name }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view contact.id %}">{{ contact.name }}</a></span>
 </div>
 {% for value in contact.contactvalue_set.all() %}
 <div>

@@ -69,7 +69,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login', {'username': self.username,
                                                         'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(reverse('identities_index'))
+        response = self.client.get(reverse('contacts:index'))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_users_login(self):
@@ -77,7 +77,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login', {'username': self.username,
                                                         'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(reverse('identities_index_users'))
+        response = self.client.get(reverse('contacts:index_users'))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_groups_login(self):
@@ -85,7 +85,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login', {'username': self.username,
                                                         'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(reverse('identities_index_groups'))
+        response = self.client.get(reverse('contacts:index_groups'))
         self.assertEquals(response.status_code, 200)
 
     # Contact types
@@ -94,7 +94,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login', {'username': self.username,
                                                         'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(reverse('identities_type_add'))
+        response = self.client.get(reverse('contacts:type_add'))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_type_view(self):
@@ -103,7 +103,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_type_view', args=[self.contact_type.id]))
+            reverse('contacts:type_view', args=[self.contact_type.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_type_edit(self):
@@ -112,7 +112,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_type_edit', args=[self.contact_type.id]))
+            reverse('contacts:type_edit', args=[self.contact_type.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_type_delete(self):
@@ -121,7 +121,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_type_delete', args=[self.contact_type.id]))
+            reverse('contacts:type_delete', args=[self.contact_type.id]))
         self.assertEquals(response.status_code, 200)
 
     # Contact fields
@@ -130,7 +130,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login', {'username': self.username,
                                                         'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(reverse('identities_field_add'))
+        response = self.client.get(reverse('contacts:field_add'))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_field_view(self):
@@ -139,7 +139,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_field_view', args=[self.field.id]))
+            reverse('contacts:field_view', args=[self.field.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_field_edit(self):
@@ -148,7 +148,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_field_edit', args=[self.field.id]))
+            reverse('contacts:field_edit', args=[self.field.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_field_delete(self):
@@ -157,7 +157,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_field_delete', args=[self.field.id]))
+            reverse('contacts:field_delete', args=[self.field.id]))
         self.assertEquals(response.status_code, 200)
 
     # Contacts
@@ -166,7 +166,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login', {'username': self.username,
                                                         'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(reverse('identities_contact_add'))
+        response = self.client.get(reverse('contacts:contact-add'))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_add_by_type(self):
@@ -175,7 +175,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_contact_add_typed', args=[self.contact_type.id]))
+            reverse('contacts:contact_add_typed', args=[self.contact_type.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_me(self):
@@ -183,7 +183,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login', {'username': self.username,
                                                         'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(reverse('identities_contact_me'))
+        response = self.client.get(reverse('contacts:contact_me'))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_view(self):
@@ -192,7 +192,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_contact_view', args=[self.contact.id]))
+            reverse('contacts:contact_view', args=[self.contact.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_edit(self):
@@ -200,8 +200,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login', {'username': self.username,
                                                         'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(
-            reverse('identities_contact_edit', args=[self.contact.id]))
+        response = self.client.get(reverse('contacts:contact_edit', args=[self.contact.id]))
         self.assertEquals(response.status_code, 200)
 
     def test_contact_delete(self):
@@ -210,7 +209,7 @@ class IdentitiesViewsTest(TestCase):
                                                         'password': self.password})
         self.assertRedirects(response, '/')
         response = self.client.get(
-            reverse('identities_contact_delete', args=[self.contact.id]))
+            reverse('contacts:contact_delete', args=[self.contact.id]))
         self.assertEquals(response.status_code, 200)
 
     # Settings
@@ -219,7 +218,7 @@ class IdentitiesViewsTest(TestCase):
         response = self.client.post('/accounts/login',
                                     {'username': self.username, 'password': self.password})
         self.assertRedirects(response, '/')
-        response = self.client.get(reverse('identities_settings_view'))
+        response = self.client.get(reverse('contacts:settings_view'))
         self.assertEquals(response.status_code, 200)
 
     ######################################
@@ -233,99 +232,99 @@ class IdentitiesViewsTest(TestCase):
 
     def test_contact_users_out(self):
         "Testing /contacts/users/"
-        response = self.client.get(reverse('identities_index_users'))
+        response = self.client.get(reverse('contacts:index_users'))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_groups_out(self):
         "Testing /contacts/groups/"
-        response = self.client.get(reverse('identities_index_groups'))
+        response = self.client.get(reverse('contacts:index_groups'))
         self.assertRedirects(response, reverse('user_login'))
 
     # Contact types
     def test_contact_type_add_out(self):
         "Testing /contacts/types/add/"
-        response = self.client.get(reverse('identities_type_add'))
+        response = self.client.get(reverse('contacts:type_add'))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_type_view_out(self):
         "Testing /contacts/type/view/(?P<type_id>\d+)"
         response = self.client.get(
-            reverse('identities_type_view', args=[self.contact_type.id]))
+            reverse('contacts:type_view', args=[self.contact_type.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_type_edit_out(self):
         "Testing /contacts/type/edit/(?P<type_id>\d+)"
         response = self.client.get(
-            reverse('identities_type_edit', args=[self.contact_type.id]))
+            reverse('contacts:type_edit', args=[self.contact_type.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_type_delete_out(self):
         "Testing /contacts/type/delete/(?P<type_id>\d+)"
         response = self.client.get(
-            reverse('identities_type_delete', args=[self.contact_type.id]))
+            reverse('contacts:type_delete', args=[self.contact_type.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     # Contact fields
     def test_contact_field_add_out(self):
         "Testing /contacts/field/add"
-        response = self.client.get(reverse('identities_field_add'))
+        response = self.client.get(reverse('contacts:field_add'))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_field_view_out(self):
         "Testing /contacts/field/view/(?P<field_id>\d+)"
         response = self.client.get(
-            reverse('identities_field_view', args=[self.field.id]))
+            reverse('contacts:field_view', args=[self.field.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_field_edit_out(self):
         "Testing /contacts/field/edit/(?P<field_id>\d+)"
         response = self.client.get(
-            reverse('identities_field_edit', args=[self.field.id]))
+            reverse('contacts:field_edit', args=[self.field.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_field_delete_out(self):
         "Testing /contacts/field/delete/(?P<field_id>\d+)"
         response = self.client.get(
-            reverse('identities_field_delete', args=[self.field.id]))
+            reverse('contacts:field_delete', args=[self.field.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     # Contacts
     def test_contact_add_out(self):
-        "Testing /contacts/contact/add/"
-        response = self.client.get(reverse('identities_contact_add'))
-        self.assertRedirects(response, reverse('user_login'))
+        """Testing /contacts/contact/add/"""
+        response = self.client.get(reverse('contacts:contact-add'))
+        self.assertEqual(response.status_code, 401)
 
     def test_contact_add_by_type_out(self):
         "Testing /contacts/contact/add/<type_id>/"
         response = self.client.get(
-            reverse('identities_contact_add_typed', args=[self.contact_type.id]))
+            reverse('contacts:contact_add_typed', args=[self.contact_type.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_me_out(self):
         "Testing /contacts/me/"
-        response = self.client.get(reverse('identities_contact_me'))
+        response = self.client.get(reverse('contacts:contact_me'))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_view_out(self):
         "Testing /contacts/contact/view/<contact_id>/"
         response = self.client.get(
-            reverse('identities_contact_view', args=[self.contact.id]))
+            reverse('contacts:contact_view', args=[self.contact.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_edit_out(self):
         "Testing /contacts/contact/edit/<contact_id>/"
-        response = self.client.get(
-            reverse('identities_contact_edit', args=[self.contact.id]))
+        url = reverse('contacts:contact_edit', args=[self.contact.id])
+        response = self.client.get(url)
         self.assertRedirects(response, reverse('user_login'))
 
     def test_contact_delete_out(self):
         "Testing /contacts/contact/delete/<contact_id>/"
         response = self.client.get(
-            reverse('identities_contact_delete', args=[self.contact.id]))
+            reverse('contacts:contact_delete', args=[self.contact.id]))
         self.assertRedirects(response, reverse('user_login'))
 
     # Settings
     def test_contact_settings_view_out(self):
         "Testing /contacts/settings/view/"
-        response = self.client.get(reverse('identities_settings_view'))
+        response = self.client.get(reverse('contacts:settings_view'))
         self.assertRedirects(response, reverse('user_login'))

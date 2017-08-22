@@ -176,7 +176,7 @@ class TicketForm(forms.ModelForm):
         self.fields['caller'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['caller'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['caller'].label = _("Caller")
 
         self.fields['assigned'].queryset = Object.filter_permitted(
@@ -445,7 +445,7 @@ class ServiceLevelAgreementForm(forms.ModelForm):
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['client'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['client'].label = _("Client")
 
         self.fields['provider'].queryset = Object.filter_permitted(
@@ -453,7 +453,7 @@ class ServiceLevelAgreementForm(forms.ModelForm):
         self.fields['provider'].widget.attrs.update({'class': 'autocomplete',
                                                      'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['provider'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['provider'].label = _("Provider")
 
         self.fields['available_from'].initial = "09:00"

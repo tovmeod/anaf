@@ -58,10 +58,10 @@
                     <input type="checkbox" name="mass-report-{{ report.id }}" value="{{ report.id }}" class="group-mass-reports" />
 				</td>
                 <td><a href="{% url reports_report_view report.id %}">{{report.name}}</a>{{ attachments_count(report) }}</td>
-                {#}<td><a href="{% url identities_user_view report.user.id %}">{{report.user}}</a></td>#}
+                {#}<td><a href="{% url contacts:user_view report.user.id %}">{{report.user}}</a></td>#}
                 <td>{{report.date_created.strftime("%d %B %Y, %H:%M")}}</td>
                 <td>{{ last_updated(report) }}</td>
-                <td>{% if report.creator %} <a href="{% url identities_user_view report.creator.id %}" class="popup-link">{{ report.creator }}</a>{% endif %}</td>
+                <td>{% if report.creator %} <a href="{% url contacts:user_view report.creator.id %}" class="popup-link">{{ report.creator }}</a>{% endif %}</td>
 				<td>
 			        <span class="content-list-item-actions table-link">
 				    {% if user.profile.has_permission(report, mode='w') %}

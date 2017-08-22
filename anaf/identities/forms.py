@@ -241,9 +241,9 @@ class ContactForm(forms.Form):
         self.fields['parent'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['parent'].widget.attrs.update({'class': 'autocomplete',
-                                                   'callback': reverse('identities_ajax_contact_lookup')})
+                                                   'callback': reverse('contacts:identities_ajax_contact_lookup')})
         self.fields['parent'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['parent'].label = _('Parent')
         self.fields['name'].label = _('Name')
 
@@ -270,7 +270,7 @@ class ContactForm(forms.Form):
                                                                  queryset=[], required=False)
             self.fields['related_user'].queryset = AccessEntity.objects.all()
             self.fields['related_user'].widget.attrs.update({'class': 'autocomplete',
-                                                             'callback': reverse('identities_ajax_access_lookup')})
+                                                             'callback': reverse('contacts:ajax_access_lookup')})
             self.fields['related_user'].label = _('Related user')
 
         if self.instance:

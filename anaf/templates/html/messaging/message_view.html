@@ -38,7 +38,7 @@
     <span class="message-picture">
     {% if message.author != None %}
       {% set picture = message.author.get_picture() %}
-      <a href="{% url identities_contact_view message.author.id %}" class="popup-link">
+      <a href="{% url contacts:contact_view message.author.id %}" class="popup-link">
       <div class="contact-picture-large-frame">
         <img class="contact-picture-large" src="{{ picture|htsafe }}" alt=""/>
       </div>
@@ -52,7 +52,7 @@
 
     <div class="message-details">
         <div class="message-bubble">
-            <a href="{% url identities_contact_view message.author.id %}" class="popup-link"><strong>{{ message.author }}</strong></a>
+            <a href="{% url contacts:contact_view message.author.id %}" class="popup-link"><strong>{{ message.author }}</strong></a>
             <span class="message-time">{{ message.date_created|htdatetime }}</span>
             {% if user.profile.has_permission(message, mode='w') %}
             <span class="message-edit" style="float: right;">
@@ -76,7 +76,7 @@
         <span class="message-picture">
         {% if message.author != None %}
           {% set picture = message.author.get_picture() %}
-          <a href="{% url identities_contact_view message.author.id %}" class="popup-link">
+          <a href="{% url contacts:contact_view message.author.id %}" class="popup-link">
           <div class="contact-picture-large-frame">
             <img class="contact-picture-large" src="{{ picture|htsafe }}" alt=""/>
           </div>
@@ -89,7 +89,7 @@
         </span>
         <div class="message-details">
             <div class="message-bubble">
-                <a href="{% url identities_contact_view message.author.id %}" class="popup-link"><strong>{{ message.author }}</strong></a>
+                <a href="{% url contacts:contact_view message.author.id %}" class="popup-link"><strong>{{ message.author }}</strong></a>
                 <span class="message-time">{{ message.date_created|htdatetime }}</span>
                 {% if user.profile.has_permission(message, mode='w') %}
                 <span class="message-edit" style="float: right;">
@@ -116,7 +116,7 @@
         {% set contact = request.user.profile.get_contact() %}
         {% if contact %}
           {% set picture = contact.get_picture() %}
-          <a href="{% url identities_contact_view contact.id %}" class="popup-link">
+          <a href="{% url contacts:contact_view contact.id %}" class="popup-link">
           <div class="contact-picture-large-frame">
             <img class="contact-picture-large" src="{{ picture|htsafe }}" alt=""/>
           </div>
@@ -130,7 +130,7 @@
         <div class="message-details">
             <div class="message-bubble">
                 {% if contact %}
-                <a href="{% url identities_contact_view contact.id %}" class="popup-link"><strong>{{ contact }}</strong></a>
+                <a href="{% url contacts:contact_view contact.id %}" class="popup-link"><strong>{{ contact }}</strong></a>
                 {% else %}
                 <strong>{{ request.user.profile }}</strong>
                 {% endif %}

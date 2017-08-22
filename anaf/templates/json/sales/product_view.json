@@ -34,7 +34,7 @@
          {% if product.supplier -%}
          "supplier": {
                     "id": {{ product.supplier_id }},
-                    "url": "http://{{ site_domain }}{% url identities_contact_view product.supplier_id %}",
+                    "url": "http://{{ site_domain }}{% url contacts:contact_view product.supplier_id %}",
                     "name": "{{ product.supplier }}"
                    },
          {% else -%}

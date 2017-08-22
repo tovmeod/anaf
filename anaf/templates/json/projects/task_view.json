@@ -9,7 +9,7 @@
      {% if task.caller -%}
 	 "caller": {
 	            "id": {{ task.caller_id }},
-	            "url": "http://{{ site_domain }}{% url identities_contact_view task.caller_id %}",
+	            "url": "http://{{ site_domain }}{% url contacts:contact_view task.caller_id %}",
 	            "name": "{{ task.caller }}"
 	           },
 	 {% else -%}
@@ -19,7 +19,7 @@
 	    {%- for assignee in task.assigned.all() %}
 	       {
 	        "id": {{ assignee.id }},
-	        "url": "http://{{ site_domain }}{% url identities_user_view assignee.id %}",
+	        "url": "http://{{ site_domain }}{% url contacts:user_view assignee.id %}",
 	        "name": "{{ assignee }}"
 	       {% if loop.last %}}{% else %}},{% endif %}
 	    {%- endfor -%}

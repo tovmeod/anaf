@@ -20,14 +20,14 @@
     <div class="content-list-tick">
     </div>
     <span class="content-list-item-name">
-        <a href="{% url identities_index_by_type itype.slug %}">{{ itype }}</a>
+        <a href="{% url contacts:index_by_type itype.slug %}">{{ itype }}</a>
         <span class="content-list-item-group">
             &nbsp;
         </span>
     </span>
     <span class="content-list-item-actions">
         {% if user.profile.has_permission(itype, mode='w') %}
-        <a href="{% url identities_type_edit itype.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
+        <a href="{% url contacts:type_edit itype.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
         {% endif %}
     </span>
 </div>
@@ -45,14 +45,14 @@
     <div class="content-list-tick">
     </div>
     <span class="content-list-item-name">
-        <a href="{% url identities_field_view ifield.id %}">{{ ifield|title() }}</a>
+        <a href="{% url contacts:field_view ifield.id %}">{{ ifield|title() }}</a>
         <span class="content-list-item-group">
             &nbsp;
         </span>
     </span>
     <span class="content-list-item-actions">
         {% if user.profile.has_permission(ifield, mode='w') %}
-        <a href="{% url identities_field_edit ifield.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
+        <a href="{% url contacts:field_edit ifield.id %}" class="inline-link edit-link">{% trans %}Edit{% endtrans %}</a>
         {% endif %}
     </span>
 </div>

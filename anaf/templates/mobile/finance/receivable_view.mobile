@@ -26,11 +26,11 @@
 {% endif %}
 <div>
     <span class="content-label">{% trans %}Source{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view liability.source.id %}" class="popup-link">{{ liability.source }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view liability.source.id %}" class="popup-link">{{ liability.source }}</a></span>
 </div>
 <div>
     <span class="content-label">{% trans %}Target{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view liability.target.id %}" class="popup-link">{{ liability.target }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view liability.target.id %}" class="popup-link">{{ liability.target }}</a></span>
 </div>
 <div>
     <span class="content-label">{% trans %}Bank Account{% endtrans %}:</span>

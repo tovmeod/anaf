@@ -36,7 +36,7 @@
                 {% set assigned = opportunity.assigned.all()[:3] %}
                 {% if assigned %}
                 {% for assignee in assigned %}
-                <a href="{% url identities_user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
+                <a href="{% url contacts:user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
                 {% if not loop.last %}, {% endif %}
                 {% if loop.index == 3 %}...{% endif %}
                 {% endfor %}

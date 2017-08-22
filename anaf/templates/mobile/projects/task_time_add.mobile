@@ -42,7 +42,7 @@
 {% if task.caller %}
 <div>
     <span class="content-label">{% trans %}Caller{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view task.caller.id %}">{{ task.caller }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view task.caller.id %}">{{ task.caller }}</a></span>
 </div>
 {% endif %}
 
@@ -86,7 +86,7 @@
         <a href="{% url task-detail subtask.id %}">{{ subtask.name|truncate(length=60) }}</a>
         {% if subtask.assigned.count() %}
         {% for assignee in subtask.assigned.all() %}
-        <a href="{% url identities_user_view assignee.id %}" class="author-link small spaced-h">{{ assignee }}</a>
+        <a href="{% url contacts:user_view assignee.id %}" class="author-link small spaced-h">{{ assignee }}</a>
         {% endfor %}
         {% endif %}
         <span class="content-list-item-group">
@@ -137,7 +137,7 @@
 {% for slot in time_slots %}
 <div class="content-list-item content-list-item-{{ loop.cycle('odd', 'even') }}">
     <span class="content-list-item-name">
-        <a href="{% url identities_user_view slot.user.id %}">{{ slot.user }}</a>
+        <a href="{% url contacts:user_view slot.user.id %}">{{ slot.user }}</a>
         {% if slot.is_open() %}
         <a class="imp heavy" href="{% url tasktimeslot-detail slot.id %}">{{ slot.get_time_string() }}</a>
         {% else %}

@@ -86,7 +86,7 @@ class AccountForm(forms.ModelForm):
         self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
                                                   'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['owner'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
 
         self.fields['balance_currency'].label = _("Currency")
         self.fields['balance_currency'].widget.attrs.update(
@@ -155,7 +155,7 @@ class AssetForm(forms.ModelForm):
         self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
                                                   'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['owner'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
 
     class Meta:
         "Asset Form"
@@ -235,13 +235,13 @@ class EquityForm(forms.ModelForm):
         self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
                                                   'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['owner'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['issuer'].queryset = Object.filter_permitted(
             user, Contact.objects)
         self.fields['issuer'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['issuer'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         try:
             conf = ModuleSetting.get_for_module(
                 'anaf.finance', 'my_company')[0]
@@ -347,7 +347,7 @@ class ReceivableForm(forms.ModelForm):
         self.fields['source'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['source'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
 
         self.fields['account'].queryset = Object.filter_permitted(
             user, Account.objects)
@@ -402,9 +402,9 @@ class TransactionForm(forms.ModelForm):
                                                    'callback': reverse('identities_ajax_contact_lookup')})
 
         self.fields['source'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['target'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
 
         self.fields['datetime'].widget.attrs.update(
             {'class': 'datetimepicker'})
@@ -550,7 +550,7 @@ class LiabilityForm(forms.ModelForm):
         self.fields['target'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['target'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
 
         self.fields['account'].queryset = Object.filter_permitted(
             user, Account.objects)

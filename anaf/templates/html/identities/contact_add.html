@@ -5,7 +5,7 @@
 {% block module_title %}{% trans %}Identities{% endtrans %}{% endblock %}
 
 {% block module_topmenu %}
-<a href="{% url identities_contact_add %}" class="top-menu add-link add-link-active">{% trans %}New Contact{% endtrans %}</a>
+<a href="{% url contacts:contact-add %}" class="top-menu add-link add-link-active">{% trans %}New Contact{% endtrans %}</a>
 {% endblock %}
 
 {% block module_content %}
@@ -17,7 +17,7 @@
 <div class="spaced-list">
     <div class="module-top-menu-inline">
         {% for type in types %}
-        <a href="{% url identities_contact_add_typed type.id %}" class="top-menu add-link">{{ type }}</a>
+        <a href="{% url contacts:contact_add_typed type.id %}" class="top-menu add-link">{{ type }}</a>
         {% endfor %}
     </div>
 </div>

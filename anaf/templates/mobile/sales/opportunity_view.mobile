@@ -46,7 +46,7 @@
 	<span class="content-label">{% trans %}Assigned to{% endtrans %}:</span>
 	<span class="content-value">
 		{% for assignee in opportunity.assigned.all() %}
-		<a href="{% url identities_user_view assignee.id %}" class="popup-link">{{ assignee }}</a><br />
+		<a href="{% url contacts:user_view assignee.id %}" class="popup-link">{{ assignee }}</a><br />
 		{% endfor %}
 	</span>
 	{% else %}
@@ -64,7 +64,7 @@
 	{% if opportunity.contact %}
 	<div>
 		<span class="content-label">{% trans %}Contact{% endtrans %}:</span>
-		<span class="content-value"><a href="{% url identities_contact_view opportunity.contact.id %}" class="popup-link">{{ opportunity.contact }}</a></span>
+		<span class="content-value"><a href="{% url contacts:contact_view opportunity.contact.id %}" class="popup-link">{{ opportunity.contact }}</a></span>
 	</div>
 	{% endif %}
 

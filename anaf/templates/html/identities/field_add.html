@@ -7,14 +7,14 @@
 
 {% block asset_fields_sidebar -%}
 {% for ifield in fields %}
-<a href="{% url identities_field_view ifield.id %}" class="sidebar-link {% if ifield == asset_field %}sidebar-link-active{% endif %}">{{ ifield }}</a>
+<a href="{% url contacts:field_view ifield.id %}" class="sidebar-link {% if ifield == asset_field %}sidebar-link-active{% endif %}">{{ ifield }}</a>
 {% endfor %}
 {%- endblock %}
 
 {% block module_topmenu %}
-<a href="{% url identities_type_add %}" class="top-menu add-link">{% trans %}New Type{% endtrans %}</a>
-<a href="{% url identities_field_add %}" class="top-menu add-link-active">{% trans %}New Field{% endtrans %}</a>
-<a href="{% url identities_settings_view %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
+<a href="{% url contacts:type_add %}" class="top-menu add-link">{% trans %}New Type{% endtrans %}</a>
+<a href="{% url contacts:field_add %}" class="top-menu add-link-active">{% trans %}New Field{% endtrans %}</a>
+<a href="{% url contacts:settings_view %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
 {% endblock %}
 
 {% block module_content %}

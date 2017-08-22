@@ -167,15 +167,15 @@ class ItemForm(forms.Form):
         self.fields['manufacturer'].widget.attrs.update({'class': 'autocomplete',
                                                          'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['manufacturer'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['supplier'].widget.attrs.update({'class': 'autocomplete',
                                                      'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['supplier'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         self.fields['owner'].widget.attrs.update({'class': 'autocomplete',
                                                   'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['owner'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
         #self.fields['asset'].widget.attrs.update({'class': 'autocomplete', 'callback': reverse('finance_ajax_asset_lookup')})
 
         self.fields['location'].widget.attrs.update(

@@ -78,7 +78,7 @@
             {% endif %}
             <td>
                 {% if ticket.caller %}
-                <a href="{% url identities_contact_view ticket.caller.id %}" class="author-link popup-link">{{ ticket.caller }}</a>
+                <a href="{% url contacts:contact_view ticket.caller.id %}" class="author-link popup-link">{{ ticket.caller }}</a>
                 {% endif %}
             </td>
             {% if not by_assigned %}
@@ -129,7 +129,7 @@
         {%- if ticket.assigned.all().exists() %}{{ ticket }}{% else %}<strong>{{ ticket.name }}</strong>{% endif -%}
         &nbsp;<span class="small">(#{{ ticket.reference }})</span>
         </a>
-        {% if ticket.caller %}<a href="{% url identities_contact_view ticket.caller.id %}" class="author-link small spaced-h popup-link">{{ ticket.caller }}</a>{% endif %}
+        {% if ticket.caller %}<a href="{% url contacts:contact_view ticket.caller.id %}" class="author-link small spaced-h popup-link">{{ ticket.caller }}</a>{% endif %}
         <span class="content-list-item-group">
             <a href="{% url services_status_view ticket.status_id %}" class="author-link spaced-h"><em>{{ ticket.status }}</em></a>
             {% if not skip_group and ticket.queue %}

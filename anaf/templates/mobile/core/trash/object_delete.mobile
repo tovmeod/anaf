@@ -48,13 +48,13 @@
 <div>
     <span class="content-label">{% trans %}Owner{% endtrans %}</span>
     <span class="content-value">
-        <a href="{% url identities_user_view object.user_id %}">{{ object.user }}</a>
+        <a href="{% url contacts:user_view object.user_id %}">{{ object.user }}</a>
     </span>
 </div>
 <div>
     <span class="content-label">{% trans %}Group{% endtrans %}</span>
     <span class="content-value">
-        <a href="{% url identities_group_view object.group_id %}">{{ object.group }}</a>
+        <a href="{% url contacts:group_view object.group_id %}">{{ object.group }}</a>
     </span>
 </div>
 {% endblock %}

@@ -39,7 +39,7 @@
                 </td>
                 <td>
                   {% if product.supplier %}
-                    <a href="{% url identities_contact_view product.supplier.id %}" class="author-link popup-link">{{ product.supplier }}</a>
+                    <a href="{% url contacts:contact_view product.supplier.id %}" class="author-link popup-link">{{ product.supplier }}</a>
                   {% else %}
 				            -
 				          {% endif %}

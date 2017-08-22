@@ -27,7 +27,7 @@
     <span class="content-label">{% trans %}My Company{% endtrans %}:</span>
     <span class="content-value">
         {% if my_company %}
-        <a href="{% url identities_contact_view my_company.id %}" class="popup-link">{{ my_company }}</a>
+        <a href="{% url contacts:contact_view my_company.id %}" class="popup-link">{{ my_company }}</a>
         {% endif %}
     </span>
 </div>

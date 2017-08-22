@@ -43,7 +43,7 @@
     {% if lead.assigned.count() %}
 	<span class="content-value">
         {% for assignee in lead.assigned.all() %}
-        <a href="{% url identities_user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
+        <a href="{% url contacts:user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
         <br />
         {% endfor %}
 	{% else %}
@@ -54,7 +54,7 @@
 {% if lead.contact %}
 <div>
     <span class="content-label">{% trans %}Contact{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view lead.contact.id %}" class="popup-link">{{ lead.contact }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view lead.contact.id %}" class="popup-link">{{ lead.contact }}</a></span>
 </div>
 {% endif %}
 
@@ -109,22 +109,22 @@
       {% set contact = record.author.get_contact() %}
       {% if contact %}
         {% set picture = contact.get_picture() %}
-        <a href="{% url identities_contact_view contact.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
+        <a href="{% url contacts:contact_view contact.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
       {% else %}
-        <a href="{% url identities_user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
+        <a href="{% url contacts:user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
       {% endif %}
     {% elif record.sender and record.sender.object_type == 'anaf.identities.models.Contact' %}
       {% set contact = record.sender.get_related_object() %}
       {% if contact %}
         {% set picture = contact.get_picture() %}
-        <a href="{% url identities_contact_view contact.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
+        <a href="{% url contacts:contact_view contact.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
       {% endif %}
     {% endif %}
     </div>
     <div class="news-record-label">
         <span class="news-record-author news-record-author-{{ record.record_type }}">
           {% if record.author %}
-          <a href="{% url identities_user_view record.author.id %}" class="popup-link">{{ record.author }}</a>
+          <a href="{% url contacts:user_view record.author.id %}" class="popup-link">{{ record.author }}</a>
           {% elif record.sender %}
           {% set sender = record.sender.get_related_object() %}
           {% if sender %}

@@ -40,11 +40,11 @@
 {% endif %}
 <div>
     <span class="content-label">{% trans %}Source{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view transaction.source.id %}" class="popup-link">{{ transaction.source }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view transaction.source.id %}" class="popup-link">{{ transaction.source }}</a></span>
 </div>
 <div>
     <span class="content-label">{% trans %}Target{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view transaction.target.id %}" class="popup-link">{{ transaction.target }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view transaction.target.id %}" class="popup-link">{{ transaction.target }}</a></span>
 </div>
 <div>
     <span class="content-label">{% trans %}Bank Account{% endtrans %}:</span>

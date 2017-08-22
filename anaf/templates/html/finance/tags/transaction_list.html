@@ -25,8 +25,8 @@
             </td>
             <td>{{ transaction.datetime|htdatetime('SHORT_DATETIME_FORMAT') }}</td>
             <td><a href="{% url finance_transaction_view transaction.id %}"><strong>{{ transaction.name|truncate(length=60) }}</strong></a></td>
-            <td><a href="{% url identities_contact_view transaction.source_id %}" class="popup-link">{{ transaction.source }}</a></td>
-            <td><a href="{% url identities_contact_view transaction.target_id %}" class="popup-link">{{ transaction.target }}</a></td>
+            <td><a href="{% url contacts:contact_view transaction.source_id %}" class="popup-link">{{ transaction.source }}</a></td>
+            <td><a href="{% url contacts:contact_view transaction.target_id %}" class="popup-link">{{ transaction.target }}</a></td>
             <td><a href="{% url finance_account_view transaction.account_id %}" class="popup-link">{{ transaction.account }}</a></td>
             <td>{{ transaction.value|number_format }}</td>
         </tr>

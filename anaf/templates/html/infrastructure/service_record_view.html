@@ -26,7 +26,7 @@
 {% if service_record.supplier %}
 <div>
     <span class="content-label">{% trans %}Supplier{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view service_record.supplier_id %}" class="popup-link">{{ service_record.supplier }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view service_record.supplier_id %}" class="popup-link">{{ service_record.supplier }}</a></span>
 </div>
 {% endif %}
 

@@ -56,7 +56,7 @@
 {% if ticket.caller %}
 <div>
     <span class="content-label">{% trans %}Caller{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view ticket.caller.id %}"><strong>{{ ticket.caller }}</strong></a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view ticket.caller.id %}"><strong>{{ ticket.caller }}</strong></a></span>
 </div>
 {% endif %}
 <div>

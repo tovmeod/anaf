@@ -42,7 +42,7 @@
     <span class="content-label">{% trans %}Assigned to{% endtrans %}:</span>
     <span class="content-value">
         {% for assignee in lead.assigned.all() %}
-        <a href="{% url identities_user_view assignee.id %}">{{ assignee }}</a>
+        <a href="{% url contacts:user_view assignee.id %}">{{ assignee }}</a>
         <br />
         {% endfor %}
     </span>
@@ -57,7 +57,7 @@
 {% if lead.contact %}
 <div>
     <span class="content-label">{% trans %}Contact{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view lead.contact.id %}">{{ lead.contact }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view lead.contact.id %}">{{ lead.contact }}</a></span>
 </div>
 {% endif %}
 

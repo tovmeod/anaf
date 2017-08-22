@@ -15,13 +15,13 @@
     <div class="contact-picture-large-frame">
     {% if contact %}
       {% set picture = contact.get_picture() %}
-      <a href="{% url identities_user_view profile.id %}"><img class="contact-picture-large left" src="{{ picture|htsafe }}" alt="" /></a>
+      <a href="{% url contacts:user_view profile.id %}"><img class="contact-picture-large left" src="{{ picture|htsafe }}" alt="" /></a>
     {% else %}
-      <a href="{% url identities_user_view profile.id %}"><img class="contact-picture-large left" src="/static/messaging/pic.png" alt="" /></a>
+      <a href="{% url contacts:user_view profile.id %}"><img class="contact-picture-large left" src="/static/messaging/pic.png" alt="" /></a>
     {% endif %}
     </div>
     <div class="news-record-label">
-        <a href="{% url identities_user_view profile.id %}" class="popup-link"><strong>{{ profile }}</strong></a>
+        <a href="{% url contacts:user_view profile.id %}" class="popup-link"><strong>{{ profile }}</strong></a>
     </div>
     <div class="news-record-body" style="width: 90%;">
       <form action="{% url news_widget_social %}" method="post" class="content-form">

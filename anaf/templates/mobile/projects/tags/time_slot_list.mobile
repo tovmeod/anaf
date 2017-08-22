@@ -2,7 +2,7 @@
 <div class="content-list-item">
     <span class="content-list-item-name time-slot-sub">
         <span class="projects-task-time"></span>
-        <a href="{% url identities_user_view slot.user.id %}" class="popup-link">{{ slot.user }}</a>
+        <a href="{% url contacts:user_view slot.user.id %}" class="popup-link">{{ slot.user }}</a>
         {% if slot.is_open() %}
         <a class="imp heavy" href="{% url task-detail slot.task.id %}">
         {% trans %}In progress{% endtrans %}...

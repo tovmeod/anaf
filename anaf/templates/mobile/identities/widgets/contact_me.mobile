@@ -11,13 +11,13 @@
 	{% if contact.related_user %}
 	<div>
 		<span class="content-label">{% trans %}User{% endtrans %}:</span>
-		<span class="content-value"><a href="{% url identities_user_view contact.related_user_id %}">{{ contact.related_user.get_username() }}</a></span>
+		<span class="content-value"><a href="{% url contacts:user_view contact.related_user_id %}">{{ contact.related_user.get_username() }}</a></span>
 	</div>
 	{% endif %}
 	{% if contact.related_group %}
 	<div>
 		<span class="content-label">{% trans %}Group{% endtrans %}:</span>
-		<span class="content-value"><a href="{% url identities_group_view contact.related_group_id %}">{{ contact.related_group }}</a></span>
+		<span class="content-value"><a href="{% url contacts:group_view contact.related_group_id %}">{{ contact.related_group }}</a></span>
 	</div>
 	{% endif %}
 	{% for value in contact.contactvalue_set.all() %}

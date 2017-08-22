@@ -61,12 +61,12 @@
 
 	<div>
 		<span class="content-label">{% trans %}Issuer{% endtrans %}:</span>
-		<span class="content-value"><a href="{% url identities_contact_view equity.issuer.id %}">{{ equity.issuer }}</a></span>
+		<span class="content-value"><a href="{% url contacts:contact_view equity.issuer.id %}">{{ equity.issuer }}</a></span>
 	</div>
 	
 	<div>
 		<span class="content-label">{% trans %}Owner{% endtrans %}:</span>
-		<span class="content-value"><a href="{% url identities_contact_view equity.owner.id %}">{{ equity.owner }}</a></span>
+		<span class="content-value"><a href="{% url contacts:contact_view equity.owner.id %}">{{ equity.owner }}</a></span>
 	</div>
 	
 	{% if equity.details %}

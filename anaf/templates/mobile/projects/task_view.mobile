@@ -25,7 +25,7 @@
     <span class="content-label">{% trans %}Assigned to{% endtrans %}:</span>
     <span class="content-value">
         {% for assignee in task.assigned.all() %}
-        <a href="{% url identities_user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
+        <a href="{% url contacts:user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
         <br />
         {% endfor %}
     </span>
@@ -40,7 +40,7 @@
 {% if task.caller %}
 <div>
     <span class="content-label">{% trans %}Caller{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view task.caller.id %}" class="popup-link">{{ task.caller }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view task.caller.id %}" class="popup-link">{{ task.caller }}</a></span>
 </div>
 {% endif %}
 
@@ -154,7 +154,7 @@
 {% for slot in time_slots %}
 <div class="content-list-item content-list-item-{{ loop.cycle('odd', 'even') }}">
     <span class="content-list-item-name">
-        <a href="{% url identities_user_view slot.user.id %}" class="popup-link">{{ slot.user }}</a>
+        <a href="{% url contacts:user_view slot.user.id %}" class="popup-link">{{ slot.user }}</a>
         {% if slot.is_open() %}
         <a class="imp heavy popup-link" href="{% url tasktimeslot-detail slot.id %}">
         {% trans %}In progress{% endtrans %}...

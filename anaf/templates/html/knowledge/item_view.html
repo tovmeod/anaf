@@ -47,7 +47,7 @@
 <div>
     <span class="content-label">{% trans %}Created By{% endtrans %}:</span>
     <span class="content-value">
-    	<a href="{% url identities_user_view item.creator_id %}" class="popup-link">{{ item.creator }}</a>
+    	<a href="{% url contacts:user_view item.creator_id %}" class="popup-link">{{ item.creator }}</a>
 	</span>
 </div>
 {% endif %}

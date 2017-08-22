@@ -36,7 +36,7 @@
 <div class="message">
     <div class="message-details">
         <div class="message-bubble">
-            <a href="{% url identities_contact_view message.author.id %}" class="popup-link"><strong>{{ message.author }}</strong></a>
+            <a href="{% url contacts:contact_view message.author.id %}" class="popup-link"><strong>{{ message.author }}</strong></a>
             <span class="message-time">{{ message.date_created|htdatetime }}</span>
             <p class="message-overflow">
                 <span class="ligher">{{ message.body|htsafe }}</span>
@@ -57,7 +57,7 @@
     <div class="message">
         <div class="message-details">
             <div class="message-bubble">
-                <a href="{% url identities_contact_view message.author.id %}" class="popup-link"><strong>{{ message.author }}</strong></a>
+                <a href="{% url contacts:contact_view message.author.id %}" class="popup-link"><strong>{{ message.author }}</strong></a>
                 <span class="message-time">{{ message.date_created|htdatetime }}</span>
                 <br />
                 <p>
@@ -82,7 +82,7 @@
         <div class="message-details">
             <div class="message-bubble">
                 {% if contact %}
-                <a href="{% url identities_contact_view contact.id %}" class="popup-link"><strong>{{ contact }}</strong></a>
+                <a href="{% url contacts:contact_view contact.id %}" class="popup-link"><strong>{{ contact }}</strong></a>
                 {% else %}
                 <strong>{{ request.user.profile }}</strong>
                 {% endif %}

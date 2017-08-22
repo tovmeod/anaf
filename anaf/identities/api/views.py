@@ -1,4 +1,10 @@
-from anaf.core.rendering import API_RENDERERS
+from django.template import RequestContext
+from rest_framework.decorators import list_route
+from rest_framework.response import Response
+
+from anaf.core.decorators import apifirst
+from anaf.core.models import Object
+from anaf.core.rendering import API_RENDERERS, NOAPI_RENDERERS
 from anaf.identities import models
 from anaf.identities.api import serializers
 from anaf.viewsets import AnafViewSet
@@ -36,6 +42,26 @@ class Contact(IdentitiesBaseViewSet):
     serializer_class = serializers.Contact
 
     renderer_classes = API_RENDERERS
+
+    @list_route(methods=('GET',), renderer_classes=NOAPI_RENDERERS)
+    def add(self, request, *args, **kwargs):
+        """Contact add"""
+
+        types = Object.filter_by_request(request, models.ContactType.objects.order_by('name'))
+
+        context = RequestContext(request)
+        context.update({'types': types})
+        # return render_to_response('identities/contact_add', {'types': types},
+        #                           context_instance=RequestContext(request), response_format=response_format)
+
+        return Response({'types': types}, template_name='identities/contact_add.html')
+
+    @apifirst
+    def retrieve(self, request, *args, **kwargs):
+        """Contact view"""
+        contact = self.get_object()
+        serializer = self.get_serializer(contact)
+        return Response(serializer.data)
 
 
 class ContactValue(IdentitiesBaseViewSet):

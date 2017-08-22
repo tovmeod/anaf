@@ -87,7 +87,7 @@ class ProjectForm(ModelForm):
         self.fields['manager'].widget.attrs.update({'class': 'autocomplete',
                                                     'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['manager'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
 
         self.fields['client'].label = _("Client")
         self.fields['client'].queryset = Object.filter_permitted(
@@ -95,7 +95,7 @@ class ProjectForm(ModelForm):
         self.fields['client'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['client'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
 
         self.fields['details'].label = _("Details")
         self.fields['details'].widget.attrs.update({'class': 'full-editor'})
@@ -203,7 +203,7 @@ class TaskForm(ModelForm):
         self.fields['caller'].widget.attrs.update({'class': 'autocomplete',
                                                    'callback': reverse('identities_ajax_contact_lookup')})
         self.fields['caller'].widget.attrs.update(
-            {'popuplink': reverse('identities_contact_add')})
+            {'popuplink': reverse('contacts:contact-add')})
 
         self.fields['project'].label = _("Project")
         self.fields['project'].queryset = Object.filter_permitted(

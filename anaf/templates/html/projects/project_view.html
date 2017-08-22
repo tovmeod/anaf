@@ -62,7 +62,7 @@
 <div>
     <span class="content-label">{% trans %}Project manager{% endtrans %}:</span>
     <span class="content-value">
-      <a href="{% url identities_contact_view project.manager.id %}" class="popup-link"><strong>{{ project.manager }}</strong></a>
+      <a href="{% url contacts:contact_view project.manager.id %}" class="popup-link"><strong>{{ project.manager }}</strong></a>
     </span>
 </div>
 {% endif %}
@@ -70,7 +70,7 @@
 {% if project.client %}
 <div>
     <span class="content-label">{% trans %}Client{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view project.client.id %}" class="popup-link">{{ project.client }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view project.client.id %}" class="popup-link">{{ project.client }}</a></span>
 </div>
 {% endif %}
 
@@ -184,14 +184,14 @@
     <div class="contact-picture-frame news-record-author news-record-author-{{ record.record_type }}">
     {% if contact %}
       {% set picture = contact.get_picture() %}
-      <a href="{% url identities_user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
+      <a href="{% url contacts:user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
     {% else %}
-      <a href="{% url identities_user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
+      <a href="{% url contacts:user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
     {% endif %}
     </div>
     <div class="news-record-label">
         <span class="news-record-author news-record-author-{{ record.record_type }}">
-        <a href="{% url identities_user_view record.author.id %}" class="popup-link">{{ record.author }}</a>
+        <a href="{% url contacts:user_view record.author.id %}" class="popup-link">{{ record.author }}</a>
         </span>
         {% if record.record_type != 'manual' and record.record_type != 'share' %}
         <span class="news-record-inline news-record-body-{{ record.record_type }}">

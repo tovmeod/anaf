@@ -33,7 +33,7 @@
 <div>
     <span class="content-label">{% trans %}Project manager{% endtrans %}:</span>
     <span class="content-value">
-      <a href="{% url identities_contact_view project.manager.id %}" class="popup-link"><strong>{{ project.manager }}</strong></a>
+      <a href="{% url contacts:contact_view project.manager.id %}" class="popup-link"><strong>{{ project.manager }}</strong></a>
     </span>
 </div>
 {% endif %}
@@ -41,7 +41,7 @@
 {% if project.client %}
 <div>
     <span class="content-label">{% trans %}Client{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view project.client.id %}" class="popup-link">{{ project.client }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view project.client.id %}" class="popup-link">{{ project.client }}</a></span>
 </div>
 {% endif %}
 

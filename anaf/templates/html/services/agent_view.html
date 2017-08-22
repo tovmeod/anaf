@@ -38,7 +38,7 @@
 
 <div>
     <span class="content-label">{% trans %}User{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_user_view view_agent.related_user_id %}" class="popup-link">{{ view_agent.related_user.get_username() }}</a></span>
+    <span class="content-value"><a href="{% url contacts:user_view view_agent.related_user_id %}" class="popup-link">{{ view_agent.related_user.get_username() }}</a></span>
 </div>
 <div>
     <span class="content-label">{% trans %}Active{% endtrans %}:</span>

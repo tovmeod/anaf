@@ -5,7 +5,7 @@
     </div>
     <span class="content-list-item-name">
         <a href="{% url infrastructure_service_record_view record.id %}">{{ record }}</a>
-        {% if record.supplier %}<a href="{% url identities_contact_view record.supplier_id %}" class="author-link small spaced-h popup-link">{{ record.supplier }}</a>{% endif %}
+        {% if record.supplier %}<a href="{% url contacts:contact_view record.supplier_id %}" class="author-link small spaced-h popup-link">{{ record.supplier }}</a>{% endif %}
         {% if not skip_group %}
         {% for item in record.items.all()[0:6] %}
         <a href="{% url infrastructure_item_view item.id %}" class="group-link popup-link small spaced-h">{{ item }}</a>

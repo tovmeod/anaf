@@ -56,7 +56,7 @@
                     <input type="checkbox" name="mass-chart-{{ chart.id }}" value="{{ chart.id }}" class="group-mass-charts" />
                 </div></td>
                 <td><a href="{% url reports_report_view report.id %}">{{chart.report.name}}</a></td>
-                <td><a href="{% url identities_user_view report.user.id %}">{{chart.id}}</a></td>
+                <td><a href="{% url contacts:user_view report.user.id %}">{{chart.id}}</a></td>
                 <td>{{chart.date_created.strftime("%d %B %Y, %H:%M")}}</td>
         <td>
               {% if user.profile.has_permission(report, mode='w') %}

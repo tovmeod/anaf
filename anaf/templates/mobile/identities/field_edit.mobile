@@ -7,14 +7,14 @@
 
 {% block fields_sidebar -%}
 {% for ifield in fields %}
-<a href="{% url identities_field_view ifield.id %}" class="sidebar-link {% if ifield == field %}sidebar-link-active{% endif %}">{{ ifield }}</a>
+<a href="{% url contacts:field_view ifield.id %}" class="sidebar-link {% if ifield == field %}sidebar-link-active{% endif %}">{{ ifield }}</a>
 {% endfor %}
 {%- endblock %}
 
 {% block module_topmenu %}
-<a href="{% url identities_field_view field.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
-<a href="{% url identities_field_edit field.id %}" class="top-menu edit-link edit-link-active">{% trans %}Edit{% endtrans %}</a>
-<a href="{% url identities_field_delete field.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
+<a href="{% url contacts:field_view field.id %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
+<a href="{% url contacts:field_edit field.id %}" class="top-menu edit-link edit-link-active">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url contacts:field_delete field.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endblock %}
 
 {% block module_content %}

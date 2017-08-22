@@ -7,15 +7,15 @@
 
 {% block contact_types_sidebar -%}
 {% for itype in types %}
-<a href="{% url identities_type_view itype.id %}" class="sidebar-link {% if itype == contact_type %}sidebar-link-active{% endif %}">{{ itype }}</a>
+<a href="{% url contacts:type_view itype.id %}" class="sidebar-link {% if itype == contact_type %}sidebar-link-active{% endif %}">{{ itype }}</a>
 {% endfor %}
 {%- endblock %}
 
 {% block module_topmenu %}
-<a href="{% url identities_contact_add_typed type.slug %}" class="top-menu add-link">{% trans %}New{% endtrans %} {{ type.name }}</a>
-<a href="{% url identities_type_view type.slug %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
-<a href="{% url identities_type_edit type.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
-<a href="{% url identities_type_delete type.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
+<a href="{% url contacts:contact_add_typed type.slug %}" class="top-menu add-link">{% trans %}New{% endtrans %} {{ type.name }}</a>
+<a href="{% url contacts:type_view type.slug %}" class="top-menu view-link">{% trans %}View{% endtrans %}</a>
+<a href="{% url contacts:type_edit type.id %}" class="top-menu edit-link-active">{% trans %}Edit{% endtrans %}</a>
+<a href="{% url contacts:type_delete type.id %}" class="top-menu delete-link">{% trans %}Delete{% endtrans %}</a>
 {% endblock %}
 
 {% block module_content %}

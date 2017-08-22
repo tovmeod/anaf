@@ -7,7 +7,7 @@
     <span class="content-list-item-name">
         <a href="{% url core_admin_group_view group.id %}">{{ group }}</a>
         {% if contact %}
-        <a href="{% url identities_contact_view contact.id %}" class="author-link small">{{ contact }}</a>
+        <a href="{% url contacts:contact_view contact.id %}" class="author-link small">{{ contact }}</a>
         {% endif %}
         <span class="content-list-item-group">
             {%- if group.parent %}

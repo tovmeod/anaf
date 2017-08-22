@@ -34,7 +34,7 @@
     </div>
     <span class="content-list-item-name">
         <a href="{% url services_agent_view agent.id %}">{{ agent }}</a>
-        <a href="{% url identities_user_view agent.related_user_id %}" class="author-link small popup-link">{{ agent.related_user.get_username() }}</a>
+        <a href="{% url contacts:user_view agent.related_user_id %}" class="author-link small popup-link">{{ agent.related_user.get_username() }}</a>
     </span>
     <span class="content-list-item-actions">
         {% if user.profile.has_permission(agent, mode='w') %}

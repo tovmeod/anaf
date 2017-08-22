@@ -18,7 +18,7 @@
     <span class="content-label">{% trans %}Default Contact Type{% endtrans %}:</span>
     <span class="content-value">
         {% if default_contact_type %}
-        <a href="{% url identities_index_by_type default_contact_type.slug %}">{{ default_contact_type }}</a>
+        <a href="{% url contacts:index_by_type default_contact_type.slug %}">{{ default_contact_type }}</a>
         {% endif %}
     </span>
 </div>

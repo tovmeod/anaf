@@ -83,7 +83,7 @@
     {% set assigned = task.assigned.all() %}
     {% if assigned %}
         {% for assignee in assigned %}
-        <a href="{% url identities_user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
+        <a href="{% url contacts:user_view assignee.id %}" class="popup-link">{{ assignee }}</a>
         <br />
         {% endfor %}
 	{% else %}
@@ -97,7 +97,7 @@
 {% if task.caller %}
 <div>
     <span class="content-label">{% trans %}Caller{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view task.caller.id %}" class="popup-link">{{ task.caller }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view task.caller.id %}" class="popup-link">{{ task.caller }}</a></span>
 </div>
 {% endif %}
 
@@ -223,7 +223,7 @@
 {% for slot in time_slots %}
 <div class="content-list-item content-list-item-{{ loop.cycle('odd', 'even') }}">
     <span class="content-list-item-name">
-        <a href="{% url identities_user_view slot.user.id %}" class="popup-link">{{ slot.user }}</a>
+        <a href="{% url contacts:user_view slot.user.id %}" class="popup-link">{{ slot.user }}</a>
         {% if slot.is_open() %}
         <a class="imp heavy popup-link" href="{% url tasktimeslot-detail slot.id %}">
         {% trans %}In progress{% endtrans %}...
@@ -288,14 +288,14 @@
     <div class="contact-picture-frame news-record-author news-record-author-{{ record.record_type }}">
     {% if contact %}
       {% set picture = contact.get_picture() %}
-      <a href="{% url identities_user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
+      <a href="{% url contacts:user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="{{ picture|htsafe }}" alt="" /></a>
     {% else %}
-      <a href="{% url identities_user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
+      <a href="{% url contacts:user_view record.author.id %}" class="popup-link"><img class="contact-picture left" src="/static/messaging/pic.png" alt="" /></a>
     {% endif %}
     </div>
     <div class="news-record-label">
         <span class="news-record-author news-record-author-{{ record.record_type }}">
-        <a href="{% url identities_user_view record.author.id %}" class="popup-link">{{ record.author }}</a>
+        <a href="{% url contacts:user_view record.author.id %}" class="popup-link">{{ record.author }}</a>
         </span>
         {% if record.record_type != 'manual' and record.record_type != 'share' %}
         <span class="news-record-inline news-record-body-{{ record.record_type }}">

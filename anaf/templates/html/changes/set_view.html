@@ -35,13 +35,13 @@
 {% if changeset.author %}
 <div>
     <span class="content-label">{% trans %}Author{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_user_view changeset.author_id %}" class="popup-link">{{ changeset.author }}</a></span>
+    <span class="content-value"><a href="{% url contacts:user_view changeset.author_id %}" class="popup-link">{{ changeset.author }}</a></span>
 </div>
 {% endif %}
 {% if changeset.resolved_by %}
 <div>
     <span class="content-label">{% trans %}Resolved By{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_user_view changeset.resolved_by_id %}" class="popup-link">{{ changeset.resolved_by }}</a></span>
+    <span class="content-value"><a href="{% url contacts:user_view changeset.resolved_by_id %}" class="popup-link">{{ changeset.resolved_by }}</a></span>
 </div>
 {% endif %}
 {% if changeset.resolved_on %}

@@ -74,7 +74,7 @@ class Group(AccessEntity):
     def get_absolute_url(self, module='identities'):
         """Returns absolute URL of the Group"""
         if not module or module == 'identities':
-            return reverse('identities_group_view', args=[self.id])
+            return reverse('contacts:group_view', args=[self.id])
         else:
             return reverse('core_administration_group_view', args=[self.id])
 
@@ -227,7 +227,7 @@ class User(AccessEntity):
     def get_absolute_url(self, module='identities'):
         """Returns absolute URL of the User"""
         if not module or module == 'identities':
-            return reverse('identities_user_view', args=[self.id])
+            return reverse('contacts:user_view', args=[self.id])
         else:
             return reverse('core_administration_user_view', args=[self.id])
 

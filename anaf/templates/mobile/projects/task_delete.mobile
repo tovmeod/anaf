@@ -63,7 +63,7 @@
 {% if task.caller %}
 <div>
     <span class="content-label">{% trans %}Caller{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view task.caller.id %}">{{ task.caller }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view task.caller.id %}">{{ task.caller }}</a></span>
 </div>
 {% endif %}
 
@@ -121,7 +121,7 @@
         <a href="{% url task-detail subtask.id %}">{{ subtask.name|truncate(length=60) }}</a>
         {% if subtask.assigned.count() %}
         {% for assignee in subtask.assigned.all() %}
-        <a href="{% url identities_user_view assignee.id %}" class="author-link small spaced-h">{{ assignee }}</a>
+        <a href="{% url contacts:user_view assignee.id %}" class="author-link small spaced-h">{{ assignee }}</a>
         {% endfor %}
         {% endif %}
     </span>

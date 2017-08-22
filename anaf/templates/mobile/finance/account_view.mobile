@@ -18,7 +18,7 @@
 
 <div>
     <span class="content-label">{% trans %}Owner{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view account.owner_id %}" class="popup-link">{{ account.owner }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view account.owner_id %}" class="popup-link">{{ account.owner }}</a></span>
 </div>
 
 {% if account.balance_display != account.balance %}

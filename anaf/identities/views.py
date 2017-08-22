@@ -1,6 +1,8 @@
 """
 Identities module: views
 """
+from __future__ import unicode_literals
+from django.utils.translation import ugettext as _
 from identicon import render_identicon
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
@@ -75,7 +77,7 @@ def _process_mass_form(f):
 @mylogin_required
 @_process_mass_form
 def index(request, response_format='html'):
-    "Default page"
+    """Default page"""
 
     if request.GET:
         query = _get_filter_query(request.GET)
@@ -136,9 +138,9 @@ def type_edit(request, type_id, response_format='html'):
                 request.user.profile, request.POST, instance=contact_type)
             if form.is_valid():
                 contact_type = form.save(request)
-                return HttpResponseRedirect(reverse('identities_type_view', args=[contact_type.id]))
+                return HttpResponseRedirect(reverse('contacts:type_view', args=[contact_type.id]))
         else:
-            return HttpResponseRedirect(reverse('identities_type_view', args=[contact_type.id]))
+            return HttpResponseRedirect(reverse('contacts:type_view', args=[contact_type.id]))
     else:
         form = ContactTypeForm(
             request.user.profile, instance=contact_type)
@@ -170,9 +172,9 @@ def type_add(request, response_format='html'):
             if form.is_valid():
                 contact_type = form.save(request)
                 contact_type.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('identities_type_view', args=[contact_type.id]))
+                return HttpResponseRedirect(reverse('contacts:type_view', args=[contact_type.id]))
         else:
-            return HttpResponseRedirect(reverse('identities_settings_view'))
+            return HttpResponseRedirect(reverse('contacts:settings_view'))
     else:
         form = ContactTypeForm(request.user.profile)
 
@@ -198,9 +200,9 @@ def type_delete(request, type_id, response_format='html'):
                 type.save()
             else:
                 type.delete()
-            return HttpResponseRedirect(reverse('identities_index'))
+            return HttpResponseRedirect(reverse('contacts:index'))
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('identities_type_view', args=[type.id]))
+            return HttpResponseRedirect(reverse('contacts:type_view', args=[type.id]))
 
     context = _get_default_context(request)
     context.update({'type': type})
@@ -245,9 +247,9 @@ def field_edit(request, field_id, response_format='html'):
             form = ContactFieldForm(request.POST, instance=field)
             if form.is_valid():
                 field = form.save(request)
-                return HttpResponseRedirect(reverse('identities_field_view', args=[field.id]))
+                return HttpResponseRedirect(reverse('contacts:field_view', args=[field.id]))
         else:
-            return HttpResponseRedirect(reverse('identities_field_view', args=[field.id]))
+            return HttpResponseRedirect(reverse('contacts:field_view', args=[field.id]))
     else:
         form = ContactFieldForm(instance=field)
 
@@ -276,9 +278,9 @@ def field_add(request, response_format='html'):
             if form.is_valid():
                 field = form.save(request)
                 field.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('identities_field_view', args=[field.id]))
+                return HttpResponseRedirect(reverse('contacts:field_view', args=[field.id]))
         else:
-            return HttpResponseRedirect(reverse('identities_settings_view'))
+            return HttpResponseRedirect(reverse('contacts:settings_view'))
     else:
         form = ContactFieldForm()
 
@@ -304,9 +306,9 @@ def field_delete(request, field_id, response_format='html'):
                 field.save()
             else:
                 field.delete()
-            return HttpResponseRedirect(reverse('identities_index'))
+            return HttpResponseRedirect(reverse('contacts:index'))
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('identities_field_view', args=[field.id]))
+            return HttpResponseRedirect(reverse('contacts:field_view', args=[field.id]))
 
     context = _get_default_context(request)
     context.update({'field': field})
@@ -317,25 +319,12 @@ def field_delete(request, field_id, response_format='html'):
 
 @handle_response_format
 @mylogin_required
-def contact_add(request, response_format='html'):
-    "Contact add"
-
-    types = Object.filter_by_request(
-        request, ContactType.objects.order_by('name'))
-
-    return render_to_response('identities/contact_add',
-                              {'types': types},
-                              context_instance=RequestContext(request), response_format=response_format)
-
-
-@handle_response_format
-@mylogin_required
 def contact_add_typed(request, type_id, response_format='html'):
     "Contact add with preselected type"
 
     contact_type = get_object_or_404(ContactType, pk=type_id)
     if not request.user.profile.has_permission(contact_type, mode='w'):
-        return user_denied(request, message="You don't have access to create " + unicode(contact_type))
+        return user_denied(request, message=_("You don't have access to create %s") % contact_type)
 
     if request.POST:
         if 'cancel' not in request.POST:
@@ -344,9 +333,9 @@ def contact_add_typed(request, type_id, response_format='html'):
             if form.is_valid():
                 contact = form.save(request, contact_type)
                 contact.set_user_from_request(request)
-                return HttpResponseRedirect(reverse('identities_contact_view', args=[contact.id]))
+                return HttpResponseRedirect(reverse('contacts:contact_view', args=[contact.id]))
         else:
-            return HttpResponseRedirect(reverse('identities_index'))
+            return HttpResponseRedirect(reverse('contacts:index'))
     else:
         form = ContactForm(request.user.profile, contact_type)
 
@@ -362,19 +351,18 @@ def contact_add_typed(request, type_id, response_format='html'):
 @handle_response_format
 @mylogin_required
 def contact_view(request, contact_id, attribute='', response_format='html'):
-    "Contact view"
+    """Contact view"""
 
     contact = get_object_or_404(Contact, pk=contact_id)
     if not request.user.profile.has_permission(contact):
-        return user_denied(request, message="You don't have access to this Contact")
+        return user_denied(request, message=_("You don't have access to this Contact"))
     types = Object.filter_by_request(
         request, ContactType.objects.order_by('name'))
 
     subcontacts = Object.filter_by_request(request, contact.child_set)
     contact_values = contact.contactvalue_set.order_by('field__name')
 
-    objects = get_contact_objects(
-        request.user.profile, contact, preformat=True)
+    objects = get_contact_objects(request.user.profile, contact, preformat=True)
 
     module = None
     for key in objects:
@@ -461,9 +449,9 @@ def contact_edit(request, contact_id, response_format='html'):
                                files=request.FILES, instance=contact)
             if form.is_valid():
                 contact = form.save(request)
-                return HttpResponseRedirect(reverse('identities_contact_view', args=[contact.id]))
+                return HttpResponseRedirect(reverse('contacts:contact_view', args=[contact.id]))
         else:
-            return HttpResponseRedirect(reverse('identities_contact_view', args=[contact.id]))
+            return HttpResponseRedirect(reverse('contacts:contact_view', args=[contact.id]))
     else:
         form = ContactForm(
             request.user.profile, contact.contact_type, instance=contact)
@@ -494,9 +482,9 @@ def contact_delete(request, contact_id, response_format='html'):
                 contact.save()
             else:
                 contact.delete()
-            return HttpResponseRedirect(reverse('identities_index'))
+            return HttpResponseRedirect(reverse('contacts:index'))
         elif 'cancel' in request.POST:
-            return HttpResponseRedirect(reverse('identities_contact_view', args=[contact.id]))
+            return HttpResponseRedirect(reverse('contacts:contact_view', args=[contact.id]))
 
     types = Object.filter_by_request(
         request, ContactType.objects.order_by('name'))
@@ -600,7 +588,7 @@ def location_add(request, response_format='html'):
                 location.set_user_from_request(request)
                 return HttpResponseRedirect(reverse('identities_location_view', args=[location.id]))
         else:
-            return HttpResponseRedirect(reverse('identities_index'))
+            return HttpResponseRedirect(reverse('contacts:index'))
     else:
         form = LocationForm(request.user.profile, None)
 
@@ -674,7 +662,7 @@ def location_delete(request, location_id, response_format='html'):
                 location.save()
             else:
                 location.delete()
-            return HttpResponseRedirect(reverse('identities_index'))
+            return HttpResponseRedirect(reverse('contacts:index'))
         elif 'cancel' in request.POST:
             return HttpResponseRedirect(reverse('identities_location_view', args=[location.id]))
 
@@ -715,7 +703,7 @@ def settings_view(request, response_format='html'):
         import_c = ProcessContacts()
         import_c.import_contacts(content)
 
-        return HttpResponseRedirect(reverse('identities_index'))
+        return HttpResponseRedirect(reverse('contacts:index'))
 
     return render_to_response('identities/settings_view', context,
                               context_instance=RequestContext(request), response_format=response_format)

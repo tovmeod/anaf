@@ -67,14 +67,14 @@
 {% if item.manufacturer %}
 <div>
     <span class="content-label">{% trans %}Manufacturer{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view item.manufacturer.id %}">{{ item.manufacturer }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view item.manufacturer.id %}">{{ item.manufacturer }}</a></span>
 </div>
 {% endif %}
 {% if item.supplier %}
 
 <div>
     <span class="content-label">{% trans %}Supplier{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view item.supplier.id %}">{{ item.supplier }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view item.supplier.id %}">{{ item.supplier }}</a></span>
 </div>
 {% endif %}
 {% if item.location %}
@@ -86,7 +86,7 @@
 {% if item.owner %}
 <div>
     <span class="content-label">{% trans %}Owner{% endtrans %}:</span>
-    <span class="content-value"><a href="{% url identities_contact_view item.owner.id %}">{{ item.owner }}</a></span>
+    <span class="content-value"><a href="{% url contacts:contact_view item.owner.id %}">{{ item.owner }}</a></span>
 </div>
 {% endif %}
 {% if item.value %}
