@@ -1,6 +1,7 @@
 """
 Contact module helpers
 """
+from __future__ import unicode_literals
 from anaf.core.models import Module
 from django.utils.translation import ugettext_lazy as _
 
@@ -38,9 +39,10 @@ def _preformat_objects(modules, objects):
                                    'objects': {}}
             for key in objects:
                 if objects[key]['module'] == module:
-                    if hasattr(objects[key]['objects'], 'count'):
-                        output[module.name][
-                            'count'] += objects[key]['objects'].count()
+                    try:
+                        output[module.name]['count'] += len(objects[key]['objects'])
+                    except TypeError:  # object has no len, duck typing better than hasattr
+                        pass
                     objects[key]['label'] = _(objects[key]['label'])
                     output[module.name]['objects'][key] = objects[key]
 
