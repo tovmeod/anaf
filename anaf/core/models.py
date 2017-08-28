@@ -338,8 +338,8 @@ def user_autocreate_handler(sender, instance, created, **kwargs):
     """When a Django User is created, automatically create a anaf User"""
     if created:
         profile = User.objects.get_or_create(user=instance)[0]
-        from anaf.identities.models import Contact  # import here to avoid circular import
-        Contact.objects.get_or_create(related_user=profile)
+        from anaf.identities.models import Contact, ContactType  # import here to avoid circular import
+        Contact.objects.get_or_create(related_user=profile, contact_type=ContactType)
 
 # Create a anaf user and a contact when Django user is created
 models.signals.post_save.connect(user_autocreate_handler, sender=django_auth.User)

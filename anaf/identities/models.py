@@ -54,6 +54,13 @@ class ContactType(Object):
         """ContactType"""
         ordering = ['name']
 
+    @classmethod
+    def default(cls):
+        """Gets the default Contact Type
+        Default contact type is Person if exists, else None
+        """
+        return cls.objects.filter(name='Person').first()
+
     def __unicode__(self):
         return self.name
 
