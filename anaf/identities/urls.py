@@ -45,6 +45,9 @@ urlpatterns = patterns('anaf.identities.views',
                        url(r'^/contact/add/(?P<type_id>\d+)/$', oldviews.contact_add_typed,
                            name='contact_add_typed'),
 
+                       url(r'^/contact/add/$', oldviews.contact_add_typed,
+                           name='contact_add_typed'),
+
                        url(r'^/contact/add/(?P<type_id>\d+).(?P<response_format>\w+)$', oldviews.contact_add_typed,
                            name='contact_add_typed'),
 

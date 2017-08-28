@@ -402,8 +402,7 @@ def contact_me(request, attribute='', response_format='html'):
     subcontacts = Object.filter_by_request(request, contact.child_set)
     contact_values = contact.contactvalue_set.order_by('field__name')
 
-    objects = get_contact_objects(
-        request.user.profile, contact, preformat=True)
+    objects = get_contact_objects(request.user.profile, contact, preformat=True)
 
     module = None
     for key in objects:

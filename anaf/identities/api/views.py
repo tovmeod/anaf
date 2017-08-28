@@ -44,7 +44,7 @@ class Contact(IdentitiesBaseViewSet):
     renderer_classes = API_RENDERERS
 
     @list_route(methods=('GET',), renderer_classes=NOAPI_RENDERERS)
-    def add(self, request, *args, **kwargs):
+    def add(self, request, type_id=None, *args, **kwargs):
         """Contact add"""
 
         types = Object.filter_by_request(request, models.ContactType.objects.order_by('name'))
