@@ -5,6 +5,10 @@ from django.contrib.auth.models import User as DjangoUser
 from anaf.core.models import Group, Perspective, ModuleSetting
 
 
+def test_initial_data():
+    assert ContactType.objects.count() == 3
+
+
 class IdentitiesModelsTest(TestCase):
     def test_model_contacttype(self):
         """Test ContactType model"""

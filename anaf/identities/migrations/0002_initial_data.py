@@ -7,7 +7,7 @@ contact_types = ('Person', 'Company', 'Department')
 
 def _add_data(ContactType):
     for name in contact_types:
-        ContactType.objects.get_or_create({'name': name})
+        ContactType.objects.get_or_create(name=name)
 
 
 def add_data(apps, schema_editor):
