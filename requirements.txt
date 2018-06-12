@@ -20,3 +20,4 @@ django-pandora
 dj_database_url
 django-markup-deprecated
 djangorestframework==3.3.2
+pytz==2018.4
