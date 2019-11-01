@@ -14,7 +14,7 @@ setup(
             "Django<1.8",
             "whoosh",
             "django-websocket",
-            "djangorestframework==3.3.2",
+            "djangorestframework==3.9.1",
             "django-dajaxice==0.6",
             "django-dajax==0.9.2",
             "django-simple-captcha",
