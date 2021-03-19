@@ -19,5 +19,5 @@ johnny-cache==1.6.1.a
 django-pandora
 dj_database_url
 django-markup-deprecated
-djangorestframework==3.3.2
+djangorestframework==3.11.2
 pytz==2018.4
