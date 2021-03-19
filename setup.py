@@ -21,7 +21,7 @@ setup(
             "django-markup-deprecated",
             "django-pandora",
             "unidecode",
-            "jinja2==2.5.2",
+            "jinja2==2.11.3",
             "html5lib==0.90",
             "python-dateutil<2.0",
             "oauth2",
